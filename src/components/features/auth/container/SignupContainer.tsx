@@ -46,7 +46,7 @@ export function SignupContainer() {
         setIsLoading(true);
 
         try {
-            await signUp(data.email, data.password, data.role as ROLES);
+            await signUp(data.email, data.password, data.confirmPassword, data.role as ROLES);
 
             toast({
                 title: 'Account created successfully',

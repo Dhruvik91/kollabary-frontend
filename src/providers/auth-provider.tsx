@@ -21,7 +21,7 @@ interface AuthContextType {
   profile: UserProfile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, role: ROLES) => Promise<void>;
+  signUp: (email: string, password: string, confirmPassword: string, role: ROLES) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -125,11 +125,12 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
     }
   };
 
-  const signUp = async (email: string, password: string, role: ROLES) => {
+  const signUp = async (email: string, password: string, confirmPassword: string, role: ROLES) => {
     try {
       const response = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.signup, {
         email,
         password,
+        confirmPassword,
         role,
       });
       const { user: userData } = response.data;

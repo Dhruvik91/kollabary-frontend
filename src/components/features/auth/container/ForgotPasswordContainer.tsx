@@ -33,7 +33,7 @@ export function ForgotPasswordContainer() {
         setIsLoading(true);
 
         try {
-            await authService.forgotPassword({ email: data.email });
+            await authService.forgotPassword(data.email);
             setIsSuccess(true);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Something went wrong. Please try again.');
