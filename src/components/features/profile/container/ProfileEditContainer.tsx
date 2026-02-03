@@ -6,7 +6,6 @@ import { useMyInfluencerProfile, useSaveInfluencerProfile } from '@/hooks/useInf
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { motion } from 'framer-motion';
 import { Loader2, User as UserIcon, Camera, Globe, Instagram, Youtube, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -1,142 +1,464 @@
 'use client';
 
-import { useInfluencerDetail } from '@/hooks/useInfluencers';
-import { useParams } from 'next/navigation';
+import { useState, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Loader2, Instagram, Youtube, Twitter, MapPin, CheckCircle, Calendar, MessageSquare } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import {
+    Instagram,
+    Youtube,
+    Twitter,
+    ExternalLink,
+    Users,
+    TrendingUp,
+    MapPin,
+    Calendar,
+    Mail,
+    ArrowLeft,
+    Share2,
+    Heart,
+    MessageSquare,
+    Star,
+    Loader2,
+    CheckCircle2,
+} from "lucide-react";
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { RequestCollaborationModal } from '@/components/features/collaboration/components/RequestCollaborationModal';
+import { ReviewsSection } from "@/components/features/influencer/components/ReviewsSection";
+import { ReportInfluencerButton } from "@/components/features/influencer/components/ReportInfluencerButton";
+import { mockInfluencers } from "@/data/mockInfluencers";
+
+const platformIcons: Record<string, React.ReactNode> = {
+    instagram: <Instagram className="w-5 h-5" aria-hidden="true" />,
+    youtube: <Youtube className="w-5 h-5" aria-hidden="true" />,
+    twitter: <Twitter className="w-5 h-5" aria-hidden="true" />,
+    tiktok: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+        </svg>
+    ),
+    pinterest: <ExternalLink className="w-5 h-5" aria-hidden="true" />,
+};
+
+const platformLabels: Record<string, string> = {
+    instagram: "Instagram",
+    youtube: "YouTube",
+    twitter: "Twitter/X",
+    tiktok: "TikTok",
+    pinterest: "Pinterest",
+};
+
+function formatNumber(num: number): string {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + "M";
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + "K";
+    }
+    return num.toString();
+}
+
+// Mock extended data for profiles - replicated from kollabary-connect
+const getExtendedProfile = (id: string) => ({
+    location: "Los Angeles, CA",
+    joinedDate: "January 2022",
+    email: "contact@example.com",
+    rating: 4.9,
+    reviewCount: 127,
+    completedCollabs: 45,
+    responseRate: 98,
+    avgResponseTime: "< 2 hours",
+    recentPosts: [
+        "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=300&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=300&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1611262588024-d12430b98920?w=300&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1583396087350-9c84c781c021?w=300&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&h=300&fit=crop",
+    ],
+    reviews: [
+        {
+            id: "1",
+            author: "TechBrand Co",
+            rating: 5,
+            text: "Exceptional work and great communication. The content was delivered on time and exceeded our expectations. The influencer was professional throughout the entire collaboration.",
+            date: "2 weeks ago",
+            helpful: 12,
+            verified: true,
+            categories: { communication: 5, quality: 5, professionalism: 5, timeliness: 5 },
+        },
+        {
+            id: "2",
+            author: "FashionHub",
+            rating: 5,
+            text: "Delivered amazing content that exceeded our expectations. The creativity and attention to detail was outstanding. Would definitely work together again!",
+            date: "1 month ago",
+            helpful: 8,
+            verified: true,
+            categories: { communication: 5, quality: 5, professionalism: 5, timeliness: 4 },
+        },
+        {
+            id: "3",
+            author: "FitLife Pro",
+            rating: 4,
+            text: "Professional and creative. Would work with again. The content quality was good, though there was a slight delay in delivery.",
+            date: "2 months ago",
+            helpful: 5,
+            verified: true,
+            categories: { communication: 4, quality: 5, professionalism: 4, timeliness: 3 },
+        },
+        {
+            id: "4",
+            author: "GreenEats",
+            rating: 5,
+            text: "Absolutely fantastic collaboration! The influencer understood our brand perfectly and created content that resonated with their audience. Great engagement results.",
+            date: "2 months ago",
+            helpful: 15,
+            verified: true,
+            categories: { communication: 5, quality: 5, professionalism: 5, timeliness: 5 },
+        },
+        {
+            id: "5",
+            author: "TravelMore Agency",
+            rating: 4,
+            text: "Good experience overall. The content was high quality and well-produced. Communication could have been slightly better but the end result was worth it.",
+            date: "3 months ago",
+            helpful: 3,
+            verified: false,
+            categories: { communication: 3, quality: 5, professionalism: 4, timeliness: 4 },
+        },
+    ],
+});
 
 export function InfluencerDetailContainer() {
-    const { id } = useParams();
-    const { data: influencer, isLoading, isError } = useInfluencerDetail(id as string);
-    const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+    const params = useParams();
+    const id = params.id as string;
+    const router = useRouter();
+    const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
 
-    if (isLoading) {
-        return (
-            <div className="flex h-[60vh] items-center justify-center">
-                <Loader2 className="h-10 w-10 text-primary animate-spin" />
-            </div>
-        );
-    }
+    // In a real app, this would be a hook fetching from API
+    // Const { data: influencer, isLoading, isError } = useInfluencerDetail(id);
 
-    if (isError || !influencer) {
+    const influencer = useMemo(() => mockInfluencers.find((inf) => inf.id === id), [id]);
+    const extendedProfile = useMemo(() => (id ? getExtendedProfile(id) : null), [id]);
+
+    if (!influencer) {
         return (
             <div className="container py-20 text-center">
-                <h2 className="text-2xl font-bold mb-4">Influencer not found</h2>
-                <Button onClick={() => window.history.back()}>Go Back</Button>
+                <BackgroundEffects />
+                <GlassCard className="py-16 max-w-4xl mx-auto">
+                    <h1 className="font-display text-2xl font-bold mb-4">Influencer Not Found</h1>
+                    <p className="text-muted-foreground mb-6">
+                        The influencer you're looking for doesn't exist or has been removed.
+                    </p>
+                    <Button onClick={() => router.push('/influencers')}>
+                        Browse Influencers
+                    </Button>
+                </GlassCard>
             </div>
         );
     }
-
-    const { user, bio, followerCount, categories, location, socialMediaLinks, isVerified } = influencer;
 
     return (
         <div className="container px-4 py-12 mx-auto">
+            <BackgroundEffects />
+
+            {/* Back Navigation */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="grid grid-cols-1 lg:grid-cols-3 gap-12"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="mb-8"
             >
-                {/* Profile Sidebar */}
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="glass-enhanced rounded-3xl p-8 text-center relative overflow-hidden">
-                        <div className="absolute top-4 right-4">
-                            {isVerified && <CheckCircle className="h-6 w-6 text-blue-500 fill-blue-500/10" />}
-                        </div>
-
-                        <Avatar className="h-32 w-32 mx-auto mb-6 ring-4 ring-primary/10">
-                            <AvatarImage src={user?.profileImage} />
-                            <AvatarFallback className="text-3xl bg-primary/10 text-primary font-bold">
-                                {user?.name?.charAt(0)}
-                            </AvatarFallback>
-                        </Avatar>
-
-                        <h1 className="text-2xl font-bold mb-2">{user?.name}</h1>
-                        <div className="flex items-center justify-center text-muted-foreground gap-1 mb-6">
-                            <MapPin className="h-4 w-4" />
-                            {location || 'Global'}
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/10">
-                            <div>
-                                <div className="font-bold text-lg">{followerCount ? (followerCount / 1000).toFixed(1) + 'K' : 'N/A'}</div>
-                                <div className="text-[10px] uppercase text-muted-foreground tracking-widest">Followers</div>
-                            </div>
-                            <div>
-                                <div className="font-bold text-lg">4.2%</div>
-                                <div className="text-[10px] uppercase text-muted-foreground tracking-widest">Engage</div>
-                            </div>
-                            <div>
-                                <div className="font-bold text-lg">120+</div>
-                                <div className="text-[10px] uppercase text-muted-foreground tracking-widest">Kollabs</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="glass-enhanced rounded-3xl p-8">
-                        <h3 className="font-bold mb-4">Contact & Social</h3>
-                        <div className="space-y-4">
-                            {socialMediaLinks?.instagram && (
-                                <a href={socialMediaLinks.instagram} className="flex items-center justify-between p-3 rounded-xl bg-pink-500/5 hover:bg-pink-500/10 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <Instagram className="h-5 w-5 text-pink-500" />
-                                        <span>Instagram</span>
-                                    </div>
-                                    <Badge variant="outline" className="border-pink-500/20 text-pink-500">Active</Badge>
-                                </a>
-                            )}
-                            {socialMediaLinks?.youtube && (
-                                <a href={socialMediaLinks.youtube} className="flex items-center justify-between p-3 rounded-xl bg-red-500/5 hover:bg-red-500/10 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <Youtube className="h-5 w-5 text-red-500" />
-                                        <span>YouTube</span>
-                                    </div>
-                                    <Badge variant="outline" className="border-red-500/20 text-red-500">Partner</Badge>
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-8">
-                    <section className="glass-enhanced rounded-3xl p-8">
-                        <h2 className="text-2xl font-bold mb-6">About the Influencer</h2>
-                        <p className="text-muted-foreground leading-relaxed mb-8">
-                            {bio || 'This influencer has not provided a bio yet. They are specialists in creating high-quality, engaging content for their audience and looking for meaningful brand partnerships.'}
-                        </p>
-
-                        <h3 className="font-bold mb-4">Specialties</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {categories?.map(cat => (
-                                <Badge key={cat} className="px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary border-none">
-                                    {cat}
-                                </Badge>
-                            )) || <span className="text-muted-foreground italic text-sm">No categories specified</span>}
-                        </div>
-                    </section>
-
-                    <section className="flex items-center justify-between p-8 glass-enhanced rounded-3xl bg-gradient-to-r from-primary/10 to-transparent border-primary/20">
-                        <div>
-                            <h2 className="text-2xl font-bold mb-2">Ready to Collaborate?</h2>
-                            <p className="text-muted-foreground">Send a proposal to {user?.name} for your next project.</p>
-                        </div>
-                        <Button size="lg" className="rounded-full shadow-xl shadow-primary/20 hover:scale-105 transition-transform" onClick={() => setIsRequestModalOpen(true)}>
-                            Request Collaboration
-                        </Button>
-                    </section>
-                </div>
+                <Button
+                    variant="ghost"
+                    onClick={() => router.back()}
+                    className="group"
+                >
+                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
+                    <span>Back to Marketplace</span>
+                </Button>
             </motion.div>
 
+            <div className="grid lg:grid-cols-3 gap-8">
+                {/* Main Content */}
+                <div className="lg:col-span-2 space-y-8">
+                    {/* Profile Header */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        <GlassCard variant="elevated" className="p-6 sm:p-8 relative overflow-hidden">
+                            <div className="absolute inset-0 gradient-bg opacity-[0.03] pointer-events-none" />
+                            <div className="flex flex-col sm:flex-row gap-8 relative z-10">
+                                {/* Avatar */}
+                                <div className="relative mx-auto sm:mx-0 shrink-0">
+                                    <div className="w-28 h-28 sm:w-36 sm:h-36 relative">
+                                        <Image
+                                            src={influencer.avatar}
+                                            alt={`${influencer.name}'s profile picture`}
+                                            fill
+                                            className="rounded-2xl object-cover ring-4 ring-primary/10"
+                                            sizes="(max-width: 640px) 112px, 144px"
+                                            priority
+                                        />
+                                    </div>
+                                    {influencer.verified && (
+                                        <div
+                                            className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full gradient-bg flex items-center justify-center z-10"
+                                            title="Verified Creator"
+                                            aria-label="Verified creator"
+                                        >
+                                            <svg className="w-5 h-5 text-primary-foreground" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                            </svg>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Info */}
+                                <div className="flex-1 text-center sm:text-left">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
+                                        <h1 className="font-display text-3xl sm:text-4xl font-bold">{influencer.name}</h1>
+                                        <div className="flex items-center justify-center sm:justify-start gap-1">
+                                            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" aria-hidden="true" />
+                                            <span className="font-medium">{extendedProfile?.rating}</span>
+                                            <span className="text-muted-foreground text-sm">
+                                                ({extendedProfile?.reviewCount} reviews)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p className="text-muted-foreground mb-4">@{influencer.username}</p>
+
+                                    <div className="flex flex-wrap justify-center sm:justify-start gap-5 text-sm text-muted-foreground mb-6">
+                                        <span className="flex items-center gap-1.5">
+                                            <MapPin className="w-4 h-4 text-primary" aria-hidden="true" />
+                                            {extendedProfile?.location}
+                                        </span>
+                                        <span className="flex items-center gap-1.5">
+                                            <Calendar className="w-4 h-4 text-primary" aria-hidden="true" />
+                                            Joined {extendedProfile?.joinedDate}
+                                        </span>
+                                    </div>
+
+                                    <p className="text-foreground leading-relaxed text-lg">{influencer.bio}</p>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-3 mt-8 pt-8 border-t border-glass-border">
+                                <Button
+                                    onClick={() => setIsRequestDialogOpen(true)}
+                                    className="flex-1 gradient-bg border-0 glow-primary h-12 text-lg"
+                                    aria-label="Send collaboration request"
+                                >
+                                    <MessageSquare className="w-5 h-5 mr-2" aria-hidden="true" />
+                                    Request Collaboration
+                                </Button>
+                                <div className="flex gap-3">
+                                    <Button
+                                        variant="outline"
+                                        className="border-glass-border hover:bg-glass h-12 px-5"
+                                        onClick={() => setIsSaved(!isSaved)}
+                                        aria-label={isSaved ? "Remove from saved" : "Save to favorites"}
+                                    >
+                                        <Heart
+                                            className={`w-5 h-5 ${isSaved ? "fill-accent text-accent" : ""}`}
+                                            aria-hidden="true"
+                                        />
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="border-glass-border hover:bg-glass h-12 px-5"
+                                        aria-label="Share profile"
+                                    >
+                                        <Share2 className="w-5 h-5" aria-hidden="true" />
+                                    </Button>
+                                    <ReportInfluencerButton
+                                        influencerId={influencer.id}
+                                        influencerName={influencer.name}
+                                        variant="icon"
+                                    />
+                                </div>
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Stats Grid */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                    >
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <GlassCard className="p-4 text-center">
+                                <Users className="w-6 h-6 mx-auto mb-2 text-primary" aria-hidden="true" />
+                                <div className="font-display text-2xl font-bold">{formatNumber(influencer.followers)}</div>
+                                <div className="text-sm text-muted-foreground">Followers</div>
+                            </GlassCard>
+                            <GlassCard className="p-4 text-center">
+                                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-accent" aria-hidden="true" />
+                                <div className="font-display text-2xl font-bold">{influencer.engagement}%</div>
+                                <div className="text-sm text-muted-foreground">Engagement</div>
+                            </GlassCard>
+                            <GlassCard className="p-4 text-center">
+                                <Star className="w-6 h-6 mx-auto mb-2 text-yellow-500" aria-hidden="true" />
+                                <div className="font-display text-2xl font-bold">{extendedProfile?.completedCollabs}</div>
+                                <div className="text-sm text-muted-foreground">Collabs Done</div>
+                            </GlassCard>
+                            <GlassCard className="p-4 text-center">
+                                <Mail className="w-6 h-6 mx-auto mb-2 text-primary" aria-hidden="true" />
+                                <div className="font-display text-2xl font-bold">{extendedProfile?.responseRate}%</div>
+                                <div className="text-sm text-muted-foreground">Response Rate</div>
+                            </GlassCard>
+                        </div>
+                    </motion.div>
+
+                    {/* Recent Posts */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <GlassCard className="p-6 sm:p-8">
+                            <h2 className="font-display text-2xl font-semibold mb-6">Recent Content</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                {extendedProfile?.recentPosts.map((post, index) => (
+                                    <motion.div
+                                        key={index}
+                                        whileHover={{ scale: 1.02 }}
+                                        className="aspect-square rounded-xl overflow-hidden cursor-pointer relative"
+                                    >
+                                        <Image
+                                            src={post}
+                                            alt={`Recent post ${index + 1} by ${influencer.name}`}
+                                            fill
+                                            className="object-cover hover:opacity-90 transition-opacity"
+                                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                        />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Reviews Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        {extendedProfile && (
+                            <ReviewsSection
+                                reviews={extendedProfile.reviews}
+                                influencerName={influencer.name}
+                                averageRating={extendedProfile.rating}
+                                totalReviews={extendedProfile.reviewCount}
+                            />
+                        )}
+                    </motion.div>
+                </div>
+
+                {/* Sidebar */}
+                <div className="space-y-8">
+                    {/* Platforms */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                    >
+                        <GlassCard className="p-6">
+                            <h2 className="font-display text-xl font-semibold mb-6">Social Reach</h2>
+                            <div className="space-y-4">
+                                {influencer.platforms.map((platform) => (
+                                    <button
+                                        key={platform}
+                                        className="w-full flex items-center gap-4 p-4 rounded-xl bg-secondary/30 border border-glass-border/30 hover:bg-secondary/50 hover:border-glass-border transition-all text-left group"
+                                        aria-label={`View ${influencer.name}'s ${platformLabels[platform.toLowerCase()] || platform} profile`}
+                                    >
+                                        <div className="w-11 h-11 rounded-lg gradient-bg flex items-center justify-center text-primary-foreground group-hover:glow-primary transition-all">
+                                            {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-5 h-5" />}
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold block">
+                                                {platformLabels[platform.toLowerCase()] || platform}
+                                            </span>
+                                            <span className="text-xs text-muted-foreground">Verified Account</span>
+                                        </div>
+                                        <ExternalLink className="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
+                                    </button>
+                                ))}
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Categories */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <GlassCard className="p-6">
+                            <h2 className="font-display text-xl font-semibold mb-4">Niches & Topics</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {influencer.niches.map((niche) => (
+                                    <Badge
+                                        key={niche}
+                                        className="gradient-bg border-0 text-primary-foreground px-4 py-1.5"
+                                    >
+                                        {niche}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Quick Stats */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                    >
+                        <GlassCard className="p-6">
+                            <h2 className="font-display text-xl font-semibold mb-6">Service Level</h2>
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center p-3 rounded-lg bg-secondary/20">
+                                    <span className="text-muted-foreground flex items-center gap-2">
+                                        <MessageSquare className="w-4 h-4 text-primary" />
+                                        Avg. Response
+                                    </span>
+                                    <span className="font-bold text-primary">{extendedProfile?.avgResponseTime}</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3 rounded-lg bg-secondary/20">
+                                    <span className="text-muted-foreground flex items-center gap-2">
+                                        <Mail className="w-4 h-4 text-primary" />
+                                        Response Rate
+                                    </span>
+                                    <span className="font-bold text-primary">{extendedProfile?.responseRate}%</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3 rounded-lg bg-secondary/20">
+                                    <span className="text-muted-foreground flex items-center gap-2">
+                                        <CheckCircle2 className="w-4 h-4 text-primary" />
+                                        Completion
+                                    </span>
+                                    <span className="font-bold text-primary">100%</span>
+                                </div>
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+                </div>
+            </div>
+
             <RequestCollaborationModal
-                isOpen={isRequestModalOpen}
-                onClose={() => setIsRequestModalOpen(false)}
+                isOpen={isRequestDialogOpen}
+                onClose={() => setIsRequestDialogOpen(false)}
                 influencerId={influencer.id}
-                influencerName={user?.name || 'Influencer'}
+                influencerName={influencer.name}
             />
         </div>
     );
