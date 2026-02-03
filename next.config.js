@@ -4,12 +4,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "medbridge-portal.s3.ap-south-1.amazonaws.com",
-      },
-    ],
+    unoptimized: true
   },
 };
 
