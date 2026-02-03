@@ -32,7 +32,7 @@ export function SignupForm({ form, onSubmit, isLoading }: SignupFormProps) {
             <RoleSelector
                 selectedRole={selectedRole}
                 onRoleChange={(role) => setValue('role', role)}
-                showRoleSelection={!showRoleSelector}
+                showRoleSelection={true}
             />
 
             <div className="space-y-2">

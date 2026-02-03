@@ -2,50 +2,26 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { API_CONFIG, FRONTEND_ROUTES } from '@/constants/constants';
+import { API_CONFIG, FRONTEND_ROUTES, ROLES } from '@/constants/constants';
 import httpService from '@/lib/http-service';
 import { getDashboardRoute } from '@/lib/dashboard-routes';
-import { UserRole } from '@/types';
-
+import { User, ApiResponse } from '@/constants/interface';
 
 type AuthUser = {
   id: string;
   email: string;
-  role: UserRole;
-  isActive: boolean;
-  isVerified: boolean;
+  role: ROLES;
+  name?: string;
 };
 
-type UserProfile = {
-  id: string;
-  email: string;
-  role: UserRole;
-  isActive: boolean;
-  isVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  metadata: Record<string, any>;
-};
-
-type BackendUser = {
-  id: string;
-  email: string;
-  role: UserRole;
-  isActive: boolean;
-  isVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  metadata: Record<string, any>;
-};
+type UserProfile = User;
 
 interface AuthContextType {
   user: AuthUser | null;
   profile: UserProfile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, role: UserRole.candidate | UserRole.employer) => Promise<void>;
+  signUp: (email: string, password: string, role: ROLES) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -53,34 +29,10 @@ interface AuthContextType {
 
 type AuthResponse = {
   access_token: string;
-  user: BackendUser;
+  user: User;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-function mapBackendUser(user: BackendUser): { authUser: AuthUser; profile: UserProfile; } {
-  const authUser: AuthUser = {
-    id: user.id,
-    email: user.email,
-    role: user.role,
-    isActive: user.isActive,
-    isVerified: user.isVerified,
-  };
-
-  const profile: UserProfile = {
-    id: user.id,
-    email: user.email,
-    role: user.role,
-    isActive: user.isActive,
-    isVerified: user.isVerified,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    deletedAt: user.deletedAt,
-    metadata: user.metadata,
-  };
-
-  return { authUser, profile };
-}
 
 export function AuthProvider({ children }: { children: React.ReactNode; }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -91,11 +43,17 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const loadUser = async () => {
     try {
-      const { data } = await httpService.get<BackendUser>(API_CONFIG.path.userAuth.me);
-      const mapped = mapBackendUser(data);
-      setUser(mapped.authUser);
-      setProfile(mapped.profile);
-      return mapped.authUser;
+      const response = await httpService.get<User>(API_CONFIG.path.userAuth.me);
+      const userData = response.data;
+
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        role: userData.role,
+        name: userData.name,
+      });
+      setProfile(userData);
+      return userData;
     } catch {
       setUser(null);
       setProfile(null);
@@ -121,7 +79,6 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
         return;
       }
 
-      // Check if current path is public - all /auth/* routes are public
       const isAuthRoute = pathname.startsWith('/auth');
       const isHomePage = pathname === FRONTEND_ROUTES.HOME;
       const isPublicRoute = isAuthRoute || isHomePage;
@@ -133,8 +90,6 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
         return;
       }
 
-      // Only redirect authenticated users from home/login/signup pages
-      // Allow access to forgot-password and reset-password even when authenticated
       const authRoutesToRedirect = [FRONTEND_ROUTES.HOME, FRONTEND_ROUTES.AUTH.LOGIN, FRONTEND_ROUTES.AUTH.SIGNUP];
       if (userData && authRoutesToRedirect.includes(pathname)) {
         const dashboardRoute = getDashboardRoute(userData.role);
@@ -148,17 +103,21 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data } = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.login, {
+      const response = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.login, {
         email,
         password,
       });
+      const { user: userData } = response.data;
 
-      const mapped = mapBackendUser(data.user);
-      setUser(mapped.authUser);
-      setProfile(mapped.profile);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        role: userData.role,
+        name: userData.name,
+      });
+      setProfile(userData);
 
-      // Redirect to appropriate dashboard after successful login
-      const dashboardRoute = getDashboardRoute(mapped.authUser.role);
+      const dashboardRoute = getDashboardRoute(userData.role);
       router.push(dashboardRoute);
     } catch (err) {
       console.error('Login failed:', err);
@@ -166,24 +125,25 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
     }
   };
 
-  const signUp = async (email: string, password: string, role: UserRole.candidate | UserRole.employer) => {
+  const signUp = async (email: string, password: string, role: ROLES) => {
     try {
-      const { data } = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.signup, {
+      const response = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.signup, {
         email,
         password,
         role,
       });
+      const { user: userData } = response.data;
 
-      const mapped = mapBackendUser(data.user);
-      setUser(mapped.authUser);
-      setProfile(mapped.profile);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        role: userData.role,
+        name: userData.name,
+      });
+      setProfile(userData);
 
-      // Redirect to profile completion after successful signup
-      if (role === UserRole.candidate) {
-        router.push(FRONTEND_ROUTES.PROFILE.DOCTOR.COMPLETE);
-      } else {
-        router.push(FRONTEND_ROUTES.PROFILE.EMPLOYER.COMPLETE);
-      }
+      // Redirect to profile edit after successful signup
+      router.push(FRONTEND_ROUTES.PROFILE.EDIT);
     } catch (err) {
       console.error('Signup failed:', err);
       throw err;
@@ -202,7 +162,6 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const signInWithGoogle = async () => {
     if (typeof window === 'undefined') return;
-
     window.location.href = `${API_CONFIG.baseUrl}${API_CONFIG.path.userAuth.googleLogin}`;
   };
 

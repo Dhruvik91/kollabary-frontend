@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/providers/theme-provider'
 import { AuthProvider } from '@/providers/auth-provider'
 import { QueryProvider } from '@/providers/query-provider'
-import { AppShell } from '@/components/app-shell'
+import { AppShell } from '@/components/AppShell'
 import { GTMPageView } from '@/components/GTMPageView'
 
 const inter = Inter({
@@ -16,59 +16,46 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MedBridges - Connecting Doctors with Healthcare Opportunities',
-    template: '%s | MedBridges'
+    default: 'Kollabary - The Ultimate Influencer Marketplace',
+    template: '%s | Kollabary'
   },
-  description: 'Professional healthcare job marketplace connecting qualified doctors with hospitals and healthcare facilities. Find your next medical career opportunity.',
-  keywords: ['medical jobs', 'doctor jobs', 'healthcare careers', 'hospital jobs', 'physician recruitment', 'medical marketplace'],
-  authors: [{ name: 'MedBridges' }],
-  creator: 'MedBridges',
-  publisher: 'MedBridges',
-  applicationName: 'MedBridges',
-  metadataBase: new URL('https://medbridges.xyz'),
+  description: 'Connect with top influencers and brands. Kollabary is the premier platform for influencer marketing collaborations, brand deals, and social media growth.',
+  keywords: ['influencer marketplace', 'brand collaborations', 'social media marketing', 'influencer marketing', 'brand deals', 'Kollabary'],
+  authors: [{ name: 'Kollabary' }],
+  creator: 'Kollabary',
+  publisher: 'Kollabary',
+  applicationName: 'Kollabary',
+  metadataBase: new URL('https://kollabary.com'),
   alternates: {
     canonical: '/'
   },
-  icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' }
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
-    ]
-  },
   manifest: '/manifest.json',
-  themeColor: '#0ea5e9',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'MedBridges'
+    title: 'Kollabary'
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://medbridges.xyz',
-    title: 'MedBridges - Connecting Doctors with Healthcare Opportunities',
-    description: 'Professional healthcare job marketplace connecting qualified doctors with hospitals and healthcare facilities.',
-    siteName: 'MedBridges',
+    url: 'https://kollabary.com',
+    title: 'Kollabary - The Ultimate Influencer Marketplace',
+    description: 'Connect with top influencers and brands for premium collaborations.',
+    siteName: 'Kollabary',
     images: [
       {
-        url: 'https://medbridge-portal.s3.ap-south-1.amazonaws.com/BannerImage.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MedBridges - Healthcare Job Marketplace'
+        alt: 'Kollabary - Influencer Marketplace'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MedBridges - Connecting Doctors with Healthcare Opportunities',
-    description: 'Professional healthcare job marketplace for doctors and hospitals.',
-    images: ['https://medbridge-portal.s3.ap-south-1.amazonaws.com/BannerImage.png']
+    title: 'Kollabary - The Ultimate Influencer Marketplace',
+    description: 'Connect with top influencers and brands for premium collaborations.',
+    images: ['/og-image.png']
   },
   robots: {
     index: true,
@@ -107,9 +94,9 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "MedBridges",
-              "alternateName": ["Med Bridges", "MedBridge"],
-              "url": "https://medbridges.xyz"
+              "name": "Kollabary",
+              "alternateName": ["Kollabary Marketplace", "Kollabary App"],
+              "url": "https://kollabary.com"
             })
           }}
         />
@@ -128,7 +115,7 @@ export default function RootLayout({
           <AuthProvider>
             <ThemeProvider
               attribute="class"
-              defaultTheme="dark"
+              defaultTheme="light"
               enableSystem
               disableTransitionOnChange={false}
             >

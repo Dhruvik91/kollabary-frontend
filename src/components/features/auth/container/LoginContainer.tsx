@@ -41,7 +41,7 @@ export function LoginContainer() {
 
             toast({
                 title: 'Login successful',
-                description: 'Welcome back to MedBridges',
+                description: 'Welcome back to Kollabary',
             });
         } catch (err: any) {
             setError(err.response?.data?.message || 'Invalid email or password');
@@ -59,8 +59,13 @@ export function LoginContainer() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 px-4 py-12">
-            <div className="w-full max-w-md">
+        <div className="relative isolate min-h-screen flex items-center justify-center overflow-hidden px-4 py-12">
+            {/* Background decoration */}
+            <div className="bg-blur-shape bg-blur-shape-1 opacity-20" />
+            <div className="bg-blur-shape bg-blur-shape-2 opacity-20" />
+            <div className="bg-blur-shape bg-blur-shape-3 opacity-20" />
+
+            <div className="w-full max-w-md relative z-10">
                 {/* Logo */}
                 {/* <div className="flex justify-center mb-8">
                     <Link href="/" className="flex items-center gap-2">

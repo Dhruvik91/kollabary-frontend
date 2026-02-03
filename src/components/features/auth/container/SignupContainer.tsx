@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/providers/auth-provider';
 import { useToast } from '@/hooks/use-toast';
-import { UserRole } from '@/types';
+import { ROLES } from '@/constants/constants';
 import { SignupHeader } from '../components/SignupHeader';
 import { SignupFooter } from '../components/SignupFooter';
 // import { SocialLogin } from '../components/SocialLogin';
@@ -20,7 +20,7 @@ const signupSchema = z.object({
     email: z.string().email('Please enter a valid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string(),
-    role: z.enum([UserRole.candidate, UserRole.employer]),
+    role: z.enum([ROLES.USER, ROLES.INFLUENCER]),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword'],
@@ -37,7 +37,7 @@ export function SignupContainer() {
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
-            role: UserRole.candidate,
+            role: ROLES.USER,
         },
     });
 
@@ -46,11 +46,11 @@ export function SignupContainer() {
         setIsLoading(true);
 
         try {
-            await signUp(data.email, data.password, data.role);
+            await signUp(data.email, data.password, data.role as ROLES);
 
             toast({
                 title: 'Account created successfully',
-                description: 'Welcome to MedBridges! Please complete your profile.',
+                description: 'Welcome to Kollabary! Please complete your profile.',
             });
         } catch (err: any) {
             setError(err?.response?.data?.message || 'Failed to create account. Please try again.');
@@ -73,8 +73,13 @@ export function SignupContainer() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 px-4 py-12">
-            <div className="w-full max-w-md">
+        <div className="relative isolate min-h-screen flex items-center justify-center overflow-hidden px-4 py-12">
+            {/* Background decoration */}
+            <div className="bg-blur-shape bg-blur-shape-1 opacity-20" />
+            <div className="bg-blur-shape bg-blur-shape-2 opacity-20" />
+            <div className="bg-blur-shape bg-blur-shape-3 opacity-20" />
+
+            <div className="w-full max-w-md relative z-10">
                 {/* Logo */}
                 {/* <div className="flex justify-center mb-8">
                     <Link href="/" className="flex items-center gap-2">
