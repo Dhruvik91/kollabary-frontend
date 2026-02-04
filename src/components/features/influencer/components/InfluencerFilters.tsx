@@ -1,72 +1,145 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { motion } from "framer-motion";
+import { Search, Filter, X, Instagram, Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 interface InfluencerFiltersProps {
-    search: string;
-    onSearchChange: (val: string) => void;
-    categories: string[];
-    selectedCategories: string[];
-    onCategoryToggle: (cat: string) => void;
-    onReset: () => void;
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
+    showFilters: boolean;
+    setShowFilters: (show: boolean) => void;
+    selectedPlatforms: string[];
+    togglePlatform: (platform: string) => void;
+    selectedNiches: string[];
+    toggleNiche: (niche: string) => void;
+    clearFilters: () => void;
+    hasActiveFilters: boolean;
+    platforms?: string[];
+    niches?: string[];
 }
 
+const DEFAULT_PLATFORMS = ["Instagram", "TikTok", "YouTube", "Twitter"];
+const DEFAULT_NICHES = ["Fashion", "Technology", "Fitness", "Food", "Travel", "Beauty", "Gaming", "Lifestyle"];
+
 export function InfluencerFilters({
-    search,
-    onSearchChange,
-    categories,
-    selectedCategories,
-    onCategoryToggle,
-    onReset
+    searchQuery,
+    setSearchQuery,
+    showFilters,
+    setShowFilters,
+    selectedPlatforms,
+    togglePlatform,
+    selectedNiches,
+    toggleNiche,
+    clearFilters,
+    hasActiveFilters,
+    platforms = DEFAULT_PLATFORMS,
+    niches = DEFAULT_NICHES
 }: InfluencerFiltersProps) {
     return (
-        <div className="space-y-6 mb-12">
-            <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                        placeholder="Search by name, category or bio..."
-                        className="pl-10 h-12 bg-white/5 border-white/10 focus:ring-primary focus:border-primary rounded-xl"
-                        value={search}
-                        onChange={(e) => onSearchChange(e.target.value)}
-                    />
-                </div>
-                <Button variant="outline" className="h-12 px-6 rounded-xl border-white/10 hover:bg-white/5">
-                    <SlidersHorizontal className="h-5 w-5 mr-2" />
-                    More Filters
-                </Button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-medium text-muted-foreground mr-2">Top Categories:</span>
-                {categories.map((cat) => (
-                    <Badge
-                        key={cat}
-                        variant={selectedCategories.includes(cat) ? 'default' : 'outline'}
-                        className={`cursor-pointer px-4 py-1.5 rounded-full transition-all border-white/10 ${selectedCategories.includes(cat)
-                                ? 'bg-primary text-white scale-105'
-                                : 'hover:bg-white/5'
-                            }`}
-                        onClick={() => onCategoryToggle(cat)}
-                    >
-                        {cat}
-                    </Badge>
-                ))}
-                {selectedCategories.length > 0 && (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-8"
+        >
+            <GlassCard variant="subtle" className="p-4">
+                <div className="flex flex-col md:flex-row gap-4">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <Input
+                            placeholder="Search creators by name, bio, or username..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-10 bg-secondary/50 border-glass-border h-12"
+                        />
+                    </div>
                     <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs text-muted-foreground hover:text-foreground h-8 px-2"
-                        onClick={onReset}
+                        variant="outline"
+                        onClick={() => setShowFilters(!showFilters)}
+                        className="border-glass-border hover:bg-glass h-12"
                     >
-                        <X className="h-3 w-3 mr-1" />
-                        Clear All
+                        <Filter className="w-4 h-4 mr-2" />
+                        Filters
+                        {hasActiveFilters && (
+                            <Badge className="ml-2 gradient-bg border-0">
+                                {(selectedPlatforms.length > 0 ? 1 : 0) + (selectedNiches.length > 0 ? 1 : 0)}
+                            </Badge>
+                        )}
                     </Button>
+                    {hasActiveFilters && (
+                        <Button
+                            variant="ghost"
+                            onClick={clearFilters}
+                            className="h-12"
+                        >
+                            <X className="w-4 h-4 mr-2" />
+                            Clear
+                        </Button>
+                    )}
+                </div>
+
+                {/* Filter Panel */}
+                {showFilters && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="mt-6 pt-6 border-t border-glass-border"
+                    >
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {/* Platforms */}
+                            <div>
+                                <h3 className="font-medium mb-3 flex items-center gap-2">
+                                    <Instagram className="w-4 h-4" />
+                                    Platforms
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {platforms.map((platform) => (
+                                        <Badge
+                                            key={platform}
+                                            variant={selectedPlatforms.includes(platform) ? "default" : "secondary"}
+                                            className={`cursor-pointer transition-all ${selectedPlatforms.includes(platform)
+                                                ? "gradient-bg border-0"
+                                                : "bg-secondary/80 hover:bg-secondary"
+                                                }`}
+                                            onClick={() => togglePlatform(platform)}
+                                        >
+                                            {platform}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Niches */}
+                            <div>
+                                <h3 className="font-medium mb-3 flex items-center gap-2">
+                                    <Sparkles className="w-4 h-4" />
+                                    Categories
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {niches.map((niche) => (
+                                        <Badge
+                                            key={niche}
+                                            variant={selectedNiches.includes(niche) ? "default" : "secondary"}
+                                            className={`cursor-pointer transition-all ${selectedNiches.includes(niche)
+                                                ? "gradient-bg border-0"
+                                                : "bg-secondary/80 hover:bg-secondary"
+                                                }`}
+                                            onClick={() => toggleNiche(niche)}
+                                        >
+                                            {niche}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
                 )}
-            </div>
-        </div>
+            </GlassCard>
+        </motion.div>
     );
 }

@@ -1,17 +1,24 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import collaborationService from '@/services/collaboration-service';
+import { collaborationService } from '@/services/collaboration.service';
+import { CollaborationStatus } from '@/constants/constants';
 
 export function useMyCollaborations() {
     return useQuery({
         queryKey: ['collaborations', 'mine'],
-        queryFn: () => collaborationService.getMyCollaborations(),
+        queryFn: async () => {
+            const response = await collaborationService.getCollaborations();
+            return response.data;
+        },
     });
 }
 
 export function useCollaborationDetail(id: string) {
     return useQuery({
         queryKey: ['collaborations', 'detail', id],
-        queryFn: () => collaborationService.getById(id),
+        queryFn: async () => {
+            const response = await collaborationService.getCollaborationById(id);
+            return response.data;
+        },
         enabled: !!id,
     });
 }
@@ -19,7 +26,10 @@ export function useCollaborationDetail(id: string) {
 export function useCreateCollaboration() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: any) => collaborationService.create(data),
+        mutationFn: async (data: any) => {
+            const response = await collaborationService.createCollaboration(data);
+            return response.data;
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['collaborations', 'mine'] });
         },
@@ -29,8 +39,10 @@ export function useCreateCollaboration() {
 export function useUpdateCollaborationStatus() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, status }: { id: string; status: string }) =>
-            collaborationService.updateStatus(id, status),
+        mutationFn: async ({ id, status }: { id: string; status: CollaborationStatus }) => {
+            const response = await collaborationService.updateStatus(id, status);
+            return response.data;
+        },
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['collaborations', 'mine'] });
             queryClient.invalidateQueries({ queryKey: ['collaborations', 'detail', variables.id] });

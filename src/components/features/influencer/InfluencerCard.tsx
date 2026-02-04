@@ -6,11 +6,12 @@ import { Instagram, Youtube, Twitter, ExternalLink, Users, TrendingUp } from "lu
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Influencer } from "@/types/influencer";
+import { InfluencerProfile } from "@/types/influencer";
 import Image from "next/image";
+import { User, Loader2 } from "lucide-react"; // Fallback icon
 
 interface InfluencerCardProps {
-    influencer: Influencer;
+    influencer: InfluencerProfile;
     index?: number;
 }
 
@@ -36,6 +37,13 @@ function formatNumber(num: number): string {
 }
 
 export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
+    // Safely access user profile data
+    const userProfile = (influencer.user as any)?.profile;
+    const name = userProfile?.fullName || userProfile?.username || 'Influencer';
+    const username = userProfile?.username || 'user';
+    const avatar = userProfile?.profileImage || userProfile?.avatarUrl || null;
+    const niches = influencer.niche ? [influencer.niche] : [];
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,14 +54,18 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
             <GlassCard className="group overflow-hidden hover:border-primary/50 transition-all duration-300">
                 {/* Header with avatar */}
                 <div className="flex items-start gap-4 mb-4">
-                    <div className="relative w-16 h-16">
-                        <Image
-                            src={influencer.avatar}
-                            alt={influencer.name}
-                            fill
-                            className="rounded-xl object-cover ring-2 ring-glass-border group-hover:ring-primary/50 transition-all"
-                            sizes="64px"
-                        />
+                    <div className="relative w-16 h-16 bg-secondary/50 rounded-xl flex items-center justify-center overflow-hidden">
+                        {avatar ? (
+                            <Image
+                                src={avatar}
+                                alt={name}
+                                fill
+                                className="object-cover ring-2 ring-glass-border group-hover:ring-primary/50 transition-all"
+                                sizes="64px"
+                            />
+                        ) : (
+                            <User className="w-8 h-8 text-muted-foreground" />
+                        )}
                         {influencer.verified && (
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full gradient-bg flex items-center justify-center z-10">
                                 <svg className="w-3 h-3 text-primary-foreground" viewBox="0 0 24 24" fill="currentColor">
@@ -63,43 +75,45 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                         )}
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-semibold text-lg truncate">{influencer.name}</h3>
-                        <p className="text-muted-foreground text-sm">@{influencer.username}</p>
+                        <h3 className="font-display font-semibold text-lg truncate">{name}</h3>
+                        <p className="text-muted-foreground text-sm">@{username}</p>
                     </div>
                 </div>
 
                 {/* Bio */}
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {influencer.bio}
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[40px]">
+                    {influencer.bio || 'No bio available.'}
                 </p>
 
                 {/* Stats */}
                 <div className="flex gap-4 mb-4">
                     <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary" />
-                        <span className="text-sm font-medium">{formatNumber(influencer.followers)}</span>
+                        <span className="text-sm font-medium">{formatNumber(influencer.followersCount || 0)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <TrendingUp className="w-4 h-4 text-accent" />
-                        <span className="text-sm font-medium">{influencer.engagement}%</span>
+                        <span className="text-sm font-medium">{influencer.engagementRate || 0}%</span>
                     </div>
                 </div>
 
                 {/* Platforms */}
-                <div className="flex gap-2 mb-4">
-                    {influencer.platforms.map((platform) => (
-                        <div
-                            key={platform}
-                            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                        >
-                            {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-4 h-4" />}
-                        </div>
-                    ))}
-                </div>
+                {influencer.platforms && (
+                    <div className="flex gap-2 mb-4">
+                        {influencer.platforms.map((platform) => (
+                            <div
+                                key={platform}
+                                className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                            >
+                                {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-4 h-4" />}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Niches */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                    {influencer.niches.slice(0, 3).map((niche) => (
+                    {niches.map((niche) => (
                         <Badge
                             key={niche}
                             variant="secondary"

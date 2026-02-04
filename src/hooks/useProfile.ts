@@ -1,13 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import httpService from '@/lib/http-service';
-import { API_CONFIG } from '@/constants/constants';
-import { User } from '@/constants/interface';
+import { profileService } from '@/services/profile.service';
 
 export function useMyProfile() {
     return useQuery({
         queryKey: ['profile', 'me'],
         queryFn: async () => {
-            const response = await httpService.get<User>(API_CONFIG.path.profile.base);
+            const response = await profileService.getProfile();
             return response.data;
         },
     });
@@ -17,7 +15,7 @@ export function useUpdateProfile() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (data: any) => {
-            const response = await httpService.patch<User>(API_CONFIG.path.profile.base, data);
+            const response = await profileService.updateProfile(data);
             return response.data;
         },
         onSuccess: () => {

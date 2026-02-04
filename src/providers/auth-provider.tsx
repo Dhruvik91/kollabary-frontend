@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { API_CONFIG, FRONTEND_ROUTES, ROLES } from '@/constants/constants';
-import httpService from '@/lib/http-service';
+import { authService } from '@/services/auth.service';
 import { getDashboardRoute } from '@/lib/dashboard-routes';
 import { User, ApiResponse } from '@/constants/interface';
 
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const loadUser = async () => {
     try {
-      const response = await httpService.get<User>(API_CONFIG.path.userAuth.me);
+      const response = await authService.me();
       const userData = response.data;
 
       setUser({
@@ -103,10 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const response = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.login, {
-        email,
-        password,
-      });
+      const response = await authService.login({ email, password });
       const { user: userData } = response.data;
 
       setUser({
@@ -127,12 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const signUp = async (email: string, password: string, confirmPassword: string, role: ROLES) => {
     try {
-      const response = await httpService.post<AuthResponse>(API_CONFIG.path.userAuth.signup, {
-        email,
-        password,
-        confirmPassword,
-        role,
-      });
+      const response = await authService.signup({ email, password, confirmPassword });
       const { user: userData } = response.data;
 
       setUser({
@@ -153,7 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
 
   const signOut = async () => {
     try {
-      await httpService.post(API_CONFIG.path.userAuth.logout);
+      await authService.logout();
     } finally {
       setUser(null);
       setProfile(null);

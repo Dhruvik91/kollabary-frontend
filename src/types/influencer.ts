@@ -1,12 +1,52 @@
-export interface Influencer {
+import { PaginatedResponse, User } from "../constants/interface";
+
+export interface InfluencerProfile {
     id: string;
-    name: string;
-    username: string;
-    avatar: string;
-    bio: string;
-    followers: number;
-    engagement: number;
-    platforms: string[];
-    niches: string[];
+    user: User; // or any if User not fully match
+    niche: string;
+    platforms: string[]; // or JSON
+    followersCount: number;
+    engagementRate: number;
+    collaborationTypes: string[];
+    availability: boolean;
+    avgRating: number;
+    totalReviews: number;
+    rankingScore: number;
     verified: boolean;
+    bio?: string;
+    location?: string;
+    socialMediaLinks?: {
+        instagram?: string;
+        youtube?: string;
+        twitter?: string;
+        tiktok?: string;
+    };
+    createdAt: string;
+    updatedAt: string;
 }
+
+export interface SaveInfluencerProfileDto {
+    niche?: string;
+    platforms?: string[];
+    collaborationTypes?: string[];
+    availability?: boolean;
+    bio?: string;
+    location?: string;
+    socialMediaLinks?: {
+        instagram?: string;
+        youtube?: string;
+        twitter?: string;
+        tiktok?: string;
+    };
+}
+
+export interface SearchInfluencersDto {
+    niche?: string;
+    platform?: string;
+    minFollowers?: number;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
+
+export type InfluencerSearchResponse = PaginatedResponse<InfluencerProfile>;

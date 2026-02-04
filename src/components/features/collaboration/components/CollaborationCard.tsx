@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Calendar, DollarSign, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
-import { Collaboration } from '@/constants/interface';
+import { Collaboration } from '@/types/collaboration';
 import { CollaborationStatus } from '@/constants/constants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,8 +15,15 @@ interface CollaborationCardProps {
 }
 
 export function CollaborationCard({ collaboration, userRole }: CollaborationCardProps) {
-    const { id, title, description, budget, status, createdAt, influencer, brand } = collaboration;
+    const { id, title, description, status, createdAt, influencer, requester, proposedTerms } = collaboration;
     const { mutate: updateStatus, isPending } = useUpdateCollaborationStatus();
+
+    // Budget might be in proposedTerms
+    const budget = proposedTerms?.budget || proposedTerms?.deliverables?.budget || 0;
+
+    // Resolve names
+    const influencerName = influencer?.profile?.fullName || influencer?.email || 'Influencer';
+    const requesterName = requester?.profile?.fullName || requester?.email || 'Brand';
 
     const getStatusIcon = (status: CollaborationStatus) => {
         switch (status) {
@@ -52,11 +59,11 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                     <h3 className="text-xl font-bold mb-1">{title}</h3>
                     <p className="text-sm text-muted-foreground flex items-center gap-1">
                         <span className="font-medium text-foreground">
-                            {userRole === 'INFLUENCER' ? brand?.name : influencer?.user?.name}
+                            {userRole === 'INFLUENCER' ? requesterName : influencerName}
                         </span>
                         <span>•</span>
                         <Calendar className="h-3 w-3" />
-                        {format(new Date(createdAt), 'MMM dd, yyyy')}
+                        {createdAt && format(new Date(createdAt), 'MMM dd, yyyy')}
                     </p>
                 </div>
                 <div className="text-right">

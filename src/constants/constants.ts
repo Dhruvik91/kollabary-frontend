@@ -1,14 +1,14 @@
 export const API_CONFIG = {
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000",
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api",
   path: {
     userAuth: {
-      login: "/user-auth/login",
-      signup: "/user-auth/signup",
-      googleLogin: "/user-auth/google",
-      me: "/user-auth/me",
-      logout: "/user-auth/logout",
-      forgotPassword: "/user-auth/forgot-password",
-      resetPassword: "/user-auth/reset-password",
+      login: "/v1/user-auth/login",
+      signup: "/v1/user-auth/signup",
+      googleLogin: "/v1/user-auth/google",
+      me: "/v1/user-auth/me",
+      logout: "/v1/user-auth/logout",
+      forgotPassword: "/v1/user-auth/forgot-password",
+      resetPassword: "/v1/user-auth/reset-password",
     },
     influencer: {
       profile: "/v1/influencer/profile",
@@ -22,6 +22,8 @@ export const API_CONFIG = {
     },
     profile: {
       base: "/v1/profile",
+      search: "/v1/profile/search",
+      detail: (id: string) => `/v1/profile/${id}`,
     },
     uploads: "/v1/uploads",
   },
