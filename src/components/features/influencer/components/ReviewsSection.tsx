@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Flag, ThumbsUp, MoreVertical, Filter } from "lucide-react";
+import { Star, Flag, ThumbsUp, MoreVertical, Filter, Pencil, Trash2 } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +36,7 @@ interface Review {
         timeliness: number;
     };
     verified: boolean;
+    reviewerId?: string;
 }
 
 interface ReviewsSectionProps {
@@ -43,6 +44,9 @@ interface ReviewsSectionProps {
     influencerName: string;
     averageRating: number;
     totalReviews: number;
+    currentUserId?: string;
+    onEdit?: (review: Review) => void;
+    onDelete?: (reviewId: string) => void;
 }
 
 function StarDisplay({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
@@ -84,6 +88,9 @@ export function ReviewsSection({
     influencerName,
     averageRating,
     totalReviews,
+    currentUserId,
+    onEdit,
+    onDelete,
 }: ReviewsSectionProps) {
     const [filter, setFilter] = useState<string>("all");
     const [reportDialogOpen, setReportDialogOpen] = useState(false);
@@ -178,100 +185,119 @@ export function ReviewsSection({
                         No reviews match your filter criteria.
                     </div>
                 ) : (
-                    filteredReviews.map((review, index) => (
-                        <motion.div
-                            key={review.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            className="p-4 rounded-xl bg-secondary/30 border border-glass-border"
-                        >
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex items-start gap-3">
-                                    {/* Author Avatar */}
-                                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium shrink-0">
-                                        {review.author.charAt(0).toUpperCase()}
+                    filteredReviews.map((review, index) => {
+                        const isMe = currentUserId && review.reviewerId === currentUserId;
+
+                        return (
+                            <motion.div
+                                key={review.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="p-4 rounded-xl bg-secondary/30 border border-glass-border"
+                            >
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-start gap-3">
+                                        {/* Author Avatar */}
+                                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium shrink-0">
+                                            {review.author.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="font-medium">{review.author}</span>
+                                                {review.verified && (
+                                                    <Badge variant="secondary" className="text-xs bg-primary/10 text-primary border-0">
+                                                        Verified
+                                                    </Badge>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <StarDisplay rating={review.rating} />
+                                                <span className="text-xs text-muted-foreground">{review.date}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 flex-wrap">
-                                            <span className="font-medium">{review.author}</span>
-                                            {review.verified && (
-                                                <Badge variant="secondary" className="text-xs bg-primary/10 text-primary border-0">
-                                                    Verified
-                                                </Badge>
+
+                                    {/* Actions Menu */}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 shrink-0"
+                                                aria-label="Review options"
+                                            >
+                                                <MoreVertical className="w-4 h-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="glass border-glass-border">
+                                            {isMe && (
+                                                <>
+                                                    <DropdownMenuItem onClick={() => onEdit?.(review)} className="gap-2 cursor-pointer text-primary focus:text-primary">
+                                                        <Pencil className="w-4 h-4" />
+                                                        <span>Edit Review</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => onDelete?.(review.id)}
+                                                        className="gap-2 cursor-pointer text-destructive focus:text-destructive"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                        <span>Delete Review</span>
+                                                    </DropdownMenuItem>
+                                                </>
                                             )}
-                                        </div>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <StarDisplay rating={review.rating} />
-                                            <span className="text-xs text-muted-foreground">{review.date}</span>
-                                        </div>
+                                            <DropdownMenuItem
+                                                onClick={() => handleReportReview(review.id)}
+                                                className="text-muted-foreground hover:text-foreground gap-2 cursor-pointer"
+                                            >
+                                                <Flag className="w-4 h-4" />
+                                                Report Review
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+
+                                {/* Review Text */}
+                                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                                    {review.text}
+                                </p>
+
+                                {/* Category Ratings */}
+                                {review.categories && (
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {Object.entries(review.categories).map(([key, value]) => (
+                                            <div
+                                                key={key}
+                                                className="flex items-center gap-1 px-2 py-1 rounded-lg bg-secondary/50 text-xs"
+                                            >
+                                                <span className="capitalize text-muted-foreground">{key}:</span>
+                                                <span className="font-medium">{value}/5</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
+                                )}
 
-                                {/* Actions Menu */}
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 shrink-0"
-                                            aria-label="Review options"
-                                        >
-                                            <MoreVertical className="w-4 h-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem
-                                            onClick={() => handleReportReview(review.id)}
-                                            className="text-destructive focus:text-destructive"
-                                        >
-                                            <Flag className="w-4 h-4 mr-2" />
-                                            Report Review
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-
-                            {/* Review Text */}
-                            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-                                {review.text}
-                            </p>
-
-                            {/* Category Ratings */}
-                            {review.categories && (
-                                <div className="flex flex-wrap gap-2 mt-3">
-                                    {Object.entries(review.categories).map(([key, value]) => (
-                                        <div
-                                            key={key}
-                                            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-secondary/50 text-xs"
-                                        >
-                                            <span className="capitalize text-muted-foreground">{key}:</span>
-                                            <span className="font-medium">{value}/5</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Helpful Button */}
-                            <div className="flex items-center gap-4 mt-4 pt-3 border-t border-glass-border/50">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className={`text-xs ${helpfulReviews.has(review.id)
+                                {/* Helpful Button */}
+                                <div className="flex items-center gap-4 mt-4 pt-3 border-t border-glass-border/50">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={`text-xs ${helpfulReviews.has(review.id)
                                             ? "text-primary"
                                             : "text-muted-foreground"
-                                        }`}
-                                    onClick={() => handleHelpful(review.id)}
-                                >
-                                    <ThumbsUp
-                                        className={`w-3.5 h-3.5 mr-1.5 ${helpfulReviews.has(review.id) ? "fill-primary" : ""
                                             }`}
-                                    />
-                                    Helpful ({review.helpful + (helpfulReviews.has(review.id) ? 1 : 0)})
-                                </Button>
-                            </div>
-                        </motion.div>
-                    ))
+                                        onClick={() => handleHelpful(review.id)}
+                                    >
+                                        <ThumbsUp
+                                            className={`w-3.5 h-3.5 mr-1.5 ${helpfulReviews.has(review.id) ? "fill-primary" : ""
+                                                }`}
+                                        />
+                                        Helpful ({review.helpful + (helpfulReviews.has(review.id) ? 1 : 0)})
+                                    </Button>
+                                </div>
+                            </motion.div>
+                        );
+                    })
                 )}
             </div>
 

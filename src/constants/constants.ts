@@ -25,6 +25,25 @@ export const API_CONFIG = {
       search: "/profile/search",
       detail: (id: string) => `/profile/${id}`,
     },
+    messaging: {
+      base: "/messaging",
+      conversation: "/messaging/conversation",
+      messages: (id: string) => `/messaging/conversation/${id}/messages`,
+      sendMessage: (id: string) => `/messaging/conversation/${id}/message`,
+      updateMessage: (id: string) => `/messaging/message/${id}`,
+      deleteMessage: (id: string) => `/messaging/message/${id}/delete`,
+      deleteConversation: (id: string) => `/messaging/conversation/${id}/delete`,
+    },
+    review: {
+      base: "/review",
+      influencer: (id: string) => `/review/influencer/${id}`,
+      update: (id: string) => `/review/${id}`,
+      delete: (id: string) => `/review/${id}/delete`,
+    },
+    report: {
+      base: "/report",
+      delete: (id: string) => `/report/${id}/delete`,
+    },
     uploads: "/uploads",
   },
 };
@@ -39,6 +58,10 @@ export const FRONTEND_ROUTES = {
   COLLABORATIONS: {
     BASE: '/collaborations',
     DETAIL: (id: string) => `/collaborations/${id}`,
+  },
+  MESSAGES: {
+    BASE: '/messages',
+    DETAIL: (id: string) => `/messages/${id}`,
   },
   AUTH: {
     LOGIN: '/auth/login',
@@ -73,6 +96,7 @@ export const AUTH_TOKEN_KEY = 'auth_token'
 
 export enum ROLES {
   USER = 'USER',
+  BRAND = 'USER', // Alias for USER
   INFLUENCER = 'INFLUENCER',
   ADMIN = 'ADMIN',
 }

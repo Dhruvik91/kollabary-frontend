@@ -15,6 +15,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AlertTriangle, Flag, Shield, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCreateReport } from "@/hooks/useReports";
+import { ReportReason } from "@/types/report";
 
 interface ReportDialogProps {
     isOpen: boolean;
@@ -25,21 +27,21 @@ interface ReportDialogProps {
 }
 
 const reviewReasons = [
-    { id: "spam", label: "Spam or misleading", icon: AlertTriangle },
-    { id: "inappropriate", label: "Inappropriate content", icon: Flag },
-    { id: "fake", label: "Fake or fraudulent review", icon: Shield },
-    { id: "harassment", label: "Harassment or bullying", icon: AlertTriangle },
-    { id: "other", label: "Other", icon: Flag },
+    { id: ReportReason.SPAM, label: "Spam or misleading", icon: AlertTriangle },
+    { id: ReportReason.INAPPROPRIATE_CONTENT, label: "Inappropriate content", icon: Flag },
+    { id: ReportReason.FRAUD, label: "Fake or fraudulent review", icon: Shield },
+    { id: ReportReason.HARASSMENT, label: "Harassment or bullying", icon: AlertTriangle },
+    { id: ReportReason.OTHER, label: "Other", icon: Flag },
 ];
 
 const influencerReasons = [
-    { id: "fraud", label: "Fraudulent activity", icon: Shield },
-    { id: "fake-followers", label: "Fake followers or engagement", icon: AlertTriangle },
-    { id: "scam", label: "Scam or deceptive practices", icon: Flag },
-    { id: "impersonation", label: "Impersonation", icon: Shield },
-    { id: "harassment", label: "Harassment or abuse", icon: AlertTriangle },
-    { id: "misleading", label: "Misleading content or profile", icon: Flag },
-    { id: "other", label: "Other concern", icon: Flag },
+    { id: ReportReason.FRAUD, label: "Fraudulent activity", icon: Shield },
+    { id: ReportReason.FAKE_ENGAGEMENT, label: "Fake followers or engagement", icon: AlertTriangle },
+    { id: ReportReason.SCAM, label: "Scam or deceptive practices", icon: Flag },
+    { id: ReportReason.IMPERSONATION, label: "Impersonation", icon: Shield },
+    { id: ReportReason.HARASSMENT, label: "Harassment or abuse", icon: AlertTriangle },
+    { id: ReportReason.MISLEADING, label: "Misleading content or profile", icon: Flag },
+    { id: ReportReason.OTHER, label: "Other concern", icon: Flag },
 ];
 
 export function ReportDialog({
@@ -49,10 +51,10 @@ export function ReportDialog({
     targetName,
     targetId,
 }: ReportDialogProps) {
-    const [selectedReason, setSelectedReason] = useState("");
+    const [selectedReason, setSelectedReason] = useState<ReportReason | "">("");
     const [details, setDetails] = useState("");
     const [step, setStep] = useState<"form" | "success">("form");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const createReport = useCreateReport();
 
     const reasons = type === "review" ? reviewReasons : influencerReasons;
     const title = type === "review" ? "Report Review" : "Report Influencer";
@@ -67,20 +69,18 @@ export function ReportDialog({
             return;
         }
 
-        setIsSubmitting(true);
-
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        setIsSubmitting(false);
-        setStep("success");
-
-        console.log("Report submitted:", {
-            type,
-            targetId,
-            reason: selectedReason,
-            details,
-        });
+        try {
+            await createReport.mutateAsync({
+                targetId,
+                targetType: type,
+                reason: selectedReason as ReportReason,
+                details,
+            });
+            setStep("success");
+        } catch (error) {
+            toast.error("Failed to submit report. Please try again.");
+            console.error(error);
+        }
     };
 
     const handleClose = () => {
@@ -114,14 +114,13 @@ export function ReportDialog({
                             </DialogHeader>
 
                             <div className="mt-6 space-y-6">
-                                {/* Reason Selection */}
                                 <div className="space-y-3">
                                     <Label className="text-sm font-medium">
                                         Why are you reporting this {type}?
                                     </Label>
                                     <RadioGroup
                                         value={selectedReason}
-                                        onValueChange={setSelectedReason}
+                                        onValueChange={(val) => setSelectedReason(val as ReportReason)}
                                         className="space-y-2"
                                     >
                                         {reasons.map((reason) => {
@@ -130,8 +129,8 @@ export function ReportDialog({
                                                 <label
                                                     key={reason.id}
                                                     className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedReason === reason.id
-                                                            ? "border-primary bg-primary/5"
-                                                            : "border-glass-border hover:border-primary/50 hover:bg-secondary/30"
+                                                        ? "border-primary bg-primary/5"
+                                                        : "border-glass-border hover:border-primary/50 hover:bg-secondary/30"
                                                         }`}
                                                 >
                                                     <RadioGroupItem
@@ -141,16 +140,16 @@ export function ReportDialog({
                                                     />
                                                     <div
                                                         className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${selectedReason === reason.id
-                                                                ? "bg-primary/20 text-primary"
-                                                                : "bg-secondary text-muted-foreground"
+                                                            ? "bg-primary/20 text-primary"
+                                                            : "bg-secondary text-muted-foreground"
                                                             }`}
                                                     >
                                                         <Icon className="w-4 h-4" aria-hidden="true" />
                                                     </div>
                                                     <span
                                                         className={`font-medium transition-colors ${selectedReason === reason.id
-                                                                ? "text-foreground"
-                                                                : "text-muted-foreground"
+                                                            ? "text-foreground"
+                                                            : "text-muted-foreground"
                                                             }`}
                                                     >
                                                         {reason.label}
@@ -161,7 +160,6 @@ export function ReportDialog({
                                     </RadioGroup>
                                 </div>
 
-                                {/* Additional Details */}
                                 <div className="space-y-2">
                                     <Label htmlFor="report-details" className="text-sm font-medium">
                                         Additional details (optional)
@@ -179,7 +177,6 @@ export function ReportDialog({
                                     </p>
                                 </div>
 
-                                {/* Info Box */}
                                 <div className="p-4 rounded-xl bg-secondary/30 border border-glass-border">
                                     <div className="flex gap-3">
                                         <Shield className="w-5 h-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
@@ -194,22 +191,21 @@ export function ReportDialog({
                                     </div>
                                 </div>
 
-                                {/* Actions */}
                                 <div className="flex gap-3 pt-2">
                                     <Button
                                         variant="outline"
                                         onClick={handleClose}
                                         className="flex-1 border-glass-border"
-                                        disabled={isSubmitting}
+                                        disabled={createReport.isPending}
                                     >
                                         Cancel
                                     </Button>
                                     <Button
                                         onClick={handleSubmit}
                                         className="flex-1 bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-                                        disabled={!selectedReason || isSubmitting}
+                                        disabled={!selectedReason || createReport.isPending}
                                     >
-                                        {isSubmitting ? (
+                                        {createReport.isPending ? (
                                             <span className="flex items-center gap-2">
                                                 <svg
                                                     className="animate-spin h-4 w-4"
@@ -256,7 +252,7 @@ export function ReportDialog({
                             <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
                                 Thank you for helping keep our community safe. We'll review your report and take appropriate action.
                             </p>
-                            <Button onClick={handleClose} className="gradient-bg border-0">
+                            <Button onClick={handleClose} className="gradient-bg border-0" aria-label="Close success dialog">
                                 Done
                             </Button>
                         </motion.div>
