@@ -1,6 +1,4 @@
-import { Influencer } from "@/types/influencer";
-
-export const mockInfluencers: Influencer[] = [
+export const mockInfluencers: any[] = [
     {
         id: "1",
         name: "Sarah Chen",

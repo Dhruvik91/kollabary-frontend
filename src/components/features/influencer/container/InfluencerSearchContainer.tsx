@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useInfluencerSearch } from '@/hooks/useInfluencers';
-import { InfluencerCard } from '../components/InfluencerCard';
+import { InfluencerCard } from '../InfluencerCard';
 import { InfluencerFilters } from '../components/InfluencerFilters';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Users } from 'lucide-react';
@@ -10,29 +10,42 @@ import { Loader2, Users } from 'lucide-react';
 const CATEGORIES = ['Lifestyle', 'Fashion', 'Tech', 'Fitness', 'Travel', 'Food', 'Gaming'];
 
 export function InfluencerSearchContainer() {
-    const [search, setSearch] = useState('');
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showFilters, setShowFilters] = useState(false);
+    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+    const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
     const [page, setPage] = useState(1);
 
     const { data, isLoading, isError } = useInfluencerSearch({
-        search,
-        categories: selectedCategories.join(','),
+        search: searchQuery,
+        niche: selectedNiches[0], // DTO expects single string
+        platform: selectedPlatforms[0], // DTO expects single string
         page,
         limit: 12
     });
 
-    const toggleCategory = (cat: string) => {
-        setSelectedCategories(prev =>
-            prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    const togglePlatform = (platform: string) => {
+        setSelectedPlatforms(prev =>
+            prev.includes(platform) ? [] : [platform]
         );
-        setPage(1); // Reset to first page on filter change
+        setPage(1);
+    };
+
+    const toggleNiche = (niche: string) => {
+        setSelectedNiches(prev =>
+            prev.includes(niche) ? [] : [niche]
+        );
+        setPage(1);
     };
 
     const handleReset = () => {
-        setSearch('');
-        setSelectedCategories([]);
+        setSearchQuery('');
+        setSelectedPlatforms([]);
+        setSelectedNiches([]);
         setPage(1);
     };
+
+    const hasActiveFilters = selectedPlatforms.length > 0 || selectedNiches.length > 0;
 
     return (
         <div className="container px-4 py-12 mx-auto">
@@ -42,12 +55,16 @@ export function InfluencerSearchContainer() {
             </div>
 
             <InfluencerFilters
-                search={search}
-                onSearchChange={setSearch}
-                categories={CATEGORIES}
-                selectedCategories={selectedCategories}
-                onCategoryToggle={toggleCategory}
-                onReset={handleReset}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                showFilters={showFilters}
+                setShowFilters={setShowFilters}
+                selectedPlatforms={selectedPlatforms}
+                togglePlatform={togglePlatform}
+                selectedNiches={selectedNiches}
+                toggleNiche={toggleNiche}
+                clearFilters={handleReset}
+                hasActiveFilters={hasActiveFilters}
             />
 
             {isLoading ? (

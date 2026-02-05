@@ -55,6 +55,10 @@ export const FRONTEND_ROUTES = {
   PROFILE: {
     BASE: '/profile',
     EDIT: '/profile/edit',
+    ONBOARDING: {
+      BRAND: '/onboarding/brand',
+      INFLUENCER: '/onboarding/influencer',
+    }
   },
   ADMIN: {
     BASE: '/dashboard/admin',

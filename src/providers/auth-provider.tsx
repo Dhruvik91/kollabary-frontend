@@ -63,6 +63,45 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
     }
   };
 
+  const handleRedirection = async (userData: AuthUser) => {
+    // Check if user is on onboarding or public pages, don't redirect if so (unless logged in on public)
+    const isOnboarding = pathname.startsWith('/onboarding');
+    const isAuthRoute = pathname.startsWith('/auth');
+    const isHomePage = pathname === FRONTEND_ROUTES.HOME;
+
+    // Check if profile exists
+    let hasProfile = false;
+    try {
+      if (userData.role === ROLES.INFLUENCER) {
+        const p = await authService.getInfluencerProfile();
+        if (p.data) hasProfile = true;
+      } else {
+        const p = await authService.getBrandProfile();
+        if (p.data) hasProfile = true;
+      }
+    } catch {
+      hasProfile = false;
+    }
+
+    if (!hasProfile) {
+      // Redirect to onboarding if not already there
+      if (!isOnboarding) {
+        if (userData.role === ROLES.INFLUENCER) {
+          router.replace(FRONTEND_ROUTES.PROFILE.ONBOARDING.INFLUENCER);
+        } else {
+          router.replace(FRONTEND_ROUTES.PROFILE.ONBOARDING.BRAND);
+        }
+      }
+      return;
+    }
+
+    // If profile exists, redirect to dashboard if on public/auth/onboarding pages
+    if (isAuthRoute || isHomePage || isOnboarding) {
+      const dashboardRoute = getDashboardRoute(userData.role);
+      router.replace(dashboardRoute);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       if (typeof window === 'undefined') return;
@@ -74,8 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
         url.searchParams.delete('token');
         window.history.replaceState({}, '', url.toString());
         const userData = await loadUser();
-        const dashboardRoute = getDashboardRoute(userData?.role || null);
-        router.replace(dashboardRoute);
+        if (userData) {
+          await handleRedirection(userData);
+        }
         return;
       }
 
@@ -90,11 +130,8 @@ export function AuthProvider({ children }: { children: React.ReactNode; }) {
         return;
       }
 
-      const authRoutesToRedirect = [FRONTEND_ROUTES.HOME, FRONTEND_ROUTES.AUTH.LOGIN, FRONTEND_ROUTES.AUTH.SIGNUP];
-      if (userData && authRoutesToRedirect.includes(pathname)) {
-        const dashboardRoute = getDashboardRoute(userData.role);
-        router.replace(dashboardRoute);
-        return;
+      if (userData) {
+        await handleRedirection(userData);
       }
     };
 

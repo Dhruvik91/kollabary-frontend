@@ -111,6 +111,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Note: Profile existence check is handled client-side in AuthProvider 
+  // to avoid blocking middleware with additional API calls.
+  // The AuthProvider will redirect to ONBOARDING routes if needed.
+
   return NextResponse.next();
 }
 

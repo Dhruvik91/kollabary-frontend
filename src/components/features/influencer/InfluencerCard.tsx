@@ -38,10 +38,10 @@ function formatNumber(num: number): string {
 
 export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
     // Safely access user profile data
-    const userProfile = (influencer.user as any)?.profile;
-    const name = userProfile?.fullName || userProfile?.username || 'Influencer';
-    const username = userProfile?.username || 'user';
-    const avatar = userProfile?.profileImage || userProfile?.avatarUrl || null;
+    const user = influencer.user as any;
+    const name = user?.name || user?.profile?.fullName || 'Influencer';
+    const username = user?.email?.split('@')[0] || 'user';
+    const avatar = user?.profileImage || user?.profile?.avatarUrl || null;
     const niches = influencer.niche ? [influencer.niche] : [];
 
     return (

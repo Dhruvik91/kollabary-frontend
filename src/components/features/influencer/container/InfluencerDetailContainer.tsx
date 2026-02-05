@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useInfluencerDetail } from '@/hooks/useInfluencers';
 import { motion } from 'framer-motion';
 import {
     Instagram,
@@ -31,7 +32,7 @@ import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { RequestCollaborationModal } from '@/components/features/collaboration/components/RequestCollaborationModal';
 import { ReviewsSection } from "@/components/features/influencer/components/ReviewsSection";
 import { ReportInfluencerButton } from "@/components/features/influencer/components/ReportInfluencerButton";
-import { mockInfluencers } from "@/data/mockInfluencers";
+
 
 const platformIcons: Record<string, React.ReactNode> = {
     instagram: <Instagram className="w-5 h-5" aria-hidden="true" />,
@@ -142,13 +143,19 @@ export function InfluencerDetailContainer() {
     const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
 
-    // In a real app, this would be a hook fetching from API
-    // Const { data: influencer, isLoading, isError } = useInfluencerDetail(id);
-
-    const influencer = useMemo(() => mockInfluencers.find((inf) => inf.id === id), [id]);
+    const { data: influencer, isLoading, isError } = useInfluencerDetail(id);
     const extendedProfile = useMemo(() => (id ? getExtendedProfile(id) : null), [id]);
 
-    if (!influencer) {
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+                <p className="text-muted-foreground animate-pulse">Loading profile...</p>
+            </div>
+        );
+    }
+
+    if (!influencer || isError) {
         return (
             <div className="container py-20 text-center">
                 <BackgroundEffects />
@@ -164,6 +171,8 @@ export function InfluencerDetailContainer() {
             </div>
         );
     }
+
+    const userProfile = influencer.user;
 
     return (
         <div className="container px-4 py-12 mx-auto">
@@ -199,14 +208,20 @@ export function InfluencerDetailContainer() {
                                 {/* Avatar */}
                                 <div className="relative mx-auto sm:mx-0 shrink-0">
                                     <div className="w-28 h-28 sm:w-36 sm:h-36 relative">
-                                        <Image
-                                            src={influencer.avatar}
-                                            alt={`${influencer.name}'s profile picture`}
-                                            fill
-                                            className="rounded-2xl object-cover ring-4 ring-primary/10"
-                                            sizes="(max-width: 640px) 112px, 144px"
-                                            priority
-                                        />
+                                        <div className="w-full h-full rounded-2xl overflow-hidden ring-4 ring-primary/10 bg-secondary/50 flex items-center justify-center">
+                                            {userProfile?.profileImage ? (
+                                                <Image
+                                                    src={userProfile.profileImage}
+                                                    alt={`${userProfile.name || 'User'}'s profile picture`}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 640px) 112px, 144px"
+                                                    priority
+                                                />
+                                            ) : (
+                                                <Users className="w-12 h-12 text-muted-foreground" />
+                                            )}
+                                        </div>
                                     </div>
                                     {influencer.verified && (
                                         <div
@@ -224,29 +239,29 @@ export function InfluencerDetailContainer() {
                                 {/* Info */}
                                 <div className="flex-1 text-center sm:text-left">
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
-                                        <h1 className="font-display text-3xl sm:text-4xl font-bold">{influencer.name}</h1>
+                                        <h1 className="font-display text-3xl sm:text-4xl font-bold">{userProfile?.name || 'Influencer'}</h1>
                                         <div className="flex items-center justify-center sm:justify-start gap-1">
                                             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" aria-hidden="true" />
-                                            <span className="font-medium">{extendedProfile?.rating}</span>
+                                            <span className="font-medium">{influencer.avgRating || extendedProfile?.rating || 0}</span>
                                             <span className="text-muted-foreground text-sm">
-                                                ({extendedProfile?.reviewCount} reviews)
+                                                ({influencer.totalReviews || extendedProfile?.reviewCount || 0} reviews)
                                             </span>
                                         </div>
                                     </div>
-                                    <p className="text-muted-foreground mb-4">@{influencer.username}</p>
+                                    <p className="text-muted-foreground mb-4">@{userProfile?.email?.split('@')[0]}</p>
 
                                     <div className="flex flex-wrap justify-center sm:justify-start gap-5 text-sm text-muted-foreground mb-6">
                                         <span className="flex items-center gap-1.5">
                                             <MapPin className="w-4 h-4 text-primary" aria-hidden="true" />
-                                            {extendedProfile?.location}
+                                            {influencer.location || extendedProfile?.location || 'Global'}
                                         </span>
                                         <span className="flex items-center gap-1.5">
                                             <Calendar className="w-4 h-4 text-primary" aria-hidden="true" />
-                                            Joined {extendedProfile?.joinedDate}
+                                            Joined {extendedProfile?.joinedDate || new Date(influencer.createdAt).toLocaleDateString()}
                                         </span>
                                     </div>
 
-                                    <p className="text-foreground leading-relaxed text-lg">{influencer.bio}</p>
+                                    <p className="text-foreground leading-relaxed text-lg">{influencer.bio || 'No bio available.'}</p>
                                 </div>
                             </div>
 
@@ -281,7 +296,7 @@ export function InfluencerDetailContainer() {
                                     </Button>
                                     <ReportInfluencerButton
                                         influencerId={influencer.id}
-                                        influencerName={influencer.name}
+                                        influencerName={userProfile?.name || 'Influencer'}
                                         variant="icon"
                                     />
                                 </div>
@@ -298,28 +313,28 @@ export function InfluencerDetailContainer() {
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             <GlassCard className="p-4 text-center">
                                 <Users className="w-6 h-6 mx-auto mb-2 text-primary" aria-hidden="true" />
-                                <div className="font-display text-2xl font-bold">{formatNumber(influencer.followers)}</div>
+                                <div className="font-display text-2xl font-bold">{formatNumber(influencer.followersCount || 0)}</div>
                                 <div className="text-sm text-muted-foreground">Followers</div>
                             </GlassCard>
                             <GlassCard className="p-4 text-center">
                                 <TrendingUp className="w-6 h-6 mx-auto mb-2 text-accent" aria-hidden="true" />
-                                <div className="font-display text-2xl font-bold">{influencer.engagement}%</div>
+                                <div className="font-display text-2xl font-bold">{influencer.engagementRate || 0}%</div>
                                 <div className="text-sm text-muted-foreground">Engagement</div>
                             </GlassCard>
                             <GlassCard className="p-4 text-center">
                                 <Star className="w-6 h-6 mx-auto mb-2 text-yellow-500" aria-hidden="true" />
-                                <div className="font-display text-2xl font-bold">{extendedProfile?.completedCollabs}</div>
+                                <div className="font-display text-2xl font-bold">{extendedProfile?.completedCollabs || 0}</div>
                                 <div className="text-sm text-muted-foreground">Collabs Done</div>
                             </GlassCard>
                             <GlassCard className="p-4 text-center">
                                 <Mail className="w-6 h-6 mx-auto mb-2 text-primary" aria-hidden="true" />
-                                <div className="font-display text-2xl font-bold">{extendedProfile?.responseRate}%</div>
+                                <div className="font-display text-2xl font-bold">{extendedProfile?.responseRate || 100}%</div>
                                 <div className="text-sm text-muted-foreground">Response Rate</div>
                             </GlassCard>
                         </div>
                     </motion.div>
 
-                    {/* Recent Posts */}
+                    {/* Recent Posts - Using Mock Only */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -336,7 +351,7 @@ export function InfluencerDetailContainer() {
                                     >
                                         <Image
                                             src={post}
-                                            alt={`Recent post ${index + 1} by ${influencer.name}`}
+                                            alt={`Recent post ${index + 1}`}
                                             fill
                                             className="object-cover hover:opacity-90 transition-opacity"
                                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -356,9 +371,9 @@ export function InfluencerDetailContainer() {
                         {extendedProfile && (
                             <ReviewsSection
                                 reviews={extendedProfile.reviews}
-                                influencerName={influencer.name}
-                                averageRating={extendedProfile.rating}
-                                totalReviews={extendedProfile.reviewCount}
+                                influencerName={userProfile?.name || 'Influencer'}
+                                averageRating={influencer.avgRating || extendedProfile.rating}
+                                totalReviews={influencer.totalReviews || extendedProfile.reviewCount}
                             />
                         )}
                     </motion.div>
@@ -375,11 +390,10 @@ export function InfluencerDetailContainer() {
                         <GlassCard className="p-6">
                             <h2 className="font-display text-xl font-semibold mb-6">Social Reach</h2>
                             <div className="space-y-4">
-                                {influencer.platforms.map((platform) => (
+                                {influencer.platforms?.map((platform) => (
                                     <button
                                         key={platform}
                                         className="w-full flex items-center gap-4 p-4 rounded-xl bg-secondary/30 border border-glass-border/30 hover:bg-secondary/50 hover:border-glass-border transition-all text-left group"
-                                        aria-label={`View ${influencer.name}'s ${platformLabels[platform.toLowerCase()] || platform} profile`}
                                     >
                                         <div className="w-11 h-11 rounded-lg gradient-bg flex items-center justify-center text-primary-foreground group-hover:glow-primary transition-all">
                                             {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-5 h-5" />}
@@ -397,7 +411,7 @@ export function InfluencerDetailContainer() {
                         </GlassCard>
                     </motion.div>
 
-                    {/* Categories */}
+                    {/* Categories/Niche */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -406,7 +420,7 @@ export function InfluencerDetailContainer() {
                         <GlassCard className="p-6">
                             <h2 className="font-display text-xl font-semibold mb-4">Niches & Topics</h2>
                             <div className="flex flex-wrap gap-2">
-                                {influencer.niches.map((niche) => (
+                                {(influencer.niche ? [influencer.niche] : []).map((niche) => (
                                     <Badge
                                         key={niche}
                                         className="gradient-bg border-0 text-primary-foreground px-4 py-1.5"
@@ -458,7 +472,7 @@ export function InfluencerDetailContainer() {
                 isOpen={isRequestDialogOpen}
                 onClose={() => setIsRequestDialogOpen(false)}
                 influencerId={influencer.id}
-                influencerName={influencer.name}
+                influencerName={userProfile?.name || 'Influencer'}
             />
         </div>
     );

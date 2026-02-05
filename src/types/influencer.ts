@@ -40,6 +40,18 @@ export interface SaveInfluencerProfileDto {
     };
 }
 
+export interface CreateInfluencerPayload {
+    bio?: string;
+    location?: string;
+    socialMediaLinks?: {
+        instagram?: string;
+        youtube?: string;
+        twitter?: string;
+        tiktok?: string;
+    };
+    niche?: string;
+}
+
 export interface SearchInfluencersDto {
     niche?: string;
     platform?: string;

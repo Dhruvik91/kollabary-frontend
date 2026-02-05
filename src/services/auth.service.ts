@@ -40,6 +40,13 @@ class AuthService {
     async resetPassword(data: { token: string; newPassword: string }) {
         return httpService.post(API_CONFIG.path.userAuth.resetPassword, data);
     }
+    async getInfluencerProfile() {
+        return httpService.get<any>(API_CONFIG.path.influencer.profile);
+    }
+
+    async getBrandProfile() {
+        return httpService.get<any>(API_CONFIG.path.profile.base);
+    }
 }
 
 export const authService = new AuthService();

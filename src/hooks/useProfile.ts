@@ -11,6 +11,24 @@ export function useMyProfile() {
     });
 }
 
+export function useCreateProfile(options?: any) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: any) => {
+            const response = await profileService.saveProfile(data);
+            return response.data;
+        },
+        onSuccess: async (data, variables, context) => {
+            await queryClient.invalidateQueries({ queryKey: ['profile', 'me'] });
+            await queryClient.invalidateQueries({ queryKey: ['auth', 'user'] });
+            if (options?.onSuccess) {
+                await options.onSuccess(data, variables, context);
+            }
+        },
+        ...options
+    });
+}
+
 export function useUpdateProfile() {
     const queryClient = useQueryClient();
     return useMutation({

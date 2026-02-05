@@ -1,0 +1,37 @@
+"use client";
+
+import { BackgroundEffects } from "@/components/BackgroundEffects";
+import { InfluencerOnboardingForm } from "@/components/features/onboarding/components/InfluencerOnboardingForm";
+import { InfluencerSchemaType } from "@/constants/validations";
+import { useInfluencerOnboarding } from "@/hooks/useInfluencerOnboarding";
+import { CreateInfluencerPayload } from "@/types/influencer";
+
+export default function InfluencerOnboarding() {
+    const mutation = useInfluencerOnboarding();
+
+    const onSubmit = (values: InfluencerSchemaType) => {
+        const payload: CreateInfluencerPayload = {
+            bio: values.bio,
+            location: values.location,
+            socialMediaLinks: {
+                instagram: values.instagram,
+                twitter: values.twitter,
+                tiktok: values.tiktok,
+                youtube: values.youtube,
+            },
+            niche: values.categories,
+        };
+
+        mutation.mutate(payload);
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <BackgroundEffects />
+            <InfluencerOnboardingForm
+                onSubmit={onSubmit}
+                isLoading={mutation.isPending}
+            />
+        </div>
+    );
+}

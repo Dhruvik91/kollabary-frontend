@@ -23,6 +23,7 @@ const profileSchema = z.object({
         instagram: z.string().optional(),
         youtube: z.string().optional(),
         twitter: z.string().optional(),
+        tiktok: z.string().optional(),
     }).optional(),
 });
 
@@ -39,19 +40,20 @@ export function ProfileEditContainer() {
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         values: {
-            name: profile?.name || '',
+            name: profile?.fullName || '',
             bio: influencerProfile?.bio || '',
             location: influencerProfile?.location || '',
             socialMediaLinks: {
                 instagram: influencerProfile?.socialMediaLinks?.instagram || '',
                 youtube: influencerProfile?.socialMediaLinks?.youtube || '',
                 twitter: influencerProfile?.socialMediaLinks?.twitter || '',
+                tiktok: influencerProfile?.socialMediaLinks?.tiktok || '',
             },
         },
     });
 
     const onSubmit = (data: ProfileFormValues) => {
-        updateProfile({ name: data.name }, {
+        updateProfile({ fullName: data.name }, {
             onSuccess: () => {
                 if (user?.role === ROLES.INFLUENCER) {
                     saveInfluencerProfile({
@@ -98,9 +100,9 @@ export function ProfileEditContainer() {
                         <div className="flex flex-col md:flex-row items-center gap-8">
                             <div className="relative group">
                                 <Avatar className="h-24 w-24 ring-4 ring-primary/10">
-                                    <AvatarImage src={profile?.profileImage} />
+                                    <AvatarImage src={profile?.avatarUrl} />
                                     <AvatarFallback className="text-2xl font-bold bg-primary/5 text-primary">
-                                        {profile?.name?.charAt(0) || <UserIcon />}
+                                        {profile?.fullName?.charAt(0) || <UserIcon />}
                                     </AvatarFallback>
                                 </Avatar>
                                 <button type="button" className="absolute bottom-0 right-0 p-2 rounded-full bg-primary text-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -108,9 +110,9 @@ export function ProfileEditContainer() {
                                 </button>
                             </div>
                             <div className="flex-1 space-y-1 text-center md:text-left">
-                                <h3 className="text-xl font-bold">{profile?.name || 'Your Name'}</h3>
+                                <h3 className="text-xl font-bold">{profile?.fullName || 'Your Name'}</h3>
                                 <p className="text-sm text-muted-foreground uppercase tracking-widest">{user?.role}</p>
-                                <p className="text-sm text-muted-foreground">{profile?.email}</p>
+                                <p className="text-sm text-muted-foreground">{user?.email}</p>
                             </div>
                         </div>
 
@@ -212,6 +214,24 @@ export function ProfileEditContainer() {
                                         <FormItem>
                                             <FormLabel className="flex items-center gap-2">
                                                 <Twitter className="h-4 w-4 text-blue-400" /> Twitter
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="@handle" className="bg-white/5" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="socialMediaLinks.tiktok"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="flex items-center gap-2">
+                                                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                                                </svg>
+                                                TikTok
                                             </FormLabel>
                                             <FormControl>
                                                 <Input placeholder="@handle" className="bg-white/5" {...field} />
