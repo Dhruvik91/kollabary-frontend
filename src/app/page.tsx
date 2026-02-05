@@ -9,6 +9,8 @@ import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { InfluencerCard } from "@/components/features/influencer/InfluencerCard";
 import { mockInfluencers } from "@/data/mockInfluencers";
 
+import { Footer } from "@/components/layout/Footer";
+
 const features = [
   {
     icon: Users,
@@ -221,6 +223,7 @@ export default function LandingPage() {
           </GlassCard>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
