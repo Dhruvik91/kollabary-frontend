@@ -101,7 +101,7 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                 </div>
             )}
 
-            {status === CollaborationStatus.ACCEPTED && (
+            {status === CollaborationStatus.ACCEPTED && userRole === 'INFLUENCER' && (
                 <div className="pt-6 border-t border-white/5">
                     <Button
                         variant="premium"

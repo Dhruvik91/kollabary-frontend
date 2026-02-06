@@ -1,21 +1,30 @@
 {
-  "name": "Kollabary",
+  "name": "Kollabary - Influencer Marketplace",
   "short_name": "Kollabary",
-  "description": "Premium Influencer Marketplace",
+  "description": "Premium Influencer Marketplace - Connect brands with top influencers",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0d0d12",
   "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": [
+    "business",
+    "social",
+    "productivity"
+  ],
   "icons": [
     {
-      "src": "/andriod-chrome-192x192.png",
+      "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/andriod-chrome-512x512.png",
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

@@ -12,16 +12,21 @@ import { FRONTEND_ROUTES } from '@/constants/constants';
 import { LoadingState } from '@/components/ui/states/LoadingState';
 import { ErrorState } from '@/components/ui/states/ErrorState';
 import { EmptyState } from '@/components/ui/states/EmptyState';
+import { cn } from '@/lib/utils';
+
+
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 export function BrandDashboardContainer() {
     const { user } = useAuth();
     const { data: collaborations, isLoading, isError, refetch } = useMyCollaborations();
 
     const platformStats = [
-        { title: 'Total Campaigns', value: collaborations?.length?.toString() || '0', icon: Target, color: 'text-blue-500' },
-        { title: 'Active Influencers', value: '0', icon: Users, color: 'text-purple-500' }, // Placeholder for now
-        { title: 'Campaign Budget', value: '₹0', icon: IndianRupee, color: 'text-green-500' }, // Placeholder
-        { title: 'Avg. ROI', value: '--', icon: Activity, color: 'text-rose-500' },
+        { title: 'Total Campaigns', value: collaborations?.length?.toString() || '0', icon: Target, color: 'text-primary' },
+        { title: 'Active Influencers', value: '0', icon: Users, color: 'text-accent' },
+        { title: 'Campaign Budget', value: '₹0', icon: IndianRupee, color: 'text-primary' },
+        { title: 'Avg. ROI', value: '--', icon: Activity, color: 'text-accent' },
     ];
 
     if (isLoading) {
@@ -33,23 +38,23 @@ export function BrandDashboardContainer() {
     }
 
     return (
-        <div className="container px-4 py-8 mx-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-                <div>
-                    <h1 className="text-3xl font-bold">Brand Dashboard</h1>
-                    <p className="text-muted-foreground">Monitor your campaigns and influencer partnerships.</p>
-                </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" onClick={() => refetch()} title="Refresh Data">
-                        <RefreshCcw className="h-4 w-4" />
-                    </Button>
-                    <Link href={FRONTEND_ROUTES.INFLUENCERS.SEARCH}>
-                        <Button variant="premium" className="rounded-xl">
-                            <Plus className="h-4 w-4 mr-2" /> Find Influencers
+        <PageContainer>
+            <PageHeader
+                title="Brand Dashboard"
+                description="Monitor your campaigns and influencer partnerships."
+                actions={
+                    <>
+                        <Button variant="outline" onClick={() => refetch()} title="Refresh Data" className="glass border-glass-border">
+                            <RefreshCcw className="h-4 w-4" />
                         </Button>
-                    </Link>
-                </div>
-            </div>
+                        <Link href={FRONTEND_ROUTES.INFLUENCERS.SEARCH}>
+                            <Button variant="premium" className="rounded-xl shadow-lg border-0 shadow-primary/20">
+                                <Plus className="h-4 w-4 mr-2" /> Find Influencers
+                            </Button>
+                        </Link>
+                    </>
+                }
+            />
 
             {/* Hero Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -57,18 +62,25 @@ export function BrandDashboardContainer() {
                     <motion.div
                         key={stat.title}
                         initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
                         transition={{ delay: idx * 0.1 }}
+                        whileHover={{ y: -5 }}
                     >
-                        <Card className="glass-enhanced border-none relative overflow-hidden group hover:border-primary/20 transition-all">
+                        <Card className="glass shadow-xl border-glass-border relative overflow-hidden group transition-all duration-300">
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+                                <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest opacity-70">
                                     {stat.title}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="flex items-center justify-between">
-                                <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                                <stat.icon className={`h-8 w-8 ${stat.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
+                                <div className={`text-3xl font-bold font-display ${stat.color}`}>{stat.value}</div>
+                                <div className={cn(
+                                    "p-3 rounded-2xl bg-secondary/50 transition-all duration-300 group-hover:scale-110",
+                                    stat.color.replace('text-', 'text-opacity-20 ')
+                                )}>
+                                    <stat.icon className={cn("h-6 w-6", stat.color)} />
+                                </div>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -79,14 +91,15 @@ export function BrandDashboardContainer() {
                 {/* Main Feed */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">Latest Proposals</h2>
-                        <Link href={FRONTEND_ROUTES.COLLABORATIONS.BASE} className="text-sm text-primary hover:underline">
+                        <h2 className="text-2xl font-bold font-display">Latest Proposals</h2>
+                        <Link href={FRONTEND_ROUTES.COLLABORATIONS.BASE} className="text-sm font-medium text-primary hover:text-accent transition-colors flex items-center gap-1 group">
                             View All
+                            <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </Link>
                     </div>
 
                     {!collaborations || collaborations.length === 0 ? (
-                        <div className="glass-enhanced rounded-3xl p-8">
+                        <div className="glass rounded-3xl p-8 border-glass-border">
                             <EmptyState
                                 title="No proposals yet"
                                 description="Start by finding influencers and creating your first campaign."
@@ -105,22 +118,22 @@ export function BrandDashboardContainer() {
 
                 {/* Sidebar Insights */}
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-bold">Insights</h2>
-                    <Card className="glass-enhanced border-none">
+                    <h2 className="text-2xl font-bold font-display">Insights</h2>
+                    <Card className="glass border-glass-border shadow-2xl">
                         <CardHeader>
-                            <CardTitle className="text-lg">Budget Distribution</CardTitle>
+                            <CardTitle className="text-lg font-display">Budget Distribution</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-64 flex items-center justify-center border-2 border-dashed border-white/10 rounded-xl bg-white/5">
+                            <div className="h-64 flex items-center justify-center border border-dashed border-glass-border rounded-2xl bg-secondary/20">
                                 <div className="text-center">
-                                    <PieChart className="h-10 w-10 text-muted-foreground opacity-20 mx-auto mb-2" />
-                                    <span className="text-xs text-muted-foreground">Analytics Visualization Pending</span>
+                                    <PieChart className="h-10 w-10 text-muted-foreground opacity-30 mx-auto mb-2" />
+                                    <span className="text-xs text-muted-foreground font-medium">Analytics Visualization Pending</span>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
             </div>
-        </div>
+        </PageContainer>
     );
 }

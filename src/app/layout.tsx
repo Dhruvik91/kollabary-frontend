@@ -7,6 +7,8 @@ import { AuthProvider } from '@/providers/auth-provider'
 import { QueryProvider } from '@/providers/query-provider'
 import { AppShell } from '@/components/AppShell'
 import { GTMPageView } from '@/components/GTMPageView'
+import { registerServiceWorker } from '@/lib/register-sw';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -81,11 +83,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Register service worker for PWA
+  if (typeof window !== 'undefined') {
+    registerServiceWorker();
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Google Tag Manager */}
-        <Script id="gtm-init" strategy="afterInteractive">
+        <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -94,6 +101,8 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');
           `}
         </Script>
+
+        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

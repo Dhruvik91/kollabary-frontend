@@ -45,6 +45,21 @@ export const API_CONFIG = {
       delete: (id: string) => `/report/${id}/delete`,
     },
     uploads: "/uploads",
+    admin: {
+      reports: "/v1/admin/reports",
+      reportStatus: (id: string) => `/v1/admin/reports/${id}/status`,
+      verifications: "/v1/admin/verifications",
+      verificationStatus: (id: string) => `/v1/admin/verifications/${id}/status`,
+      subscriptionPlan: "/v1/admin/subscription/plan",
+      deletePlan: (id: string) => `/v1/admin/subscription/plan/${id}`,
+    },
+    subscription: {
+      plans: "/v1/subscription/plans",
+    },
+    verification: {
+      request: "/v1/verification/request",
+      myRequests: "/v1/verification/my-requests",
+    },
   },
 };
 
