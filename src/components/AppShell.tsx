@@ -7,6 +7,7 @@ import { Menu, Sparkles } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/providers/auth-provider';
+import { LoadingState } from '@/components/ui/states/LoadingState';
 
 interface AppShellProps {
     children: React.ReactNode;
@@ -16,6 +17,10 @@ export function AppShell({ children }: AppShellProps) {
     const pathname = usePathname();
     const { user, loading } = useAuth();
     const isAuthPage = pathname?.startsWith('/auth');
+
+    if (loading) {
+        return <LoadingState fullPage message="Initializing Kollabary..." />;
+    }
 
     if (isAuthPage) {
         return <main>{children}</main>;

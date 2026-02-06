@@ -32,7 +32,7 @@ const navLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/influencers", label: "Discover", icon: Compass },
     { href: "/collaborations", label: "Collaborations", icon: Users },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/dashboard/brand", label: "Dashboard", icon: LayoutDashboard },
     { href: "/analytics", label: "Analytics", icon: BarChart3 },
 ];
 

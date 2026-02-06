@@ -56,7 +56,9 @@ const platformIcons: Record<string, React.ReactNode> = {
     pinterest: <ExternalLink className="w-5 h-5" aria-hidden="true" />,
 };
 
-function formatNumber(num: number): string {
+function formatNumber(value: number | string): string {
+    const num = Number(value);
+    if (isNaN(num)) return "0";
     if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
     if (num >= 1000) return (num / 1000).toFixed(1) + "K";
     return num.toString();
@@ -213,7 +215,7 @@ export function InfluencerDetailContainer() {
                                         <h1 className="font-display text-3xl sm:text-4xl font-bold">{userProfile?.name || 'Influencer'}</h1>
                                         <div className="flex items-center justify-center sm:justify-start gap-1">
                                             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                            <span className="font-medium">{influencer.avgRating || 0}</span>
+                                            <span className="font-medium">{Number(influencer.avgRating || 0)}</span>
                                         </div>
                                     </div>
                                     <p className="text-muted-foreground mb-4">@{userProfile?.email?.split('@')[0]}</p>
@@ -264,7 +266,7 @@ export function InfluencerDetailContainer() {
                         </GlassCard>
                         <GlassCard className="p-4 text-center">
                             <TrendingUp className="w-6 h-6 mx-auto mb-2 text-accent" />
-                            <div className="font-display text-2xl font-bold">{influencer.engagementRate || 0}%</div>
+                            <div className="font-display text-2xl font-bold">{Number(influencer.engagementRate || 0)}%</div>
                             <div className="text-sm text-muted-foreground">Engagement</div>
                         </GlassCard>
                         <GlassCard className="p-4 text-center">

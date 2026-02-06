@@ -76,7 +76,7 @@ export function InfluencerSearchContainer() {
                 <div className="text-center py-20 text-destructive bg-destructive/5 rounded-2xl border border-destructive/10">
                     <p>Something went wrong. Please try again later.</p>
                 </div>
-            ) : data?.items?.length === 0 ? (
+            ) : !data?.items || data.items.length === 0 ? (
                 <div className="text-center py-20 glass-enhanced rounded-3xl">
                     <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-20" />
                     <p className="text-xl font-medium mb-2">No influencers found</p>
@@ -85,7 +85,7 @@ export function InfluencerSearchContainer() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <AnimatePresence>
-                        {data?.items.map((influencer) => (
+                        {data.items.map((influencer) => (
                             <InfluencerCard key={influencer.id} influencer={influencer} />
                         ))}
                     </AnimatePresence>

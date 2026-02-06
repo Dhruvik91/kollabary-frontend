@@ -47,8 +47,9 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
+            whileHover={{ y: -4 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-enhanced rounded-2xl p-6 relative overflow-hidden group hover:border-primary/30 transition-all"
+            className="glass-enhanced rounded-2xl p-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300"
         >
             <div className="flex items-start justify-between mb-4">
                 <div>
@@ -80,8 +81,9 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
             </p>
 
             {status === CollaborationStatus.REQUESTED && userRole === 'INFLUENCER' && (
-                <div className="flex gap-3 pt-4 border-t border-white/10">
+                <div className="flex gap-3 pt-6 border-t border-white/5">
                     <Button
+                        variant="premium"
                         className="flex-1 rounded-xl"
                         onClick={() => updateStatus({ id, status: CollaborationStatus.ACCEPTED })}
                         disabled={isPending}
@@ -90,7 +92,7 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                     </Button>
                     <Button
                         variant="outline"
-                        className="flex-1 rounded-xl border-white/10"
+                        className="flex-1 rounded-xl border-white/10 hover:bg-white/5"
                         onClick={() => updateStatus({ id, status: CollaborationStatus.REJECTED })}
                         disabled={isPending}
                     >
@@ -100,9 +102,10 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
             )}
 
             {status === CollaborationStatus.ACCEPTED && (
-                <div className="pt-4 border-t border-white/10">
+                <div className="pt-6 border-t border-white/5">
                     <Button
-                        className="w-full rounded-xl bg-green-600 hover:bg-green-700"
+                        variant="premium"
+                        className="w-full rounded-xl !from-green-600 !to-emerald-600 shadow-green-900/20"
                         onClick={() => updateStatus({ id, status: CollaborationStatus.IN_PROGRESS })}
                         disabled={isPending}
                     >

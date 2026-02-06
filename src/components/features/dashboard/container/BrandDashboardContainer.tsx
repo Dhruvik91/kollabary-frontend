@@ -44,7 +44,7 @@ export function BrandDashboardContainer() {
                         <RefreshCcw className="h-4 w-4" />
                     </Button>
                     <Link href={FRONTEND_ROUTES.INFLUENCERS.SEARCH}>
-                        <Button className="rounded-xl gradient-bg border-0">
+                        <Button variant="premium" className="rounded-xl">
                             <Plus className="h-4 w-4 mr-2" /> Find Influencers
                         </Button>
                     </Link>

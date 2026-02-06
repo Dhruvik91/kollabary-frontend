@@ -45,10 +45,13 @@ class HttpService {
             (error as any).response = { status: envelope.statusCode, data: envelope };
             throw error;
           }
+          const finalData = (envelope as any).metaData?.pagination
+            ? { items: envelope.data as any[], meta: (envelope as any).metaData.pagination }
+            : envelope.data;
+
           return {
             ...response,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            data: envelope.data as any,
+            data: finalData as any,
           } as AxiosResponse;
         }
         return response;

@@ -155,9 +155,11 @@ export function ReviewsSection({
                 {/* Average Rating */}
                 <div className="text-center sm:text-left">
                     <div className="flex items-center justify-center sm:justify-start gap-3 mb-2">
-                        <span className="font-display text-4xl font-bold">{averageRating.toFixed(1)}</span>
+                        <span className="font-display text-4xl font-bold">
+                            {Number(averageRating || 0).toFixed(1)}
+                        </span>
                         <div>
-                            <StarDisplay rating={Math.round(averageRating)} size="md" />
+                            <StarDisplay rating={Math.round(Number(averageRating || 0))} size="md" />
                             <p className="text-sm text-muted-foreground mt-1">
                                 {totalReviews} reviews
                             </p>

@@ -26,6 +26,7 @@ export interface Review {
 
 export interface CreateReviewDto {
     influencerId: string;
+    collaborationId?: string;
     rating: number;
     comment: string;
 }
