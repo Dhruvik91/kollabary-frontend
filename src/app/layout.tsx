@@ -8,6 +8,7 @@ import { QueryProvider } from '@/providers/query-provider'
 import { AppShell } from '@/components/AppShell'
 import { GTMPageView } from '@/components/GTMPageView'
 import { registerServiceWorker } from '@/lib/register-sw';
+import { NotificationDetector } from '@/components/NotificationDetector';
 
 
 const inter = Inter({
@@ -135,6 +136,7 @@ export default function RootLayout({
               disableTransitionOnChange={false}
             >
               <AppShell>
+                <NotificationDetector />
                 <GTMPageView />
                 {children}
               </AppShell>

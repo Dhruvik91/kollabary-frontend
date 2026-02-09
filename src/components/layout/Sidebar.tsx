@@ -31,6 +31,7 @@ import {
 import { ROLES } from "@/constants/constants";
 import { getDashboardRoute } from "@/lib/dashboard-routes";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -101,10 +102,7 @@ export function Sidebar({ className }: { className?: string }) {
             {/* Bottom Actions */}
             <div className="p-4 border-t border-glass-border space-y-4 bg-glass/20 backdrop-blur-md">
                 <div className="flex items-center justify-around">
-                    <Link href="/notifications" className="relative p-2 text-muted-foreground hover:text-foreground transition-all hover:scale-110">
-                        <Bell className="w-5 h-5" />
-                        <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 text-[10px] flex items-center justify-center bg-accent text-accent-foreground border-2 border-background">2</Badge>
-                    </Link>
+                    <NotificationBell />
                     <Link href="/settings" className="p-2 text-muted-foreground hover:text-foreground transition-all hover:scale-110">
                         <Settings className="w-5 h-5" />
                     </Link>
