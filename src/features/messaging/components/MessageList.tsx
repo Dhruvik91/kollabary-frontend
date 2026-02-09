@@ -39,7 +39,7 @@ export function MessageList({ messages, currentUserId, onEdit, onDelete }: Messa
                 </div>
             ) : (
                 messages.map((msg, index) => {
-                    const isMe = msg.senderId === currentUserId;
+                    const isMe = msg.sender.id === currentUserId;
 
                     return (
                         <motion.div

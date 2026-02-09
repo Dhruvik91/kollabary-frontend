@@ -48,7 +48,7 @@ export function BrandDashboardContainer() {
                             <RefreshCcw className="h-4 w-4" />
                         </Button>
                         <Link href={FRONTEND_ROUTES.INFLUENCERS.SEARCH}>
-                            <Button variant="premium" className="rounded-xl shadow-lg border-0 shadow-primary/20">
+                            <Button variant="premium" className="rounded-xl shadow-sm border-0">
                                 <Plus className="h-4 w-4 mr-2" /> Find Influencers
                             </Button>
                         </Link>
@@ -67,7 +67,7 @@ export function BrandDashboardContainer() {
                         transition={{ delay: idx * 0.1 }}
                         whileHover={{ y: -5 }}
                     >
-                        <Card className="glass shadow-xl border-glass-border relative overflow-hidden group transition-all duration-300">
+                        <Card className="glass shadow-sm border-glass-border relative overflow-hidden group transition-all duration-300">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest opacity-70">
                                     {stat.title}
@@ -119,7 +119,7 @@ export function BrandDashboardContainer() {
                 {/* Sidebar Insights */}
                 <div className="space-y-6">
                     <h2 className="text-2xl font-bold font-display">Insights</h2>
-                    <Card className="glass border-glass-border shadow-2xl">
+                    <Card className="glass border-glass-border shadow-sm">
                         <CardHeader>
                             <CardTitle className="text-lg font-display">Budget Distribution</CardTitle>
                         </CardHeader>

@@ -141,11 +141,11 @@
 
 @layer components {
   .glass-card {
-    @apply bg-background/60 backdrop-blur-xl border border-border/50 shadow-xl;
+    @apply bg-background/60 backdrop-blur-xl border border-border/50 shadow-sm;
   }
 
   .glass-enhanced {
-    @apply bg-background/40 backdrop-blur-2xl border border-white/10 shadow-2xl relative overflow-hidden;
+    @apply bg-background/40 backdrop-blur-2xl border border-white/10 shadow-md relative overflow-hidden;
 
     &::before {
       content: '';
@@ -196,11 +196,11 @@ body {
   }
 
   .glow-primary {
-    box-shadow: 0 0 40px hsl(var(--glow-primary) / 0.3);
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.2);
   }
 
   .glow-accent {
-    box-shadow: 0 0 40px hsl(var(--glow-accent) / 0.3);
+    box-shadow: 0 0 20px hsl(var(--glow-accent) / 0.2);
   }
 
   .animate-float {

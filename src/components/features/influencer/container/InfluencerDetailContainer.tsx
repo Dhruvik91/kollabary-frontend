@@ -123,7 +123,7 @@ export function InfluencerDetailContainer() {
         <PageContainer>
             <div className="max-w-7xl mx-auto space-y-8">
                 {/* Hero Profile Section */}
-                <div className="relative rounded-[2rem] overflow-hidden glass border-glass-border shadow-2xl">
+                <div className="relative rounded-[2rem] overflow-hidden glass border-glass-border shadow-sm">
                     <div className="h-48 sm:h-64 bg-gradient-to-r from-primary/30 via-accent/20 to-primary/30 relative">
                         <div className="absolute inset-0 backdrop-blur-3xl opacity-50" />
                     </div>
@@ -137,14 +137,14 @@ export function InfluencerDetailContainer() {
                                     className="relative group"
                                 >
                                     <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-accent rounded-[2.5rem] blur opacity-30 group-hover:opacity-50 transition-opacity" />
-                                    <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-[2.5rem] bg-secondary border-4 border-background overflow-hidden relative shadow-2xl">
+                                    <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-[2.5rem] bg-secondary border-4 border-background overflow-hidden relative shadow-sm">
                                         <img
                                             src={influencer.user.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${influencer.user.name}`}
                                             alt={influencer.user.name}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                         />
                                     </div>
-                                    <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-green-500 border-2 border-background shadow-lg" />
+                                    <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-green-500 border-2 border-background shadow-sm" />
                                 </motion.div>
 
                                 <div className="text-center md:text-left space-y-3 pb-2">
@@ -191,7 +191,7 @@ export function InfluencerDetailContainer() {
                                         </Button>
                                         <Button
                                             variant="default"
-                                            className="rounded-xl px-8 h-12 shadow-xl shadow-primary/20 font-medium bg-primary text-primary-foreground hover:bg-primary/90"
+                                            className="rounded-xl px-8 h-12 shadow-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90"
                                             onClick={() => setIsCollabModalOpen(true)}
                                         >
                                             <Briefcase className="w-4 h-4 mr-2" />
@@ -209,7 +209,7 @@ export function InfluencerDetailContainer() {
                     {/* Left Column - Details */}
                     <div className="lg:col-span-2 space-y-8">
                         {/* Bio/About */}
-                        <GlassCard className="p-8 sm:p-10 border-glass-border shadow-xl">
+                        <GlassCard className="p-8 sm:p-10 border-glass-border shadow-sm">
                             <h2 className="text-2xl font-display font-bold mb-6">About</h2>
                             <p className="text-muted-foreground text-lg leading-relaxed whitespace-pre-wrap">
                                 {influencer.bio || `${influencer.user.name} is a creative visionary based in ${influencer.location || 'Mumbai'}. With a passion for storytelling and authentic engagement, they have built a thriving community focused on ${influencer.niche || 'quality content'}.`}
@@ -334,7 +334,7 @@ export function InfluencerDetailContainer() {
                                 </p>
                                 {!isOwnProfile && currentUser?.role === ROLES.BRAND && (
                                     <Button
-                                        className="w-full rounded-xl h-11 premium-gradient-bg border-0 shadow-lg shadow-primary/20 font-semibold"
+                                        className="w-full rounded-xl h-11 premium-gradient-bg border-0 shadow-sm font-semibold"
                                         onClick={() => setIsReviewModalOpen(true)}
                                     >
                                         Write a Review

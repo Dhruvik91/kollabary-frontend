@@ -37,7 +37,7 @@ export function AppShell({ children }: AppShellProps) {
         <div className="flex h-screen overflow-hidden bg-background text-foreground relative">
             <BackgroundEffects />
             {/* Desktop Sidebar */}
-            {user && <Sidebar className="hidden lg:flex w-64 border-r border-glass-border shadow-xl z-20" />}
+            {user && <Sidebar className="hidden lg:flex w-64 border-r border-glass-border shadow-sm z-20" />}
 
             <div className="flex-1 flex flex-col min-w-0 h-full relative z-10">
                 {/* Mobile Top Bar */}

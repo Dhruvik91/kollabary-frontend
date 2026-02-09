@@ -11,7 +11,7 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
     ({ className, variant = "default", glow = false, children, ...props }, ref) => {
         const variants = {
             default: "bg-glass/60 backdrop-blur-2xl border border-glass-border",
-            elevated: "bg-glass/80 backdrop-blur-3xl border border-glass-border shadow-2xl",
+            elevated: "bg-glass/80 backdrop-blur-3xl border border-glass-border shadow-md",
             subtle: "bg-glass/40 backdrop-blur-xl border border-glass-border/50",
         };
 

@@ -30,13 +30,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ROLES } from "@/constants/constants";
 import { getDashboardRoute } from "@/lib/dashboard-routes";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
-    { href: "/", label: "Home", icon: Home },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/influencers", label: "Discover", icon: Compass, roles: [ROLES.USER, ROLES.ADMIN] },
     { href: "/collaborations", label: "Collaborations", icon: Users },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/analytics", label: "Analytics", icon: BarChart3, roles: [ROLES.USER, ROLES.INFLUENCER] },
+    { href: "/messages", label: "Messages", icon: MessageSquare },
     { href: "/dashboard/admin", label: "Admin", icon: Shield, roles: [ROLES.ADMIN] },
 ];
 
@@ -101,10 +101,6 @@ export function Sidebar({ className }: { className?: string }) {
             {/* Bottom Actions */}
             <div className="p-4 border-t border-glass-border space-y-4 bg-glass/20 backdrop-blur-md">
                 <div className="flex items-center justify-around">
-                    <Link href="/messages" className="relative p-2 text-muted-foreground hover:text-foreground transition-all hover:scale-110">
-                        <MessageSquare className="w-5 h-5" />
-                        <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 text-[10px] flex items-center justify-center bg-primary text-primary-foreground border-2 border-background">3</Badge>
-                    </Link>
                     <Link href="/notifications" className="relative p-2 text-muted-foreground hover:text-foreground transition-all hover:scale-110">
                         <Bell className="w-5 h-5" />
                         <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 text-[10px] flex items-center justify-center bg-accent text-accent-foreground border-2 border-background">2</Badge>
@@ -112,6 +108,7 @@ export function Sidebar({ className }: { className?: string }) {
                     <Link href="/settings" className="p-2 text-muted-foreground hover:text-foreground transition-all hover:scale-110">
                         <Settings className="w-5 h-5" />
                     </Link>
+                    <ThemeToggle />
                 </div>
 
                 {user && (
