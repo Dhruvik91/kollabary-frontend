@@ -1,4 +1,4 @@
-import { MessagingContainer } from '@/features/messaging/container/MessagingContainer';
+import { MessagingContainer } from '@/components/features/messaging/container/MessagingContainer';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { SettingsContainer } from '@/features/settings/SettingsContainer';
+import { SettingsContainer } from '@/components/features/settings/SettingsContainer';
 
 export const metadata: Metadata = {
     title: 'Settings',

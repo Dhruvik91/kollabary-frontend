@@ -42,7 +42,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReviewForm } from '@/features/reviews/components/ReviewForm';
+import { ReviewForm } from '@/components/features/reviews/components/ReviewForm';
 import { LoadingState } from '@/components/ui/states/LoadingState';
 import { ErrorState } from '@/components/ui/states/ErrorState';
 import { PageContainer } from '@/components/layout/PageContainer';
