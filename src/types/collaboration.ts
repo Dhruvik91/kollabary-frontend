@@ -10,8 +10,11 @@ export interface Collaboration {
     id: string;
     requester: UserWithProfile;
     influencer: UserWithProfile;
+    brand?: UserWithProfile; // Brand user (same as requester typically)
     title: string;
     description?: string;
+    requirements?: string;
+    budget?: number;
     status: CollaborationStatus;
     proposedTerms?: any;
     agreedTerms?: any;
@@ -19,6 +22,11 @@ export interface Collaboration {
     endDate?: string;
     createdAt: string;
     updatedAt: string;
+    acceptedAt?: string;
+    rejectedAt?: string;
+    startedAt?: string;
+    completedAt?: string;
+    cancelledAt?: string;
 }
 
 export interface CreateCollaborationDto {
