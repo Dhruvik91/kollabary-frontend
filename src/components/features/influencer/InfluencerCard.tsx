@@ -73,7 +73,22 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                         )}
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-semibold text-lg truncate">{name}</h3>
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-display font-semibold text-lg truncate">{name}</h3>
+                            {influencer.rankingScore && influencer.rankingScore > 0 && (
+                                <Badge
+                                    variant="secondary"
+                                    className={`text-xs font-semibold ${influencer.rankingScore >= 1200 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' :
+                                            influencer.rankingScore >= 900 ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white' :
+                                                influencer.rankingScore >= 600 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' :
+                                                    influencer.rankingScore >= 300 ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' :
+                                                        'bg-gray-500 text-white'
+                                        }`}
+                                >
+                                    ⭐ {Math.round(influencer.rankingScore)}
+                                </Badge>
+                            )}
+                        </div>
                         <p className="text-muted-foreground text-sm">@{username}</p>
                     </div>
                 </div>

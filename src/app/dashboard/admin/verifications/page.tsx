@@ -1,173 +1,222 @@
 'use client';
 
 import { useState } from 'react';
-import { useAllVerifications, useUpdateVerificationStatus } from '@/hooks/useAdmin';
-import { PageContainer } from '@/components/layout/PageContainer';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { LoadingState } from '@/components/ui/states/LoadingState';
-import { ErrorState } from '@/components/ui/states/ErrorState';
-import { CheckCircle, XCircle, Clock, ExternalLink } from 'lucide-react';
-import { format } from 'date-fns';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+import { useVerificationRequests, useApproveVerification, useRejectVerification } from '@/hooks/admin/useVerificationRequests';
+import { VerificationRequestCard } from '@/components/admin/VerificationRequestCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertCircle, CheckCircle2, Clock, XCircle } from 'lucide-react';
 
-const statusConfig = {
-    PENDING: { label: 'Pending', icon: Clock, color: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' },
-    APPROVED: { label: 'Approved', icon: CheckCircle, color: 'bg-green-500/10 text-green-500 border-green-500/20' },
-    REJECTED: { label: 'Rejected', icon: XCircle, color: 'bg-red-500/10 text-red-500 border-red-500/20' },
-};
+function VerificationsSkeleton() {
+    return (
+        <div className="grid gap-4 md:grid-cols-2">
+            {[...Array(4)].map((_, i) => (
+                <Card key={i}>
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="flex-1">
+                                <Skeleton className="h-5 w-32 mb-2" />
+                                <Skeleton className="h-4 w-48" />
+                            </div>
+                        </div>
+                        <Skeleton className="h-10 w-full mb-2" />
+                        <div className="flex gap-2">
+                            <Skeleton className="h-10 flex-1" />
+                            <Skeleton className="h-10 flex-1" />
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    );
+}
 
 export default function AdminVerificationsPage() {
-    const { data: verifications, isLoading, isError } = useAllVerifications();
-    const updateStatusMutation = useUpdateVerificationStatus();
-    const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
-    const [selectedVerification, setSelectedVerification] = useState<string | null>(null);
-    const [rejectionReason, setRejectionReason] = useState('');
+    const [activeTab, setActiveTab] = useState('pending');
+    const { data: requests, isLoading, error } = useVerificationRequests();
+    const approveMutation = useApproveVerification();
+    const rejectMutation = useRejectVerification();
 
     const handleApprove = (id: string) => {
-        updateStatusMutation.mutate({ id, data: { status: 'APPROVED' } });
+        approveMutation.mutate(id);
     };
 
-    const handleReject = () => {
-        if (selectedVerification && rejectionReason) {
-            updateStatusMutation.mutate({
-                id: selectedVerification,
-                data: { status: 'REJECTED', rejectionReason },
-            });
-            setRejectDialogOpen(false);
-            setRejectionReason('');
-            setSelectedVerification(null);
-        }
+    const handleReject = (id: string, reason: string) => {
+        rejectMutation.mutate({ id, reason });
     };
 
-    if (isLoading) return <LoadingState message="Loading verification requests..." />;
-    if (isError) return <ErrorState message="Failed to load verification requests" />;
+    if (isLoading) {
+        return (
+            <div className="container mx-auto py-8 px-4">
+                <div className="mb-8">
+                    <Skeleton className="h-10 w-64 mb-2" />
+                    <Skeleton className="h-4 w-96" />
+                </div>
+                <VerificationsSkeleton />
+            </div>
+        );
+    }
+
+    if (error || !requests) {
+        return (
+            <div className="container mx-auto py-8 px-4">
+                <Card>
+                    <CardContent className="py-12 text-center">
+                        <AlertCircle className="h-12 w-12 mx-auto mb-4 text-red-500" />
+                        <h3 className="text-lg font-semibold mb-2">Failed to Load Verifications</h3>
+                        <p className="text-muted-foreground">Please try refreshing the page</p>
+                    </CardContent>
+                </Card>
+            </div>
+        );
+    }
+
+    const pendingRequests = requests.filter(r => r.status === 'PENDING');
+    const approvedRequests = requests.filter(r => r.status === 'APPROVED');
+    const rejectedRequests = requests.filter(r => r.status === 'REJECTED');
 
     return (
-        <PageContainer>
-            <PageHeader
-                title="Verification Requests"
-                description="Review and approve influencer verification requests."
-            />
-
-            <div className="space-y-6">
-                {verifications && verifications.length === 0 ? (
-                    <GlassCard className="p-12 text-center">
-                        <Clock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-xl font-semibold mb-2">No Pending Requests</h3>
-                        <p className="text-muted-foreground">There are no verification requests to review.</p>
-                    </GlassCard>
-                ) : (
-                    verifications?.map((verification) => {
-                        const StatusIcon = statusConfig[verification.status].icon;
-                        return (
-                            <GlassCard key={verification.id} className="p-6 border-glass-border">
-                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                                    <div className="flex-1 space-y-3">
-                                        <div className="flex items-center gap-3">
-                                            <Badge variant="outline" className={statusConfig[verification.status].color}>
-                                                <StatusIcon className="w-3 h-3 mr-1" />
-                                                {statusConfig[verification.status].label}
-                                            </Badge>
-                                            <Badge variant="secondary">
-                                                {verification.documentType}
-                                            </Badge>
-                                        </div>
-
-                                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                                            <span>User ID: {verification.userId}</span>
-                                            <span>Submitted: {format(new Date(verification.createdAt), 'MMM dd, yyyy')}</span>
-                                        </div>
-
-                                        <div>
-                                            <a
-                                                href={verification.documentUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 text-primary hover:underline"
-                                            >
-                                                View Document <ExternalLink className="w-4 h-4" />
-                                            </a>
-                                        </div>
-
-                                        {verification.rejectionReason && (
-                                            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                                                <p className="text-sm font-medium text-destructive">Rejection Reason:</p>
-                                                <p className="text-sm text-muted-foreground mt-1">{verification.rejectionReason}</p>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {verification.status === 'PENDING' && (
-                                        <div className="flex flex-col gap-3 min-w-[200px]">
-                                            <Button
-                                                onClick={() => handleApprove(verification.id)}
-                                                className="w-full bg-green-500 hover:bg-green-600 text-white"
-                                                disabled={updateStatusMutation.isPending}
-                                            >
-                                                <CheckCircle className="w-4 h-4 mr-2" />
-                                                Approve
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    setSelectedVerification(verification.id);
-                                                    setRejectDialogOpen(true);
-                                                }}
-                                                variant="outline"
-                                                className="w-full border-red-500/20 text-red-500 hover:bg-red-500/10"
-                                                disabled={updateStatusMutation.isPending}
-                                            >
-                                                <XCircle className="w-4 h-4 mr-2" />
-                                                Reject
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            </GlassCard>
-                        );
-                    })
-                )}
+        <div className="container mx-auto py-8 px-4 space-y-6">
+            {/* Header */}
+            <div>
+                <h1 className="text-4xl font-bold tracking-tight">Verification Requests</h1>
+                <p className="text-muted-foreground mt-2">
+                    Review and manage influencer verification requests
+                </p>
             </div>
 
-            <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
-                <DialogContent className="glass border-glass-border">
-                    <DialogHeader>
-                        <DialogTitle>Reject Verification Request</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                        <p className="text-sm text-muted-foreground">
-                            Please provide a reason for rejecting this verification request.
-                        </p>
-                        <Textarea
-                            placeholder="Enter rejection reason..."
-                            value={rejectionReason}
-                            onChange={(e) => setRejectionReason(e.target.value)}
-                            className="glass border-glass-border min-h-[100px]"
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleReject}
-                            disabled={!rejectionReason || updateStatusMutation.isPending}
-                            className="bg-red-500 hover:bg-red-600 text-white"
-                        >
-                            Reject Request
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </PageContainer>
+            {/* Stats */}
+            <div className="grid gap-4 md:grid-cols-3">
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Pending</p>
+                                <p className="text-3xl font-bold">{pendingRequests.length}</p>
+                            </div>
+                            <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-full">
+                                <Clock className="h-6 w-6 text-yellow-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Approved</p>
+                                <p className="text-3xl font-bold">{approvedRequests.length}</p>
+                            </div>
+                            <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-full">
+                                <CheckCircle2 className="h-6 w-6 text-green-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-muted-foreground">Rejected</p>
+                                <p className="text-3xl font-bold">{rejectedRequests.length}</p>
+                            </div>
+                            <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-full">
+                                <XCircle className="h-6 w-6 text-red-600" />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList>
+                    <TabsTrigger value="pending">
+                        Pending ({pendingRequests.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="approved">
+                        Approved ({approvedRequests.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="rejected">
+                        Rejected ({rejectedRequests.length})
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="pending" className="mt-6">
+                    {pendingRequests.length === 0 ? (
+                        <Card>
+                            <CardContent className="py-12 text-center">
+                                <Clock className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                                <h3 className="text-lg font-semibold mb-2">No Pending Requests</h3>
+                                <p className="text-muted-foreground">All verification requests have been processed</p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {pendingRequests.map((request) => (
+                                <VerificationRequestCard
+                                    key={request.id}
+                                    request={request}
+                                    onApprove={handleApprove}
+                                    onReject={handleReject}
+                                    isApproving={approveMutation.isPending}
+                                    isRejecting={rejectMutation.isPending}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </TabsContent>
+
+                <TabsContent value="approved" className="mt-6">
+                    {approvedRequests.length === 0 ? (
+                        <Card>
+                            <CardContent className="py-12 text-center">
+                                <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                                <h3 className="text-lg font-semibold mb-2">No Approved Requests</h3>
+                                <p className="text-muted-foreground">No verifications have been approved yet</p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {approvedRequests.map((request) => (
+                                <VerificationRequestCard
+                                    key={request.id}
+                                    request={request}
+                                    onApprove={handleApprove}
+                                    onReject={handleReject}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </TabsContent>
+
+                <TabsContent value="rejected" className="mt-6">
+                    {rejectedRequests.length === 0 ? (
+                        <Card>
+                            <CardContent className="py-12 text-center">
+                                <XCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                                <h3 className="text-lg font-semibold mb-2">No Rejected Requests</h3>
+                                <p className="text-muted-foreground">No verifications have been rejected</p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {rejectedRequests.map((request) => (
+                                <VerificationRequestCard
+                                    key={request.id}
+                                    request={request}
+                                    onApprove={handleApprove}
+                                    onReject={handleReject}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </TabsContent>
+            </Tabs>
+        </div>
     );
 }
