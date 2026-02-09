@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { profileService } from '@/services/profile.service';
+import { toast } from 'sonner';
 
 export function useMyProfile() {
     return useQuery({
@@ -39,6 +40,10 @@ export function useUpdateProfile() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['profile', 'me'] });
             queryClient.invalidateQueries({ queryKey: ['auth', 'user'] });
+            toast.success('Profile updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to update profile');
         },
     });
 }
