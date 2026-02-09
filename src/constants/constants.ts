@@ -45,7 +45,14 @@ export const API_CONFIG = {
       delete: (id: string) => `/report/${id}/delete`,
     },
     uploads: "/uploads",
+    ranking: {
+      breakdown: (id: string) => `/v1/ranking/breakdown/${id}`,
+      recalculate: (id: string) => `/v1/ranking/recalculate/${id}`,
+      recalculateAll: "/v1/ranking/recalculate-all",
+      weights: "/v1/ranking/weights",
+    },
     admin: {
+      stats: "/v1/admin/stats",
       reports: "/v1/admin/reports",
       reportStatus: (id: string) => `/v1/admin/reports/${id}/status`,
       verifications: "/v1/admin/verifications",
