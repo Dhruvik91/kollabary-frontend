@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useUpdateCollaborationStatus } from '@/hooks/useCollaborations';
 import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 interface CollaborationCardProps {
     collaboration: Collaboration;
@@ -17,6 +18,7 @@ interface CollaborationCardProps {
 export function CollaborationCard({ collaboration, userRole }: CollaborationCardProps) {
     const { id, title, description, status, createdAt, influencer, requester, proposedTerms } = collaboration;
     const { mutate: updateStatus, isPending } = useUpdateCollaborationStatus();
+    const router = useRouter();
 
     // Budget might be in proposedTerms
     const budget = proposedTerms?.budget || proposedTerms?.deliverables?.budget || 0;
@@ -44,12 +46,17 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
         [CollaborationStatus.CANCELLED]: 'bg-gray-500/10 text-gray-500 border-gray-500/20',
     };
 
+    const handleCardClick = () => {
+        router.push(`/collaborations/${id}`);
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileHover={{ y: -4 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-enhanced rounded-2xl p-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300"
+            onClick={handleCardClick}
+            className="glass-enhanced rounded-2xl p-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300 cursor-pointer"
         >
             <div className="flex items-start justify-between mb-4">
                 <div>
@@ -85,7 +92,10 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                     <Button
                         variant="premium"
                         className="flex-1 rounded-xl"
-                        onClick={() => updateStatus({ id, status: CollaborationStatus.ACCEPTED })}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            updateStatus({ id, status: CollaborationStatus.ACCEPTED });
+                        }}
                         disabled={isPending}
                     >
                         Accept
@@ -93,7 +103,10 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                     <Button
                         variant="outline"
                         className="flex-1 rounded-xl border-white/10 hover:bg-white/5"
-                        onClick={() => updateStatus({ id, status: CollaborationStatus.REJECTED })}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            updateStatus({ id, status: CollaborationStatus.REJECTED });
+                        }}
                         disabled={isPending}
                     >
                         Decline
@@ -106,7 +119,10 @@ export function CollaborationCard({ collaboration, userRole }: CollaborationCard
                     <Button
                         variant="premium"
                         className="w-full rounded-xl !from-green-600 !to-emerald-600 shadow-green-900/20"
-                        onClick={() => updateStatus({ id, status: CollaborationStatus.IN_PROGRESS })}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            updateStatus({ id, status: CollaborationStatus.IN_PROGRESS });
+                        }}
                         disabled={isPending}
                     >
                         Start Project

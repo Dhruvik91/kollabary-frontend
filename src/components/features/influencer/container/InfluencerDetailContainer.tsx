@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useInfluencerDetail } from '@/hooks/useInfluencers';
 import { useStartConversation } from '@/hooks/useMessaging';
-import { useInfluencerReviews, useUpdateReview, useDeleteReview } from '@/hooks/useReviews';
+import { useInfluencerReviews, useDeleteReview } from '@/hooks/useReviews';
 import { toast } from 'sonner';
 import { useAuth } from '@/providers/auth-provider';
 import { motion } from 'framer-motion';
@@ -14,11 +14,7 @@ import {
     Twitter,
     ExternalLink,
     Users,
-    TrendingUp,
     MapPin,
-    Calendar,
-    Mail,
-    ArrowLeft,
     Share2,
     Heart,
     MessageSquare,
@@ -26,14 +22,11 @@ import {
     Loader2,
     Plus,
 } from "lucide-react";
-import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { RequestCollaborationModal } from '@/components/features/collaboration/components/RequestCollaborationModal';
 import { ReviewsSection } from "@/components/features/influencer/components/ReviewsSection";
-import { ReportInfluencerButton } from "@/components/features/influencer/components/ReportInfluencerButton";
 import { ROLES } from '@/constants/constants';
 import {
     Dialog,
@@ -77,6 +70,7 @@ function formatNumber(value: number | string): string {
 export function InfluencerDetailContainer() {
     const params = useParams();
     const id = params?.id as string;
+    const router = useRouter();
     const { user: currentUser } = useAuth();
     const [isCollabModalOpen, setIsCollabModalOpen] = useState(false);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -86,7 +80,7 @@ export function InfluencerDetailContainer() {
     const { data: influencer, isLoading, isError } = useInfluencerDetail(id);
     const { data: realReviews } = useInfluencerReviews(id);
     const deleteReviewMutation = useDeleteReview();
-    const startConversation = useStartConversation();
+    const startConversationMutation = useStartConversation();
 
     const displayReviews = useMemo(() => {
         const reviews = realReviews || [];
@@ -112,6 +106,25 @@ export function InfluencerDetailContainer() {
             categories: review.categories
         });
         setIsReviewModalOpen(true);
+    };
+
+    const handleStartConversation = async () => {
+        if (!influencer?.user?.id) {
+            toast.error('Unable to start conversation');
+            return;
+        }
+
+        try {
+            const conversation = await startConversationMutation.mutateAsync({
+                recipientId: influencer.user.id
+            });
+
+            // Redirect to messages page with the conversation ID
+            router.push(`/messages?id=${conversation.id}`);
+            toast.success('Opening conversation...');
+        } catch (error) {
+            toast.error('Failed to start conversation');
+        }
     };
 
     const isOwnProfile = currentUser && influencer && currentUser.id === influencer.user.id;
@@ -184,9 +197,14 @@ export function InfluencerDetailContainer() {
                                         <Button
                                             variant="outline"
                                             className="rounded-xl px-8 h-12 glass border-glass-border font-medium"
-                                            onClick={() => influencer.user.email && (window.location.href = `mailto:${influencer.user.email}`)}
+                                            onClick={handleStartConversation}
+                                            disabled={startConversationMutation.isPending}
                                         >
-                                            <Mail className="w-4 h-4 mr-2" />
+                                            {startConversationMutation.isPending ? (
+                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            ) : (
+                                                <MessageSquare className="w-4 h-4 mr-2" />
+                                            )}
                                             Message
                                         </Button>
                                         <Button
