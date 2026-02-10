@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Loader2, Search } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
@@ -25,13 +24,9 @@ export function InfluencerList({
             {/* Results Count */}
             <div className="mb-6 h-6">
                 {!isLoading && (
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-muted-foreground"
-                    >
+                    <p className="text-muted-foreground text-sm">
                         Showing <span className="text-foreground font-medium">{totalInfluencers}</span> creators
-                    </motion.p>
+                    </p>
                 )}
             </div>
 

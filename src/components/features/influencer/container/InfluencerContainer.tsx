@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useInfluencerSearch } from "@/hooks/useInfluencers";
 import { useDebounce } from "@/hooks/useDebounce";
-import { InfluencerHeader } from "../components/InfluencerHeader";
 import { InfluencerFilters } from "../components/InfluencerFilters";
 import { InfluencerList } from "../components/InfluencerList";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 export function InfluencerContainer() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -50,8 +51,11 @@ export function InfluencerContainer() {
     const hasActiveFilters = selectedPlatforms.length > 0 || selectedNiches.length > 0 || searchQuery !== "";
 
     return (
-        <div className="container max-w-6xl mx-auto">
-            <InfluencerHeader />
+        <PageContainer className="max-w-7xl">
+            <PageHeader
+                title="Discover Creators"
+                description="Find the perfect influencers for your brand from our curated marketplace."
+            />
 
             <InfluencerFilters
                 searchQuery={searchQuery}
@@ -72,6 +76,6 @@ export function InfluencerContainer() {
                 totalInfluencers={totalInfluencers}
                 clearFilters={clearFilters}
             />
-        </div>
+        </PageContainer>
     );
 }

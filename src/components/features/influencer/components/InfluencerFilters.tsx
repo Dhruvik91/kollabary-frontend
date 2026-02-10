@@ -40,13 +40,8 @@ export function InfluencerFilters({
     niches = DEFAULT_NICHES
 }: InfluencerFiltersProps) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
-        >
-            <GlassCard variant="subtle" className="p-4">
+        <div className="mb-8 overflow-hidden rounded-xl border border-border/40 bg-card shadow-sm">
+            <div className="p-4">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -54,46 +49,43 @@ export function InfluencerFilters({
                             placeholder="Search creators by name, bio, or username..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 bg-secondary/50 border-glass-border h-12"
+                            className="pl-10 h-10 bg-background/50"
                         />
                     </div>
-                    <Button
-                        variant="outline"
-                        onClick={() => setShowFilters(!showFilters)}
-                        className="border-glass-border hover:bg-glass h-12"
-                    >
-                        <Filter className="w-4 h-4 mr-2" />
-                        Filters
-                        {hasActiveFilters && (
-                            <Badge className="ml-2 gradient-bg border-0">
-                                {(selectedPlatforms.length > 0 ? 1 : 0) + (selectedNiches.length > 0 ? 1 : 0)}
-                            </Badge>
-                        )}
-                    </Button>
-                    {hasActiveFilters && (
+                    <div className="flex items-center gap-2">
                         <Button
-                            variant="ghost"
-                            onClick={clearFilters}
-                            className="h-12"
+                            variant="outline"
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="h-10 border-border/40"
                         >
-                            <X className="w-4 h-4 mr-2" />
-                            Clear
+                            <Filter className="w-4 h-4 mr-2" />
+                            Filters
+                            {hasActiveFilters && (
+                                <Badge className="ml-2 gradient-bg border-0 text-[10px] px-1.5 h-4">
+                                    {(selectedPlatforms.length > 0 ? 1 : 0) + (selectedNiches.length > 0 ? 1 : 0)}
+                                </Badge>
+                            )}
                         </Button>
-                    )}
+                        {hasActiveFilters && (
+                            <Button
+                                variant="ghost"
+                                onClick={clearFilters}
+                                className="h-10 text-muted-foreground hover:text-foreground"
+                            >
+                                <X className="w-4 h-4 mr-2" />
+                                Clear
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Filter Panel */}
                 {showFilters && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="mt-6 pt-6 border-t border-glass-border"
-                    >
+                    <div className="mt-6 pt-6 border-t border-border/40 animate-in fade-in slide-in-from-top-2 duration-200">
                         <div className="grid md:grid-cols-2 gap-6">
                             {/* Platforms */}
                             <div>
-                                <h3 className="font-medium mb-3 flex items-center gap-2">
+                                <h3 className="text-sm font-medium mb-3 flex items-center gap-2 text-muted-foreground">
                                     <Instagram className="w-4 h-4" />
                                     Platforms
                                 </h3>
@@ -116,7 +108,7 @@ export function InfluencerFilters({
 
                             {/* Niches */}
                             <div>
-                                <h3 className="font-medium mb-3 flex items-center gap-2">
+                                <h3 className="text-sm font-medium mb-3 flex items-center gap-2 text-muted-foreground">
                                     <Sparkles className="w-4 h-4" />
                                     Categories
                                 </h3>
@@ -137,9 +129,9 @@ export function InfluencerFilters({
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
-            </GlassCard>
-        </motion.div>
+            </div>
+        </div>
     );
 }

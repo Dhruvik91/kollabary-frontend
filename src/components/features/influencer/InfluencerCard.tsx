@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Instagram, Youtube, Twitter, ExternalLink, Users, TrendingUp } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
@@ -43,13 +42,8 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
     const niches = influencer.niche ? [influencer.niche] : [];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
-        >
-            <GlassCard className="group overflow-hidden hover:border-primary/50 transition-all duration-300">
+        <div className="group h-full">
+            <GlassCard className="h-full group overflow-hidden border-border/40 hover:border-primary/40 hover:shadow-md transition-all duration-300">
                 {/* Header with avatar */}
                 <div className="flex items-start gap-4 mb-4">
                     <div className="relative w-16 h-16 bg-secondary/50 rounded-xl flex items-center justify-center overflow-hidden">
@@ -58,7 +52,7 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                                 src={avatar}
                                 alt={name}
                                 fill
-                                className="object-cover ring-2 ring-glass-border group-hover:ring-primary/50 transition-all"
+                                className="object-cover ring-2 ring-transparent group-hover:ring-primary/20 transition-all"
                                 sizes="64px"
                             />
                         ) : (
@@ -78,35 +72,35 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                             {influencer.rankingScore && influencer.rankingScore > 0 && (
                                 <Badge
                                     variant="secondary"
-                                    className={`text-xs font-semibold ${influencer.rankingScore >= 1200 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' :
-                                            influencer.rankingScore >= 900 ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white' :
-                                                influencer.rankingScore >= 600 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' :
-                                                    influencer.rankingScore >= 300 ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' :
-                                                        'bg-gray-500 text-white'
+                                    className={`text-[10px] font-bold h-5 px-1.5 ${influencer.rankingScore >= 1200 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0' :
+                                        influencer.rankingScore >= 900 ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0' :
+                                            influencer.rankingScore >= 600 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0' :
+                                                influencer.rankingScore >= 300 ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-0' :
+                                                    'bg-gray-500 text-white border-0'
                                         }`}
                                 >
                                     ⭐ {Math.round(influencer.rankingScore)}
                                 </Badge>
                             )}
                         </div>
-                        <p className="text-muted-foreground text-sm">@{username}</p>
+                        <p className="text-muted-foreground text-xs font-medium">@{username}</p>
                     </div>
                 </div>
 
                 {/* Bio */}
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[40px]">
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[40px] leading-relaxed">
                     {influencer.bio || 'No bio available.'}
                 </p>
 
                 {/* Stats */}
                 <div className="flex gap-4 mb-4">
                     <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-primary" />
-                        <span className="text-sm font-medium">{formatNumber(influencer.followersCount || 0)}</span>
+                        <Users className="w-4 h-4 text-primary/70" />
+                        <span className="text-sm font-semibold">{formatNumber(influencer.followersCount || 0)}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4 text-accent" />
-                        <span className="text-sm font-medium">{influencer.engagementRate || 0}%</span>
+                        <TrendingUp className="w-4 h-4 text-accent/70" />
+                        <span className="text-sm font-semibold">{influencer.engagementRate || 0}%</span>
                     </div>
                 </div>
 
@@ -116,9 +110,9 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                         {influencer.platforms.map((platform) => (
                             <div
                                 key={platform}
-                                className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                                className="w-7 h-7 rounded-lg bg-secondary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                             >
-                                {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-4 h-4" />}
+                                {platformIcons[platform.toLowerCase()] || <ExternalLink className="w-3.5 h-3.5" />}
                             </div>
                         ))}
                     </div>
@@ -130,7 +124,7 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                         <Badge
                             key={niche}
                             variant="secondary"
-                            className="bg-secondary/80 text-xs"
+                            className="bg-secondary/40 text-[10px] uppercase tracking-wider font-bold text-muted-foreground hover:text-foreground transition-colors"
                         >
                             {niche}
                         </Badge>
@@ -140,11 +134,11 @@ export function InfluencerCard({ influencer, index = 0 }: InfluencerCardProps) {
                 {/* CTA */}
                 <Button
                     asChild
-                    className="w-full gradient-bg border-0 group-hover:glow-primary transition-all"
+                    className="w-full gradient-bg border-0 hover:shadow-lg hover:shadow-primary/20 transition-all font-semibold"
                 >
                     <Link href={`/influencers/${influencer.id}`}>View Profile</Link>
                 </Button>
             </GlassCard>
-        </motion.div>
+        </div>
     );
 }
