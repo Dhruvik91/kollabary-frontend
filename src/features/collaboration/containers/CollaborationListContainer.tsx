@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useCollaborations } from '@/hooks/use-collaboration.hooks';
 import { CollaborationCard } from '@/components/collaboration/CollaborationCard';
 import { useAuth } from '@/contexts/auth-context';

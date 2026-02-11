@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,8 +15,6 @@ import {
     ChevronRight,
     Rocket,
     LogOut,
-    Bell,
-    HelpCircle,
     X,
     Handshake
 } from 'lucide-react';
@@ -100,24 +98,24 @@ export const Sidebar = ({
     }, [pathname]);
 
     const commonLinks = [
-        { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
-        { href: '/dashboard/collaborations', icon: Handshake, label: 'Collaborations' },
-        { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages', badge: '3' },
+        { href: '/', icon: LayoutDashboard, label: 'Overview' },
+        { href: '/collaborations', icon: Handshake, label: 'Collaborations' },
+        { href: '/messages', icon: MessageSquare, label: 'Messages', badge: '3' },
     ];
 
     const adminLinks = [
-        { href: '/dashboard/users', icon: Users, label: 'User Management' },
-        { href: '/dashboard/analytics', icon: BarChart3, label: 'Platform Analytics' },
+        { href: '/users', icon: Users, label: 'User Management' },
+        { href: '/analytics', icon: BarChart3, label: 'Platform Analytics' },
     ];
 
     const influencerLinks = [
-        { href: '/dashboard/campaigns', icon: Briefcase, label: 'Campaigns' },
-        { href: '/dashboard/earnings', icon: BarChart3, label: 'Earnings' },
+        { href: '/campaigns', icon: Briefcase, label: 'Campaigns' },
+        { href: '/earnings', icon: BarChart3, label: 'Earnings' },
     ];
 
     const brandLinks = [
-        { href: '/dashboard/discover', icon: Rocket, label: 'Discover' },
-        { href: '/dashboard/projects', icon: Briefcase, label: 'My Projects' },
+        { href: '/discover', icon: Rocket, label: 'Discover' },
+        { href: '/projects', icon: Briefcase, label: 'My Projects' },
     ];
 
     const getLinksByRole = () => {
@@ -135,7 +133,7 @@ export const Sidebar = ({
         <div className="flex flex-col h-full overflow-hidden">
             {/* Sidebar Header */}
             <div className="h-16 flex items-center justify-between px-5 border-b border-border/50 mb-6 shrink-0">
-                <Link href="/dashboard" className="flex items-center gap-3 active:scale-95 transition-transform overflow-hidden">
+                <Link href="/overview" className="flex items-center gap-3 active:scale-95 transition-transform overflow-hidden">
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 shrink-0">
                         <Rocket size={20} />
                     </div>
@@ -178,11 +176,11 @@ export const Sidebar = ({
             {/* Sidebar Footer */}
             <div className="p-3 mt-auto space-y-1 border-t border-border/50 bg-muted/20 shrink-0">
                 <NavItem
-                    href="/dashboard/settings"
+                    href="/settings"
                     icon={Settings}
                     label="Settings"
                     isCollapsed={isCollapsed && !isMobileOpen}
-                    isActive={pathname === '/dashboard/settings'}
+                    isActive={pathname === '/settings'}
                     onClick={onMobileClose}
                 />
 

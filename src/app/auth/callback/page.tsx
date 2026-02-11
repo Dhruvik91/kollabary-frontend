@@ -30,7 +30,7 @@ export default function CallbackPage() {
         queryClient.invalidateQueries({ queryKey: authKeys.me() });
 
         // Redirect to dashboard
-        router.push('/dashboard');
+        router.push('/overview');
     }, [searchParams, router, queryClient]);
 
     return (

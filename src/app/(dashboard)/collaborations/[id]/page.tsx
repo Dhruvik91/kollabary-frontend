@@ -1,4 +1,3 @@
-import React from 'react';
 import { CollaborationDetailContainer } from '@/features/collaboration/containers/CollaborationDetailContainer';
 
 interface PageProps {

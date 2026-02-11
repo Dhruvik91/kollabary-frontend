@@ -52,7 +52,7 @@ export function useSignup() {
             });
 
             // Redirect to dashboard
-            router.push('/dashboard');
+            router.push(FRONTEND_ROUTES.DASHBOARD.HOME);
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

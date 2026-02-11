@@ -1,4 +1,3 @@
-import React from 'react';
 import { CollaborationListContainer } from '@/features/collaboration/containers/CollaborationListContainer';
 import { Handshake } from 'lucide-react';
 

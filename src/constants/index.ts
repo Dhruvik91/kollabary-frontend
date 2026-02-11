@@ -28,9 +28,18 @@ export const FRONTEND_ROUTES = {
         CALLBACK: '/auth/callback',
     },
     DASHBOARD: {
-        BASE: '/dashboard',
-        COLLABORATIONS: '/dashboard/collaborations',
-        COLLABORATION_DETAIL: (id: string) => `/dashboard/collaborations/${id}`,
+        HOME: '/overview',
+        COLLABORATIONS: '/collaborations',
+        COLLABORATION_DETAIL: (id: string) => `/collaborations/${id}`,
+        MESSAGES: '/messages',
+        SETTINGS: '/settings',
+        USERS: '/users',
+        ANALYTICS: '/analytics',
+        CAMPAIGNS: '/campaigns',
+        EARNINGS: '/earnings',
+        DISCOVER: '/discover',
+        PROJECTS: '/projects',
+        OVERVIEW: '/overview'
     },
     HOME: '/',
 }
