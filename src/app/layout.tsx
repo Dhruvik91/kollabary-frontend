@@ -4,8 +4,6 @@ import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "sonner";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,13 +32,7 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            {children}
             <Toaster position="top-right" richColors closeButton />
           </AuthProvider>
         </QueryProvider>

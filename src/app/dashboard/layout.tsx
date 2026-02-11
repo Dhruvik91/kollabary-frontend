@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import DashboardClientLayout from './dashboard-client-layout';
 
 export const metadata: Metadata = {
     title: 'Dashboard | Kollabary',
@@ -10,5 +11,9 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <DashboardClientLayout>
+            {children}
+        </DashboardClientLayout>
+    );
 }
