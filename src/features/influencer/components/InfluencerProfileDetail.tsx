@@ -22,14 +22,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { CollaborationRequestDialog } from './CollaborationRequestDialog';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
 }
 
 export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailProps) => {
-    const { user, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
-    const profile = user?.profile;
+    const { user } = useAuth();
+    const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
+    const profile = influencerUser?.profile;
     const bio = profile?.bio;
 
     const getPlatformIcon = (platform: string) => {
@@ -244,9 +248,16 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                                     View Media Kit
                                     <ExternalLink size={18} />
                                 </button>
-                                <button className="flex-1 min-w-[200px] py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
-                                    Start Collaboration
-                                </button>
+                                {(user?.role === UserRole.USER || user?.role === UserRole.ADMIN) && user?.id !== influencer.user.id && (
+                                    <CollaborationRequestDialog
+                                        influencerId={influencer.id}
+                                        influencerName={profile?.fullName || 'Creator'}
+                                    >
+                                        <button className="flex-1 min-w-[200px] py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                            Start Collaboration
+                                        </button>
+                                    </CollaborationRequestDialog>
+                                )}
                             </div>
                         </div>
                     </Card>
