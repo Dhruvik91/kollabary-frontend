@@ -50,6 +50,25 @@ Rules:
   - `/components/ui`
   - `/components/shared`
 
+### Component Naming
+
+- Use Pascal Case for component names and file names 
+
+### Component Props
+
+- Use camelCase for prop names
+- Use Pascal Case for prop types
+
+### Component Events
+
+- Use camelCase for event names
+- Use Pascal Case for event handlers
+
+### Component State
+
+- Use camelCase for state names
+- Use Pascal Case for state types
+
 ⚠ Never mix UI with business logic.
 
 ---
@@ -432,6 +451,231 @@ Avoid fake coverage.
 - Ignoring performance regressions
 
 ---
+
+## 2️⃣5️⃣ Application State Handling Standards (MANDATORY)
+
+Every data-driven view MUST explicitly handle the following states:
+
+- Loading
+- Error
+- Empty
+- Not Found
+- Unauthorized
+
+No screen may silently fail or render incomplete UI.
+
+---
+
+### 🟡 Loading State Rules
+
+- Always show a loading state when data is fetching
+- Prefer skeleton loaders over spinners
+- Maintain layout consistency during loading
+- Prevent layout shift (CLS-safe)
+- Disable interactive elements while loading
+- Do not block the entire page unless necessary
+
+Use:
+
+- Route-level `loading.tsx` when appropriate
+- Component-level skeletons for partial loading
+
+❌ Never render blank screens  
+❌ Never render undefined data  
+
+---
+
+### 🔴 Error State Rules
+
+All errors must be handled gracefully.
+
+Rules:
+- Never expose stack traces
+- Never show raw backend error messages
+- Map technical errors to user-friendly messages
+- Provide retry mechanism when applicable
+- Log errors for monitoring
+
+Must handle:
+- Network errors
+- 4xx errors
+- 5xx errors
+- Mutation failures
+
+Use:
+- React Query `isError`
+- Error boundaries where appropriate
+
+---
+
+### 📭 Empty State Rules
+
+If data exists but contains no results:
+
+- Show a clear empty state UI
+- Provide explanation
+- Provide CTA if applicable (Create, Add, Refresh)
+- Maintain visual hierarchy
+
+Empty state must:
+- Be intentional
+- Not feel broken
+- Not look like loading
+
+---
+
+### 🔍 Not Found State (404)
+
+If resource does not exist:
+
+- Use Next.js `not-found.tsx`
+- Provide helpful message
+- Offer navigation back
+- Maintain brand consistency
+
+Never:
+- Show blank screen
+- Redirect silently without explanation
+
+---
+
+### 🚫 Unauthorized State (401 / 403)
+
+If user lacks permission:
+
+- Do not render restricted content
+- Redirect to login (401) when session invalid
+- Show access denied page (403) when insufficient permission
+- Provide clear explanation
+
+Create:
+- `/app/unauthorized/page.tsx` (or equivalent)
+
+Never:
+- Hide UI visually but allow interaction
+- Fetch restricted data
+- Rely only on frontend checks
+
+Frontend RBAC must complement backend validation.
+
+---
+
+## 2️⃣6️⃣ Next.js App Router File Conventions
+
+Follow proper App Router structure strictly.
+
+---
+
+### Required Route-Level Files
+
+Each major route may include:
+
+- `page.tsx` → Main UI
+- `layout.tsx` → Shared layout wrapper
+- `loading.tsx` → Route-level loading UI
+- `error.tsx` → Route-level error boundary
+- `not-found.tsx` → Route-specific 404
+- `template.tsx` (only if necessary)
+- `default.tsx` (parallel routes only if required)
+
+---
+
+### 🔄 loading.tsx Rules
+
+- Must show skeleton UI
+- Must prevent layout shift
+- Must match final layout structure
+- Must not contain heavy logic
+
+---
+
+### ❗ error.tsx Rules
+
+- Must be client component
+- Must accept error and reset props
+- Provide retry mechanism
+- Log error silently (RUM compatible)
+- Must not expose sensitive info
+
+---
+
+### 🔎 not-found.tsx Rules
+
+- Provide contextual message
+- Offer navigation options
+- Maintain accessibility
+
+---
+
+### 🧩 layout.tsx Rules
+
+- Used for:
+  - Shared wrappers
+  - Providers
+  - Motion wrappers
+  - RBAC guards
+- Avoid heavy business logic
+- Avoid unnecessary client conversion
+
+---
+
+## 2️⃣7️⃣ Global Error Handling Architecture
+
+At root level:
+
+- Implement global `error.tsx`
+- Implement global `not-found.tsx`
+- Implement global fallback UI
+- Capture unhandled errors
+- Send errors to monitoring service
+
+Must handle:
+- Unexpected crashes
+- Suspense failures
+- Async rendering issues
+
+---
+
+## 2️⃣8️⃣ State Handling Discipline Checklist
+
+Before shipping any screen:
+
+- [ ] Loading state implemented
+- [ ] Error state implemented
+- [ ] Empty state implemented
+- [ ] Not Found handled
+- [ ] Unauthorized handled
+- [ ] No blank screens
+- [ ] No silent failures
+- [ ] No layout shifts
+
+If any box is unchecked → not production ready.
+
+---
+
+## 🚫 Strictly Forbidden (State Handling)
+
+- Rendering undefined data
+- Showing blank pages
+- Silent API failure
+- Infinite spinners
+- No retry option on recoverable errors
+- Ignoring 401/403 handling
+
+---
+
+## 🏁 Reliability Standard
+
+The application must:
+
+- Fail gracefully
+- Recover intelligently
+- Communicate clearly
+- Never confuse users
+- Never expose internal system details
+
+Every screen must feel deliberate, even in failure.
+
 
 ## 🏁 Final Engineering Standard
 
