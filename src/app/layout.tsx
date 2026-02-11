@@ -4,6 +4,8 @@ import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "sonner";
+import { Navbar } from "@/components/landing/Navbar";
+import { Footer } from "@/components/landing/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kollabary - Influencer Collaboration Platform",
-  description: "Connect brands with influencers for successful collaborations",
+  title: "Kollabary - Enterprise Influencer Collaboration Platform",
+  description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
 };
 
 export default function RootLayout({
@@ -28,11 +30,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
           <AuthProvider>
-            {children}
+            <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
             <Toaster position="top-right" richColors closeButton />
           </AuthProvider>
         </QueryProvider>

@@ -24,11 +24,6 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
                     </CardHeader>
                     <CardContent>{children}</CardContent>
                 </Card>
-
-                {/* Footer */}
-                <p className="mt-8 text-center text-sm text-muted-foreground">
-                    © {new Date().getFullYear()} Kollabary. All rights reserved.
-                </p>
             </div>
         </div>
     );
