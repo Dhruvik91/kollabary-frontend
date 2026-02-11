@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
@@ -30,8 +29,8 @@ interface InfluencerProfileDetailProps {
 
 export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailProps) => {
     const { user, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
-    const { profile } = user;
-    const { bio } = profile;
+    const profile = user?.profile;
+    const bio = profile?.bio;
 
     const getPlatformIcon = (platform: string) => {
         switch (platform.toLowerCase()) {
@@ -77,23 +76,23 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                         animate={{ opacity: 1, scale: 1 }}
                         className="relative w-48 h-48 rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl"
                     >
-                        {profile.avatarUrl ? (
+                        {profile?.avatarUrl ? (
                             <Image
                                 src={profile.avatarUrl}
-                                alt={profile.fullName}
+                                alt={profile.fullName || 'Influencer'}
                                 fill
                                 className="object-cover"
                             />
                         ) : (
                             <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-5xl font-bold">
-                                {profile.fullName.charAt(0)}
+                                {profile?.fullName?.charAt(0) || '?'}
                             </div>
                         )}
                     </motion.div>
 
                     <div className="flex-1 pb-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-4">
-                            <h1 className="text-4xl font-black tracking-tight">{profile.fullName}</h1>
+                            <h1 className="text-4xl font-black tracking-tight">{profile?.fullName}</h1>
                             {verified && (
                                 <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
                                     <CheckCircle2 size={14} />
@@ -108,9 +107,9 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
 
                         <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
                             <div className="flex items-center gap-2">
-                                <span className="font-bold text-foreground">@{profile.username}</span>
+                                <span className="font-bold text-foreground">@{profile?.username}</span>
                             </div>
-                            {profile.location && (
+                            {profile?.location && (
                                 <div className="flex items-center gap-2">
                                     <MapPin size={18} className="text-primary" />
                                     <span>{profile.location}</span>
@@ -208,7 +207,7 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                     <Card className="rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-8 md:p-12">
                         <div className="space-y-8">
                             <div className="space-y-4">
-                                <h3 className="text-2xl font-black tracking-tight">About {profile.fullName.split(' ')[0]}</h3>
+                                <h3 className="text-2xl font-black tracking-tight">About {profile?.fullName?.split(' ')[0] || 'Creator'}</h3>
                                 <p className="text-lg text-muted-foreground leading-relaxed">
                                     {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
                                 </p>

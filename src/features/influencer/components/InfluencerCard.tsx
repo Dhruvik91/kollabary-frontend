@@ -1,13 +1,11 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Users, Star, TrendingUp, MapPin, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
-import { cn } from '@/lib/utils';
 
 interface InfluencerCardProps {
     influencer: InfluencerProfile;
@@ -31,7 +29,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="relative h-32 bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
                             <div className="absolute -bottom-10 left-6">
                                 <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
-                                    {profile.avatarUrl ? (
+                                    {profile?.avatarUrl ? (
                                         <Image
                                             src={profile.avatarUrl}
                                             alt={profile.fullName}
@@ -40,7 +38,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-                                            {profile.fullName.charAt(0)}
+                                            {profile?.fullName.charAt(0)}
                                         </div>
                                     )}
                                 </div>
@@ -56,9 +54,9 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="pt-12 pb-6 px-6 space-y-4">
                             <div>
                                 <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
-                                    {profile.fullName}
+                                    {profile?.fullName}
                                 </h3>
-                                <p className="text-sm text-muted-foreground">@{profile.username}</p>
+                                <p className="text-sm text-muted-foreground">@{profile?.username}</p>
                             </div>
 
                             {/* Tags */}
@@ -66,7 +64,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg">
                                     {niche}
                                 </span>
-                                {profile.location && (
+                                {profile?.location && (
                                     <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg">
                                         <MapPin size={10} />
                                         {profile.location}

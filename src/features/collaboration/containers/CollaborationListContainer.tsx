@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useCollaborations } from '@/hooks/use-collaboration.hooks';
 import { CollaborationCard } from '@/components/collaboration/CollaborationCard';
 import { useAuth } from '@/contexts/auth-context';
@@ -7,10 +8,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { UserRole } from '@/types/auth.types';
 import { Package2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { FRONTEND_ROUTES } from '@/constants';
 
 export const CollaborationListContainer = () => {
     const { data: collaborations, isLoading, error } = useCollaborations();
     const { user } = useAuth();
+    const router = useRouter();
 
     if (isLoading) {
         return (
@@ -40,7 +43,7 @@ export const CollaborationListContainer = () => {
                 <p className="text-muted-foreground max-w-sm mb-8">
                     Start your first partnership by reaching out to influencers or responding to requests.
                 </p>
-                <Button className="rounded-full px-8">
+                <Button className="rounded-full px-8" onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.DISCOVER)}>
                     <Plus size={18} className="mr-2" />
                     Find Partners
                 </Button>
