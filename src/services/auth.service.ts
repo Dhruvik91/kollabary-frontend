@@ -1,4 +1,5 @@
-import { apiClient } from '@/lib/api-client';
+import { API_CONFIG } from '@/constants';
+import httpService from '@/lib/http-service';
 import {
     AuthResponse,
     User,
@@ -6,6 +7,8 @@ import {
     SignupCredentials,
     ForgotPasswordData,
     ResetPasswordData,
+    SuccessResponse,
+    MessageResponse,
 } from '@/types/auth.types';
 
 /**
@@ -17,49 +20,55 @@ export const authService = {
      * Sign up a new user
      */
     async signup(credentials: SignupCredentials): Promise<AuthResponse> {
-        return apiClient.post<AuthResponse>('/user-auth/signup', credentials);
+        const response = await httpService.post<AuthResponse>(API_CONFIG.path.auth.signup, credentials);
+        return response.data;
     },
 
     /**
      * Login user
      */
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
-        return apiClient.post<AuthResponse>('/user-auth/login', credentials);
+        const response = await httpService.post<AuthResponse>(API_CONFIG.path.auth.login, credentials);
+        return response.data;
     },
 
     /**
      * Logout current user
      */
-    async logout(): Promise<{ success: boolean }> {
-        return apiClient.post<{ success: boolean }>('/user-auth/logout');
+    async logout(): Promise<SuccessResponse> {
+        const response = await httpService.post<SuccessResponse>(API_CONFIG.path.auth.logout);
+        return response.data;
     },
 
     /**
      * Get current authenticated user
      */
     async getMe(): Promise<User> {
-        return apiClient.get<User>('/user-auth/me');
+        const response = await httpService.get<User>(API_CONFIG.path.auth.me);
+        return response.data;
     },
 
     /**
      * Request password reset email
      */
-    async forgotPassword(data: ForgotPasswordData): Promise<{ message: string }> {
-        return apiClient.post<{ message: string }>('/user-auth/forgot-password', data);
+    async forgotPassword(data: ForgotPasswordData): Promise<MessageResponse> {
+        const response = await httpService.post<MessageResponse>(API_CONFIG.path.auth.forgotPassword, data);
+        return response.data;
     },
 
     /**
      * Reset password using token
      */
-    async resetPassword(data: ResetPasswordData): Promise<{ message: string }> {
-        return apiClient.post<{ message: string }>('/user-auth/reset-password', data);
+    async resetPassword(data: ResetPasswordData): Promise<MessageResponse> {
+        const response = await httpService.post<MessageResponse>(API_CONFIG.path.auth.resetPassword, data);
+        return response.data;
     },
 
     /**
      * Initiate Google OAuth flow
      */
     initiateGoogleAuth(): void {
-        const googleAuthUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/user-auth/google`;
+        const googleAuthUrl = `${API_CONFIG.baseUrl}${API_CONFIG.path.auth.google}`;
         window.location.href = googleAuthUrl;
     },
 };

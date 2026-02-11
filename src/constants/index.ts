@@ -15,13 +15,13 @@ export const API_CONFIG = {
 }
 
 export const FRONTEND_ROUTES = {
-    auth: {
-        login: '/auth/login',
-        signup: '/auth/signup',
-        forgotPassword: '/auth/forgot-password',
-        resetPassword: '/auth/reset-password',
-        callback: '/auth/callback',
+    AUTH: {
+        LOGIN: '/auth/login',
+        SIGNUP: '/auth/signup',
+        FORGOT_PASSWORD: '/auth/forgot-password',
+        RESET_PASSWORD: '/auth/reset-password',
+        CALLBACK: '/auth/callback',
     },
-    dashboard: '/dashboard',
-    home: '/',
+    DASHBOARD: '/dashboard',
+    HOME: '/',
 }

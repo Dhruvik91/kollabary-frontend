@@ -3,7 +3,6 @@
 import { LoginForm } from '@/components/auth/LoginForm';
 import { useLogin, useGoogleAuth } from '@/hooks/use-auth.hooks';
 import { LoginFormData } from '@/lib/validations/auth.validation';
-import { ApiError } from '@/lib/api-client';
 
 /**
  * Login Container (Smart Component)
@@ -21,15 +20,11 @@ export function LoginContainer() {
         initiateGoogleAuth();
     };
 
-    const errorMessage = loginMutation.error instanceof ApiError
-        ? loginMutation.error.message
-        : undefined;
-
     return (
         <LoginForm
             onSubmit={handleSubmit}
             isLoading={loginMutation.isPending}
-            error={errorMessage}
+            error={loginMutation.error?.message}
             onGoogleAuth={handleGoogleAuth}
         />
     );

@@ -3,7 +3,6 @@
 import { SignupForm } from '@/components/auth/SignupForm';
 import { useSignup, useGoogleAuth } from '@/hooks/use-auth.hooks';
 import { SignupFormData } from '@/lib/validations/auth.validation';
-import { ApiError } from '@/lib/api-client';
 
 /**
  * Signup Container (Smart Component)
@@ -21,15 +20,11 @@ export function SignupContainer() {
         initiateGoogleAuth();
     };
 
-    const errorMessage = signupMutation.error instanceof ApiError
-        ? signupMutation.error.message
-        : undefined;
-
     return (
         <SignupForm
             onSubmit={handleSubmit}
             isLoading={signupMutation.isPending}
-            error={errorMessage}
+            error={signupMutation.error?.message}
             onGoogleAuth={handleGoogleAuth}
         />
     );

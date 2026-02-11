@@ -10,7 +10,8 @@ import {
     User,
     AuthResponse,
 } from '@/types/auth.types';
-import { ApiError } from '@/lib/api-client';
+import axios from 'axios';
+import { FRONTEND_ROUTES } from '@/constants';
 
 /**
  * Query key factory for authentication
@@ -54,13 +55,14 @@ export function useSignup() {
             router.push('/dashboard');
         },
         onError: (error: Error) => {
-            const message = error instanceof ApiError
-                ? error.message
-                : 'Failed to create account. Please try again.';
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to create account. Please try again.';
 
             toast.error('Signup failed', {
                 description: message,
             });
+            return message;
         },
     });
 }
@@ -86,13 +88,14 @@ export function useLogin() {
             router.push('/dashboard');
         },
         onError: (error: Error) => {
-            const message = error instanceof ApiError
-                ? error.message
-                : 'Failed to login. Please try again.';
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to login. Please try again.';
 
             toast.error('Login failed', {
                 description: message,
             });
+            return message;
         },
     });
 }
@@ -113,16 +116,17 @@ export function useLogout() {
             toast.success('Logged out successfully');
 
             // Redirect to login page
-            router.push('/auth/login');
+            router.push(FRONTEND_ROUTES.AUTH.LOGIN);
         },
         onError: (error: Error) => {
-            const message = error instanceof ApiError
-                ? error.message
-                : 'Failed to logout. Please try again.';
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to logout. Please try again.';
 
             toast.error('Logout failed', {
                 description: message,
             });
+            return message;
         },
     });
 }
@@ -139,13 +143,14 @@ export function useForgotPassword() {
             });
         },
         onError: (error: Error) => {
-            const message = error instanceof ApiError
-                ? error.message
-                : 'Failed to send reset email. Please try again.';
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to send reset email. Please try again.';
 
             toast.error('Request failed', {
                 description: message,
             });
+            return message;
         },
     });
 }
@@ -165,17 +170,18 @@ export function useResetPassword() {
 
             // Redirect to login page after 2 seconds
             setTimeout(() => {
-                router.push('/auth/login');
+                router.push(FRONTEND_ROUTES.AUTH.LOGIN);
             }, 2000);
         },
         onError: (error: Error) => {
-            const message = error instanceof ApiError
-                ? error.message
-                : 'Failed to reset password. Please try again.';
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to reset password. Please try again.';
 
             toast.error('Reset failed', {
                 description: message,
             });
+            return message;
         },
     });
 }

@@ -3,7 +3,6 @@
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
 import { useResetPassword } from '@/hooks/use-auth.hooks';
 import { ResetPasswordFormData } from '@/lib/validations/auth.validation';
-import { ApiError } from '@/lib/api-client';
 
 interface ResetPasswordContainerProps {
     token: string;
@@ -23,15 +22,11 @@ export function ResetPasswordContainer({ token }: ResetPasswordContainerProps) {
         });
     };
 
-    const errorMessage = resetPasswordMutation.error instanceof ApiError
-        ? resetPasswordMutation.error.message
-        : undefined;
-
     return (
         <ResetPasswordForm
             onSubmit={handleSubmit}
             isLoading={resetPasswordMutation.isPending}
-            error={errorMessage}
+            error={resetPasswordMutation.error?.message}
         />
     );
 }

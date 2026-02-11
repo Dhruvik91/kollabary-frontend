@@ -49,3 +49,11 @@ export interface AuthError {
     message: string;
     statusCode?: number;
 }
+
+export interface SuccessResponse {
+    success: boolean;
+}
+
+export interface MessageResponse {
+    message: string;
+}
