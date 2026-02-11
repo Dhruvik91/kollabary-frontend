@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
     Search,
     Bell,
@@ -13,11 +12,12 @@ import {
 import { useAuth } from '@/contexts/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 
 interface DashboardHeaderProps {
     onMenuClick?: () => void;
 }
+
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 /**
  * Header component for the authenticated dashboard
@@ -56,6 +56,8 @@ export const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
                     <Plus size={16} />
                     New Campaign
                 </Button>
+
+                <ThemeToggle />
 
                 <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors group">
                     <Bell size={20} />

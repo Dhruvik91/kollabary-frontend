@@ -27,10 +27,10 @@ export default function Home() {
                   Join 500+ premium brands scaling their reach through authentic human partnerships.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                  <button className="h-14 px-10 bg-white text-primary font-bold rounded-full hover:bg-zinc-100 transition-all duration-300 shadow-xl shadow-black/10">
+                  <button className="h-14 px-10 bg-primary-foreground text-primary font-bold rounded-full hover:opacity-90 transition-all duration-300 shadow-xl shadow-black/10">
                     Get Started Now
                   </button>
-                  <button className="h-14 px-10 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300">
+                  <button className="h-14 px-10 border border-primary-foreground/20 bg-primary-foreground/5 backdrop-blur-sm text-primary-foreground font-bold rounded-full hover:bg-primary-foreground/10 transition-all duration-300">
                     Book a Demo
                   </button>
                 </div>
