@@ -50,6 +50,12 @@ export function middleware(request: NextRequest) {
         FRONTEND_ROUTES.DASHBOARD.EARNINGS,
         FRONTEND_ROUTES.DASHBOARD.DISCOVER,
         FRONTEND_ROUTES.DASHBOARD.PROJECTS,
+        '/influencers',
+        // Assuming INFLUENCER_DETAIL is a dynamic route like /influencers/:id
+        // We protect it by checking if the pathname starts with the base path for influencer details.
+        // If FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(id) returns '/influencers/some-id',
+        // then checking for '/influencers/' is sufficient.
+        '/influencers/',
     ];
 
     const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));

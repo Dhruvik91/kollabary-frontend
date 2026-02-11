@@ -15,6 +15,11 @@ export const API_CONFIG = {
             base: '/collaboration',
             detail: (id: string) => `/collaboration/${id}`,
             status: (id: string) => `/collaboration/${id}/status`,
+        },
+        influencer: {
+            base: '/v1/influencer',
+            search: '/v1/influencer/search',
+            profile: (id: string) => `/v1/influencer/${id}`,
         }
     }
 }

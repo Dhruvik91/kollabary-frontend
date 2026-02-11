@@ -1,0 +1,258 @@
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import {
+    Users,
+    Star,
+    TrendingUp,
+    MapPin,
+    CheckCircle2,
+    Instagram,
+    Youtube,
+    Twitter,
+    Globe,
+    ExternalLink,
+    Briefcase,
+    Calendar,
+    MessageCircle,
+    ArrowLeft
+} from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+
+interface InfluencerProfileDetailProps {
+    influencer: InfluencerProfile;
+}
+
+export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailProps) => {
+    const { user, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
+    const { profile } = user;
+    const { bio } = profile;
+
+    const getPlatformIcon = (platform: string) => {
+        switch (platform.toLowerCase()) {
+            case 'instagram': return <Instagram size={20} />;
+            case 'youtube': return <Youtube size={20} />;
+            case 'twitter':
+            case 'x': return <Twitter size={20} />;
+            default: return <Globe size={20} />;
+        }
+    };
+
+    const getAvailabilityColor = (status: AvailabilityStatus) => {
+        switch (status) {
+            case AvailabilityStatus.OPEN: return 'bg-green-500';
+            case AvailabilityStatus.BUSY: return 'bg-yellow-500';
+            case AvailabilityStatus.CLOSED: return 'bg-red-500';
+            default: return 'bg-zinc-500';
+        }
+    };
+
+    return (
+        <div className="max-w-6xl mx-auto space-y-8 pb-20">
+            {/* Back Button */}
+            <Link
+                href="/discover"
+                className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
+            >
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Discovery
+            </Link>
+
+            {/* Profile Header */}
+            <div className="relative">
+                {/* Banner */}
+                <div className="h-64 rounded-[3rem] bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-border/50 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20" />
+                </div>
+
+                {/* Profile Info Overlay */}
+                <div className="px-8 -mt-24 relative z-10 flex flex-col md:flex-row md:items-end gap-8">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="relative w-48 h-48 rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl"
+                    >
+                        {profile.avatarUrl ? (
+                            <Image
+                                src={profile.avatarUrl}
+                                alt={profile.fullName}
+                                fill
+                                className="object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-5xl font-bold">
+                                {profile.fullName.charAt(0)}
+                            </div>
+                        )}
+                    </motion.div>
+
+                    <div className="flex-1 pb-4 space-y-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <h1 className="text-4xl font-black tracking-tight">{profile.fullName}</h1>
+                            {verified && (
+                                <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
+                                    <CheckCircle2 size={14} />
+                                    Verified Creator
+                                </div>
+                            )}
+                            <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
+                                <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                                <span className="font-bold text-foreground">@{profile.username}</span>
+                            </div>
+                            {profile.location && (
+                                <div className="flex items-center gap-2">
+                                    <MapPin size={18} className="text-primary" />
+                                    <span>{profile.location}</span>
+                                </div>
+                            )}
+                            <div className="flex items-center gap-2">
+                                <Briefcase size={18} className="text-primary" />
+                                <span>{niche}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pb-4 flex gap-3">
+                        <button className="px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                            <MessageCircle size={20} />
+                            Contact
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Stats & Socials */}
+                <div className="lg:col-span-1 space-y-8">
+                    {/* Stats Card */}
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                            <h3 className="font-bold tracking-tight">Channel Performance</h3>
+                        </div>
+                        <CardContent className="p-8 space-y-8">
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2 text-muted-foreground">
+                                        <Users size={16} />
+                                        <span className="text-xs font-bold uppercase">Total Reach</span>
+                                    </div>
+                                    <p className="text-3xl font-black">
+                                        {Intl.NumberFormat('en', { notation: 'compact' }).format(followersCount)}
+                                    </p>
+                                </div>
+                                <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                                    <TrendingUp size={24} />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Eng. Rate</p>
+                                    <p className="text-xl font-bold text-green-500">{engagementRate}%</p>
+                                </div>
+                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Rating</p>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-xl font-bold">{avgRating}</p>
+                                        <Star size={14} className="fill-yellow-500 text-yellow-500" />
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Socials Card */}
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                            <h3 className="font-bold tracking-tight">Connected Platforms</h3>
+                        </div>
+                        <CardContent className="p-6 space-y-4">
+                            {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
+                                <a
+                                    key={name}
+                                    href="#"
+                                    className="flex items-center justify-between p-4 bg-background/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all group"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                            {getPlatformIcon(name)}
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold capitalize">{name}</p>
+                                            <p className="text-xs text-muted-foreground">{data.handle}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-bold">{Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}</p>
+                                        <p className="text-[10px] font-bold text-muted-foreground uppercase">Followers</p>
+                                    </div>
+                                </a>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Right Column: About & Collabs */}
+                <div className="lg:col-span-2 space-y-8">
+                    <Card className="rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-8 md:p-12">
+                        <div className="space-y-8">
+                            <div className="space-y-4">
+                                <h3 className="text-2xl font-black tracking-tight">About {profile.fullName.split(' ')[0]}</h3>
+                                <p className="text-lg text-muted-foreground leading-relaxed">
+                                    {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 text-primary">
+                                        <Calendar size={20} />
+                                        <h4 className="font-bold">Collaboration Types</h4>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {collaborationTypes?.map((type) => (
+                                            <span key={type} className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold">
+                                                {type}
+                                            </span>
+                                        )) || <span className="text-muted-foreground italic">Contact for details</span>}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 text-primary">
+                                        <Star size={20} />
+                                        <h4 className="font-bold">Reviews & Sentiment</h4>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground leading-relaxed">
+                                        Based on {totalReviews} previous collaborations, this creator has maintained a {avgRating}/5 rating with consistent positive feedback regarding communication and content quality.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="pt-8 border-t border-border/50 flex flex-wrap gap-4">
+                                <button className="flex-1 min-w-[200px] py-4 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-2xl font-bold transition-all flex items-center justify-center gap-2">
+                                    View Media Kit
+                                    <ExternalLink size={18} />
+                                </button>
+                                <button className="flex-1 min-w-[200px] py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                    Start Collaboration
+                                </button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    );
+};
