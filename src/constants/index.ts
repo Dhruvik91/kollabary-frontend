@@ -10,6 +10,11 @@ export const API_CONFIG = {
             resetPassword: '/user-auth/reset-password',
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
+        },
+        collaboration: {
+            base: '/collaboration',
+            detail: (id: string) => `/collaboration/${id}`,
+            status: (id: string) => `/collaboration/${id}/status`,
         }
     }
 }
@@ -22,6 +27,10 @@ export const FRONTEND_ROUTES = {
         RESET_PASSWORD: '/auth/reset-password',
         CALLBACK: '/auth/callback',
     },
-    DASHBOARD: '/dashboard',
+    DASHBOARD: {
+        BASE: '/dashboard',
+        COLLABORATIONS: '/dashboard/collaborations',
+        COLLABORATION_DETAIL: (id: string) => `/dashboard/collaborations/${id}`,
+    },
     HOME: '/',
 }

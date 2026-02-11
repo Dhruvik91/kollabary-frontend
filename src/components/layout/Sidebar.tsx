@@ -17,7 +17,8 @@ import {
     LogOut,
     Bell,
     HelpCircle,
-    X
+    X,
+    Handshake
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -100,6 +101,7 @@ export const Sidebar = ({
 
     const commonLinks = [
         { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
+        { href: '/dashboard/collaborations', icon: Handshake, label: 'Collaborations' },
         { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages', badge: '3' },
     ];
 
