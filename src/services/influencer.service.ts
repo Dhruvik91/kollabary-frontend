@@ -4,6 +4,7 @@ import {
     InfluencerProfile,
     SearchInfluencersDto,
     SearchInfluencersResponse,
+    CreateInfluencerProfileDto,
 } from '@/types/influencer.types';
 
 /**
@@ -34,6 +35,14 @@ export const influencerService = {
      */
     async getInfluencerById(id: string): Promise<InfluencerProfile> {
         const response = await httpService.get<InfluencerProfile>(API_CONFIG.path.influencer.profile(id));
+        return response.data;
+    },
+
+    /**
+     * Create or update current user's influencer profile
+     */
+    async createProfile(dto: CreateInfluencerProfileDto): Promise<InfluencerProfile> {
+        const response = await httpService.post<InfluencerProfile>(API_CONFIG.path.influencer.myProfile, dto);
         return response.data;
     },
 };

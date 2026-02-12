@@ -1,6 +1,7 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { influencerService } from '@/services/influencer.service';
-import { SearchInfluencersDto } from '@/types/influencer.types';
+import { CreateInfluencerProfileDto, SearchInfluencersDto } from '@/types/influencer.types';
+import { toast } from 'sonner';
 
 export const influencerKeys = {
     all: ['influencer'] as const,
@@ -17,6 +18,25 @@ export function useMyInfluencerProfile(enabled = true) {
         queryKey: influencerKeys.me(),
         queryFn: () => influencerService.getMyProfile(),
         enabled: enabled,
+        retry: false, // Don't retry on 404
+    });
+}
+
+/**
+ * Hook for creating/updating influencer profile
+ */
+export function useCreateInfluencerProfile() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: CreateInfluencerProfileDto) => influencerService.createProfile(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            toast.success('Profile created successfully!');
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to create profile');
+        },
     });
 }
 

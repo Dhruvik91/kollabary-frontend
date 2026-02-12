@@ -13,7 +13,7 @@ export enum CollaborationStatus {
 export interface Collaboration {
     id: string;
     requester: User;
-    influencer: InfluencerProfile;
+    influencer: User;
     title: string;
     description: string;
     status: CollaborationStatus;

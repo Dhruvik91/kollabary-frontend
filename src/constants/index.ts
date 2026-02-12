@@ -64,7 +64,8 @@ export const FRONTEND_ROUTES = {
         EARNINGS: '/earnings',
         DISCOVER: '/discover',
         PROJECTS: '/projects',
-        OVERVIEW: '/overview'
+        OVERVIEW: '/overview',
+        INFLUENCER_SETUP: '/influencer/setup'
     },
     HOME: '/',
 }

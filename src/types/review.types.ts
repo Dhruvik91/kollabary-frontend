@@ -10,7 +10,7 @@ export enum ReviewStatus {
 export interface Review {
     id: string;
     reviewer: User;
-    influencer: InfluencerProfile;
+    influencer: User;
     collaboration?: {
         id: string;
         title: string;

@@ -29,7 +29,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
     const canEdit = isRequester && (collaboration.status === CollaborationStatus.REQUESTED || collaboration.status === CollaborationStatus.ACCEPTED);
     const canDelete = isRequester; // User requested to allow deletion regardless of status
 
-    const partner = isInfluencer ? collaboration.requester : collaboration.influencer.user;
+    const partner = isInfluencer ? collaboration.requester : collaboration.influencer;
     const dateRange = collaboration.startDate && collaboration.endDate
         ? `${format(new Date(collaboration.startDate), 'MMM d')} - ${format(new Date(collaboration.endDate), 'MMM d, yyyy')}`
         : 'Request Pending';
