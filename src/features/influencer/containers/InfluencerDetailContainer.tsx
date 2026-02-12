@@ -6,6 +6,7 @@ import { useInfluencerDetail } from '@/hooks/queries/useInfluencerQueries';
 import { InfluencerProfileDetail } from '../components/InfluencerProfileDetail';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 export const InfluencerDetailContainer = () => {
     const { id } = useParams<{ id: string }>();
@@ -40,12 +41,12 @@ export const InfluencerDetailContainer = () => {
                         The influencer profile you're looking for might have been moved or doesn't exist in our network anymore.
                     </p>
                 </div>
-                <button
+                <Button
                     onClick={() => window.history.back()}
-                    className="px-8 py-3 bg-primary text-primary-foreground rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+                    className="px-8 h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
                 >
                     Go Back
-                </button>
+                </Button>
             </div>
         );
     }

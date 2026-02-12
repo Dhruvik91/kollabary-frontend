@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserRole } from '@/types/auth.types';
+import { Button } from '@/components/ui/button';
 
 interface NavItemProps {
     href: string;
@@ -151,12 +152,14 @@ export const Sidebar = ({
 
                 {/* Mobile Close Button */}
                 {isMobileOpen && (
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={onMobileClose}
-                        className="p-2 lg:hidden text-muted-foreground hover:text-primary transition-colors shrink-0"
+                        className="lg:hidden text-muted-foreground hover:text-primary transition-colors shrink-0"
                     >
                         <X size={20} />
-                    </button>
+                    </Button>
                 )}
             </div>
 
@@ -184,21 +187,22 @@ export const Sidebar = ({
                     onClick={onMobileClose}
                 />
 
-                <button
+                <Button
+                    variant="ghost"
                     onClick={() => {
                         logoutMutation.mutate();
                         if (onMobileClose) onMobileClose();
                     }}
                     className={cn(
-                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors group overflow-hidden",
-                        (isCollapsed && !isMobileOpen) ? "justify-center" : ""
+                        "w-full flex items-center gap-3 px-3 h-11 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors group overflow-hidden border-none",
+                        (isCollapsed && !isMobileOpen) ? "justify-center" : "justify-start"
                     )}
                 >
                     <LogOut size={20} className="group-hover:-translate-x-1 transition-transform shrink-0" />
                     {(!isCollapsed || isMobileOpen) && (
                         <span className="text-sm font-medium whitespace-nowrap overflow-hidden">Log out</span>
                     )}
-                </button>
+                </Button>
             </div>
         </div>
     );
@@ -215,12 +219,14 @@ export const Sidebar = ({
                 {sidebarContent}
 
                 {/* Desktop Toggle Button - Positioned outside but relative to aside */}
-                <button
+                <Button
+                    variant="outline"
+                    size="icon-xs"
                     onClick={onToggleCollapse}
                     className="absolute -right-3 top-20 w-6 h-6 bg-card border border-border rounded-full hidden lg:flex items-center justify-center shadow-sm text-muted-foreground hover:text-primary transition-colors z-50 hover:scale-110 active:scale-95"
                 >
                     {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-                </button>
+                </Button>
             </aside>
 
             {/* Mobile Drawer */}

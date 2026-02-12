@@ -46,11 +46,17 @@ export const InfluencerDiscoverContainer = () => {
     const isAuthorized = user?.role === UserRole.USER || user?.role === UserRole.ADMIN;
 
     const handleFilterChange = (newFilters: Partial<SearchInfluencersDto>) => {
-        setFilters((prev: SearchInfluencersDto) => ({ ...prev, ...newFilters }));
+        setFilters((prev) => ({ ...prev, ...newFilters }));
     };
 
     const handleResetFilters = () => {
-        setFilters({ limit: 10 });
+        setFilters({
+            limit: 10,
+            search: '',
+            niche: '',
+            platform: '',
+            minFollowers: undefined,
+        });
     };
 
     const allInfluencers = data?.pages.flatMap((page: any) => page.items) || [];
@@ -94,6 +100,7 @@ export const InfluencerDiscoverContainer = () => {
                                     <InfluencerFilters
                                         filters={filters}
                                         onFilterChange={handleFilterChange}
+                                        onReset={handleResetFilters}
                                         className="bg-transparent border-0 p-0 backdrop-blur-none shadow-none"
                                     />
                                 </div>
@@ -113,7 +120,11 @@ export const InfluencerDiscoverContainer = () => {
                 {/* Fixed Side Filters for Large Screens */}
                 <div className="hidden lg:block lg:col-span-1 space-y-6">
                     <div className="sticky top-24">
-                        <InfluencerFilters filters={filters} onFilterChange={handleFilterChange} />
+                        <InfluencerFilters
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            onReset={handleResetFilters}
+                        />
                     </div>
                 </div>
 

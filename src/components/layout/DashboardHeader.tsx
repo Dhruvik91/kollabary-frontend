@@ -29,13 +29,15 @@ export const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
     return (
         <header className="sticky top-0 right-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
             <div className="flex items-center gap-4 flex-grow max-w-xl">
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={onMenuClick}
-                    className="p-2 lg:hidden text-muted-foreground hover:text-primary transition-colors"
+                    className="lg:hidden text-muted-foreground hover:text-primary transition-colors h-10 w-10 p-2"
                     aria-label="Toggle Menu"
                 >
                     <Menu size={20} />
-                </button>
+                </Button>
 
                 <div className="relative group flex-grow hidden sm:flex items-center">
                     <Search className="absolute left-3 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
@@ -46,9 +48,9 @@ export const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
                 </div>
 
                 {/* Mobile Search Button icon instead of full bar */}
-                <button className="sm:hidden p-2 text-muted-foreground">
+                <Button variant="ghost" size="icon" className="sm:hidden text-muted-foreground h-10 w-10">
                     <Search size={20} />
-                </button>
+                </Button>
             </div>
 
             <div className="flex items-center gap-2 md:gap-4">
@@ -59,10 +61,10 @@ export const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
 
                 <ThemeToggle />
 
-                <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors group">
+                <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground transition-colors group h-10 w-10">
                     <Bell size={20} />
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-background group-hover:scale-110 transition-transform" />
-                </button>
+                    <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background group-hover:scale-110 transition-transform" />
+                </Button>
 
                 <div className="w-[1px] h-6 bg-border mx-1 md:mx-2" />
 

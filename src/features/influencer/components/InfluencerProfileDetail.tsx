@@ -19,12 +19,14 @@ import {
     ArrowLeft
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
+import { FRONTEND_ROUTES } from '@/constants';
 
 interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
@@ -59,7 +61,7 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
         <div className="max-w-6xl mx-auto space-y-8 pb-20">
             {/* Back Button */}
             <Link
-                href="/discover"
+                href={FRONTEND_ROUTES.DASHBOARD.DISCOVER}
                 className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
             >
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -127,10 +129,10 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                     </div>
 
                     <div className="pb-4 flex gap-3">
-                        <button className="px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                        <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                             <MessageCircle size={20} />
                             Contact
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -244,18 +246,21 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                             </div>
 
                             <div className="pt-8 border-t border-border/50 flex flex-wrap gap-4">
-                                <button className="flex-1 min-w-[200px] py-4 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-2xl font-bold transition-all flex items-center justify-center gap-2">
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 min-w-[200px] h-14 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 border-none"
+                                >
                                     View Media Kit
                                     <ExternalLink size={18} />
-                                </button>
+                                </Button>
                                 {(user?.role === UserRole.USER || user?.role === UserRole.ADMIN) && user?.id !== influencer.user.id && (
                                     <CollaborationRequestDialog
                                         influencerId={influencer.id}
                                         influencerName={profile?.fullName || 'Creator'}
                                     >
-                                        <button className="flex-1 min-w-[200px] py-4 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                        <Button className="flex-1 min-w-[200px] h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                                             Start Collaboration
-                                        </button>
+                                        </Button>
                                     </CollaborationRequestDialog>
                                 )}
                             </div>
