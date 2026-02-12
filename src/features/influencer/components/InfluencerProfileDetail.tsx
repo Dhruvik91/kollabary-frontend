@@ -29,6 +29,13 @@ import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { RankingScoreCard } from './RankingScoreCard';
 import { RankingBreakdown } from '@/types/ranking';
+import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
+import { ReviewList } from '@/features/review/components/ReviewList';
+import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
+import { useState } from 'react';
+import { Review } from '@/types/review.types';
+import { toast } from 'sonner';
+
 
 interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
@@ -41,6 +48,27 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
     const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
     const profile = influencerUser?.profile;
     const bio = profile?.bio;
+
+    // Review Integration
+    const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
+    const deleteReview = useDeleteReview(influencer.id);
+    const updateReview = useUpdateReview(influencer.id);
+
+    const [editingReview, setEditingReview] = useState<Review | null>(null);
+
+    const handleDeleteReview = (id: string) => {
+        if (confirm('Are you sure you want to delete this review?')) {
+            deleteReview.mutate(id);
+        }
+    };
+
+    const handleUpdateReview = (data: { rating: number; comment: string }) => {
+        if (editingReview) {
+            updateReview.mutate({ id: editingReview.id, data }, {
+                onSuccess: () => setEditingReview(null)
+            });
+        }
+    };
 
     const getPlatformIcon = (platform: string) => {
         switch (platform.toLowerCase()) {
@@ -279,8 +307,30 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                             </div>
                         </div>
                     </Card>
+
+                    {/* Reviews Section */}
+                    <div className="pt-4">
+                        <ReviewList
+                            reviews={reviews}
+                            isLoading={isReviewsLoading}
+                            onEdit={setEditingReview}
+                            onDelete={handleDeleteReview}
+                        />
+                    </div>
                 </div>
             </div>
+
+            {/* Editing Modal */}
+            <ReviewSubmissionModal
+                isOpen={!!editingReview}
+                onClose={() => setEditingReview(null)}
+                influencerName={influencerUser?.profile?.fullName || 'the Influencer'}
+                onSubmit={handleUpdateReview}
+                isLoading={updateReview.isPending}
+                initialData={editingReview ? { rating: editingReview.rating, comment: editingReview.comment } : undefined}
+                title="Edit Your Review"
+                description="Update your feedback for this collaboration."
+            />
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { User } from '@/types/auth.types';
 import { Button } from '@/components/ui/button';
 
 interface CollaborationPartnerCardProps {
-    partner: User;
+    partner: any;
     isInfluencer: boolean;
     onMessage?: () => void;
     isMessaging?: boolean;

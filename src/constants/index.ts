@@ -34,6 +34,12 @@ export const API_CONFIG = {
             message: (id: string) => `/messaging/message/${id}`,
             deleteMessage: (id: string) => `/messaging/message/${id}/delete`,
             deleteConversation: (id: string) => `/messaging/conversation/${id}/delete`,
+        },
+        review: {
+            base: '/review',
+            influencer: (id: string) => `/review/influencer/${id}`,
+            update: (id: string) => `/review/${id}`,
+            delete: (id: string) => `/review/${id}/delete`,
         }
     }
 }

@@ -1,4 +1,5 @@
 import { User } from './auth.types';
+import { InfluencerProfile } from './influencer.types';
 
 export enum CollaborationStatus {
     REQUESTED = 'REQUESTED',
@@ -12,7 +13,7 @@ export enum CollaborationStatus {
 export interface Collaboration {
     id: string;
     requester: User;
-    influencer: User;
+    influencer: InfluencerProfile;
     title: string;
     description: string;
     status: CollaborationStatus;

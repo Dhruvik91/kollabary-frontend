@@ -116,7 +116,7 @@ export const DashboardOverviewContainer = () => {
                         </div>
 
                         {/* Recent Activity Placeholder or Quick Stats */}
-                        <Card className="rounded-[2.5rem] border-border/50 bg-card/30 backdrop-blur-md overflow-hidden">
+                        <Card className="rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden">
                             <div className="p-6 border-b border-border/50 bg-muted/30 flex items-center justify-between">
                                 <h3 className="font-bold tracking-tight">Recent Performance</h3>
                                 <Link href="#" className="text-xs font-bold text-primary hover:underline">View Analytics</Link>

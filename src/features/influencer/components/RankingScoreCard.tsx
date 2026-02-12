@@ -37,7 +37,7 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
     };
 
     return (
-        <Card className={cn("rounded-[2.5rem] border-border/50 bg-card/30 backdrop-blur-md overflow-hidden", className)}>
+        <Card className={cn("rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
             <div className="p-6 border-b border-border/50 bg-muted/30 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Trophy size={18} className="text-primary" />

@@ -22,8 +22,13 @@ import { CollaborationLoadingState } from '../components/CollaborationLoadingSta
 import { CollaborationErrorState } from '../components/CollaborationErrorState';
 import { CollaborationProgressActions } from '../components/CollaborationProgressActions';
 import { ProofUploadDialog } from '../components/ProofUploadDialog';
+import { useCreateReview } from '@/hooks/use-review.hooks';
+import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface CollaborationDetailContainerProps {
     id: string;
@@ -39,19 +44,21 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const { mutate: updateStatus, isPending: isUpdating } = useUpdateCollaborationStatus(id);
     const { mutate: updateCollaboration, isPending: isUpdatingDetails } = useUpdateCollaboration(id);
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
+    const { mutate: createReview, isPending: isCreatingReview } = useCreateReview();
     const { user } = useAuth();
     const router = useRouter();
 
     const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
     const handleMessagePartner = () => {
         if (!collaboration) return;
 
         const partner = user?.id === collaboration.requester.id
-            ? collaboration.influencer
+            ? (collaboration.influencer.user || collaboration.influencer)
             : collaboration.requester;
 
-        startConversation(partner.id, {
+        startConversation((partner as any).id, {
             onSuccess: (conversation) => {
                 router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
             }
@@ -70,10 +77,10 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
 
     // Derived State
     const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const partner = isInfluencer ? collaboration.requester : collaboration.influencer;
+    const partner = isInfluencer ? collaboration.requester : (collaboration.influencer.user || collaboration.influencer);
 
     // Authorization check: Only requester or influencer can view
-    const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.id || user?.role === UserRole.ADMIN;
+    const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.user.id || user?.role === UserRole.ADMIN;
 
     if (!isAuthorized) {
         return <CollaborationErrorState message="Unauthorized access" />;
@@ -105,6 +112,18 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         CollaborationStatus.IN_PROGRESS,
         CollaborationStatus.COMPLETED
     ].includes(collaboration.status);
+
+    const canReview = isRequester && collaboration.status === CollaborationStatus.COMPLETED;
+
+    const handleReviewSubmit = (data: { rating: number; comment: string }) => {
+        createReview({
+            influencerId: collaboration.influencer.id,
+            collaborationId: collaboration.id,
+            ...data
+        }, {
+            onSuccess: () => setIsReviewModalOpen(false)
+        });
+    };
 
     return (
         <motion.div
@@ -143,6 +162,27 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                             isUpdating={isUpdating}
                         />
                     )}
+
+                    {/* Review Action */}
+                    {canReview && (
+                        <Card className="rounded-[2.5rem] border-border/50 bg-primary/5 p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-dashed border-primary/20">
+                            <div className="space-y-1 text-center md:text-left">
+                                <h3 className="text-xl font-black tracking-tight flex items-center gap-2 justify-center md:justify-start">
+                                    <Star size={24} className="text-yellow-500 fill-yellow-500" />
+                                    How was the collaboration?
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Your feedback helps maintaining platform quality and rewards top creators.
+                                </p>
+                            </div>
+                            <Button
+                                onClick={() => setIsReviewModalOpen(true)}
+                                className="h-12 px-8 rounded-2xl font-bold bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto"
+                            >
+                                Leave a Review
+                            </Button>
+                        </Card>
+                    )}
                 </div>
 
                 {/* Sidebar Details */}
@@ -167,6 +207,14 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                 onUpload={handleUploadProof}
                 isUpdating={isUpdatingDetails}
                 existingUrls={collaboration.proofUrls}
+            />
+
+            <ReviewSubmissionModal
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                influencerName={collaboration.influencer.user.profile?.fullName || 'Creator'}
+                onSubmit={handleReviewSubmit}
+                isLoading={isCreatingReview}
             />
         </motion.div>
     );
