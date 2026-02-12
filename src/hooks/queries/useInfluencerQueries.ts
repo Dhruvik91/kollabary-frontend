@@ -6,7 +6,19 @@ export const influencerKeys = {
     all: ['influencer'] as const,
     search: (filters: SearchInfluencersDto) => [...influencerKeys.all, 'search', filters] as const,
     detail: (id: string) => [...influencerKeys.all, 'detail', id] as const,
+    me: () => [...influencerKeys.all, 'me'] as const,
 };
+
+/**
+ * Hook for getting current user's influencer profile
+ */
+export function useMyInfluencerProfile(enabled = true) {
+    return useQuery({
+        queryKey: influencerKeys.me(),
+        queryFn: () => influencerService.getMyProfile(),
+        enabled: enabled,
+    });
+}
 
 /**
  * Hook for searching influencers with infinite scroll support

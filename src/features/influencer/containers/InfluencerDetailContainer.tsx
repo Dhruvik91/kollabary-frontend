@@ -3,6 +3,7 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { useInfluencerDetail } from '@/hooks/queries/useInfluencerQueries';
+import { useRankingBreakdown } from '@/hooks/queries/useRanking';
 import { InfluencerProfileDetail } from '../components/InfluencerProfileDetail';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -10,9 +11,10 @@ import { Button } from '@/components/ui/button';
 
 export const InfluencerDetailContainer = () => {
     const { id } = useParams<{ id: string }>();
-    const { data: influencer, isLoading, isError, error } = useInfluencerDetail(id);
+    const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useInfluencerDetail(id);
+    const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user.id || '');
 
-    if (isLoading) {
+    if (isInfluencerLoading) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
                 <motion.div
@@ -57,7 +59,11 @@ export const InfluencerDetailContainer = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <InfluencerProfileDetail influencer={influencer} />
+            <InfluencerProfileDetail
+                influencer={influencer}
+                ranking={ranking}
+                isRankingLoading={isRankingLoading}
+            />
         </motion.div>
     );
 };

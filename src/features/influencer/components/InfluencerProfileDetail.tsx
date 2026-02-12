@@ -27,12 +27,16 @@ import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
+import { RankingScoreCard } from './RankingScoreCard';
+import { RankingBreakdown } from '@/types/ranking';
 
 interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
+    ranking?: RankingBreakdown;
+    isRankingLoading?: boolean;
 }
 
-export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailProps) => {
+export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
     const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
     const profile = influencerUser?.profile;
@@ -176,6 +180,15 @@ export const InfluencerProfileDetail = ({ influencer }: InfluencerProfileDetailP
                             </div>
                         </CardContent>
                     </Card>
+
+                    {/* Ranking Card */}
+                    {ranking ? (
+                        <RankingScoreCard breakdown={ranking} />
+                    ) : isRankingLoading ? (
+                        <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
+                            <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>
+                        </Card>
+                    ) : null}
 
                     {/* Socials Card */}
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">

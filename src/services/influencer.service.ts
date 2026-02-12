@@ -22,6 +22,14 @@ export const influencerService = {
     },
 
     /**
+     * Get current user influencer profile
+     */
+    async getMyProfile(): Promise<InfluencerProfile> {
+        const response = await httpService.get<InfluencerProfile>(API_CONFIG.path.influencer.myProfile);
+        return response.data;
+    },
+
+    /**
      * Get influencer profile by ID
      */
     async getInfluencerById(id: string): Promise<InfluencerProfile> {
