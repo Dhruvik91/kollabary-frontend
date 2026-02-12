@@ -47,4 +47,6 @@ export interface UpdateCollaborationDto {
     proposedTerms?: Record<string, unknown>;
     startDate?: string;
     endDate?: string;
+    proofUrls?: string[];
+    proofSubmittedAt?: string;
 }

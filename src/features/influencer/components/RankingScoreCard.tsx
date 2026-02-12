@@ -143,23 +143,31 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                             </div>
                         )}
 
-                        {/* Penalties */}
-                        {(penalties.count || 0) > 0 && (
-                            <div className="flex items-center justify-between p-3 bg-red-500/5 rounded-2xl border border-red-500/10">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
-                                        <AlertTriangle size={16} />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-red-500">Adjustments</p>
-                                        <p className="text-[10px] text-red-600/70">{(penalties.count || 0)} cancellations/penalties</p>
-                                    </div>
+                        {/* Adjustments / Penalties */}
+                        <div className={cn(
+                            "flex items-center justify-between p-3 rounded-2xl border transition-all duration-300",
+                            (penalties.count || 0) > 0
+                                ? "bg-red-500/5 border-red-500/10"
+                                : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
+                        )}>
+                            <div className="flex items-center gap-3">
+                                <div className={cn(
+                                    "w-8 h-8 rounded-xl flex items-center justify-center",
+                                    (penalties.count || 0) > 0 ? "bg-red-500/10 text-red-500" : "bg-zinc-500/10 text-zinc-500"
+                                )}>
+                                    <AlertTriangle size={16} />
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-bold text-red-500">{Math.round(penalties.score)}</p>
+                                <div>
+                                    <p className={cn("text-sm font-bold", (penalties.count || 0) > 0 ? "text-red-500" : "text-foreground")}>Adjustments</p>
+                                    <p className="text-[10px] text-muted-foreground">{(penalties.count || 0)} cancellations/penalties</p>
                                 </div>
                             </div>
-                        )}
+                            <div className="text-right">
+                                <p className={cn("text-sm font-bold", (penalties.count || 0) > 0 ? "text-red-500" : "text-muted-foreground")}>
+                                    {Math.round(penalties.score) || 0}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </CardContent>

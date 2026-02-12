@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
 import {
     useCollaborationDetail,
-    useUpdateCollaborationStatus
+    useUpdateCollaborationStatus,
+    useUpdateCollaboration
 } from '@/hooks/use-collaboration.hooks';
 import { useAuth } from '@/contexts/auth-context';
 import { CollaborationStatus } from '@/types/collaboration.types';
@@ -17,6 +17,10 @@ import { CollaborationProgressTracker } from '../components/CollaborationProgres
 import { CollaborationResponseActions } from '../components/CollaborationResponseActions';
 import { CollaborationLoadingState } from '../components/CollaborationLoadingState';
 import { CollaborationErrorState } from '../components/CollaborationErrorState';
+import { CollaborationProgressActions } from '../components/CollaborationProgressActions';
+import { ProofUploadDialog } from '../components/ProofUploadDialog';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface CollaborationDetailContainerProps {
     id: string;
@@ -30,7 +34,10 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     // Data Fetching
     const { data: collaboration, isLoading, isError, error } = useCollaborationDetail(id);
     const { mutate: updateStatus, isPending: isUpdating } = useUpdateCollaborationStatus(id);
+    const { mutate: updateCollaboration, isPending: isUpdatingDetails } = useUpdateCollaboration(id);
     const { user } = useAuth();
+
+    const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
 
     // Loading State
     if (isLoading) {
@@ -60,8 +67,33 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         updateStatus({ status });
     };
 
+    const handleUploadProof = (urls: string[]) => {
+        updateCollaboration({
+            proofUrls: urls,
+            proofSubmittedAt: new Date().toISOString()
+        }, {
+            onSuccess: () => setIsProofDialogOpen(false)
+        });
+    };
+
+    const isRequester = user?.id === collaboration.requester.id;
+    const canShowProgressActions = isInfluencer && [
+        CollaborationStatus.ACCEPTED,
+        CollaborationStatus.IN_PROGRESS
+    ].includes(collaboration.status);
+
+    const canSubmitProof = isRequester && [
+        CollaborationStatus.IN_PROGRESS,
+        CollaborationStatus.COMPLETED
+    ].includes(collaboration.status);
+
     return (
-        <div className="space-y-8 max-w-5xl mx-auto">
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-8 max-w-5xl mx-auto"
+        >
             {/* Header with Navigation */}
             <CollaborationHeader />
 
@@ -69,13 +101,26 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                 {/* Main Content Area */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Primary Collaboration Info */}
-                    <CollaborationMainInfo collaboration={collaboration} />
+                    <CollaborationMainInfo
+                        collaboration={collaboration}
+                        canSubmitProof={canSubmitProof}
+                        onUpdateProof={() => setIsProofDialogOpen(true)}
+                    />
 
                     {/* Pending Actions (Accept/Reject) */}
                     {canAccept && (
                         <CollaborationResponseActions
                             onAccept={() => handleUpdateStatus(CollaborationStatus.ACCEPTED)}
                             onReject={() => handleUpdateStatus(CollaborationStatus.REJECTED)}
+                            isUpdating={isUpdating}
+                        />
+                    )}
+
+                    {/* Progress Actions (Start/Complete) */}
+                    {canShowProgressActions && (
+                        <CollaborationProgressActions
+                            status={collaboration.status}
+                            onUpdateStatus={handleUpdateStatus}
                             isUpdating={isUpdating}
                         />
                     )}
@@ -90,6 +135,15 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                     <CollaborationProgressTracker status={collaboration.status} />
                 </div>
             </div>
-        </div>
+
+            {/* Dialogs */}
+            <ProofUploadDialog
+                isOpen={isProofDialogOpen}
+                onClose={() => setIsProofDialogOpen(false)}
+                onUpload={handleUploadProof}
+                isUpdating={isUpdatingDetails}
+                existingUrls={collaboration.proofUrls}
+            />
+        </motion.div>
     );
 };
