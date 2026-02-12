@@ -9,24 +9,26 @@ export const modalVariants: Variants = {
     hidden: {
         opacity: 0,
         scale: 0.95,
-        y: 20,
+        y: 10,
     },
     visible: {
         opacity: 1,
         scale: 1,
         y: 0,
         transition: {
-            duration: 0.3,
-            ease: [0.22, 1, 0.36, 1], // Custom cubic-bezier
+            type: "spring",
+            damping: 25,
+            stiffness: 300,
+            duration: 0.15,
         },
     },
     exit: {
         opacity: 0,
         scale: 0.95,
-        y: 20,
+        y: 10,
         transition: {
-            duration: 0.2,
-            ease: 'easeIn',
+            duration: 0.15,
+            ease: "easeOut",
         },
     },
 };

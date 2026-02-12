@@ -2,7 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { collaborationService } from '@/services/collaboration.service';
 import {
     CreateCollaborationDto,
-    UpdateCollaborationStatusDto
+    UpdateCollaborationStatusDto,
+    UpdateCollaborationDto
 } from '@/types/collaboration.types';
 import { toast } from 'sonner';
 
@@ -63,6 +64,43 @@ export const useUpdateCollaborationStatus = (id: string) => {
         },
         onError: (error: any) => {
             toast.error(error.message || 'Failed to update collaboration status');
+        },
+    });
+};
+/**
+ * Hook to update collaboration details
+ */
+export const useUpdateCollaboration = (id: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: UpdateCollaborationDto) =>
+            collaborationService.updateCollaboration(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['collaborations'] });
+            queryClient.invalidateQueries({ queryKey: ['collaborations', id] });
+            toast.success('Collaboration updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to update collaboration');
+        },
+    });
+};
+
+/**
+ * Hook to delete a collaboration
+ */
+export const useDeleteCollaboration = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id: string) => collaborationService.deleteCollaboration(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['collaborations'] });
+            toast.success('Collaboration deleted successfully');
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to delete collaboration');
         },
     });
 };

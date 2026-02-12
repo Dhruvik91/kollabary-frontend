@@ -3,7 +3,8 @@ import { API_CONFIG } from '@/constants';
 import {
     Collaboration,
     CreateCollaborationDto,
-    UpdateCollaborationStatusDto
+    UpdateCollaborationStatusDto,
+    UpdateCollaborationDto
 } from '@/types/collaboration.types';
 
 export const collaborationService = {
@@ -45,6 +46,27 @@ export const collaborationService = {
         const response = await httpService.patch<Collaboration>(
             API_CONFIG.path.collaboration.status(id),
             data
+        );
+        return response.data;
+    },
+
+    /**
+     * Update collaboration details
+     */
+    updateCollaboration: async (id: string, data: UpdateCollaborationDto) => {
+        const response = await httpService.patch<Collaboration>(
+            API_CONFIG.path.collaboration.detail(id),
+            data
+        );
+        return response.data;
+    },
+
+    /**
+     * Delete a collaboration
+     */
+    deleteCollaboration: async (id: string) => {
+        const response = await httpService.delete<void>(
+            API_CONFIG.path.collaboration.detail(id)
         );
         return response.data;
     },

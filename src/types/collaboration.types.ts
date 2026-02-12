@@ -40,3 +40,11 @@ export interface CreateCollaborationDto {
 export interface UpdateCollaborationStatusDto {
     status: CollaborationStatus;
 }
+
+export interface UpdateCollaborationDto {
+    title?: string;
+    description?: string;
+    proposedTerms?: Record<string, unknown>;
+    startDate?: string;
+    endDate?: string;
+}

@@ -15,10 +15,7 @@ export default function CollaborationsPage() {
                     Manage your active partnerships, review requests, and track campaign progress.
                 </p>
             </div>
-
-            <div className="bg-background/50 backdrop-blur-sm rounded-3xl border border-border/50 p-6 md:p-8">
-                <CollaborationListContainer />
-            </div>
+            <CollaborationListContainer />
         </div>
     );
 }

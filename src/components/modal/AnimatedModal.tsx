@@ -3,12 +3,13 @@
 import React from 'react';
 import {
     Dialog,
-    DialogContent,
+    DialogPortal,
+} from '@/components/ui/dialog';
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogPortal,
-    DialogOverlay,
 } from '@/components/ui/dialog';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -58,69 +59,79 @@ export const AnimatedModal = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogPortal>
-                <DialogOverlay className="backdrop-blur-sm bg-black/40" />
-                <DialogContent
-                    className={cn(
-                        "p-0 overflow-hidden border-none bg-transparent shadow-none focus-visible:ring-0",
-                        sizeClasses[size],
-                        className
-                    )}
-                    showCloseButton={false}
-                >
-                    <AnimatePresence mode="wait">
-                        {isOpen && (
+            <AnimatePresence>
+                {isOpen && (
+                    <DialogPortal forceMount>
+                        <DialogPrimitive.Overlay asChild>
                             <motion.div
-                                initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
-                                animate={shouldReduceMotion ? { opacity: 1 } : "visible"}
-                                exit={shouldReduceMotion ? { opacity: 0 } : "exit"}
-                                variants={modalVariants}
-                                className={cn(
-                                    "bg-background border border-border/50 rounded-[2.5rem] shadow-2xl flex flex-col w-full max-h-[90vh] relative",
-                                    contentClassName
-                                )}
-                            >
-                                {/* Header Section */}
-                                <DialogHeader className="px-8 pt-8 pb-4 shrink-0 border-b border-border/5 text-left">
-                                    <DialogTitle className="text-2xl font-black tracking-tight">
-                                        {title}
-                                    </DialogTitle>
-                                    {description && (
-                                        <DialogDescription className="text-muted-foreground text-base mt-1 leading-relaxed">
-                                            {description}
-                                        </DialogDescription>
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]"
+                            />
+                        </DialogPrimitive.Overlay>
+                        <DialogPrimitive.Content
+                            asChild
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                        >
+                            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+                                <motion.div
+                                    initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
+                                    animate={shouldReduceMotion ? { opacity: 1 } : "visible"}
+                                    exit={shouldReduceMotion ? { opacity: 0 } : "exit"}
+                                    variants={modalVariants}
+                                    transition={{ duration: 0.15 }}
+                                    className={cn(
+                                        "w-full bg-background border border-border/50 rounded-3xl shadow-xl flex flex-col max-h-[90vh] relative pointer-events-auto transform-gpu",
+                                        "will-change-transform will-change-opacity",
+                                        sizeClasses[size],
+                                        className,
+                                        contentClassName
                                     )}
-                                </DialogHeader>
+                                >
+                                    {/* Header Section */}
+                                    <DialogHeader className="px-8 pt-8 pb-4 shrink-0 border-b border-border/5 text-left">
+                                        <DialogTitle className="text-2xl font-black tracking-tight">
+                                            {title}
+                                        </DialogTitle>
+                                        {description && (
+                                            <DialogDescription className="text-muted-foreground text-sm mt-1 leading-relaxed">
+                                                {description}
+                                            </DialogDescription>
+                                        )}
+                                    </DialogHeader>
 
-                                {/* Main Content - Scrollable */}
-                                <div className="p-8 overflow-y-auto scrollbar-none flex-1">
-                                    {children}
-                                </div>
-
-                                {/* Footer Section */}
-                                {footer && (
-                                    <div className="px-8 py-6 border-t border-border/5 bg-muted/20 shrink-0">
-                                        {footer}
+                                    {/* Main Content - Scrollable */}
+                                    <div className="px-8 py-6 overflow-y-auto scrollbar-none flex-1">
+                                        {children}
                                     </div>
-                                )}
 
-                                {/* Close Button */}
-                                {showCloseButton && (
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={onClose}
-                                        className="absolute top-6 right-6 rounded-2xl bg-muted/50 hover:bg-muted text-muted-foreground transition-all hover:rotate-90 active:scale-95 z-50 h-10 w-10"
-                                    >
-                                        <X size={20} />
-                                        <span className="sr-only">Close</span>
-                                    </Button>
-                                )}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </DialogContent>
-            </DialogPortal>
+                                    {/* Footer Section */}
+                                    {footer && (
+                                        <div className="px-8 py-4 bg-muted/20 border-t border-border/5 rounded-b-3xl shrink-0">
+                                            {footer}
+                                        </div>
+                                    )}
+
+                                    {/* Close Button */}
+                                    {showCloseButton && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={onClose}
+                                            className="absolute top-4 right-4 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground transition-all hover:rotate-12 active:scale-95 z-50 h-8 w-8"
+                                        >
+                                            <X size={16} />
+                                            <span className="sr-only">Close</span>
+                                        </Button>
+                                    )}
+                                </motion.div>
+                            </div>
+                        </DialogPrimitive.Content>
+                    </DialogPortal>
+                )}
+            </AnimatePresence>
         </Dialog>
     );
 };
