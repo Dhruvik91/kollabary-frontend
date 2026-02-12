@@ -25,6 +25,15 @@ export const API_CONFIG = {
             search: '/influencer/search',
             myProfile: '/influencer/profile',
             profile: (id: string) => `/influencer/${id}`,
+        },
+        messaging: {
+            conversation: '/messaging/conversation',
+            conversationDetail: (id: string) => `/messaging/conversation/${id}`,
+            messages: (id: string) => `/messaging/conversation/${id}/messages`,
+            sendMessage: (id: string) => `/messaging/conversation/${id}/message`,
+            message: (id: string) => `/messaging/message/${id}`,
+            deleteMessage: (id: string) => `/messaging/message/${id}/delete`,
+            deleteConversation: (id: string) => `/messaging/conversation/${id}/delete`,
         }
     }
 }

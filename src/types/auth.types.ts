@@ -10,6 +10,17 @@ export enum UserStatus {
     SUSPENDED = 'SUSPENDED',
 }
 
+export interface Profile {
+    id: string;
+    fullName: string;
+    username: string;
+    avatarUrl?: string;
+    bio?: string;
+    location?: string;
+    firstName?: string;
+    lastName?: string;
+}
+
 export interface User {
     id: string;
     email: string;
@@ -18,6 +29,8 @@ export interface User {
     emailVerified: boolean;
     createdAt: string;
     updatedAt: string;
+    profile?: Profile;
+    influencerProfile?: { id: string };
 }
 
 export interface AuthResponse {

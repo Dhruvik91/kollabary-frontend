@@ -5,9 +5,12 @@ import {
     useUpdateCollaborationStatus,
     useUpdateCollaboration
 } from '@/hooks/use-collaboration.hooks';
+import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { useAuth } from '@/contexts/auth-context';
 import { CollaborationStatus } from '@/types/collaboration.types';
 import { UserRole } from '@/types/auth.types';
+import { useRouter } from 'next/navigation';
+import { FRONTEND_ROUTES } from '@/constants';
 
 // Sub-components
 import { CollaborationHeader } from '../components/CollaborationHeader';
@@ -35,9 +38,25 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const { data: collaboration, isLoading, isError, error } = useCollaborationDetail(id);
     const { mutate: updateStatus, isPending: isUpdating } = useUpdateCollaborationStatus(id);
     const { mutate: updateCollaboration, isPending: isUpdatingDetails } = useUpdateCollaboration(id);
+    const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
     const { user } = useAuth();
+    const router = useRouter();
 
     const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
+
+    const handleMessagePartner = () => {
+        if (!collaboration) return;
+
+        const partner = user?.id === collaboration.requester.id
+            ? collaboration.influencer
+            : collaboration.requester;
+
+        startConversation(partner.id, {
+            onSuccess: (conversation) => {
+                router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+            }
+        });
+    };
 
     // Loading State
     if (isLoading) {
@@ -129,7 +148,12 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                 {/* Sidebar Details */}
                 <div className="space-y-6">
                     {/* Partner Information */}
-                    <CollaborationPartnerCard partner={partner} isInfluencer={isInfluencer} />
+                    <CollaborationPartnerCard
+                        partner={partner}
+                        isInfluencer={isInfluencer}
+                        onMessage={handleMessagePartner}
+                        isMessaging={isStartingChat}
+                    />
 
                     {/* Status Progress Tracker */}
                     <CollaborationProgressTracker status={collaboration.status} />

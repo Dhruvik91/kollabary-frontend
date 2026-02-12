@@ -3,17 +3,39 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, Star, TrendingUp, MapPin, CheckCircle2 } from 'lucide-react';
+import { Users, Star, TrendingUp, MapPin, CheckCircle2, MessageSquare } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
+import { Button } from '@/components/ui/button';
+import { useStartConversation } from '@/hooks/use-messaging.hooks';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
+import { FRONTEND_ROUTES } from '@/constants';
 
 interface InfluencerCardProps {
     influencer: InfluencerProfile;
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user, niche, followersCount, engagementRate, avgRating, totalReviews, verified, id } = influencer;
-    const { profile } = user;
+    const { user: influencerUser, niche, followersCount, engagementRate, avgRating, totalReviews, verified, id } = influencer;
+    const { profile } = influencerUser;
+    const { user: currentUser } = useAuth();
+    const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
+    const router = useRouter();
+
+    const handleMessage = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        startConversation(influencerUser.id, {
+            onSuccess: (conversation) => {
+                router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+            }
+        });
+    };
+
+    const isBrand = currentUser?.role === UserRole.USER;
 
     return (
         <motion.div
@@ -73,7 +95,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                             </div>
 
                             {/* Stats Grid */}
-                            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
+                            <div className="grid grid-cols-3 gap-2 py-4 border-y border-border/50">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-1.5 text-muted-foreground">
                                         <Users size={12} />
@@ -101,6 +123,17 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                     </div>
                                 </div>
                             </div>
+
+                            {isBrand && (
+                                <Button
+                                    onClick={handleMessage}
+                                    disabled={isStartingChat}
+                                    className="w-full h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10 relative z-20"
+                                >
+                                    <MessageSquare size={16} />
+                                    Message Influencer
+                                </Button>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
