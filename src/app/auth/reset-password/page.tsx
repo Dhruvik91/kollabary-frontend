@@ -1,3 +1,4 @@
+import { use } from 'react';
 import { Metadata } from 'next';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { ResetPasswordContainer } from '@/features/auth/ResetPasswordContainer';
@@ -13,11 +14,11 @@ export const metadata: Metadata = {
 };
 
 interface ResetPasswordPageProps {
-    searchParams: { token?: string };
+    searchParams: Promise<{ token?: string }>;
 }
 
 export default function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
-    const token = searchParams.token;
+    const { token } = use(searchParams);
 
     // Redirect if no token provided
     if (!token) {
