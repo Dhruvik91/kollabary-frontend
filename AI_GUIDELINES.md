@@ -69,6 +69,13 @@ Rules:
 - Use camelCase for state names
 - Use Pascal Case for state types
 
+### Constants and Types
+
+- Make sure to use the constant file for API_CONFIG for the backend points and FRONTEND_ROUTES for the frontend routes
+- Make sure to use the http-service file for the http methods for the usage of api calls
+- Make sure to use the types file for the types of the data
+- Make sure to use the services for the business logic
+
 ⚠ Never mix UI with business logic.
 
 ---

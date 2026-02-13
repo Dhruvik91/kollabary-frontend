@@ -38,7 +38,6 @@ export function useMe(enabled = true) {
  * Hook to handle user signup
  */
 export function useSignup() {
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -47,12 +46,15 @@ export function useSignup() {
             // Invalidate and refetch user data
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
 
+            // Set role cookie for middleware (accessible by JS)
+            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
             toast.success('Account created successfully!', {
                 description: 'Welcome to Kollabary',
             });
 
-            // Redirect to dashboard
-            router.push(FRONTEND_ROUTES.DASHBOARD.HOME);
+            // Reload to trigger middleware redirection
+            window.location.href = '/';
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)
@@ -71,7 +73,6 @@ export function useSignup() {
  * Hook to handle user login
  */
 export function useLogin() {
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -80,12 +81,15 @@ export function useLogin() {
             // Invalidate and refetch user data
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
 
+            // Set role cookie for middleware (accessible by JS)
+            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
             toast.success('Login successful!', {
                 description: `Welcome back, ${data.user.email}`,
             });
 
-            // Redirect to dashboard
-            router.push('/dashboard');
+            // Reload to trigger middleware redirection
+            window.location.href = '/';
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)
@@ -104,7 +108,6 @@ export function useLogin() {
  * Hook to handle user logout
  */
 export function useLogout() {
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -113,10 +116,13 @@ export function useLogout() {
             // Clear all queries
             queryClient.clear();
 
+            // Clear role cookie
+            document.cookie = 'user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax';
+
             toast.success('Logged out successfully');
 
-            // Redirect to login page
-            router.push(FRONTEND_ROUTES.AUTH.LOGIN);
+            // Trigger full refresh to clear any state and trigger middleware
+            window.location.href = FRONTEND_ROUTES.AUTH.LOGIN;
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)
@@ -168,10 +174,8 @@ export function useResetPassword() {
                 description: data.message,
             });
 
-            // Redirect to login page after 2 seconds
-            setTimeout(() => {
-                router.push(FRONTEND_ROUTES.AUTH.LOGIN);
-            }, 2000);
+            // No redirection here, let the user manually go to login or 
+            // the component state handle the success view.
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

@@ -170,16 +170,16 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                         </div>
                     </div>
 
-                    <div className="pb-4 flex gap-3">
+                    <div className="pb-4 flex gap-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsReportModalOpen(true)}
-                            className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl border-none hover:bg-red-500/10 hover:text-red-500 transition-colors flex items-center justify-center group"
+                            className="w-14 h-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-all flex items-center justify-center group"
                             title="Report Influencer"
                         >
-                            <Flag size={20} className="group-hover:fill-red-500 transition-colors" />
+                            <Flag size={20} className="group-hover:fill-destructive transition-colors" />
                         </Button>
-                        <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                        <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                             <MessageCircle size={20} />
                             Contact
                         </Button>
@@ -358,9 +358,9 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                 description="Are you sure you want to delete this review? This action cannot be undone."
                 size="sm"
                 footer={
-                    <div className="flex gap-3 justify-end">
+                    <div className="flex gap-4 justify-end">
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             onClick={() => setReviewToDelete(null)}
                             className="rounded-xl font-bold"
                         >
@@ -370,7 +370,7 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                             variant="destructive"
                             onClick={confirmDelete}
                             disabled={deleteReview.isPending}
-                            className="rounded-xl font-bold px-6 shadow-lg shadow-red-500/20"
+                            className="rounded-xl font-bold px-8 shadow-xl shadow-destructive/20"
                         >
                             {deleteReview.isPending ? 'Deleting...' : 'Delete Review'}
                         </Button>

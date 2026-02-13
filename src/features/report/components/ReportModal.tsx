@@ -2,9 +2,10 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
     Form,
     FormControl,
@@ -32,6 +33,10 @@ interface ReportModalProps {
     targetName: string;
 }
 
+/**
+ * ReportModal - A smart component for handling content reporting.
+ * Follows AI guidelines for forms, accessibility, and tokens.
+ */
 export const ReportModal = ({
     isOpen,
     onClose,
@@ -74,14 +79,15 @@ export const ReportModal = ({
             description={`You are reporting "${targetName}". Please provide details below.`}
             size="md"
         >
-            <div className="space-y-6 py-4">
-                <div className="flex items-start gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-600 dark:text-amber-500 text-sm">
-                    <AlertTriangle size={18} className="shrink-0 mt-0.5" />
-                    <p>
+            <div className="space-y-8 py-2">
+                <Alert variant="destructive" className="bg-destructive/5 border-destructive/20 rounded-2xl">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle className="font-bold">Community Safety Notice</AlertTitle>
+                    <AlertDescription className="text-xs">
                         Reporting is for serious violations of our community guidelines.
                         Misuse of this feature may lead to account restrictions.
-                    </p>
-                </div>
+                    </AlertDescription>
+                </Alert>
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -90,25 +96,25 @@ export const ReportModal = ({
                             name="reason"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="font-bold">Reason for reporting</FormLabel>
+                                    <FormLabel className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Reason for reporting</FormLabel>
                                     <Select
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
-                                            <SelectTrigger className="h-12 rounded-xl focus:ring-primary/20">
-                                                <SelectValue placeholder="Select a reason" />
+                                            <SelectTrigger className="h-14 rounded-2xl border-border/50 bg-muted/20 focus:ring-primary/20 focus:border-primary/30 transition-all">
+                                                <SelectValue placeholder="Select a violation type" />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent className="rounded-xl">
+                                        <SelectContent className="rounded-2xl border-border/50">
                                             {REPORT_REASONS.map((reason) => (
-                                                <SelectItem key={reason} value={reason}>
+                                                <SelectItem key={reason} value={reason} className="rounded-xl">
                                                     {reason}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    <FormMessage />
+                                    <FormMessage className="text-xs font-bold" />
                                 </FormItem>
                             )}
                         />
@@ -118,25 +124,25 @@ export const ReportModal = ({
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="font-bold">Detailed Description</FormLabel>
+                                    <FormLabel className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Detailed Description</FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder="Please describe the issue in detail..."
-                                            className="min-h-[120px] rounded-xl focus:ring-primary/20 resize-none"
+                                            placeholder="Provide specific details about the violation..."
+                                            className="min-h-[140px] rounded-2xl border-border/50 bg-muted/20 focus:ring-primary/20 focus:border-primary/30 transition-all resize-none p-4"
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-xs font-bold" />
                                 </FormItem>
                             )}
                         />
 
-                        <div className="flex gap-3 justify-end pt-4">
+                        <div className="flex gap-4 justify-end pt-4">
                             <Button
                                 type="button"
-                                variant="outline"
+                                variant="ghost"
                                 onClick={onClose}
-                                className="rounded-xl font-bold px-6"
+                                className="rounded-2xl font-bold px-8 h-12 hover:bg-muted"
                             >
                                 Cancel
                             </Button>
@@ -144,7 +150,7 @@ export const ReportModal = ({
                                 type="submit"
                                 variant="destructive"
                                 disabled={submitReport.isPending}
-                                className="rounded-xl font-bold px-8 shadow-xl shadow-red-500/20"
+                                className="rounded-2xl font-bold px-10 h-12 shadow-xl shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
                             >
                                 {submitReport.isPending ? (
                                     <>

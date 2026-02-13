@@ -16,12 +16,17 @@ import {
     Rocket,
     LogOut,
     X,
-    Handshake
+    Handshake,
+    ShieldAlert,
+    CheckCircle,
+    CreditCard,
+    TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserRole } from '@/types/auth.types';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 
 interface NavItemProps {
@@ -99,24 +104,26 @@ export const Sidebar = ({
     }, [pathname]);
 
     const commonLinks = [
-        { href: '/', icon: LayoutDashboard, label: 'Overview' },
-        { href: '/collaborations', icon: Handshake, label: 'Collaborations' },
-        { href: '/messages', icon: MessageSquare, label: 'Messages', badge: '3' },
+        { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+        { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages', badge: '3' },
     ];
 
     const adminLinks = [
-        { href: '/users', icon: Users, label: 'User Management' },
-        { href: '/analytics', icon: BarChart3, label: 'Platform Analytics' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Admin Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },
     ];
 
     const influencerLinks = [
-        { href: '/campaigns', icon: Briefcase, label: 'Campaigns' },
-        { href: '/earnings', icon: BarChart3, label: 'Earnings' },
+        { href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS, icon: Briefcase, label: 'Campaigns' },
+        { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: BarChart3, label: 'Earnings' },
     ];
 
     const brandLinks = [
-        { href: '/discover', icon: Rocket, label: 'Discover' },
-        { href: '/projects', icon: Briefcase, label: 'My Projects' },
+        { href: FRONTEND_ROUTES.DASHBOARD.DISCOVER, icon: Rocket, label: 'Discover' },
+        { href: FRONTEND_ROUTES.DASHBOARD.PROJECTS, icon: Briefcase, label: 'My Projects' },
     ];
 
     const getLinksByRole = () => {
@@ -179,11 +186,11 @@ export const Sidebar = ({
             {/* Sidebar Footer */}
             <div className="p-3 mt-auto space-y-1 border-t border-border/50 bg-muted/20 shrink-0">
                 <NavItem
-                    href="/settings"
+                    href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}
                     icon={Settings}
                     label="Settings"
                     isCollapsed={isCollapsed && !isMobileOpen}
-                    isActive={pathname === '/settings'}
+                    isActive={pathname === FRONTEND_ROUTES.DASHBOARD.SETTINGS}
                     onClick={onMobileClose}
                 />
 

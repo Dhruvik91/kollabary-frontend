@@ -8,9 +8,21 @@ import { FRONTEND_ROUTES } from './constants';
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Get the access token from cookies
+    // Get the access token and user role from cookies
     const accessToken = request.cookies.get('access_token')?.value;
+    const userRole = request.cookies.get('user_role')?.value;
     const isAuthenticated = !!accessToken;
+
+    const ADMIN_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW;
+    const USER_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
+
+    /**
+     * Helper to get the correct dashboard based on role
+     */
+    const getDashboardUrl = (role?: string) => {
+        if (role === 'ADMIN') return ADMIN_DASHBOARD;
+        return USER_DASHBOARD;
+    };
 
     // Public routes that should be accessible only to guests
     const authRoutes = [
@@ -23,15 +35,15 @@ export function middleware(request: NextRequest) {
     // Check if the current route is an auth route
     const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
 
-    // Redirect authenticated users trying to access auth routes to the dashboard overview
+    // Redirect authenticated users trying to access auth routes to their respective dashboard
     if (isAuthenticated && isAuthRoute) {
-        return NextResponse.redirect(new URL(FRONTEND_ROUTES.DASHBOARD.OVERVIEW, request.url));
+        return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
     }
 
     // Special handling for the root path
     if (pathname === '/') {
         if (isAuthenticated) {
-            return NextResponse.redirect(new URL(FRONTEND_ROUTES.DASHBOARD.OVERVIEW, request.url));
+            return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
         }
         // Guests at '/' see the landing page (stay where they are)
         return NextResponse.next();
@@ -60,7 +72,12 @@ export function middleware(request: NextRequest) {
 
     const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
-    if (!isAuthenticated && isProtectedRoute) {
+    // Protected Admin Routes
+    if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+        return NextResponse.redirect(new URL(USER_DASHBOARD, request.url));
+    }
+
+    if (!isAuthenticated && (isProtectedRoute || pathname.startsWith('/admin'))) {
         const loginUrl = new URL(FRONTEND_ROUTES.AUTH.LOGIN, request.url);
         // Optional: save the intended destination to redirect back after login
         loginUrl.searchParams.set('callbackUrl', pathname);

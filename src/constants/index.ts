@@ -44,6 +44,12 @@ export const API_CONFIG = {
         report: {
             base: "/report",
             delete: (id: string) => `/report/${id}/delete`,
+        },
+        admin: {
+            stats: '/admin/stats',
+            reports: '/admin/reports',
+            verifications: '/admin/verifications',
+            subscription: '/admin/subscription/plan',
         }
     }
 }
@@ -69,7 +75,14 @@ export const FRONTEND_ROUTES = {
         DISCOVER: '/discover',
         PROJECTS: '/projects',
         OVERVIEW: '/overview',
-        INFLUENCER_SETUP: '/influencer/setup'
+        INFLUENCER_SETUP: '/influencer/setup',
+        ADMIN: {
+            OVERVIEW: '/admin/overview',
+            REPORTS: '/admin/reports',
+            VERIFICATIONS: '/admin/verifications',
+            SUBSCRIPTIONS: '/admin/subscriptions',
+            RANKING: '/admin/ranking',
+        }
     },
     HOME: '/',
 }
