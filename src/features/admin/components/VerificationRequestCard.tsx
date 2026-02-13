@@ -52,10 +52,10 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                            {request.user.email[0].toUpperCase()}
+                            {request.user?.email?.[0]?.toUpperCase() || '?'}
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold truncate max-w-[150px]">{request.user.email}</h3>
+                            <h3 className="text-sm font-semibold truncate max-w-[150px]">{request.user?.email || 'Unknown User'}</h3>
                             <p className="text-[10px] text-muted-foreground">ID: {request.id.slice(0, 8)}...</p>
                         </div>
                     </div>
@@ -74,7 +74,12 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" className="flex-1 rounded-xl h-9 text-xs gap-2">
+                    <Button
+                        variant="outline"
+                        className="flex-1 rounded-xl h-9 text-xs gap-2"
+                        onClick={() => request.documents[0] && window.open(request.documents[0], '_blank')}
+                        disabled={!request.documents.length}
+                    >
                         <Eye size={14} /> View Docs
                     </Button>
 
@@ -89,7 +94,7 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                                 <DialogHeader>
                                     <DialogTitle>Process Verification</DialogTitle>
                                     <DialogDescription>
-                                        Provide feedback and decide on this verification request for {request.user.email}.
+                                        Provide feedback and decide on this verification request for {request.user?.email || 'this user'}.
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="py-4 space-y-4">

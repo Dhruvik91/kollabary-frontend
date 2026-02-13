@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
@@ -16,13 +18,21 @@ import {
     Briefcase,
     Calendar,
     MessageCircle,
+    Flag,
+    AlignLeft,
+    ShieldCheck,
     ArrowLeft,
-    Flag
+    Clock
 } from 'lucide-react';
+import { useSubmitVerification, useMyVerificationStatus } from '@/hooks/queries/useVerificationQueries';
+import { VerificationStatus } from '@/types/admin.types';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
@@ -33,9 +43,7 @@ import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
 import { ReviewList } from '@/features/review/components/ReviewList';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
-import { useState } from 'react';
 import { Review } from '@/types/review.types';
-import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { ReportModal } from '@/features/report/components/ReportModal';
 
 
@@ -43,10 +51,26 @@ interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
     ranking?: RankingBreakdown;
     isRankingLoading?: boolean;
+    isOwner?: boolean;
 }
 
-export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading }: InfluencerProfileDetailProps) => {
+export const InfluencerProfileDetail = ({
+    influencer,
+    ranking,
+    isRankingLoading,
+    isOwner = false
+}: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
+    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+    const [docUrl, setDocUrl] = useState('');
+    const [notes, setNotes] = useState('');
+
+    const verificationMutation = useSubmitVerification();
+    const { data: verificationRequests } = useMyVerificationStatus();
+    // In getMyRequests in backend: order: { createdAt: 'DESC' }
+    // So latest is at index 0.
+    const currentVerification = (verificationRequests as any[])?.[0];
+
     const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
     const profile = influencerUser?.profile;
     const bio = profile?.bio;
@@ -147,6 +171,35 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                                     Verified Creator
                                 </div>
                             )}
+                            {isOwner && !verified && !currentVerification && (
+                                <button
+                                    onClick={() => setIsVerificationModalOpen(true)}
+                                    className="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-primary/20 hover:bg-primary/20 transition-all active:scale-95"
+                                >
+                                    <ShieldCheck size={14} />
+                                    Get Verified
+                                </button>
+                            )}
+                            {isOwner && !verified && currentVerification?.status === VerificationStatus.PENDING && (
+                                <div className="bg-yellow-500/10 text-yellow-600 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-yellow-500/20">
+                                    <Clock size={14} />
+                                    Verification Pending
+                                </div>
+                            )}
+                            {isOwner && !verified && currentVerification?.status === VerificationStatus.REJECTED && (
+                                <div className="flex items-center gap-2">
+                                    <div className="bg-red-500/10 text-red-600 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-red-500/20">
+                                        <Flag size={14} />
+                                        Rejected
+                                    </div>
+                                    <button
+                                        onClick={() => setIsVerificationModalOpen(true)}
+                                        className="text-primary text-[10px] font-bold underline hover:text-primary/80 transition-colors"
+                                    >
+                                        Try Again
+                                    </button>
+                                </div>
+                            )}
                             <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
                                 <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
                                 <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
@@ -171,18 +224,29 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                     </div>
 
                     <div className="pb-4 flex gap-4">
-                        <Button
-                            variant="outline"
-                            onClick={() => setIsReportModalOpen(true)}
-                            className="w-14 h-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-all flex items-center justify-center group"
-                            title="Report Influencer"
-                        >
-                            <Flag size={20} className="group-hover:fill-destructive transition-colors" />
-                        </Button>
-                        <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                            <MessageCircle size={20} />
-                            Contact
-                        </Button>
+                        {isOwner ? (
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP}>
+                                <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                                    <AlignLeft size={20} />
+                                    Edit Profile
+                                </Button>
+                            </Link>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsReportModalOpen(true)}
+                                    className="w-14 h-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-all flex items-center justify-center group"
+                                    title="Report Influencer"
+                                >
+                                    <Flag size={20} className="group-hover:fill-destructive transition-colors" />
+                                </Button>
+                                <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                                    <MessageCircle size={20} />
+                                    Contact
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -392,6 +456,66 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                 targetType="influencer"
                 targetName={profile?.fullName || 'the Influencer'}
             />
+
+            {/* Verification Modal */}
+            <AnimatedModal
+                isOpen={isVerificationModalOpen}
+                onClose={() => setIsVerificationModalOpen(false)}
+                title="Request Profile Verification"
+                description="Submit proof of your identity or social media influence to get the verified badge."
+                size="md"
+            >
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="docUrl" className="font-bold">Identity/Influence Proof (URL)</Label>
+                        <Input
+                            id="docUrl"
+                            placeholder="e.g. Google Drive or Dropbox link to your documents"
+                            value={docUrl}
+                            onChange={(e) => setDocUrl(e.target.value)}
+                            className="h-12 rounded-xl"
+                        />
+                        <p className="text-[10px] text-muted-foreground">Provide a link to a document or screenshot that proves your identity or reach.</p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="v-notes" className="font-bold">Additional Notes (Optional)</Label>
+                        <Textarea
+                            id="v-notes"
+                            placeholder="Tell us why your profile should be verified..."
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            className="min-h-[100px] rounded-xl resize-none"
+                        />
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                        <Button
+                            variant="ghost"
+                            onClick={() => setIsVerificationModalOpen(false)}
+                            className="flex-1 h-12 rounded-xl font-bold"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            className="flex-[2] h-12 rounded-xl font-black bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                            onClick={() => {
+                                verificationMutation.mutate({
+                                    documents: {
+                                        idProof: docUrl,
+                                        notes
+                                    }
+                                }, {
+                                    onSuccess: () => setIsVerificationModalOpen(false)
+                                });
+                            }}
+                            disabled={!docUrl || verificationMutation.isPending}
+                        >
+                            {verificationMutation.isPending ? "Submitting..." : "Submit Request"}
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
         </div>
     );
 };

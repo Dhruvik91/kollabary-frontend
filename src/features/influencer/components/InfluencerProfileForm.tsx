@@ -63,6 +63,7 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface InfluencerProfileFormProps {
     onSubmit: (data: ProfileFormValues) => void;
+    initialData?: Partial<ProfileFormValues>;
     isLoading?: boolean;
 }
 
@@ -72,20 +73,34 @@ const steps = [
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
 ];
 
-export const InfluencerProfileForm = ({ onSubmit, isLoading }: InfluencerProfileFormProps) => {
+export const InfluencerProfileForm = ({ onSubmit, initialData, isLoading }: InfluencerProfileFormProps) => {
     const [currentStep, setCurrentStep] = useState(0);
 
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            niche: '',
-            bio: '',
-            location: '',
-            availability: AvailabilityStatus.OPEN,
-            collaborationTypes: [],
-            platforms: [{ name: 'Instagram', handle: '', followers: 0 }],
+            niche: initialData?.niche || '',
+            bio: initialData?.bio || '',
+            location: initialData?.location || '',
+            availability: initialData?.availability || AvailabilityStatus.OPEN,
+            collaborationTypes: initialData?.collaborationTypes || [],
+            platforms: initialData?.platforms || [{ name: 'Instagram', handle: '', followers: 0 }],
         },
     });
+
+    // Handle form reset when initialData is loaded
+    React.useEffect(() => {
+        if (initialData) {
+            form.reset({
+                niche: initialData.niche || '',
+                bio: initialData.bio || '',
+                location: initialData.location || '',
+                availability: initialData.availability || AvailabilityStatus.OPEN,
+                collaborationTypes: initialData.collaborationTypes || [],
+                platforms: initialData.platforms || [{ name: 'Instagram', handle: '', followers: 0 }],
+            });
+        }
+    }, [initialData, form]);
 
     const { fields, append, remove } = useFieldArray({
         name: 'platforms',

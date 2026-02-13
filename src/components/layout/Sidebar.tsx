@@ -20,8 +20,10 @@ import {
     ShieldAlert,
     CheckCircle,
     CreditCard,
-    TrendingUp
+    TrendingUp,
+    User
 } from 'lucide-react';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth.hooks';
@@ -97,6 +99,7 @@ export const Sidebar = ({
     const pathname = usePathname();
     const { user } = useAuth();
     const logoutMutation = useLogout();
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
 
     // Close mobile sidebar ONLY on navigation
     useEffect(() => {
@@ -117,6 +120,7 @@ export const Sidebar = ({
     ];
 
     const influencerLinks = [
+        { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE, icon: Users, label: 'My Profile' },
         { href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS, icon: Briefcase, label: 'Campaigns' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: BarChart3, label: 'Earnings' },
     ];
@@ -185,6 +189,31 @@ export const Sidebar = ({
 
             {/* Sidebar Footer */}
             <div className="p-3 mt-auto space-y-1 border-t border-border/50 bg-muted/20 shrink-0">
+                {/* User Profile Summary */}
+                {user && (
+                    <div className={cn(
+                        "mb-2 p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all",
+                        isCollapsed && !isMobileOpen ? "justify-center" : "px-3"
+                    )}>
+                        <div className="relative shrink-0">
+                            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                <User size={18} />
+                            </div>
+                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
+                        </div>
+                        {(!isCollapsed || isMobileOpen) && (
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
+                                    {user.email.split('@')[0]}
+                                </span>
+                                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-1">
+                                    {user.role}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 <NavItem
                     href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}
                     icon={Settings}
@@ -196,10 +225,7 @@ export const Sidebar = ({
 
                 <Button
                     variant="ghost"
-                    onClick={() => {
-                        logoutMutation.mutate();
-                        if (onMobileClose) onMobileClose();
-                    }}
+                    onClick={() => setIsLogoutModalOpen(true)}
                     className={cn(
                         "w-full flex items-center gap-3 px-3 h-11 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors group overflow-hidden border-none",
                         (isCollapsed && !isMobileOpen) ? "justify-center" : "justify-start"
@@ -211,6 +237,38 @@ export const Sidebar = ({
                     )}
                 </Button>
             </div>
+
+            {/* Logout Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                title="End Session?"
+                description="Are you sure you want to log out? You'll need to sign in again to access your dashboard."
+                size="sm"
+            >
+                <div className="flex flex-col gap-3">
+                    <Button
+                        variant="destructive"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12 shadow-lg shadow-red-500/20"
+                        onClick={() => {
+                            logoutMutation.mutate();
+                            setIsLogoutModalOpen(false);
+                        }}
+                        disabled={logoutMutation.isPending}
+                    >
+                        {logoutMutation.isPending ? "Logging out..." : "Log me out"}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12"
+                        onClick={() => setIsLogoutModalOpen(false)}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </AnimatedModal>
         </div>
     );
 

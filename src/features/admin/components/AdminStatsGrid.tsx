@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Handshake, Briefcase, CheckCircle, Star } from 'lucide-react';
+import { Users, Handshake, CheckCircle, Star } from 'lucide-react';
 import { AdminStatCard } from './AdminStatCard';
 import { AdminStats } from '@/types/admin.types';
 

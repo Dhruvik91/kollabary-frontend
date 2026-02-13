@@ -3,14 +3,33 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { InfluencerProfileForm } from '@/features/influencer/components/InfluencerProfileForm';
-import { useCreateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { useCreateInfluencerProfile, useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { FRONTEND_ROUTES } from '@/constants';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
 export default function InfluencerSetupPage() {
     const router = useRouter();
+    const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile();
     const { mutate: createProfile, isPending } = useCreateInfluencerProfile();
+
+    const initialData = React.useMemo(() => {
+        if (!profileData) return undefined;
+
+        // Transform platforms record back to array for form
+        const platformsArray = Object.entries(profileData.platforms || {}).map(([name, data]) => ({
+            name,
+            handle: (data as any).handle,
+            followers: (data as any).followers,
+        }));
+
+        return {
+            ...profileData,
+            platforms: platformsArray as any,
+            collaborationTypes: profileData.collaborationTypes as any,
+            availability: profileData.availability as any,
+        };
+    }, [profileData]);
 
     const handleProfileSubmit = useCallback((data: any) => {
         // Transform platforms array to record
@@ -54,7 +73,11 @@ export default function InfluencerSetupPage() {
                 </p>
             </motion.div>
 
-            <InfluencerProfileForm onSubmit={handleProfileSubmit} isLoading={isPending} />
+            <InfluencerProfileForm
+                onSubmit={handleProfileSubmit}
+                initialData={initialData}
+                isLoading={isPending || isFetchingProfile}
+            />
 
             <motion.p
                 initial={{ opacity: 0 }}
