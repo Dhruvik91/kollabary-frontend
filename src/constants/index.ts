@@ -40,6 +40,10 @@ export const API_CONFIG = {
             influencer: (id: string) => `/review/influencer/${id}`,
             update: (id: string) => `/review/${id}`,
             delete: (id: string) => `/review/${id}/delete`,
+        },
+        report: {
+            base: "/report",
+            delete: (id: string) => `/report/${id}/delete`,
         }
     }
 }

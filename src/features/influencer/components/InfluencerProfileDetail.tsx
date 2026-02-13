@@ -16,7 +16,8 @@ import {
     Briefcase,
     Calendar,
     MessageCircle,
-    ArrowLeft
+    ArrowLeft,
+    Flag
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,8 @@ import { ReviewList } from '@/features/review/components/ReviewList';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { useState } from 'react';
 import { Review } from '@/types/review.types';
-import { toast } from 'sonner';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import { ReportModal } from '@/features/report/components/ReportModal';
 
 
 interface InfluencerProfileDetailProps {
@@ -55,10 +57,18 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
     const updateReview = useUpdateReview(influencer.id);
 
     const [editingReview, setEditingReview] = useState<Review | null>(null);
+    const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const handleDeleteReview = (id: string) => {
-        if (confirm('Are you sure you want to delete this review?')) {
-            deleteReview.mutate(id);
+        setReviewToDelete(id);
+    };
+
+    const confirmDelete = () => {
+        if (reviewToDelete) {
+            deleteReview.mutate(reviewToDelete, {
+                onSuccess: () => setReviewToDelete(null)
+            });
         }
     };
 
@@ -161,6 +171,14 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                     </div>
 
                     <div className="pb-4 flex gap-3">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsReportModalOpen(true)}
+                            className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl border-none hover:bg-red-500/10 hover:text-red-500 transition-colors flex items-center justify-center group"
+                            title="Report Influencer"
+                        >
+                            <Flag size={20} className="group-hover:fill-red-500 transition-colors" />
+                        </Button>
                         <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                             <MessageCircle size={20} />
                             Contact
@@ -330,6 +348,49 @@ export const InfluencerProfileDetail = ({ influencer, ranking, isRankingLoading 
                 initialData={editingReview ? { rating: editingReview.rating, comment: editingReview.comment } : undefined}
                 title="Edit Your Review"
                 description="Update your feedback for this collaboration."
+            />
+
+            {/* Deletion Confirmation Modal */}
+            <AnimatedModal
+                isOpen={!!reviewToDelete}
+                onClose={() => setReviewToDelete(null)}
+                title="Confirm Deletion"
+                description="Are you sure you want to delete this review? This action cannot be undone."
+                size="sm"
+                footer={
+                    <div className="flex gap-3 justify-end">
+                        <Button
+                            variant="outline"
+                            onClick={() => setReviewToDelete(null)}
+                            className="rounded-xl font-bold"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={confirmDelete}
+                            disabled={deleteReview.isPending}
+                            className="rounded-xl font-bold px-6 shadow-lg shadow-red-500/20"
+                        >
+                            {deleteReview.isPending ? 'Deleting...' : 'Delete Review'}
+                        </Button>
+                    </div>
+                }
+            >
+                <div className="py-4">
+                    <p className="text-muted-foreground">
+                        Your review and rating for <span className="text-foreground font-bold">@{profile?.username}</span> will be permanently removed.
+                    </p>
+                </div>
+            </AnimatedModal>
+
+            {/* Report Modal */}
+            <ReportModal
+                isOpen={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+                targetId={influencer.id}
+                targetType="influencer"
+                targetName={profile?.fullName || 'the Influencer'}
             />
         </div>
     );
