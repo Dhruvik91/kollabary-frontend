@@ -18,19 +18,18 @@ export default function DashboardClientLayout({
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathName = usePathname();
 
+    const isSetupPage = pathName === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP;
+
     return (
         <AuthGuard>
-            <ProfileSetupGuard>
+            {isSetupPage ? (
                 <div className="flex h-screen bg-zinc-50/50 dark:bg-black overflow-hidden text-foreground">
-                    {/* Sidebar - fixed width handled inside component */}
                     <Sidebar
                         isCollapsed={isCollapsed}
                         onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
                         isMobileOpen={isMobileSidebarOpen}
                         onMobileClose={() => setIsMobileSidebarOpen(false)}
                     />
-
-                    {/* Main Content Area */}
                     <div
                         className={cn(
                             "flex flex-col flex-1 transition-all duration-300 ease-in-out min-w-0 relative h-full",
@@ -46,7 +45,32 @@ export default function DashboardClientLayout({
                         </main>
                     </div>
                 </div>
-            </ProfileSetupGuard>
+            ) : (
+                <ProfileSetupGuard>
+                    <div className="flex h-screen bg-zinc-50/50 dark:bg-black overflow-hidden text-foreground">
+                        <Sidebar
+                            isCollapsed={isCollapsed}
+                            onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+                            isMobileOpen={isMobileSidebarOpen}
+                            onMobileClose={() => setIsMobileSidebarOpen(false)}
+                        />
+                        <div
+                            className={cn(
+                                "flex flex-col flex-1 transition-all duration-300 ease-in-out min-w-0 relative h-full",
+                                isCollapsed ? "lg:pl-20" : "lg:pl-64"
+                            )}
+                        >
+                            <DashboardHeader onMenuClick={() => setIsMobileSidebarOpen(true)} />
+                            <main className={cn(
+                                "flex-1 min-h-0",
+                                pathName !== FRONTEND_ROUTES.DASHBOARD.MESSAGES ? 'p-4 md:p-8 lg:p-10 overflow-y-auto' : 'overflow-hidden h-full'
+                            )}>
+                                {children}
+                            </main>
+                        </div>
+                    </div>
+                </ProfileSetupGuard>
+            )}
         </AuthGuard>
     );
 }

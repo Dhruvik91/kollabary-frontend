@@ -30,7 +30,11 @@ export const CollaborationPartnerCard = ({
                         <UserIcon size={28} />
                     </div>
                     <div className="min-w-0 flex-1">
-                        <p className="font-bold text-lg leading-tight truncate">{partner.email.split('@')[0]}</p>
+                        <p className="font-bold text-lg leading-tight truncate">
+                            {isInfluencer
+                                ? partner.email.split('@')[0]
+                                : (partner as any).user?.email?.split('@')[0] || partner.email?.split('@')[0]}
+                        </p>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold mt-1">
                             {isInfluencer ? 'Brand Partner' : 'Influencer Partner'}
                         </p>

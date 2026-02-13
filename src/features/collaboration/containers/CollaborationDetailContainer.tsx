@@ -54,11 +54,11 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const handleMessagePartner = () => {
         if (!collaboration) return;
 
-        const partner = user?.id === collaboration.requester.id
-            ? collaboration.influencer
-            : collaboration.requester;
+        const partnerId = user?.id === collaboration.requester.id
+            ? collaboration.influencer.user.id
+            : collaboration.requester.id;
 
-        startConversation((partner as any).id, {
+        startConversation(partnerId, {
             onSuccess: (conversation) => {
                 router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
             }
@@ -80,7 +80,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const partner = isInfluencer ? collaboration.requester : collaboration.influencer;
 
     // Authorization check: Only requester or influencer can view
-    const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.id || user?.role === UserRole.ADMIN;
+    const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.user.id || user?.role === UserRole.ADMIN;
 
     if (!isAuthorized) {
         return <CollaborationErrorState message="Unauthorized access" />;
@@ -212,7 +212,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             <ReviewSubmissionModal
                 isOpen={isReviewModalOpen}
                 onClose={() => setIsReviewModalOpen(false)}
-                influencerName={collaboration.influencer.profile?.fullName || 'Creator'}
+                influencerName={collaboration.influencer.user.profile?.fullName || 'Creator'}
                 onSubmit={handleReviewSubmit}
                 isLoading={isCreatingReview}
             />
