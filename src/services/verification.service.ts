@@ -1,3 +1,4 @@
+import { API_CONFIG } from '@/constants';
 import httpService from '@/lib/http-service';
 
 export interface VerificationDto {
@@ -13,13 +14,13 @@ export const verificationService = {
      * Submit a verification request
      */
     submitVerification: (data: VerificationDto) =>
-        httpService.post<any>('/verification/request', data),
+        httpService.post<any>(API_CONFIG.path.verification.base, data),
 
     /**
      * Get current user's verification status
      */
     getMyVerificationStatus: async () => {
-        const response = await httpService.get<any[]>('/verification/my-requests');
+        const response = await httpService.get<any[]>(API_CONFIG.path.verification.myRequests);
         return response.data;
     }
 };

@@ -50,6 +50,12 @@ export const API_CONFIG = {
             reports: '/admin/reports',
             verifications: '/admin/verifications',
             subscription: '/admin/subscription/plan',
+        },
+        verification: {
+            base: '/verification',
+            myRequests: '/verification/my-requests',
+            approve: (id: string) => `/verification/approve/${id}`,
+            reject: (id: string) => `/verification/reject/${id}`,
         }
     }
 }
