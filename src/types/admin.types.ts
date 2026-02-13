@@ -1,24 +1,41 @@
 import { User } from './auth.types';
 
 export interface AdminStats {
-    totalUsers: number;
-    totalInfluencers: number;
-    totalBrands: number;
-    totalCollaborations: number;
-    activeCollaborations: number;
-    pendingVerifications: number;
-    totalReports: number;
-    revenue?: {
-        daily: number[];
-        weekly: number[];
-        monthly: number[];
-        total: number;
+    users: {
+        totalUsers: number;
+        regularUsers: number;
+        influencers: number;
+        admins: number;
+        newUsersThisWeek: number;
+        newUsersThisMonth: number;
     };
-    growth?: {
-        userGrowth: number;
-        influencerGrowth: number;
-        revenueGrowth: number;
+    collaborations: {
+        totalCollaborations: number;
+        activeCollaborations: number;
+        completedCollaborations: number;
+        pendingRequests: number;
+        cancelledCollaborations: number;
+        completionRate: number;
     };
+    verifications: {
+        totalRequests: number;
+        pendingRequests: number;
+        approvedRequests: number;
+        rejectedRequests: number;
+        approvalRate: number;
+    };
+    reviews: {
+        totalReviews: number;
+        averageRating: number;
+        reviewsThisWeek: number;
+        reviewsThisMonth: number;
+    };
+    growth: {
+        week: string;
+        newUsers: number;
+        newCollaborations: number;
+        newReviews: number;
+    }[];
 }
 
 export enum VerificationStatus {
