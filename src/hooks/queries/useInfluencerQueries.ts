@@ -32,10 +32,6 @@ export function useCreateInfluencerProfile() {
         mutationFn: (data: CreateInfluencerProfileDto) => influencerService.createProfile(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
-            toast.success('Profile created successfully!');
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to create profile');
         },
     });
 }

@@ -116,7 +116,9 @@ export const InfluencerProfileForm = ({
         control: form.control,
     });
 
-    const nextStep = async () => {
+    const nextStep = async (e?: React.MouseEvent | React.KeyboardEvent) => {
+        if (e) e.preventDefault();
+
         const fieldsToValidate = currentStep === 0
             ? ['niche', 'bio', 'location']
             : currentStep === 1
@@ -132,8 +134,24 @@ export const InfluencerProfileForm = ({
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0));
 
     const handleFormSubmit = (data: ProfileFormValues) => {
-        // Transform platforms to record for backend if needed
+        // Double check we are on the last step
+        if (currentStep !== steps.length - 1) {
+            return;
+        }
         onSubmit(data);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        // Prevent default Enter behavior (which might submit the form prematurely)
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (currentStep < steps.length - 1) {
+                nextStep();
+            } else {
+                // If on final step, manually trigger submission
+                form.handleSubmit(handleFormSubmit)();
+            }
+        }
     };
 
     const getStepIcon = (platform: string) => {
@@ -178,7 +196,11 @@ export const InfluencerProfileForm = ({
             </div>
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+                <form
+                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    onKeyDown={handleKeyDown}
+                    className="space-y-8"
+                >
                     <motion.div
                         layout
                         className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none overflow-hidden"
