@@ -8,7 +8,8 @@ import {
     Star,
     Zap,
     BarChart3,
-    AlertTriangle
+    AlertTriangle,
+    Check
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { RankingBreakdown } from '@/types/ranking';
@@ -23,17 +24,21 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
     const { totalScore, completedCollaborations, averageRating, responseSpeed, completionRate, verificationBonus, penalties } = breakdown;
 
     const getScoreColor = (score: number) => {
-        if (score >= 80) return 'text-emerald-500';
-        if (score >= 50) return 'text-blue-500';
-        if (score >= 30) return 'text-amber-500';
-        return 'text-red-500';
+        if (score >= 90) return 'text-purple-500';
+        if (score >= 75) return 'text-violet-500';
+        if (score >= 60) return 'text-amber-500';
+        if (score >= 40) return 'text-indigo-500';
+        if (score >= 20) return 'text-blue-500';
+        return 'text-emerald-500';
     };
 
     const getScoreBg = (score: number) => {
-        if (score >= 80) return 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20';
-        if (score >= 50) return 'from-blue-500/20 to-blue-500/5 border-blue-500/20';
-        if (score >= 30) return 'from-amber-500/20 to-amber-500/5 border-amber-500/20';
-        return 'from-red-500/20 to-red-500/5 border-red-500/20';
+        if (score >= 90) return 'from-purple-500/20 to-pink-500/5 border-purple-500/20';
+        if (score >= 75) return 'from-violet-500/20 to-amber-500/5 border-violet-500/20';
+        if (score >= 60) return 'from-amber-500/20 to-amber-500/5 border-amber-500/20';
+        if (score >= 40) return 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20';
+        if (score >= 20) return 'from-blue-500/20 to-blue-500/5 border-blue-500/20';
+        return 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20';
     };
 
     return (
@@ -84,7 +89,7 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                         </div>
                     </div>
                     <div className={cn("px-4 py-1.5 rounded-full text-xs font-bold border text-center transition-all duration-500", getScoreBg(totalScore))}>
-                        {totalScore >= 80 ? 'Exceptional Performance' : totalScore >= 50 ? 'Strong Contributor' : 'Promising Talent'}
+                        {breakdown.rankingTier}
                     </div>
                 </div>
 
@@ -167,6 +172,29 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                                     {Math.round(penalties.score) || 0}
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Requirements List (Mini) */}
+                <div className="pt-4 border-t border-border/50">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Tier Requirements</h4>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                        <div className="flex items-center gap-2">
+                            {breakdown.requirementsMet?.completedCollabs ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
+                            <span className="text-[10px] font-medium">Completed Collabs</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {breakdown.requirementsMet?.rating ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
+                            <span className="text-[10px] font-medium">Min Rating</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {breakdown.requirementsMet?.completion ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
+                            <span className="text-[10px] font-medium">Completion Rate</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {breakdown.requirementsMet?.zeroFraud ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
+                            <span className="text-[10px] font-medium">Zero Fraud Flags</span>
                         </div>
                     </div>
                 </div>

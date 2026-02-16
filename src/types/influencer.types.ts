@@ -25,6 +25,7 @@ export interface InfluencerProfile {
     avgRating: number;
     totalReviews: number;
     rankingScore: number;
+    rankingTier?: string;
     verified: boolean;
     createdAt: string;
     updatedAt: string;

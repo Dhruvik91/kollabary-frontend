@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Users, Star, TrendingUp, MapPin, CheckCircle2, MessageSquare } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
+import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { Button } from '@/components/ui/button';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { useRouter } from 'next/navigation';
@@ -78,7 +79,12 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
                                     {profile?.fullName}
                                 </h3>
-                                <p className="text-sm text-muted-foreground">@{profile?.username}</p>
+                                <div className="flex items-center justify-between mt-1">
+                                    <p className="text-xs text-muted-foreground">@{profile?.username}</p>
+                                    {influencer.rankingTier && (
+                                        <RankTierBadge tier={influencer.rankingTier} size="sm" />
+                                    )}
+                                </div>
                             </div>
 
                             {/* Tags */}

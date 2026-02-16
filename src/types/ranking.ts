@@ -16,6 +16,8 @@ export interface RankingBreakdown {
     verificationBonus: RankingMetric<boolean>;
     penalties: RankingMetric<number>;
     totalScore: number;
+    rankingTier: string;
+    requirementsMet: Record<string, boolean>;
 }
 
 export interface RankingWeights {

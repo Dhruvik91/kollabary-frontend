@@ -39,6 +39,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { RankingScoreCard } from './RankingScoreCard';
+import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
 import { ReviewList } from '@/features/review/components/ReviewList';
@@ -165,6 +166,9 @@ export const InfluencerProfileDetail = ({
                     <div className="flex-1 pb-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-4">
                             <h1 className="text-4xl font-black tracking-tight">{profile?.fullName}</h1>
+                            {influencer.rankingTier && (
+                                <RankTierBadge tier={influencer.rankingTier} size="lg" />
+                            )}
                             {verified && (
                                 <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
                                     <CheckCircle2 size={14} />
