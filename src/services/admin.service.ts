@@ -83,4 +83,12 @@ export const adminService = {
         const response = await httpService.post<any>(`${API_CONFIG.baseUrl}/ranking/recalculate-all`);
         return response.data;
     },
+
+    /**
+     * Admin: Create an influencer account
+     */
+    createInfluencer: async (data: any): Promise<any> => {
+        const response = await httpService.post<any>(API_CONFIG.path.auth.createInfluencer, data);
+        return response.data;
+    },
 };

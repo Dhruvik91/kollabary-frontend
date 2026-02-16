@@ -10,6 +10,7 @@ export const API_CONFIG = {
             resetPassword: '/user-auth/reset-password',
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
+            createInfluencer: '/user-auth/admin/create-influencer',
         },
         collaboration: {
             base: '/collaboration',
@@ -91,6 +92,7 @@ export const FRONTEND_ROUTES = {
             VERIFICATIONS: '/admin/verifications',
             SUBSCRIPTIONS: '/admin/subscriptions',
             RANKING: '/admin/ranking',
+            INFLUENCERS: '/admin/influencers',
         }
     },
     HOME: '/',

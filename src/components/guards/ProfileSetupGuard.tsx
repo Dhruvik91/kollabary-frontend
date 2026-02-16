@@ -34,14 +34,17 @@ export function ProfileSetupGuard({ children }: ProfileSetupGuardProps) {
         const setupPath = '/influencer/setup';
 
         if (isInfluencer && isProfileNotFound && pathname !== setupPath) {
-            router.push(setupPath);
+            router.replace(setupPath);
         }
     }, [isInfluencer, isError, error, pathname, router, isAuthLoading, isProfileLoading]);
 
     // Only show loading state on INITIAL check
+    const isProfileNotFound = isError && (error as any)?.response?.status === 404;
     const isInitialLoading = isProfileLoading && !profile && !isError;
 
-    if (isAuthLoading || (isInfluencer && isInitialLoading)) {
+    // VERY IMPORTANT: If influencer and profile is not found, we MUST NOT render children
+    // because children (like Header) might also trigger profile fetches, causing redundant calls/loops.
+    if (isAuthLoading || (isInfluencer && (isInitialLoading || isProfileNotFound))) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />

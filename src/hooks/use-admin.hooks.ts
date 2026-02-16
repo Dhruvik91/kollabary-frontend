@@ -134,3 +134,20 @@ export function useRecalculateScores() {
         },
     });
 }
+
+/**
+ * Hook to create a new influencer account
+ */
+export function useCreateInfluencer() {
+    return useMutation({
+        mutationFn: (data: any) => adminService.createInfluencer(data),
+        onSuccess: () => {
+            toast.success('Influencer account created successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to create influencer', {
+                description: error.response?.data?.message || error.message,
+            });
+        },
+    });
+}

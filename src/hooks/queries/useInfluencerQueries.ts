@@ -19,6 +19,7 @@ export function useMyInfluencerProfile(enabled = true) {
         queryFn: () => influencerService.getMyProfile(),
         enabled: enabled,
         retry: false, // Don't retry on 404
+        staleTime: 30000, // 30 seconds
     });
 }
 

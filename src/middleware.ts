@@ -37,9 +37,21 @@ export function middleware(request: NextRequest) {
     // Check if the current route is an auth route
     const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
 
+    // STALE SESSION PROTECTION:
+    // If we are at an auth route (like login) and have an access token but NO user role,
+    // it means the user was likely kicked back here by a 401 error.
+    // We MUST let them stay here so they can re-authenticate.
+    if (isAuthRoute && accessToken && !userRole) {
+        return NextResponse.next();
+    }
+
     // Redirect authenticated users trying to access auth routes to their respective dashboard
     if (isAuthenticated && isAuthRoute) {
-        return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
+        const dashboardUrl = getDashboardUrl(userRole);
+        // Only redirect if we're not already going to the correct dashboard path
+        if (pathname !== dashboardUrl) {
+            return NextResponse.redirect(new URL(dashboardUrl, request.url));
+        }
     }
 
     // Special handling for the root path
@@ -64,11 +76,9 @@ export function middleware(request: NextRequest) {
         FRONTEND_ROUTES.DASHBOARD.EARNINGS,
         FRONTEND_ROUTES.DASHBOARD.DISCOVER,
         FRONTEND_ROUTES.DASHBOARD.PROJECTS,
+        FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP,
+        '/influencer/',
         '/influencers',
-        // Assuming INFLUENCER_DETAIL is a dynamic route like /influencers/:id
-        // We protect it by checking if the pathname starts with the base path for influencer details.
-        // If FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(id) returns '/influencers/some-id',
-        // then checking for '/influencers/' is sufficient.
         '/influencers/',
     ];
 
