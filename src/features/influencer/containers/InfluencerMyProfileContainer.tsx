@@ -17,7 +17,7 @@ import { FRONTEND_ROUTES } from '@/constants';
 export const InfluencerMyProfileContainer = () => {
     const router = useRouter();
     const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile();
-    const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user.id || '');
+    const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user?.id || '');
 
     // Handle redirection to setup if profile doesn't exist (e.g., 404 from myProfile)
     useEffect(() => {
