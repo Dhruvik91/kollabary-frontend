@@ -49,7 +49,9 @@ export const API_CONFIG = {
         admin: {
             stats: '/admin/stats',
             reports: '/admin/reports',
+            reportUpdate: (id: string) => `/admin/reports/${id}/status`,
             verifications: '/admin/verifications',
+            verificationUpdate: (id: string) => `/admin/verifications/${id}/status`,
             subscription: '/admin/subscription/plan',
         },
         verification: {

@@ -24,7 +24,7 @@ export const adminService = {
      * Update a report's status
      */
     updateReportStatus: async (reportId: string, data: UpdateReportStatusDto): Promise<Report> => {
-        const response = await httpService.patch<Report>(`${API_CONFIG.path.admin.reports}/${reportId}`, data);
+        const response = await httpService.patch<Report>(API_CONFIG.path.admin.reportUpdate(reportId), data);
         return response.data;
     },
 
@@ -49,7 +49,7 @@ export const adminService = {
      * Process a verification request
      */
     processVerification: async (id: string, status: 'APPROVED' | 'REJECTED', notes?: string): Promise<VerificationRequest> => {
-        const response = await httpService.patch<VerificationRequest>(`${API_CONFIG.path.admin.verifications}/${id}/status`, { status, notes });
+        const response = await httpService.patch<VerificationRequest>(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
         return response.data;
     },
 

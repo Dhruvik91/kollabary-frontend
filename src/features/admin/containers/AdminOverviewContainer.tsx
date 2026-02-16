@@ -59,7 +59,7 @@ export function AdminOverviewContainer() {
             </div>
 
             {/* Main Stats Grid */}
-            <AdminStatsGrid stats={stats} />
+            {/* <AdminStatsGrid stats={stats} /> */}
 
             {/* Detailed Metrics Breakdown */}
             <AdminDetailGrid stats={stats} />
