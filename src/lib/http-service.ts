@@ -103,6 +103,8 @@ class HttpService {
             ];
 
             if (!publicRoutes.includes(currentPath)) {
+              // Clear user_role cookie to signal unauthenticated status to middleware
+              document.cookie = "user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax";
               window.location.href = FRONTEND_ROUTES.AUTH.LOGIN;
             }
           }

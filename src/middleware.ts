@@ -11,7 +11,9 @@ export function middleware(request: NextRequest) {
     // Get the access token and user role from cookies
     const accessToken = request.cookies.get('access_token')?.value;
     const userRole = request.cookies.get('user_role')?.value;
-    const isAuthenticated = !!accessToken;
+    // Authenticated only if we have both. This allows us to clear user_role client-side
+    // to break infinite loops when the token is actually invalid.
+    const isAuthenticated = !!accessToken && !!userRole;
 
     const ADMIN_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW;
     const USER_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
