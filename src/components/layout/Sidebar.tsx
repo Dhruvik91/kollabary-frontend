@@ -30,6 +30,11 @@ import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface NavItemProps {
     href: string;
@@ -120,7 +125,6 @@ export const Sidebar = ({
     ];
 
     const influencerLinks = [
-        { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE, icon: Users, label: 'My Profile' },
         { href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS, icon: Briefcase, label: 'Campaigns' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: BarChart3, label: 'Earnings' },
     ];
@@ -140,6 +144,10 @@ export const Sidebar = ({
     };
 
     const navLinks = getLinksByRole();
+
+    const profilePath = user?.role === UserRole.INFLUENCER
+        ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE
+        : FRONTEND_ROUTES.DASHBOARD.OVERVIEW; // Default or fallback
 
     const sidebarContent = (
         <div className="flex flex-col h-full overflow-hidden">
@@ -188,54 +196,66 @@ export const Sidebar = ({
             </div>
 
             {/* Sidebar Footer */}
-            <div className="p-3 mt-auto space-y-1 border-t border-border/50 bg-muted/20 shrink-0">
-                {/* User Profile Summary */}
+            <div className="p-3 mt-auto border-t border-border/50 bg-muted/20 shrink-0">
+                {/* User Profile Popover */}
                 {user && (
-                    <div className={cn(
-                        "mb-2 p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all",
-                        isCollapsed && !isMobileOpen ? "justify-center" : "px-3"
-                    )}>
-                        <div className="relative shrink-0">
-                            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                                <User size={18} />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <button className={cn(
+                                "w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group",
+                                isCollapsed && !isMobileOpen ? "justify-center" : "px-3"
+                            )}>
+                                <div className="relative shrink-0">
+                                    <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                                        <User size={18} />
+                                    </div>
+                                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
+                                </div>
+                                {(!isCollapsed || isMobileOpen) && (
+                                    <div className="flex flex-col min-w-0 text-left">
+                                        <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
+                                            {user.email.split('@')[0]}
+                                        </span>
+                                        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-1">
+                                            {user.role}
+                                        </span>
+                                    </div>
+                                )}
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                            side={isCollapsed && !isMobileOpen ? "right" : "top"}
+                            align={isCollapsed && !isMobileOpen ? "center" : "end"}
+                            className="w-56 p-2 rounded-2xl border-border/50 bg-background/95 backdrop-blur-sm shadow-xl"
+                        >
+                            <div className="space-y-1">
+                                <Link href={profilePath} onClick={onMobileClose}>
+                                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
+                                        <User size={18} className="text-muted-foreground" />
+                                        Profile
+                                    </div>
+                                </Link>
+                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS} onClick={onMobileClose}>
+                                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
+                                        <Settings size={18} className="text-muted-foreground" />
+                                        Settings
+                                    </div>
+                                </Link>
+                                <div className="h-px bg-border/50 my-1 mx-1" />
+                                <button
+                                    onClick={() => {
+                                        setIsLogoutModalOpen(true);
+                                        if (onMobileClose) onMobileClose();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                                >
+                                    <LogOut size={18} />
+                                    Log out
+                                </button>
                             </div>
-                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
-                        </div>
-                        {(!isCollapsed || isMobileOpen) && (
-                            <div className="flex flex-col min-w-0">
-                                <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
-                                    {user.email.split('@')[0]}
-                                </span>
-                                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-1">
-                                    {user.role}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+                        </PopoverContent>
+                    </Popover>
                 )}
-
-                <NavItem
-                    href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}
-                    icon={Settings}
-                    label="Settings"
-                    isCollapsed={isCollapsed && !isMobileOpen}
-                    isActive={pathname === FRONTEND_ROUTES.DASHBOARD.SETTINGS}
-                    onClick={onMobileClose}
-                />
-
-                <Button
-                    variant="ghost"
-                    onClick={() => setIsLogoutModalOpen(true)}
-                    className={cn(
-                        "w-full flex items-center gap-3 px-3 h-11 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors group overflow-hidden border-none",
-                        (isCollapsed && !isMobileOpen) ? "justify-center" : "justify-start"
-                    )}
-                >
-                    <LogOut size={20} className="group-hover:-translate-x-1 transition-transform shrink-0" />
-                    {(!isCollapsed || isMobileOpen) && (
-                        <span className="text-sm font-medium whitespace-nowrap overflow-hidden">Log out</span>
-                    )}
-                </Button>
             </div>
 
             {/* Logout Confirmation Modal */}

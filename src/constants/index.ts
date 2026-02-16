@@ -83,6 +83,7 @@ export const FRONTEND_ROUTES = {
         OVERVIEW: '/overview',
         INFLUENCER_SETUP: '/influencer/setup',
         INFLUENCER_PROFILE: '/influencer/profile',
+        INFLUENCER_EDIT: '/influencer/profile/edit',
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',

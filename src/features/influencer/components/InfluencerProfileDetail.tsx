@@ -229,7 +229,7 @@ export const InfluencerProfileDetail = ({
 
                     <div className="pb-4 flex gap-4">
                         {isOwner ? (
-                            <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP}>
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT}>
                                 <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                                     <AlignLeft size={20} />
                                     Edit Profile
@@ -313,7 +313,9 @@ export const InfluencerProfileDetail = ({
                             {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
                                 <a
                                     key={name}
-                                    href="#"
+                                    href={data.handle}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center justify-between p-4 bg-background/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all group"
                                 >
                                     <div className="flex items-center gap-4">

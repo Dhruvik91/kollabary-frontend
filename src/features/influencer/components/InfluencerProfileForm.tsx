@@ -21,7 +21,8 @@ import {
     Instagram,
     Youtube,
     Twitter,
-    Globe
+    Globe,
+    Link as LinkIcon
 } from 'lucide-react';
 import {
     Form,
@@ -54,7 +55,7 @@ const profileSchema = z.object({
     collaborationTypes: z.array(z.nativeEnum(CollaborationType)).min(1, 'Select at least one collaboration type'),
     platforms: z.array(z.object({
         name: z.string(),
-        handle: z.string().min(1, 'Handle is required'),
+        handle: z.string().url('Please enter a valid profile URL (e.g. https://instagram.com/username)'),
         followers: z.number().min(0, 'Followers must be positive'),
     })).min(1, 'Add at least one platform'),
 });
@@ -65,6 +66,8 @@ interface InfluencerProfileFormProps {
     onSubmit: (data: ProfileFormValues) => void;
     initialData?: Partial<ProfileFormValues>;
     isLoading?: boolean;
+    submitLabel?: string;
+    mode?: 'setup' | 'edit';
 }
 
 const steps = [
@@ -73,7 +76,13 @@ const steps = [
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
 ];
 
-export const InfluencerProfileForm = ({ onSubmit, initialData, isLoading }: InfluencerProfileFormProps) => {
+export const InfluencerProfileForm = ({
+    onSubmit,
+    initialData,
+    isLoading,
+    submitLabel,
+    mode = 'setup'
+}: InfluencerProfileFormProps) => {
     const [currentStep, setCurrentStep] = useState(0);
 
     const form = useForm<ProfileFormValues>({
@@ -301,11 +310,11 @@ export const InfluencerProfileForm = ({ onSubmit, initialData, isLoading }: Infl
                                                         name={`platforms.${index}.handle`}
                                                         render={({ field }) => (
                                                             <FormItem>
-                                                                <FormLabel className="text-xs font-bold uppercase tracking-wider">Handle</FormLabel>
+                                                                <FormLabel className="text-xs font-bold uppercase tracking-wider">Profile Link</FormLabel>
                                                                 <FormControl>
                                                                     <div className="relative">
-                                                                        <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                                        <Input placeholder="username" {...field} className="h-11 pl-9 rounded-xl bg-background/50" />
+                                                                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                                        <Input placeholder="https://..." {...field} className="h-11 pl-9 rounded-xl bg-background/50" />
                                                                     </div>
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -464,7 +473,7 @@ export const InfluencerProfileForm = ({ onSubmit, initialData, isLoading }: Infl
                                 disabled={isLoading}
                                 className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2"
                             >
-                                {isLoading ? 'Creating Profile...' : 'Complete Profile'}
+                                {isLoading ? (mode === 'setup' ? 'Creating Profile...' : 'Saving Changes...') : (submitLabel || 'Complete Profile')}
                                 <Sparkles size={18} />
                             </Button>
                         ) : (
