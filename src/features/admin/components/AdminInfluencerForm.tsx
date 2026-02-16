@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Lock, UserPlus, Loader2 } from 'lucide-react';
+import { Mail, Lock, UserPlus, Loader2, Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 
 interface AdminInfluencerFormProps {
     onSubmit: (data: CreateInfluencerFormData) => void;
@@ -23,6 +24,8 @@ interface AdminInfluencerFormProps {
 }
 
 export function AdminInfluencerForm({ onSubmit, isLoading }: AdminInfluencerFormProps) {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const form = useForm<CreateInfluencerFormData>({
         resolver: zodResolver(createInfluencerSchema),
         defaultValues: {
@@ -77,11 +80,26 @@ export function AdminInfluencerForm({ onSubmit, isLoading }: AdminInfluencerForm
                                         <div className="relative">
                                             <Lock className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                                             <Input
-                                                type="password"
+                                                type={showPassword ? 'text' : 'password'}
                                                 placeholder="••••••••"
                                                 {...field}
-                                                className="rounded-xl border-border/50 bg-background/50 pl-10 focus:ring-primary/20"
+                                                className="rounded-xl border-border/50 bg-background/50 pl-10 pr-10 focus:ring-primary/20"
                                             />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                disabled={isLoading}
+                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                                ) : (
+                                                    <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                                )}
+                                            </Button>
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -99,11 +117,26 @@ export function AdminInfluencerForm({ onSubmit, isLoading }: AdminInfluencerForm
                                         <div className="relative">
                                             <Lock className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                                             <Input
-                                                type="password"
+                                                type={showConfirmPassword ? 'text' : 'password'}
                                                 placeholder="••••••••"
                                                 {...field}
-                                                className="rounded-xl border-border/50 bg-background/50 pl-10 focus:ring-primary/20"
+                                                className="rounded-xl border-border/50 bg-background/50 pl-10 pr-10 focus:ring-primary/20"
                                             />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                disabled={isLoading}
+                                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                            >
+                                                {showConfirmPassword ? (
+                                                    <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                                ) : (
+                                                    <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                                )}
+                                            </Button>
                                         </div>
                                     </FormControl>
                                     <FormMessage />

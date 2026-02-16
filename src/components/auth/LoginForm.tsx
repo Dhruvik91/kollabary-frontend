@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface LoginFormProps {
     onSubmit: (data: LoginFormData) => void;
@@ -22,6 +23,7 @@ interface LoginFormProps {
  * Pure presentational component for user login
  */
 export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFormProps) {
+    const [showPassword, setShowPassword] = useState(false);
     const {
         register,
         handleSubmit,
@@ -65,16 +67,34 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                             Forgot password?
                         </Link>
                     </div>
-                    <Input
-                        id="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        autoComplete="current-password"
-                        disabled={isLoading}
-                        aria-invalid={!!errors.password}
-                        aria-describedby={errors.password ? 'password-error' : undefined}
-                        {...register('password')}
-                    />
+                    <div className="relative">
+                        <Input
+                            id="password"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Enter your password"
+                            autoComplete="current-password"
+                            className="pr-10"
+                            disabled={isLoading}
+                            aria-invalid={!!errors.password}
+                            aria-describedby={errors.password ? 'password-error' : undefined}
+                            {...register('password')}
+                        />
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                            onClick={() => setShowPassword(!showPassword)}
+                            disabled={isLoading}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? (
+                                <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                            ) : (
+                                <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                            )}
+                        </Button>
+                    </div>
                     {errors.password && (
                         <p id="password-error" className="text-sm text-destructive" role="alert">
                             {errors.password.message}
