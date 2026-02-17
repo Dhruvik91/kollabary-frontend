@@ -59,6 +59,11 @@ export const API_CONFIG = {
             myRequests: '/verification/my-requests',
             approve: (id: string) => `/verification/approve/${id}`,
             reject: (id: string) => `/verification/reject/${id}`,
+        },
+        profile: {
+            base: '/profile',
+            me: '/profile',
+            search: '/profile/search',
         }
     }
 }
@@ -88,6 +93,7 @@ export const FRONTEND_ROUTES = {
         INFLUENCER_PROFILE: '/influencer/profile',
         INFLUENCER_EDIT: '/influencer/profile/edit',
         INFLUENCER_DETAIL: (id: string) => `/influencers/${id}`,
+        PROFILE_SETUP: '/profile/setup',
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',

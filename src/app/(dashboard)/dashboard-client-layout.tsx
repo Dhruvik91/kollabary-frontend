@@ -18,7 +18,8 @@ export default function DashboardClientLayout({
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathName = usePathname();
 
-    const isSetupPage = pathName === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP;
+    const isSetupPage = pathName === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP ||
+        pathName === FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
 
     return (
         <AuthGuard>
