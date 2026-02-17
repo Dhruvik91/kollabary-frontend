@@ -7,7 +7,9 @@ export interface UserProfile {
     fullName: string;
     bio?: string;
     location?: string;
-    profileImage?: string;
+    profileImage?: string; // Kept for backward compatibility if needed, but primary is avatarUrl
+    avatarUrl?: string;
+    socialLinks?: Record<string, string>;
     createdAt: string;
     updatedAt: string;
 }
@@ -17,7 +19,9 @@ export interface SaveProfileDto {
     fullName: string;
     bio?: string;
     location?: string;
-    profileImage?: string;
+    profileImage?: string; // Kept for backward compatibility
+    avatarUrl?: string;
+    socialLinks?: Record<string, string>;
 }
 
 export const profileService = {
@@ -30,10 +34,29 @@ export const profileService = {
     },
 
     /**
-     * Create or update user profile
+     * Create or update user profile (POST)
      */
     saveProfile: async (data: SaveProfileDto): Promise<UserProfile> => {
-        const response = await httpService.post<UserProfile>(API_CONFIG.path.profile.base, data);
+        // Map profileImage to avatarUrl if the latter is missing but former is present
+        const payload = { ...data };
+        if (payload.profileImage && !payload.avatarUrl) {
+            payload.avatarUrl = payload.profileImage;
+        }
+
+        const response = await httpService.post<UserProfile>(API_CONFIG.path.profile.base, payload);
+        return response.data;
+    },
+
+    /**
+     * Update user profile (PATCH)
+     */
+    updateProfile: async (data: SaveProfileDto): Promise<UserProfile> => {
+        const payload = { ...data };
+        if (payload.profileImage && !payload.avatarUrl) {
+            payload.avatarUrl = payload.profileImage;
+        }
+
+        const response = await httpService.patch<UserProfile>(API_CONFIG.path.profile.base, payload);
         return response.data;
     },
 

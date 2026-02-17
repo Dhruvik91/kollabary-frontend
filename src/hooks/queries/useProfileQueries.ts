@@ -38,3 +38,23 @@ export function useSaveProfile() {
         },
     });
 }
+
+/**
+ * Hook to update profile (PATCH)
+ */
+export function useUpdateProfile() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: profileService.updateProfile,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: profileKeys.me() });
+            toast.success('Profile updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update profile', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}

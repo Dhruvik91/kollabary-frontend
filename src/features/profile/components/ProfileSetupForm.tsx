@@ -14,8 +14,10 @@ import {
     Link2,
     Plus,
     Trash2,
-    Globe
+    Globe,
+    Camera
 } from 'lucide-react';
+import { ProfileImageUpload } from './ProfileImageUpload';
 import {
     Form,
     FormControl,
@@ -34,6 +36,7 @@ const profileSchema = z.object({
     fullName: z.string().min(2, 'Full name is required'),
     bio: z.string().max(300, 'Bio must be less than 300 characters').optional(),
     location: z.string().min(2, 'Location is required').optional(),
+    avatarUrl: z.string().optional(),
     socials: z.array(z.object({
         platform: z.string().min(1, 'Platform name is required'),
         url: z.string().url('Invalid URL format'),
@@ -47,6 +50,8 @@ export interface ProfileFormValues {
     fullName: string;
     bio?: string;
     location?: string;
+    avatarUrl?: string;
+    profileImage?: string; // Keep for mapping if needed
     socialLinks?: Record<string, string>;
 }
 
@@ -54,12 +59,14 @@ interface ProfileSetupFormProps {
     onSubmit: (data: ProfileFormValues) => void;
     initialData?: Partial<ProfileFormValues>;
     isLoading?: boolean;
+    isEdit?: boolean;
 }
 
 export const ProfileSetupForm = ({
     onSubmit,
     initialData,
     isLoading,
+    isEdit = false,
 }: ProfileSetupFormProps) => {
     // Transform initial socialLinks object to array for current form logic
     const initialSocials = React.useMemo(() => {
@@ -77,6 +84,7 @@ export const ProfileSetupForm = ({
             fullName: initialData?.fullName || '',
             bio: initialData?.bio || '',
             location: initialData?.location || '',
+            avatarUrl: initialData?.avatarUrl || initialData?.profileImage || '',
             socials: initialSocials,
         },
     });
@@ -112,7 +120,27 @@ export const ProfileSetupForm = ({
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none"
                     >
-                        <div className="space-y-8">
+                        <div className="space-y-10">
+                            {/* Profile Image Section */}
+                            <div className="flex justify-center -mt-20 md:-mt-24 mb-6">
+                                <FormField
+                                    control={form.control}
+                                    name="avatarUrl"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <ProfileImageUpload
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    disabled={isLoading}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
                             <div className="flex items-center gap-4 mb-4">
                                 <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                                     <User size={24} />
@@ -289,7 +317,7 @@ export const ProfileSetupForm = ({
                                 disabled={isLoading}
                                 className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2"
                             >
-                                {isLoading ? 'Saving...' : 'Complete Setup'}
+                                {isLoading ? 'Saving...' : isEdit ? 'Update Profile' : 'Complete Setup'}
                                 <Sparkles size={18} />
                             </Button>
                         </div>

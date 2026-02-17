@@ -64,6 +64,9 @@ export const API_CONFIG = {
             base: '/profile',
             me: '/profile',
             search: '/profile/search',
+        },
+        uploads: {
+            base: '/uploads',
         }
     }
 }
