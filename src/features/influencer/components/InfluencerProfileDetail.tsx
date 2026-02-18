@@ -37,6 +37,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
@@ -429,7 +430,7 @@ export const InfluencerProfileDetail = ({
                                             collaborationTypes.map((type) => (
                                                 <div key={type} className="group relative">
                                                     <Badge className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold flex items-center gap-2 shadow-none hover:bg-primary/10">
-                                                        {type.replace('_', ' ')}
+                                                        {formatCollaborationType(type)}
                                                         {isOwner && (
                                                             <button
                                                                 onClick={() => handleRemoveCollabType(type)}
@@ -463,7 +464,7 @@ export const InfluencerProfileDetail = ({
                                                         .filter(t => !collaborationTypes.includes(t as any))
                                                         .map(t => (
                                                             <SelectItem key={t} value={t}>
-                                                                {t.replace('_', ' ')}
+                                                                {formatCollaborationType(t)}
                                                             </SelectItem>
                                                         ))}
                                                 </SelectContent>

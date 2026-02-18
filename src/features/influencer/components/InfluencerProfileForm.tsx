@@ -47,6 +47,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
 import { ImageUpload } from '@/components/shared/ImageUpload';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 const profileSchema = z.object({
     niche: z.string().min(2, 'Niche is required'),
@@ -483,7 +484,7 @@ export const InfluencerProfileForm = ({
                                                                             "font-bold text-sm",
                                                                             isChecked ? "text-primary" : "text-foreground"
                                                                         )}>
-                                                                            {type.replace('_', ' ')}
+                                                                            {formatCollaborationType(type)}
                                                                         </span>
                                                                         <div className={cn(
                                                                             "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
