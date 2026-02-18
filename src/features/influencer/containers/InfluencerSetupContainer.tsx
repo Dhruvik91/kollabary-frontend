@@ -11,9 +11,9 @@ import { toast } from 'sonner';
 
 export const InfluencerSetupContainer = () => {
     const router = useRouter();
-    const { mutate: createProfile, isPending } = useCreateInfluencerProfile();
+    const { mutateAsync: createProfile, isPending } = useCreateInfluencerProfile();
 
-    const handleProfileSubmit = useCallback((data: any) => {
+    const handleProfileSubmit = useCallback(async (data: any) => {
         // Transform platforms array to record for backend
         const platformsRecord: Record<string, { handle: string; followers: number }> = {};
         data.platforms.forEach((p: any) => {
@@ -28,15 +28,14 @@ export const InfluencerSetupContainer = () => {
             platforms: platformsRecord
         };
 
-        createProfile(submissionData, {
-            onSuccess: () => {
-                toast.success('Profile created successfully!');
-                router.push(FRONTEND_ROUTES.DASHBOARD.OVERVIEW);
-            },
-            onError: (error: any) => {
-                toast.error(error?.response?.data?.message || 'Failed to create profile');
-            }
-        });
+        try {
+            await createProfile(submissionData);
+            // After successful creation and cache invalidation, redirect
+            router.replace(FRONTEND_ROUTES.DASHBOARD.OVERVIEW);
+        } catch (error: any) {
+            // Error toast is handled by the hook's onError or can be added here
+            console.error('Profile creation failed:', error);
+        }
     }, [createProfile, router]);
 
     return (

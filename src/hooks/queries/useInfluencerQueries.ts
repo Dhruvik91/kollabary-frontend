@@ -1,5 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { influencerService } from '@/services/influencer.service';
+import { profileKeys } from './useProfileQueries';
+import { authKeys } from '../use-auth.hooks';
 import { CreateInfluencerProfileDto, SearchInfluencersDto } from '@/types/influencer.types';
 import { toast } from 'sonner';
 
@@ -32,7 +34,11 @@ export function useCreateInfluencerProfile() {
     return useMutation({
         mutationFn: (data: CreateInfluencerProfileDto) => influencerService.createProfile(data),
         onSuccess: () => {
+            // Invalidate everything related to the current user's profile state
+            queryClient.invalidateQueries({ queryKey: authKeys.me() });
             queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            queryClient.invalidateQueries({ queryKey: profileKeys.me() });
+            toast.success('Influencer profile created successfully!');
         },
     });
 }

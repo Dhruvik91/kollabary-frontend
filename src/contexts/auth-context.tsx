@@ -3,6 +3,7 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useMe } from '@/hooks/use-auth.hooks';
 import { useMyProfile } from '@/hooks/queries/useProfileQueries';
+import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { User, UserRole } from '@/types/auth.types';
 
 interface AuthContextValue {
@@ -21,25 +22,65 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: user, isLoading: isAuthLoading, isError: isAuthError } = useMe();
 
-    // Fetch profile only if user is logged in, has USER role, and doesn't have a profile yet
-    // For other roles like INFLUENCER, the profile might already be included or handled differently
-    const shouldFetchProfile = !!user && user.role === UserRole.USER && !user.profile;
-    const { data: profile, isLoading: isProfileLoading, isError: isProfileError } = useMyProfile(shouldFetchProfile);
+    // Regular users fetch from /profile
+    const shouldFetchUserProfile = !!user && user.role === UserRole.USER && !user.profile;
+    const {
+        data: userProfile,
+        isLoading: isUserProfileLoading,
+        isError: isUserProfileError
+    } = useMyProfile(shouldFetchUserProfile);
+
+    // Influencers fetch from /influencer/profile
+    const shouldFetchInfluencerProfile = !!user && user.role === UserRole.INFLUENCER && !user.profile;
+    const {
+        data: influencerProfile,
+        isLoading: isInfluencerProfileLoading,
+        isError: isInfluencerProfileError
+    } = useMyInfluencerProfile(shouldFetchInfluencerProfile);
 
     const mergedUser = useMemo(() => {
         if (!user) return null;
-        if (shouldFetchProfile && profile) {
-            return { ...user, profile };
-        }
-        return user;
-    }, [user, profile, shouldFetchProfile]);
 
-    const value = useMemo(() => ({
-        user: mergedUser,
-        isLoading: isAuthLoading || (shouldFetchProfile && isProfileLoading),
-        isAuthenticated: !!user,
-        isError: isAuthError || (shouldFetchProfile && isProfileError),
-    }), [mergedUser, isAuthLoading, isProfileLoading, isAuthError, isProfileError, user, shouldFetchProfile]);
+        // Merge regular profile
+        if (userProfile) {
+            return { ...user, profile: userProfile };
+        }
+
+        // Merge influencer profile
+        if (influencerProfile) {
+            // Priority 1: Use the nested profile if it exists
+            const nestedProfile = (influencerProfile as any).user?.profile;
+
+            // Priority 2: If nested profile is missing (common backend inconsistency), 
+            // synthesize a fallback profile using user info.
+            const fallbackProfile = {
+                id: influencerProfile.id,
+                fullName: user.email.split('@')[0], // Fallback name
+                username: user.email.split('@')[0],
+                ...nestedProfile
+            };
+
+            return {
+                ...user,
+                profile: fallbackProfile,
+                influencerProfile: { id: influencerProfile.id }
+            };
+        }
+
+        return user;
+    }, [user, userProfile, influencerProfile]);
+
+    const value = useMemo(() => {
+        const isProfileLoading = (shouldFetchUserProfile && isUserProfileLoading) ||
+            (shouldFetchInfluencerProfile && isInfluencerProfileLoading);
+
+        return {
+            user: mergedUser,
+            isLoading: isAuthLoading || isProfileLoading,
+            isAuthenticated: !!user,
+            isError: isAuthError || isUserProfileError || isInfluencerProfileError,
+        };
+    }, [mergedUser, isAuthLoading, isUserProfileLoading, isInfluencerProfileLoading, isAuthError, isUserProfileError, isInfluencerProfileError, user, shouldFetchUserProfile, shouldFetchInfluencerProfile]);
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

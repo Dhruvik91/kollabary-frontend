@@ -3,8 +3,8 @@
 import { ReactNode, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-import { useMyProfile } from '@/hooks/queries/useProfileQueries';
 import { UserRole } from '@/types/auth.types';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Loader2 } from 'lucide-react';
 
 interface ProfileSetupGuardProps {
@@ -16,43 +16,61 @@ interface ProfileSetupGuardProps {
  * Redirects USERS and INFLUENCERS to setup page if they don't have a profile
  */
 export function ProfileSetupGuard({ children }: ProfileSetupGuardProps) {
-    const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    const { user, isAuthenticated, isLoading } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
 
-    // Fetch profile for both influencers and regular users
-    const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const isRegularUser = user?.role === UserRole.USER;
-    const needsProfile = isInfluencer || isRegularUser;
-
-    const { data: profile, isLoading: isProfileLoading, isError, error } = useMyProfile(
-        isAuthenticated && needsProfile
-    );
-
     useEffect(() => {
-        if (isAuthLoading || isProfileLoading) return;
+        if (isLoading || !isAuthenticated) return;
 
-        // If user needs profile but it's missing (404)
-        const isProfileNotFound = isError && (error as any)?.response?.status === 404;
+        // Check if profile is missing based on role
+        const isInfluencer = user?.role === UserRole.INFLUENCER;
+        const isRegularUser = user?.role === UserRole.USER;
 
-        const influencerSetupPath = '/influencer/setup';
-        const userSetupPath = '/profile/setup';
+        // Robust check: either profile or influencerProfile record exists
+        const hasProfile = !!user?.profile || !!user?.influencerProfile;
 
-        const correctSetupPath = isInfluencer ? influencerSetupPath : userSetupPath;
+        const influencerSetupPath = FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP;
+        const userSetupPath = FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
+        const dashboardPath = FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
 
-        if (needsProfile && isProfileNotFound && pathname !== correctSetupPath) {
-            router.replace(correctSetupPath);
+        // CASE 1: Missing profile - Redirect TO setup
+        if (isInfluencer && !hasProfile && pathname !== influencerSetupPath) {
+            router.replace(influencerSetupPath);
+        } else if (isRegularUser && !hasProfile && pathname !== userSetupPath) {
+            router.replace(userSetupPath);
         }
-    }, [isInfluencer, isRegularUser, needsProfile, isError, error, pathname, router, isAuthLoading, isProfileLoading]);
+        // CASE 2: Has profile - Redirect AWAY from setup
+        else if (hasProfile && (pathname === influencerSetupPath || pathname === userSetupPath)) {
+            // Influencers go to their profile, others go to dashboard
+            const redirectPath = isInfluencer
+                ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE
+                : dashboardPath;
 
-    // Only show loading state on INITIAL check
-    const isProfileNotFound = isError && (error as any)?.response?.status === 404;
-    const isInitialLoading = isProfileLoading && !profile && !isError;
+            router.replace(redirectPath);
+        }
+    }, [user, isAuthenticated, isLoading, pathname, router]);
 
-    // VERY IMPORTANT: If profile is required but not found, we MUST NOT render children
-    if (isAuthLoading || (needsProfile && (isInitialLoading || isProfileNotFound))) {
+    // Show loading while we verify auth/profile status
+    if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-background">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="text-sm text-muted-foreground font-medium animate-pulse">Syncing profile...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // If we're authenticated but missing a profile, don't render children while redirect is pending
+    const needsProfile = user?.role === UserRole.INFLUENCER || user?.role === UserRole.USER;
+    const hasProfile = !!user?.profile;
+    const isSetupPage = pathname === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP || pathname === FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
+
+    if (isAuthenticated && needsProfile && !hasProfile && !isSetupPage) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
