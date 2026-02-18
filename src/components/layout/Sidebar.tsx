@@ -147,9 +147,18 @@ export const Sidebar = ({
 
     const navLinks = getLinksByRole();
 
-    const profilePath = user?.role === UserRole.INFLUENCER
-        ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE
-        : FRONTEND_ROUTES.DASHBOARD.OVERVIEW; // Default or fallback
+    const getProfilePath = () => {
+        switch (user?.role) {
+            case UserRole.INFLUENCER:
+                return FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE;
+            case UserRole.USER:
+                return FRONTEND_ROUTES.DASHBOARD.PROFILE;
+            default:
+                return FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
+        }
+    };
+
+    const profilePath = getProfilePath();
 
     const sidebarContent = (
         <div className="flex flex-col h-full overflow-hidden">
@@ -208,15 +217,23 @@ export const Sidebar = ({
                                 isCollapsed && !isMobileOpen ? "justify-center" : "px-3"
                             )}>
                                 <div className="relative shrink-0">
-                                    <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
-                                        <User size={18} />
+                                    <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
+                                        {user.profile?.avatarUrl ? (
+                                            <img
+                                                src={user.profile.avatarUrl}
+                                                alt={user.email}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <User size={18} />
+                                        )}
                                     </div>
                                     <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
                                 </div>
                                 {(!isCollapsed || isMobileOpen) && (
                                     <div className="flex flex-col min-w-0 text-left">
                                         <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
-                                            {user.email.split('@')[0]}
+                                            {user.profile?.fullName || user.email.split('@')[0]}
                                         </span>
                                         <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-1">
                                             {user.role}

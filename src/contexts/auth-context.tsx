@@ -2,7 +2,8 @@
 
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useMe } from '@/hooks/use-auth.hooks';
-import { User } from '@/types/auth.types';
+import { useMyProfile } from '@/hooks/queries/useProfileQueries';
+import { User, UserRole } from '@/types/auth.types';
 
 interface AuthContextValue {
     user: User | null | undefined;
@@ -18,14 +19,27 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
  * Manages global authentication state
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const { data: user, isLoading, isError } = useMe();
+    const { data: user, isLoading: isAuthLoading, isError: isAuthError } = useMe();
+
+    // Fetch profile only if user is logged in, has USER role, and doesn't have a profile yet
+    // For other roles like INFLUENCER, the profile might already be included or handled differently
+    const shouldFetchProfile = !!user && user.role === UserRole.USER && !user.profile;
+    const { data: profile, isLoading: isProfileLoading, isError: isProfileError } = useMyProfile(shouldFetchProfile);
+
+    const mergedUser = useMemo(() => {
+        if (!user) return null;
+        if (shouldFetchProfile && profile) {
+            return { ...user, profile };
+        }
+        return user;
+    }, [user, profile, shouldFetchProfile]);
 
     const value = useMemo(() => ({
-        user: user ?? null,
-        isLoading,
+        user: mergedUser,
+        isLoading: isAuthLoading || (shouldFetchProfile && isProfileLoading),
         isAuthenticated: !!user,
-        isError,
-    }), [user, isLoading, isError]);
+        isError: isAuthError || (shouldFetchProfile && isProfileError),
+    }), [mergedUser, isAuthLoading, isProfileLoading, isAuthError, isProfileError, user, shouldFetchProfile]);
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
