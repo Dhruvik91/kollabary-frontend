@@ -19,8 +19,19 @@ interface InfluencerCardProps {
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user: influencerUser, niche, followersCount, engagementRate, avgRating, totalReviews, verified, id } = influencer;
+    const { user: influencerUser, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id } = influencer;
     const { profile } = influencerUser;
+    
+    // Calculate total followers from all platforms
+    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
+    
+    // Calculate average engagement rate from platforms
+    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
+    const engagementRate = platformsWithEngagement.length > 0
+        ? (platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length).toFixed(1)
+        : '0.0';
+    
+    const displayAvatar = avatarUrl || profile?.avatarUrl;
     const { user: currentUser } = useAuth();
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
     const router = useRouter();
@@ -52,9 +63,9 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="relative h-32 bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
                             <div className="absolute -bottom-10 left-6">
                                 <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
-                                    {profile?.avatarUrl ? (
+                                    {displayAvatar ? (
                                         <Image
-                                            src={profile.avatarUrl}
+                                            src={displayAvatar}
                                             alt={profile.fullName}
                                             fill
                                             className="object-cover"
@@ -92,10 +103,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg">
                                     {niche}
                                 </span>
-                                {profile?.location && (
+                                {(influencer.address || profile?.location) && (
                                     <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg">
                                         <MapPin size={10} />
-                                        {profile.location}
+                                        {influencer.address || profile.location}
                                     </span>
                                 )}
                             </div>

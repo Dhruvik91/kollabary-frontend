@@ -47,10 +47,10 @@ export const influencerService = {
     },
 
     /**
-     * Update current user's influencer profile (POST/PATCH endpoint usually same for upsert)
+     * Update current user's influencer profile
      */
     async updateProfile(dto: Partial<CreateInfluencerProfileDto>): Promise<InfluencerProfile> {
-        const response = await httpService.post<InfluencerProfile>(API_CONFIG.path.influencer.myProfile, dto);
+        const response = await httpService.patch<InfluencerProfile>(API_CONFIG.path.influencer.myProfile, dto);
         return response.data;
     }
 };

@@ -207,28 +207,30 @@ export const Sidebar = ({
 
                 {/* Mobile-only links for better accessibility */}
                 {isMobileOpen && (
-                    <div className="pt-4 mt-4 border-t border-border/50 space-y-1">
+                    <div className="pt-3 mt-3 border-t border-border/50">
                         <div className="px-3 mb-2">
                             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Account</span>
                         </div>
-                        <NavItem
-                            href={profilePath}
-                            icon={User}
-                            label="My Profile"
-                            isCollapsed={false}
-                            isActive={pathname === profilePath}
-                            onClick={onMobileClose}
-                        />
-                        <button
-                            onClick={() => {
-                                setIsLogoutModalOpen(true);
-                                if (onMobileClose) onMobileClose();
-                            }}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 group"
-                        >
-                            <LogOut size={20} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-medium">Log out</span>
-                        </button>
+                        <div className="space-y-1">
+                            <NavItem
+                                href={profilePath}
+                                icon={User}
+                                label="My Profile"
+                                isCollapsed={false}
+                                isActive={pathname === profilePath}
+                                onClick={onMobileClose}
+                            />
+                            <button
+                                onClick={() => {
+                                    setIsLogoutModalOpen(true);
+                                    if (onMobileClose) onMobileClose();
+                                }}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 group"
+                            >
+                                <LogOut size={20} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium">Log out</span>
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>

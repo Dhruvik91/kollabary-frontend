@@ -3,7 +3,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { InfluencerProfileForm } from '../components/InfluencerProfileForm';
-import { useCreateInfluencerProfile, useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { useUpdateInfluencerProfile, useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { FRONTEND_ROUTES } from '@/constants';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowLeft } from 'lucide-react';
@@ -14,7 +14,7 @@ import Link from 'next/link';
 export const InfluencerEditContainer = () => {
     const router = useRouter();
     const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile();
-    const { mutate: updateProfile, isPending: isUpdating } = useCreateInfluencerProfile(); // Using same mutation as it handles upsert
+    const { mutate: updateProfile, isPending: isUpdating } = useUpdateInfluencerProfile();
 
     const initialData = useMemo(() => {
         if (!profileData) return undefined;
@@ -24,6 +24,7 @@ export const InfluencerEditContainer = () => {
             name,
             handle: (data as any).handle,
             followers: (data as any).followers,
+            engagementRate: (data as any).engagementRate,
         }));
 
         return {
@@ -36,11 +37,12 @@ export const InfluencerEditContainer = () => {
 
     const handleProfileSubmit = useCallback((data: any) => {
         // Transform platforms array to record for backend
-        const platformsRecord: Record<string, { handle: string; followers: number }> = {};
+        const platformsRecord: Record<string, { handle: string; followers: number; engagementRate?: number }> = {};
         data.platforms.forEach((p: any) => {
             platformsRecord[p.name] = {
                 handle: p.handle,
-                followers: p.followers
+                followers: p.followers,
+                ...(p.engagementRate !== undefined && { engagementRate: p.engagementRate })
             };
         });
 

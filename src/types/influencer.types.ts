@@ -17,9 +17,10 @@ export interface InfluencerProfile {
     id: string;
     userId: string;
     niche: string;
-    platforms: Record<string, { handle: string; followers: number }>;
-    followersCount: number;
-    engagementRate: number;
+    avatarUrl?: string;
+    bio?: string;
+    address?: string;
+    platforms: Record<string, { handle: string; followers: number; engagementRate?: number }>;
     collaborationTypes: string[];
     availability: AvailabilityStatus;
     avgRating: number;
@@ -53,9 +54,10 @@ export interface SearchInfluencersResponse {
 
 export interface CreateInfluencerProfileDto {
     niche: string;
+    avatarUrl?: string;
     bio?: string;
-    location?: string;
-    platforms: Record<string, { handle: string; followers: number }>;
+    address?: string;
+    platforms: Record<string, { handle: string; followers: number; engagementRate?: number }>;
     collaborationTypes: CollaborationType[];
     availability?: AvailabilityStatus;
 }

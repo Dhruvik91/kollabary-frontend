@@ -83,10 +83,20 @@ export const InfluencerProfileDetail = ({
     const { data: verificationRequests } = useMyVerificationStatus();
     const currentVerification = (verificationRequests as any[])?.[0];
 
-    const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, availability } = influencer;
+    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability } = influencer;
+    
+    // Calculate total followers from all platforms
+    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
+    
+    // Calculate average engagement rate from platforms
+    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
+    const avgEngagementRate = platformsWithEngagement.length > 0
+        ? platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length
+        : 0;
     const collaborationTypes = influencer.collaborationTypes || [];
     const profile = influencerUser?.profile;
-    const bio = profile?.bio;
+    const displayBio = bio || profile?.bio;
+    const displayAvatar = avatarUrl || profile?.avatarUrl;
 
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
     const deleteReview = useDeleteReview(influencer.id);
@@ -179,10 +189,10 @@ export const InfluencerProfileDetail = ({
                         animate={{ opacity: 1, scale: 1 }}
                         className="relative w-48 h-48 rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl"
                     >
-                        {profile?.avatarUrl ? (
+                        {displayAvatar ? (
                             <Image
-                                src={profile.avatarUrl}
-                                alt={profile.fullName || 'Influencer'}
+                                src={displayAvatar}
+                                alt={profile?.fullName || 'Influencer'}
                                 fill
                                 className="object-cover"
                             />
@@ -332,8 +342,8 @@ export const InfluencerProfileDetail = ({
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
-                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Eng. Rate</p>
-                                    <p className="text-xl font-bold text-green-500">{engagementRate}%</p>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Eng. Rate</p>
+                                    <p className="text-xl font-bold text-green-500">{avgEngagementRate.toFixed(1)}%</p>
                                 </div>
                                 <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Rating</p>
@@ -378,9 +388,12 @@ export const InfluencerProfileDetail = ({
                                             <p className="text-xs text-muted-foreground">{data.handle}</p>
                                         </div>
                                     </div>
-                                    <div className="text-right">
+                                    <div className="text-right space-y-1">
                                         <p className="text-sm font-bold">{Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}</p>
                                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Followers</p>
+                                        {data.engagementRate && (
+                                            <p className="text-xs font-bold text-green-500">{data.engagementRate}% Eng.</p>
+                                        )}
                                     </div>
                                 </a>
                             ))}
@@ -395,8 +408,14 @@ export const InfluencerProfileDetail = ({
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-black tracking-tight">About {profile?.fullName?.split(' ')[0] || 'Creator'}</h3>
                                 <p className="text-lg text-muted-foreground leading-relaxed">
-                                    {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
+                                    {displayBio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
                                 </p>
+                                {address && (
+                                    <div className="flex items-center gap-2 text-muted-foreground pt-2">
+                                        <MapPin size={16} className="text-primary" />
+                                        <span className="text-sm">{address}</span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
