@@ -66,5 +66,13 @@ export const profileService = {
     searchProfiles: async (params: any): Promise<any> => {
         const response = await httpService.get<any>(API_CONFIG.path.profile.search, { params });
         return response.data;
+    },
+
+    /**
+     * Update account password
+     */
+    changePassword: async (data: any): Promise<{ message: string }> => {
+        const response = await httpService.patch<{ message: string }>(`${API_CONFIG.path.auth.logout.replace('/logout', '')}/change-password`, data);
+        return response.data;
     }
 };

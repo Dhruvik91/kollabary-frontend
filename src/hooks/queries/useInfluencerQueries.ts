@@ -71,3 +71,23 @@ export function useInfluencerDetail(id: string) {
         enabled: !!id,
     });
 }
+
+/**
+ * Hook for updating influencer profile (PATCH)
+ */
+export function useUpdateInfluencerProfile() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: Partial<CreateInfluencerProfileDto>) => influencerService.updateProfile(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            toast.success('Influencer profile updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update profile', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}

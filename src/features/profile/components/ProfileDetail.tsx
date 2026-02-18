@@ -9,7 +9,8 @@ import {
     User as UserIcon,
     AlignLeft,
     ExternalLink,
-    PencilLine
+    PencilLine,
+    Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,6 +18,7 @@ import { UserProfile } from '@/services/profile.service';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FRONTEND_ROUTES } from '@/constants';
+import { PasswordUpdateForm } from './PasswordUpdateForm';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -143,6 +145,30 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                     </Card>
                 </div>
             </div>
+
+            {/* Account Security (Password Update) */}
+            {isOwner && (
+                <div className="lg:col-span-3">
+                    <Card className="rounded-[2.5rem] border-border/50 bg-card/30 backdrop-blur-md p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3 text-primary">
+                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                        <Lock size={20} />
+                                    </div>
+                                    <h3 className="text-xl font-black tracking-tight">Account Security</h3>
+                                </div>
+                                <p className="text-muted-foreground font-medium">
+                                    Keep your account secure by updating your password regularly.
+                                </p>
+                            </div>
+                            <div className="md:col-span-2 max-w-lg">
+                                <PasswordUpdateForm />
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 };

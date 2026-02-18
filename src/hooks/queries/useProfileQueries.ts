@@ -58,3 +58,20 @@ export function useUpdateProfile() {
         },
     });
 }
+
+/**
+ * Hook to update account password
+ */
+export function useChangePasswordMutation() {
+    return useMutation({
+        mutationFn: profileService.changePassword,
+        onSuccess: (data) => {
+            toast.success(data.message || 'Password updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update password', {
+                description: error.response?.data?.message || 'Current password might be incorrect or something went wrong',
+            });
+        },
+    });
+}
