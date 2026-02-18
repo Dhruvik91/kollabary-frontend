@@ -5,6 +5,7 @@ export const rankingKeys = {
     all: ['ranking'] as const,
     breakdown: (id: string) => [...rankingKeys.all, 'breakdown', id] as const,
     weights: () => [...rankingKeys.all, 'weights'] as const,
+    tierGuide: () => [...rankingKeys.all, 'tierGuide'] as const,
 };
 
 /**
@@ -25,5 +26,15 @@ export function useRankingWeights() {
     return useQuery({
         queryKey: rankingKeys.weights(),
         queryFn: () => rankingService.getWeights(),
+    });
+}
+
+/**
+ * Hook for getting tier guide query
+ */
+export function useTierGuide() {
+    return useQuery({
+        queryKey: rankingKeys.tierGuide(),
+        queryFn: () => rankingService.getTierGuide(),
     });
 }

@@ -43,6 +43,8 @@ import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { RankingScoreCard } from './RankingScoreCard';
+import { RankingBreakdownCard } from './RankingBreakdownCard';
+import { RankingGuideCard } from './RankingGuideCard';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
@@ -66,6 +68,7 @@ interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
     ranking?: RankingBreakdown;
     isRankingLoading?: boolean;
+    tierGuide?: any;
     isOwner?: boolean;
 }
 
@@ -73,6 +76,7 @@ export const InfluencerProfileDetail = ({
     influencer,
     ranking,
     isRankingLoading,
+    tierGuide,
     isOwner = false
 }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
@@ -359,7 +363,12 @@ export const InfluencerProfileDetail = ({
 
                     {/* Ranking Card */}
                     {ranking ? (
-                        <RankingScoreCard breakdown={ranking} />
+                        <>
+                            <RankingBreakdownCard breakdown={ranking} />
+                            {isOwner && tierGuide && (
+                                <RankingGuideCard guideData={tierGuide} />
+                            )}
+                        </>
                     ) : isRankingLoading ? (
                         <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
                             <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>

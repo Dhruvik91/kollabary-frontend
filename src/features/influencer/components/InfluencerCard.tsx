@@ -20,7 +20,7 @@ interface InfluencerCardProps {
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
     const { user: influencerUser, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id } = influencer;
-    const { profile } = influencerUser;
+    const profile = influencerUser?.profile;
     
     // Calculate total followers from all platforms
     const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
@@ -66,13 +66,13 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                     {displayAvatar ? (
                                         <Image
                                             src={displayAvatar}
-                                            alt={profile.fullName}
+                                            alt={profile?.fullName || 'Influencer'}
                                             fill
                                             className="object-cover"
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-                                            {profile?.fullName.charAt(0)}
+                                            {profile?.fullName?.charAt(0) || '?'}
                                         </div>
                                     )}
                                 </div>
@@ -88,10 +88,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="pt-12 pb-6 px-6 space-y-4">
                             <div>
                                 <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
-                                    {profile?.fullName}
+                                    {profile?.fullName || 'Unknown Creator'}
                                 </h3>
                                 <div className="flex items-center justify-between mt-1">
-                                    <p className="text-xs text-muted-foreground">@{profile?.username}</p>
+                                    <p className="text-xs text-muted-foreground">@{profile?.username || 'unknown'}</p>
                                     {influencer.rankingTier && (
                                         <RankTierBadge tier={influencer.rankingTier} size="sm" />
                                     )}
@@ -106,7 +106,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 {(influencer.address || profile?.location) && (
                                     <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg">
                                         <MapPin size={10} />
-                                        {influencer.address || profile.location}
+                                        {influencer.address || profile?.location}
                                     </span>
                                 )}
                             </div>

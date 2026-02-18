@@ -26,4 +26,14 @@ export const rankingService = {
         );
         return response.data;
     },
+
+    /**
+     * Get tier requirements guide
+     */
+    async getTierGuide(): Promise<any> {
+        const response = await httpService.get<any>(
+            API_CONFIG.path.ranking.tierGuide
+        );
+        return response.data;
+    },
 };

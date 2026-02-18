@@ -20,6 +20,7 @@ export const API_CONFIG = {
         ranking: {
             breakdown: (id: string) => `/ranking/breakdown/${id}`,
             weights: '/ranking/weights',
+            tierGuide: '/ranking/tier-guide',
         },
         influencer: {
             base: '/influencer',
