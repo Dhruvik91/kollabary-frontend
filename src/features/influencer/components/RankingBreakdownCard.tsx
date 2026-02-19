@@ -69,12 +69,12 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
     };
 
     return (
-        <Card className={cn("rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
-            <CardHeader className="p-6 border-b border-border/50 bg-muted/30">
+        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
+            <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 bg-muted/30">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Trophy size={18} className="text-primary" />
-                        <h3 className="font-bold tracking-tight">Ranking Breakdown</h3>
+                        <Trophy size={16} className="text-primary sm:w-[18px] sm:h-[18px]" />
+                        <h3 className="font-bold tracking-tight text-sm sm:text-base">Ranking Breakdown</h3>
                     </div>
                     <div className={cn("px-3 py-1 rounded-full text-xs font-bold border", getScoreBg(totalScore))}>
                         {rankingTier}
@@ -82,11 +82,11 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                 </div>
             </CardHeader>
 
-            <CardContent className="p-8 space-y-8">
+            <CardContent className="p-5 sm:p-6 md:p-8 space-y-6 md:space-y-8">
                 {/* Main Score Display */}
-                <div className="flex flex-col items-center justify-center space-y-4 py-4">
+                <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4">
                     <div className="relative">
-                        <svg className="w-40 h-40 transform -rotate-90">
+                        <svg className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
                             <circle
                                 cx="80"
                                 cy="80"

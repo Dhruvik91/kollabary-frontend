@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, SlidersHorizontal, Users, Globe2, Briefcase, ChevronDown, Check } from 'lucide-react';
+import { Search, SlidersHorizontal, Users, Globe2, Briefcase, ChevronDown, Check, Award, Star, CheckCircle2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchInfluencersDto } from '@/types/influencer.types';
@@ -40,6 +40,23 @@ const PLATFORM_OPTIONS = [
     { label: 'TikTok', value: 'tiktok' },
     { label: 'YouTube', value: 'youtube' },
     { label: 'X (Twitter)', value: 'twitter' },
+];
+
+const RANKING_TIER_OPTIONS = [
+    { label: 'All Ranks', value: '' },
+    { label: 'Rising Creator', value: 'Rising Creator' },
+    { label: 'Emerging Partner', value: 'Emerging Partner' },
+    { label: 'Established Influencer', value: 'Established Influencer' },
+    { label: 'Premium Collaborator', value: 'Premium Collaborator' },
+    { label: 'Elite Ambassador', value: 'Elite Ambassador' },
+    { label: 'Legendary Icon', value: 'Legendary Icon' },
+];
+
+const RATING_OPTIONS = [
+    { label: 'Any Rating', value: '' },
+    { label: '4+ Stars', minValue: 4, maxValue: 5 },
+    { label: '3+ Stars', minValue: 3, maxValue: 5 },
+    { label: '2+ Stars', minValue: 2, maxValue: 5 },
 ];
 
 export const InfluencerFilters = ({ filters, onFilterChange, onReset, className }: InfluencerFiltersProps) => {
@@ -143,11 +160,112 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                         />
                     </div>
                 </div>
+
+                {/* Ranking Tier */}
+                <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                        Ranking Tier
+                    </label>
+                    <div className="relative group">
+                        <Award className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
+                        <Select
+                            value={filters.rankingTier || 'all'}
+                            onValueChange={(val) => onFilterChange({ rankingTier: val === 'all' ? '' : val })}
+                        >
+                            <SelectTrigger className="w-full pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 transition-all font-medium hover:bg-background/80 hover:cursor-pointer">
+                                <SelectValue placeholder="All Ranks" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-2xl border-border/50 backdrop-blur-xl">
+                                {RANKING_TIER_OPTIONS.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value || 'all'} className="rounded-xl hover:cursor-pointer px-4">
+                                        {opt.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
+                {/* Rating Filter */}
+                <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                        Minimum Rating
+                    </label>
+                    <div className="relative group">
+                        <Star className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
+                        <Select
+                            value={
+                                filters.minRating === 4 ? '4+' :
+                                filters.minRating === 3 ? '3+' :
+                                filters.minRating === 2 ? '2+' :
+                                'all'
+                            }
+                            onValueChange={(val) => {
+                                if (val === 'all') {
+                                    onFilterChange({ minRating: undefined, maxRating: undefined });
+                                } else if (val === '4+') {
+                                    onFilterChange({ minRating: 4, maxRating: 5 });
+                                } else if (val === '3+') {
+                                    onFilterChange({ minRating: 3, maxRating: 5 });
+                                } else if (val === '2+') {
+                                    onFilterChange({ minRating: 2, maxRating: 5 });
+                                }
+                            }}
+                        >
+                            <SelectTrigger className="w-full pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 transition-all font-medium hover:bg-background/80 hover:cursor-pointer">
+                                <SelectValue placeholder="Any Rating" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-2xl border-border/50 backdrop-blur-xl">
+                                {RATING_OPTIONS.map((opt) => (
+                                    <SelectItem 
+                                        key={opt.label} 
+                                        value={opt.value || (opt.minValue ? `${opt.minValue}+` : 'all')} 
+                                        className="rounded-xl hover:cursor-pointer px-4"
+                                    >
+                                        {opt.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
+                {/* Verified Filter */}
+                <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                        Verification Status
+                    </label>
+                    <button
+                        type="button"
+                        onClick={() => onFilterChange({ verified: filters.verified ? undefined : true })}
+                        className={cn(
+                            "w-full h-12 rounded-2xl border-border/50 border bg-background/50 hover:bg-background/80 transition-all font-medium flex items-center gap-3 px-4",
+                            filters.verified && "bg-primary/10 border-primary/50 text-primary"
+                        )}
+                    >
+                        <CheckCircle2 size={18} className={filters.verified ? "text-primary" : "text-muted-foreground"} />
+                        <span className="flex-1 text-left">
+                            {filters.verified ? 'Verified Only' : 'All Creators'}
+                        </span>
+                        {filters.verified && (
+                            <Check size={16} className="text-primary" />
+                        )}
+                    </button>
+                </div>
             </div>
 
             <Button
                 variant="ghost"
-                onClick={onReset || (() => onFilterChange({ search: '', niche: '', platform: '', minFollowers: undefined }))}
+                onClick={onReset || (() => onFilterChange({ 
+                    search: '', 
+                    niche: '', 
+                    platform: '', 
+                    minFollowers: undefined, 
+                    rankingTier: '', 
+                    minRating: undefined, 
+                    maxRating: undefined, 
+                    verified: undefined 
+                }))}
                 className="w-full h-11 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center justify-center gap-2 group hover:bg-primary/5 rounded-xl border-none"
             >
                 <span className="group-hover:translate-x-0 transition-transform">Clear All Filters</span>

@@ -185,11 +185,11 @@ export const InfluencerProfileDetail = ({
                 </div>
 
                 {/* Profile Info Overlay */}
-                <div className="px-8 -mt-24 relative z-10 flex flex-col md:flex-row md:items-end gap-8">
+                <div className="px-4 sm:px-8 -mt-24 relative z-10 flex flex-col md:flex-row md:items-end gap-6 md:gap-8">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="relative w-48 h-48 rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl"
+                        className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden border-4 sm:border-6 md:border-8 border-background shadow-2xl"
                     >
                         {displayAvatar ? (
                             <Image
@@ -205,9 +205,9 @@ export const InfluencerProfileDetail = ({
                         )}
                     </motion.div>
 
-                    <div className="flex-1 pb-4 space-y-4">
-                        <div className="flex flex-wrap items-center gap-4">
-                            <h1 className="text-4xl font-black tracking-tight">{profile?.fullName}</h1>
+                    <div className="flex-1 pb-4 space-y-3 md:space-y-4">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{profile?.fullName}</h1>
                             {(ranking?.rankingTier || influencer.rankingTier) && (
                                 <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
                             )}
@@ -318,9 +318,9 @@ export const InfluencerProfileDetail = ({
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                 {/* Left Column: Stats & Socials */}
-                <div className="lg:col-span-1 space-y-8">
+                <div className="lg:col-span-1 space-y-6 md:space-y-8">
                     {/* Stats Card */}
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
                         <div className="p-6 border-b border-border/50 bg-muted/30">
@@ -404,9 +404,9 @@ export const InfluencerProfileDetail = ({
                 </div>
 
                 {/* Right Column: About & Collabs */}
-                <div className="lg:col-span-2 space-y-8">
-                    <Card className="rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-8 md:p-12">
-                        <div className="space-y-8">
+                <div className="lg:col-span-2 space-y-6 md:space-y-8">
+                    <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 lg:p-12">
+                        <div className="space-y-6 md:space-y-8">
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-black tracking-tight">About {profile?.fullName?.split(' ')[0] || 'Creator'}</h3>
                                 <p className="text-lg text-muted-foreground leading-relaxed">
@@ -420,7 +420,7 @@ export const InfluencerProfileDetail = ({
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-2 text-primary">
                                         <Calendar size={20} />
@@ -521,9 +521,9 @@ export const InfluencerProfileDetail = ({
 
             {/* Account Security (Password Update) */}
             {isOwner && (
-                <div className="pt-8">
-                    <Card className="rounded-[3rem] border-border/50 bg-card/30 backdrop-blur-md p-8 md:p-12 border-none shadow-none ring-1 ring-border/50">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                <div className="pt-6 md:pt-8">
+                    <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/30 backdrop-blur-md p-6 sm:p-8 md:p-10 lg:p-12 border-none shadow-none ring-1 ring-border/50">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3 text-primary">
                                     <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">

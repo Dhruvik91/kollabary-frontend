@@ -45,6 +45,10 @@ export interface SearchInfluencersDto {
     search?: string;
     platform?: string;
     minFollowers?: number;
+    rankingTier?: string;
+    minRating?: number;
+    maxRating?: number;
+    verified?: boolean;
     page?: number;
     limit?: number;
 }
