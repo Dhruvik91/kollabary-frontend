@@ -73,12 +73,12 @@ export const InfluencerDiscoverContainer = () => {
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Header Section */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6">
+            <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 sm:gap-6">
                 <div className="space-y-3 sm:space-y-4">
                     <DiscoverHeader />
 
                     {/* Mobile Filter Trigger */}
-                    <div className="lg:hidden flex items-center gap-2 sm:gap-3">
+                    <div className="xl:hidden flex items-center gap-2 sm:gap-3">
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button
@@ -116,14 +116,14 @@ export const InfluencerDiscoverContainer = () => {
                     </div>
                 </div>
 
-                <div className="hidden lg:block">
+                <div className="hidden xl:block">
                     <DiscoverNetworkStats total={totalCount} />
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 md:gap-8">
                 {/* Fixed Side Filters for Large Screens */}
-                <div className="hidden lg:block lg:col-span-1 space-y-4 md:space-y-6">
+                <div className="hidden xl:block xl:col-span-1 space-y-4 md:space-y-6">
                     <div className="sticky top-20 md:top-24">
                         <InfluencerFilters
                             filters={filters}
@@ -134,7 +134,7 @@ export const InfluencerDiscoverContainer = () => {
                 </div>
 
                 {/* Main Content Grid */}
-                <div className="lg:col-span-3">
+                <div className="xl:col-span-3">
                     {isLoading ? (
                         <DiscoverLoadingState />
                     ) : isError ? (

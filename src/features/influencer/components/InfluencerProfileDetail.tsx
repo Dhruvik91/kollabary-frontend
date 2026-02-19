@@ -86,10 +86,10 @@ export const InfluencerProfileDetail = ({
     const currentVerification = (verificationRequests as any[])?.[0];
 
     const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability } = influencer;
-    
+
     // Calculate total followers from all platforms
     const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
-    
+
     // Calculate average engagement rate from platforms
     const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
     const avgEngagementRate = platformsWithEngagement.length > 0
@@ -205,9 +205,9 @@ export const InfluencerProfileDetail = ({
                         )}
                     </motion.div>
 
-                    <div className="flex-1 pb-4 space-y-3 md:space-y-4">
+                    <div className="flex-1 min-w-0 pb-4 space-y-3 md:space-y-4">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{profile?.fullName}</h1>
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight truncate max-w-[280px] sm:max-w-none">{profile?.fullName}</h1>
                             {(ranking?.rankingTier || influencer.rankingTier) && (
                                 <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
                             )}
@@ -318,9 +318,9 @@ export const InfluencerProfileDetail = ({
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
                 {/* Left Column: Stats & Socials */}
-                <div className="lg:col-span-1 space-y-6 md:space-y-8">
+                <div className="xl:col-span-1 space-y-6 md:space-y-8">
                     {/* Stats Card */}
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
                         <div className="p-6 border-b border-border/50 bg-muted/30">
@@ -404,7 +404,7 @@ export const InfluencerProfileDetail = ({
                 </div>
 
                 {/* Right Column: About & Collabs */}
-                <div className="lg:col-span-2 space-y-6 md:space-y-8">
+                <div className="xl:col-span-2 space-y-6 md:space-y-8">
                     <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 lg:p-12">
                         <div className="space-y-6 md:space-y-8">
                             <div className="space-y-4">

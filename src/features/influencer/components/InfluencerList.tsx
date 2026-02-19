@@ -28,7 +28,7 @@ export const InfluencerList = ({
 
     return (
         <div className="space-y-8 md:space-y-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                 {influencers.map((influencer) => (
                     <InfluencerCard key={influencer.id} influencer={influencer} />
                 ))}
