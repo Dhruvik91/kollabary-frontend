@@ -124,3 +124,57 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar Styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.7 0.05 45) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: oklch(0.7 0.05 45);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.6 0.08 45);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: oklch(0.5 0.12 45);
+  background-clip: padding-box;
+}
+
+/* Dark mode scrollbar */
+.dark * {
+  scrollbar-color: oklch(0.4 0.05 40) transparent;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background: oklch(0.4 0.05 40);
+  background-clip: padding-box;
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.5 0.08 40);
+  background-clip: padding-box;
+}
+
+.dark *::-webkit-scrollbar-thumb:active {
+  background: oklch(0.6 0.12 40);
+  background-clip: padding-box;
+}
