@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Users, Star, TrendingUp, MapPin, CheckCircle2, MessageSquare } from 'lucide-react';
+import { Users, Star, TrendingUp, MapPin, CheckCircle2, MessageSquare, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
@@ -19,8 +18,19 @@ interface InfluencerCardProps {
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user: influencerUser, niche, followersCount, engagementRate, avgRating, totalReviews, verified, id } = influencer;
-    const { profile } = influencerUser;
+    const { user: influencerUser, fullName, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id } = influencer;
+    const profile = influencerUser?.profile;
+    
+    // Calculate total followers from all platforms
+    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
+    
+    // Calculate average engagement rate from platforms
+    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
+    const engagementRate = platformsWithEngagement.length > 0
+        ? (platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length).toFixed(1)
+        : '0.0';
+    
+    const displayAvatar = avatarUrl || profile?.avatarUrl;
     const { user: currentUser } = useAuth();
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
     const router = useRouter();
@@ -45,23 +55,22 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             whileHover={{ y: -5 }}
             transition={{ duration: 0.3 }}
         >
-            <Link href={`/influencers/${id}`}>
-                <Card className="group overflow-hidden border-border bg-card/50 backdrop-blur-sm hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 rounded-[1.5rem]">
+            <Card className="group overflow-hidden border-border bg-card/50 backdrop-blur-sm hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 rounded-[1.5rem]">
                     <CardContent className="p-0">
                         {/* Avatar & Cover Section */}
                         <div className="relative h-32 bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
                             <div className="absolute -bottom-10 left-6">
                                 <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
-                                    {profile?.avatarUrl ? (
+                                    {displayAvatar ? (
                                         <Image
-                                            src={profile.avatarUrl}
-                                            alt={profile.fullName}
+                                            src={displayAvatar}
+                                            alt={fullName || profile?.fullName || 'Influencer'}
                                             fill
                                             className="object-cover"
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-                                            {profile?.fullName.charAt(0)}
+                                            {(fullName || profile?.fullName)?.charAt(0) || '?'}
                                         </div>
                                     )}
                                 </div>
@@ -76,11 +85,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         {/* Content Section */}
                         <div className="pt-12 pb-6 px-6 space-y-4">
                             <div>
-                                <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
-                                    {profile?.fullName}
+                                <h3 className="text-lg font-bold line-clamp-1">
+                                    {fullName || profile?.fullName || 'Unknown Creator'}
                                 </h3>
                                 <div className="flex items-center justify-between mt-1">
-                                    <p className="text-xs text-muted-foreground">@{profile?.username}</p>
                                     {influencer.rankingTier && (
                                         <RankTierBadge tier={influencer.rankingTier} size="sm" />
                                     )}
@@ -92,10 +100,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg">
                                     {niche}
                                 </span>
-                                {profile?.location && (
+                                {(influencer.address || profile?.location) && (
                                     <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg">
                                         <MapPin size={10} />
-                                        {profile.location}
+                                        {influencer.address || profile?.location}
                                     </span>
                                 )}
                             </div>
@@ -120,7 +128,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 </div>
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-1.5 text-muted-foreground">
-                                        <Star size={12} />
+                                        <Star size={12} className="text-yellow-500 fill-amber-400" />
                                         <span className="text-[10px] font-medium uppercase tracking-tight">Rating</span>
                                     </div>
                                     <div className="flex items-center gap-1">
@@ -131,19 +139,28 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                             </div>
 
                             {isBrand && (
-                                <Button
-                                    onClick={handleMessage}
-                                    disabled={isStartingChat}
-                                    className="w-full h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10 relative z-20"
-                                >
-                                    <MessageSquare size={16} />
-                                    Message Influencer
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button
+                                        onClick={handleMessage}
+                                        disabled={isStartingChat}
+                                        className="flex-1 h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10"
+                                    >
+                                        <MessageSquare size={16} />
+                                        Message
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => router.push(`/influencers/${id}`)}
+                                        className="h-11 px-4 rounded-xl font-bold gap-2 border-border/50"
+                                    >
+                                        <Eye size={16} />
+                                        Details
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     </CardContent>
                 </Card>
-            </Link>
         </motion.div>
     );
 };

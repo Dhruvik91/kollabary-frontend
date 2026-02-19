@@ -7,19 +7,27 @@ export enum AvailabilityStatus {
 }
 
 export enum CollaborationType {
-    PAID_SHOUTOUT = 'PAID_SHOUTOUT',
-    AFFILIATE = 'AFFILIATE',
-    GIFTING = 'GIFTING',
-    LONG_TERM = 'LONG_TERM',
+    SPONSORED_POST = 'SPONSORED_POST',
+    SPONSORED_VIDEO = 'SPONSORED_VIDEO',
+    UGC_CONTENT = 'UGC_CONTENT',
+    GIVEAWAY = 'GIVEAWAY',
+    BRAND_AMBASSADOR = 'BRAND_AMBASSADOR',
+    AFFILIATE_PARTNERSHIP = 'AFFILIATE_PARTNERSHIP',
+    PRODUCT_PLACEMENT = 'PRODUCT_PLACEMENT',
+    LIVE_SESSION = 'LIVE_SESSION',
+    EVENT_COVERAGE = 'EVENT_COVERAGE',
+    REVENUE_SHARE = 'REVENUE_SHARE',
 }
 
 export interface InfluencerProfile {
     id: string;
     userId: string;
+    fullName?: string;
     niche: string;
-    platforms: Record<string, { handle: string; followers: number }>;
-    followersCount: number;
-    engagementRate: number;
+    avatarUrl?: string;
+    bio?: string;
+    address?: string;
+    platforms: Record<string, { handle: string; followers: number; engagementRate?: number }>;
     collaborationTypes: string[];
     availability: AvailabilityStatus;
     avgRating: number;
@@ -53,9 +61,10 @@ export interface SearchInfluencersResponse {
 
 export interface CreateInfluencerProfileDto {
     niche: string;
+    avatarUrl?: string;
     bio?: string;
-    location?: string;
-    platforms: Record<string, { handle: string; followers: number }>;
+    address?: string;
+    platforms: Record<string, { handle: string; followers: number; engagementRate?: number }>;
     collaborationTypes: CollaborationType[];
     availability?: AvailabilityStatus;
 }

@@ -9,19 +9,38 @@ import {
     Zap,
     BarChart3,
     AlertTriangle,
-    Check
+    Check,
+    TrendingUp,
+    Award,
+    Clock,
+    Target,
+    XCircle,
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RankingBreakdown } from '@/types/ranking';
 import { cn } from '@/lib/utils';
 
-interface RankingScoreCardProps {
+interface RankingBreakdownCardProps {
     breakdown: RankingBreakdown;
     className?: string;
 }
 
-export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps) => {
-    const { totalScore, completedCollaborations, averageRating, responseSpeed, completionRate, verificationBonus, penalties } = breakdown;
+export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownCardProps) => {
+    const {
+        totalScore,
+        completedCollaborations,
+        paidPromotions,
+        averageRating,
+        responseSpeed,
+        completionRate,
+        verificationBonus,
+        penalties,
+        rankingTier,
+        nextTier,
+        tierProgress,
+        requirementsMet,
+        tierRequirements,
+    } = breakdown;
 
     const getScoreColor = (score: number) => {
         if (score >= 90) return 'text-purple-500';
@@ -41,14 +60,28 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
         return 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20';
     };
 
+    const getRequirementStatus = (met: boolean) => {
+        return met ? (
+            <Check size={14} className="text-green-500" />
+        ) : (
+            <XCircle size={14} className="text-red-500" />
+        );
+    };
+
     return (
         <Card className={cn("rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
-            <div className="p-6 border-b border-border/50 bg-muted/30 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Trophy size={18} className="text-primary" />
-                    <h3 className="font-bold tracking-tight">Creator Influence Score</h3>
+            <CardHeader className="p-6 border-b border-border/50 bg-muted/30">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Trophy size={18} className="text-primary" />
+                        <h3 className="font-bold tracking-tight">Ranking Breakdown</h3>
+                    </div>
+                    <div className={cn("px-3 py-1 rounded-full text-xs font-bold border", getScoreBg(totalScore))}>
+                        {rankingTier}
+                    </div>
                 </div>
-            </div>
+            </CardHeader>
+
             <CardContent className="p-8 space-y-8">
                 {/* Main Score Display */}
                 <div className="flex flex-col items-center justify-center space-y-4 py-4">
@@ -85,50 +118,77 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                             >
                                 {totalScore}
                             </motion.span>
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Score</span>
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                                / 100
+                            </span>
                         </div>
-                    </div>
-                    <div className={cn("px-4 py-1.5 rounded-full text-xs font-bold border text-center transition-all duration-500", getScoreBg(totalScore))}>
-                        {breakdown.rankingTier}
                     </div>
                 </div>
 
-                {/* Breakdown List */}
+                {/* Tier Progress */}
+                {nextTier && (
+                    <div className="space-y-3 p-4 bg-muted/30 rounded-2xl border border-border/30">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <TrendingUp size={16} className="text-primary" />
+                                <span className="text-sm font-bold">Progress to {nextTier}</span>
+                            </div>
+                            <span className="text-sm font-bold text-primary">{tierProgress}%</span>
+                        </div>
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-2 overflow-hidden">
+                            <motion.div
+                                className="h-full bg-primary rounded-full"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${tierProgress}%` }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* Detailed Metrics */}
                 <div className="space-y-4">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Score Breakdown</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                        Score Breakdown
+                    </h4>
 
                     <div className="grid grid-cols-1 gap-3">
                         {/* Completed Collaborations */}
-                        <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
+                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                    <CheckCircle2 size={16} />
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                    <Award size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold">Collaborations</p>
-                                    <p className="text-[10px] text-muted-foreground">{completedCollaborations.count} completed • 1 pt each</p>
+                                    <p className="text-sm font-bold">Completed Collaborations</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {completedCollaborations.count} completed • 1 point each
+                                    </p>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-sm font-bold text-blue-500">+{completedCollaborations.score}</p>
+                                <p className="text-sm font-bold text-blue-500">
+                                    {completedCollaborations.score}
+                                </p>
+                                <p className="text-xs text-muted-foreground">points</p>
                             </div>
                         </div>
 
                         {/* Verification Bonus */}
                         <div className={cn(
-                            "flex items-center justify-between p-3 rounded-2xl border",
+                            "flex items-center justify-between p-4 rounded-2xl border",
                             verificationBonus.isVerified 
                                 ? "bg-emerald-500/5 border-emerald-500/10" 
                                 : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
                         )}>
                             <div className="flex items-center gap-3">
                                 <div className={cn(
-                                    "w-8 h-8 rounded-xl flex items-center justify-center",
+                                    "w-10 h-10 rounded-xl flex items-center justify-center",
                                     verificationBonus.isVerified 
                                         ? "bg-emerald-500/10 text-emerald-500" 
-                                        : "bg-zinc-500/10 text-zinc-500"
+                                        : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground"
                                 )}>
-                                    <CheckCircle2 size={16} />
+                                    <CheckCircle2 size={18} />
                                 </div>
                                 <div>
                                     <p className={cn(
@@ -138,7 +198,7 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                                         Verification Bonus
                                     </p>
                                     <p className={cn(
-                                        "text-[10px]",
+                                        "text-xs",
                                         verificationBonus.isVerified 
                                             ? "text-emerald-600/70" 
                                             : "text-muted-foreground"
@@ -152,24 +212,38 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                                     "text-sm font-bold",
                                     verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"
                                 )}>
-                                    {verificationBonus.isVerified ? '+' : ''}{verificationBonus.score}
+                                    {verificationBonus.isVerified ? '+' : ''}{verificationBonus.score}/{verificationBonus.maxScore}
+                                </p>
+                                <p className={cn(
+                                    "text-xs",
+                                    verificationBonus.isVerified 
+                                        ? "text-emerald-600/70" 
+                                        : "text-muted-foreground"
+                                )}>
+                                    bonus
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Requirements List (Mini) */}
+                {/* Tier Requirements */}
                 <div className="pt-4 border-t border-border/50">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Tier Requirements</h4>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
+                        Current Tier Requirements
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
                         <div className="flex items-center gap-2">
-                            {breakdown.requirementsMet?.completedCollabs ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
-                            <span className="text-[10px] font-medium">Completed Collabs</span>
+                            {getRequirementStatus(requirementsMet.completedCollabs)}
+                            <span className="text-xs font-medium">
+                                {tierRequirements.minCollabs}+ Collaborations
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            {breakdown.requirementsMet?.verified ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
-                            <span className="text-[10px] font-medium">Verified Account</span>
+                            {getRequirementStatus(requirementsMet.verified)}
+                            <span className="text-xs font-medium">
+                                {tierRequirements.verified ? 'Verified Account' : 'No Verification Required'}
+                            </span>
                         </div>
                     </div>
                 </div>

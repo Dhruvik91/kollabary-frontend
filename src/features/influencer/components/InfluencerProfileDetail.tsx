@@ -22,7 +22,10 @@ import {
     AlignLeft,
     ShieldCheck,
     ArrowLeft,
-    Clock
+    Clock,
+    X,
+    Plus,
+    Lock
 } from 'lucide-react';
 import { useSubmitVerification, useMyVerificationStatus } from '@/hooks/queries/useVerificationQueries';
 import { VerificationStatus } from '@/types/admin.types';
@@ -32,13 +35,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
+import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { RankingScoreCard } from './RankingScoreCard';
+import { RankingBreakdownCard } from './RankingBreakdownCard';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
@@ -46,6 +51,16 @@ import { ReviewList } from '@/features/review/components/ReviewList';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { Review } from '@/types/review.types';
 import { ReportModal } from '@/features/report/components/ReportModal';
+import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 
 
 interface InfluencerProfileDetailProps {
@@ -68,22 +83,49 @@ export const InfluencerProfileDetail = ({
 
     const verificationMutation = useSubmitVerification();
     const { data: verificationRequests } = useMyVerificationStatus();
-    // In getMyRequests in backend: order: { createdAt: 'DESC' }
-    // So latest is at index 0.
     const currentVerification = (verificationRequests as any[])?.[0];
 
-    const { user: influencerUser, niche, platforms, followersCount, engagementRate, avgRating, totalReviews, verified, collaborationTypes, availability } = influencer;
+    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability } = influencer;
+    
+    // Calculate total followers from all platforms
+    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
+    
+    // Calculate average engagement rate from platforms
+    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
+    const avgEngagementRate = platformsWithEngagement.length > 0
+        ? platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length
+        : 0;
+    const collaborationTypes = influencer.collaborationTypes || [];
     const profile = influencerUser?.profile;
-    const bio = profile?.bio;
+    const displayBio = bio || profile?.bio;
+    const displayAvatar = avatarUrl || profile?.avatarUrl;
 
-    // Review Integration
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
     const deleteReview = useDeleteReview(influencer.id);
     const updateReview = useUpdateReview(influencer.id);
+    const updateInfluencer = useUpdateInfluencerProfile();
 
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    const handleUpdateAvailability = (status: AvailabilityStatus) => {
+        updateInfluencer.mutate({ availability: status });
+    };
+
+    const handleAddCollabType = (type: CollaborationType) => {
+        if (!collaborationTypes.includes(type as any)) {
+            updateInfluencer.mutate({
+                collaborationTypes: [...collaborationTypes, type] as any
+            });
+        }
+    };
+
+    const handleRemoveCollabType = (type: string) => {
+        updateInfluencer.mutate({
+            collaborationTypes: collaborationTypes.filter(t => t !== type) as any
+        });
+    };
 
     const handleDeleteReview = (id: string) => {
         setReviewToDelete(id);
@@ -149,10 +191,10 @@ export const InfluencerProfileDetail = ({
                         animate={{ opacity: 1, scale: 1 }}
                         className="relative w-48 h-48 rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl"
                     >
-                        {profile?.avatarUrl ? (
+                        {displayAvatar ? (
                             <Image
-                                src={profile.avatarUrl}
-                                alt={profile.fullName || 'Influencer'}
+                                src={displayAvatar}
+                                alt={profile?.fullName || 'Influencer'}
                                 fill
                                 className="object-cover"
                             />
@@ -166,8 +208,8 @@ export const InfluencerProfileDetail = ({
                     <div className="flex-1 pb-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-4">
                             <h1 className="text-4xl font-black tracking-tight">{profile?.fullName}</h1>
-                            {influencer.rankingTier && (
-                                <RankTierBadge tier={influencer.rankingTier} size="lg" />
+                            {(ranking?.rankingTier || influencer.rankingTier) && (
+                                <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
                             )}
                             {verified && (
                                 <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
@@ -204,10 +246,31 @@ export const InfluencerProfileDetail = ({
                                     </button>
                                 </div>
                             )}
-                            <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
-                                <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
-                            </div>
+
+                            {isOwner ? (
+                                <Select
+                                    value={availability}
+                                    onValueChange={handleUpdateAvailability}
+                                    disabled={updateInfluencer.isPending}
+                                >
+                                    <SelectTrigger className="h-8 border-border/50 bg-background/50 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider w-fit">
+                                        <div className="flex items-center gap-2">
+                                            <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                            <SelectValue placeholder={availability} />
+                                        </div>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={AvailabilityStatus.OPEN}>OPEN</SelectItem>
+                                        <SelectItem value={AvailabilityStatus.BUSY}>BUSY</SelectItem>
+                                        <SelectItem value={AvailabilityStatus.CLOSED}>CLOSED</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            ) : (
+                                <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
+                                    <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                    <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
@@ -281,8 +344,8 @@ export const InfluencerProfileDetail = ({
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
-                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Eng. Rate</p>
-                                    <p className="text-xl font-bold text-green-500">{engagementRate}%</p>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Eng. Rate</p>
+                                    <p className="text-xl font-bold text-green-500">{avgEngagementRate.toFixed(1)}%</p>
                                 </div>
                                 <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Rating</p>
@@ -297,7 +360,7 @@ export const InfluencerProfileDetail = ({
 
                     {/* Ranking Card */}
                     {ranking ? (
-                        <RankingScoreCard breakdown={ranking} />
+                        <RankingBreakdownCard breakdown={ranking} />
                     ) : isRankingLoading ? (
                         <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
                             <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>
@@ -327,9 +390,12 @@ export const InfluencerProfileDetail = ({
                                             <p className="text-xs text-muted-foreground">{data.handle}</p>
                                         </div>
                                     </div>
-                                    <div className="text-right">
+                                    <div className="text-right space-y-1">
                                         <p className="text-sm font-bold">{Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}</p>
                                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Followers</p>
+                                        {data.engagementRate && (
+                                            <p className="text-xs font-bold text-green-500">{data.engagementRate}% Eng.</p>
+                                        )}
                                     </div>
                                 </a>
                             ))}
@@ -344,8 +410,14 @@ export const InfluencerProfileDetail = ({
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-black tracking-tight">About {profile?.fullName?.split(' ')[0] || 'Creator'}</h3>
                                 <p className="text-lg text-muted-foreground leading-relaxed">
-                                    {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
+                                    {displayBio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
                                 </p>
+                                {address && (
+                                    <div className="flex items-center gap-2 text-muted-foreground pt-2">
+                                        <MapPin size={16} className="text-primary" />
+                                        <span className="text-sm">{address}</span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -355,11 +427,50 @@ export const InfluencerProfileDetail = ({
                                         <h4 className="font-bold">Collaboration Types</h4>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {collaborationTypes?.map((type) => (
-                                            <span key={type} className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold">
-                                                {type}
-                                            </span>
-                                        )) || <span className="text-muted-foreground italic">Contact for details</span>}
+                                        {collaborationTypes.length > 0 ? (
+                                            collaborationTypes.map((type) => (
+                                                <div key={type} className="group relative">
+                                                    <Badge className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold flex items-center gap-2 shadow-none hover:bg-primary/10">
+                                                        {formatCollaborationType(type)}
+                                                        {isOwner && (
+                                                            <button
+                                                                onClick={() => handleRemoveCollabType(type)}
+                                                                className="hover:text-destructive transition-colors"
+                                                                disabled={updateInfluencer.isPending}
+                                                            >
+                                                                <X size={14} />
+                                                            </button>
+                                                        )}
+                                                    </Badge>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            !isOwner && <span className="text-muted-foreground italic">Contact for details</span>
+                                        )}
+
+                                        {isOwner && (
+                                            <Select
+                                                key={`collab-type-${collaborationTypes.length}`}
+                                                onValueChange={(val) => handleAddCollabType(val as CollaborationType)}
+                                                disabled={updateInfluencer.isPending}
+                                            >
+                                                <SelectTrigger className="w-fit h-9 rounded-xl border-dashed border-2 px-3 text-xs font-bold">
+                                                    <div className="flex items-center gap-2">
+                                                        <Plus size={14} />
+                                                        <SelectValue placeholder="Add Type" />
+                                                    </div>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {Object.values(CollaborationType)
+                                                        .filter(t => !collaborationTypes.includes(t as any))
+                                                        .map(t => (
+                                                            <SelectItem key={t} value={t}>
+                                                                {formatCollaborationType(t)}
+                                                            </SelectItem>
+                                                        ))}
+                                                </SelectContent>
+                                            </Select>
+                                        )}
                                     </div>
                                 </div>
 
@@ -407,6 +518,30 @@ export const InfluencerProfileDetail = ({
                     </div>
                 </div>
             </div>
+
+            {/* Account Security (Password Update) */}
+            {isOwner && (
+                <div className="pt-8">
+                    <Card className="rounded-[3rem] border-border/50 bg-card/30 backdrop-blur-md p-8 md:p-12 border-none shadow-none ring-1 ring-border/50">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 text-primary">
+                                    <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
+                                        <Lock size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-black tracking-tight">Account Security</h3>
+                                </div>
+                                <p className="text-lg text-muted-foreground font-medium">
+                                    Keep your account secure by updating your password regularly.
+                                </p>
+                            </div>
+                            <div className="md:col-span-2 max-w-xl">
+                                <PasswordUpdateForm />
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            )}
 
             {/* Editing Modal */}
             <ReviewSubmissionModal

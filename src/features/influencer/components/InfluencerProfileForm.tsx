@@ -46,17 +46,22 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
+import { ImageUpload } from '@/components/shared/ImageUpload';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 const profileSchema = z.object({
+    fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
     niche: z.string().min(2, 'Niche is required'),
+    avatarUrl: z.string(),
     bio: z.string().min(10, 'Bio should be at least 10 characters').max(500),
-    location: z.string().min(2, 'Location is required'),
+    address: z.string().min(2, 'Address is required'),
     availability: z.nativeEnum(AvailabilityStatus),
-    collaborationTypes: z.array(z.nativeEnum(CollaborationType)).min(1, 'Select at least one collaboration type'),
+    collaborationTypes: z.array(z.string()).min(1, 'Select at least one collaboration type'),
     platforms: z.array(z.object({
         name: z.string(),
         handle: z.string().url('Please enter a valid profile URL (e.g. https://instagram.com/username)'),
         followers: z.number().min(0, 'Followers must be positive'),
+        engagementRate: z.number().min(0).max(100, 'Engagement rate must be between 0-100').optional(),
     })).min(1, 'Add at least one platform'),
 });
 
@@ -88,12 +93,14 @@ export const InfluencerProfileForm = ({
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
+            fullName: initialData?.fullName || '',
             niche: initialData?.niche || '',
+            avatarUrl: initialData?.avatarUrl || '',
             bio: initialData?.bio || '',
-            location: initialData?.location || '',
+            address: initialData?.address || '',
             availability: initialData?.availability || AvailabilityStatus.OPEN,
             collaborationTypes: initialData?.collaborationTypes || [],
-            platforms: initialData?.platforms || [{ name: 'Instagram', handle: '', followers: 0 }],
+            platforms: initialData?.platforms || [{ name: 'Instagram', handle: '', followers: 0, engagementRate: 0 }],
         },
     });
 
@@ -101,12 +108,14 @@ export const InfluencerProfileForm = ({
     React.useEffect(() => {
         if (initialData) {
             form.reset({
+                fullName: initialData.fullName || '',
                 niche: initialData.niche || '',
+                avatarUrl: initialData.avatarUrl || '',
                 bio: initialData.bio || '',
-                location: initialData.location || '',
+                address: initialData.address || '',
                 availability: initialData.availability || AvailabilityStatus.OPEN,
                 collaborationTypes: initialData.collaborationTypes || [],
-                platforms: initialData.platforms || [{ name: 'Instagram', handle: '', followers: 0 }],
+                platforms: initialData.platforms || [{ name: 'Instagram', handle: '', followers: 0, engagementRate: 0 }],
             });
         }
     }, [initialData, form]);
@@ -120,7 +129,7 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['niche', 'bio', 'location']
+            ? ['fullName', 'niche', 'avatarUrl', 'bio', 'address']
             : currentStep === 1
                 ? ['platforms']
                 : ['collaborationTypes', 'availability'];
@@ -227,6 +236,23 @@ export const InfluencerProfileForm = ({
 
                                         <FormField
                                             control={form.control}
+                                            name="fullName"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <AtSign size={14} className="text-primary" />
+                                                        Full Name
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="e.g. John Doe" {...field} className="h-12 rounded-xl bg-background/50" />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
                                             name="niche"
                                             render={({ field }) => (
                                                 <FormItem>
@@ -244,12 +270,35 @@ export const InfluencerProfileForm = ({
 
                                         <FormField
                                             control={form.control}
-                                            name="location"
+                                            name="avatarUrl"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <AtSign size={14} className="text-primary" />
+                                                        Profile Picture
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <ImageUpload
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                            onRemove={() => field.onChange('')}
+                                                            maxSize={5}
+                                                        />
+                                                    </FormControl>
+                                                    <FormDescription>Upload your profile picture (max 5MB)</FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="address"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="font-bold flex items-center gap-2">
                                                         <MapPin size={14} className="text-primary" />
-                                                        Location
+                                                        Address
                                                     </FormLabel>
                                                     <FormControl>
                                                         <Input placeholder="e.g. San Francisco, CA" {...field} className="h-12 rounded-xl bg-background/50" />
@@ -348,7 +397,7 @@ export const InfluencerProfileForm = ({
                                                         control={form.control}
                                                         name={`platforms.${index}.followers`}
                                                         render={({ field }) => (
-                                                            <FormItem className="md:col-span-2">
+                                                            <FormItem>
                                                                 <FormLabel className="text-xs font-bold uppercase tracking-wider">Follower Count</FormLabel>
                                                                 <FormControl>
                                                                     <Input
@@ -359,6 +408,29 @@ export const InfluencerProfileForm = ({
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        control={form.control}
+                                                        name={`platforms.${index}.engagementRate`}
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs font-bold uppercase tracking-wider">Engagement Rate (%)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        step="0.1"
+                                                                        placeholder="e.g. 4.5"
+                                                                        {...field}
+                                                                        value={field.value ?? ''}
+                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : parseFloat(e.target.value))}
+                                                                        className="h-11 rounded-xl bg-background/50"
+                                                                    />
+                                                                </FormControl>
+                                                                <FormDescription className="text-[10px]">Optional: Average engagement rate</FormDescription>
                                                                 <FormMessage />
                                                             </FormItem>
                                                         )}
@@ -382,7 +454,7 @@ export const InfluencerProfileForm = ({
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => append({ name: 'Instagram', handle: '', followers: 0 })}
+                                            onClick={() => append({ name: 'Instagram', handle: '', followers: 0, engagementRate: 0 })}
                                             className="w-full h-12 rounded-xl border-dashed border-2 hover:bg-muted/50 transition-all font-bold gap-2"
                                         >
                                             <Plus size={18} />
@@ -432,7 +504,7 @@ export const InfluencerProfileForm = ({
                                                                             "font-bold text-sm",
                                                                             isChecked ? "text-primary" : "text-foreground"
                                                                         )}>
-                                                                            {type.replace('_', ' ')}
+                                                                            {formatCollaborationType(type)}
                                                                         </span>
                                                                         <div className={cn(
                                                                             "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",

@@ -204,6 +204,35 @@ export const Sidebar = ({
                         onClick={onMobileClose}
                     />
                 ))}
+
+                {/* Mobile-only links for better accessibility */}
+                {isMobileOpen && (
+                    <div className="pt-3 mt-3 border-t border-border/50">
+                        <div className="px-3 mb-2">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Account</span>
+                        </div>
+                        <div className="space-y-1">
+                            <NavItem
+                                href={profilePath}
+                                icon={User}
+                                label="My Profile"
+                                isCollapsed={false}
+                                isActive={pathname === profilePath}
+                                onClick={onMobileClose}
+                            />
+                            <button
+                                onClick={() => {
+                                    setIsLogoutModalOpen(true);
+                                    if (onMobileClose) onMobileClose();
+                                }}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 group"
+                            >
+                                <LogOut size={20} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium">Log out</span>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Sidebar Footer */}
@@ -325,7 +354,7 @@ export const Sidebar = ({
                 {/* Desktop Toggle Button - Positioned outside but relative to aside */}
                 <Button
                     variant="outline"
-                    size="icon-xs"
+                    size="icon"
                     onClick={onToggleCollapse}
                     className="absolute -right-3 top-20 w-6 h-6 bg-card border border-border rounded-full hidden lg:flex items-center justify-center shadow-sm text-muted-foreground hover:text-primary transition-colors z-50 hover:scale-110 active:scale-95"
                 >
