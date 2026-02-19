@@ -108,7 +108,11 @@ export const DashboardOverviewContainer = () => {
                             />
                             <MetricCard
                                 label="Total Reach"
-                                value={Intl.NumberFormat('en', { notation: 'compact' }).format(profile?.followersCount || 0)}
+                                value={Intl.NumberFormat('en', { notation: 'compact' }).format(
+                                    profile?.platforms 
+                                        ? Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0)
+                                        : 0
+                                )}
                                 icon={TrendingUp}
                                 color="text-blue-500"
                                 subtitle="Combined platform followers"

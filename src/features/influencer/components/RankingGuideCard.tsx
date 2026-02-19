@@ -20,14 +20,9 @@ import { cn } from '@/lib/utils';
 interface TierInfo {
     name: string;
     description: string;
-    minScore: number;
     requirements: {
         completedCollabs: number;
-        rating: number;
-        completion: number;
-        responseTime: string;
         verified: boolean;
-        maxPenalties: string | number;
     };
     benefits: string[];
 }
@@ -168,42 +163,23 @@ export const RankingGuideCard = ({ guideData, className }: RankingGuideCardProps
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="px-3 py-1 rounded-full bg-background/50 border border-border/50">
-                                        <span className="text-xs font-bold">{tier.minScore}+ pts</span>
-                                    </div>
                                 </div>
 
                                 <div className="space-y-3 mt-4">
                                     <div className="flex items-center gap-2 text-xs">
                                         <span className="font-bold text-muted-foreground">Requirements:</span>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-1 gap-2">
                                         <div className="flex items-center gap-1.5 text-xs">
                                             <ChevronRight size={12} className="text-primary" />
-                                            <span>{tier.requirements.completedCollabs}+ collaborations</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 text-xs">
-                                            <ChevronRight size={12} className="text-primary" />
-                                            <span>{tier.requirements.rating}+ rating</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 text-xs">
-                                            <ChevronRight size={12} className="text-primary" />
-                                            <span>{tier.requirements.completion}% completion</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 text-xs">
-                                            <ChevronRight size={12} className="text-primary" />
-                                            <span>{tier.requirements.responseTime} response</span>
+                                            <span>{tier.requirements.completedCollabs}+ completed collaborations</span>
                                         </div>
                                         {tier.requirements.verified && (
                                             <div className="flex items-center gap-1.5 text-xs">
                                                 <ChevronRight size={12} className="text-primary" />
-                                                <span>Verified account</span>
+                                                <span>Verified account required</span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-1.5 text-xs">
-                                            <ChevronRight size={12} className="text-primary" />
-                                            <span>≤ {tier.requirements.maxPenalties} penalties</span>
-                                        </div>
                                     </div>
 
                                     {tier.benefits.length > 0 && (

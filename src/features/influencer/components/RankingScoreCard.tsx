@@ -185,16 +185,8 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                             <span className="text-[10px] font-medium">Completed Collabs</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            {breakdown.requirementsMet?.rating ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
-                            <span className="text-[10px] font-medium">Min Rating</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {breakdown.requirementsMet?.completion ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
-                            <span className="text-[10px] font-medium">Completion Rate</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {breakdown.requirementsMet?.zeroFraud ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
-                            <span className="text-[10px] font-medium">Zero Fraud Flags</span>
+                            {breakdown.requirementsMet?.verified ? <Check size={12} className="text-green-500" /> : <div className="w-3 h-3 rounded-full border border-muted-foreground/30" />}
+                            <span className="text-[10px] font-medium">Verified Account</span>
                         </div>
                     </div>
                 </div>

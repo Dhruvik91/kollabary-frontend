@@ -162,151 +162,68 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                                 <div>
                                     <p className="text-sm font-bold">Completed Collaborations</p>
                                     <p className="text-xs text-muted-foreground">
-                                        {completedCollaborations.count} completed
+                                        {completedCollaborations.count} completed • 1 point each
                                     </p>
                                 </div>
                             </div>
                             <div className="text-right">
                                 <p className="text-sm font-bold text-blue-500">
-                                    {completedCollaborations.score}/{completedCollaborations.maxScore}
-                                </p>
-                                <p className="text-xs text-muted-foreground">points</p>
-                            </div>
-                        </div>
-
-                        {/* Paid Promotions */}
-                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
-                                    <Target size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold">Paid Promotions</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {paidPromotions.count} paid collabs
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold text-green-500">
-                                    {paidPromotions.score}/{paidPromotions.maxScore}
-                                </p>
-                                <p className="text-xs text-muted-foreground">points</p>
-                            </div>
-                        </div>
-
-                        {/* Average Rating */}
-                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500">
-                                    <Star size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold">Average Rating</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {averageRating.value?.toFixed(1) || '0.0'} stars
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold text-yellow-500">
-                                    {averageRating.score}/{averageRating.maxScore}
-                                </p>
-                                <p className="text-xs text-muted-foreground">points</p>
-                            </div>
-                        </div>
-
-                        {/* Completion Rate */}
-                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                                    <BarChart3 size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold">Completion Rate</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {completionRate.percentage?.toFixed(1) || '0.0'}% completed
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold text-indigo-500">
-                                    {completionRate.score}/{completionRate.maxScore}
-                                </p>
-                                <p className="text-xs text-muted-foreground">points</p>
-                            </div>
-                        </div>
-
-                        {/* Response Speed */}
-                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
-                                    <Zap size={18} />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold">Response Speed</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        Avg. {responseSpeed.hours?.toFixed(1) || '0.0'}h
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold text-purple-500">
-                                    {responseSpeed.score}/{responseSpeed.maxScore}
+                                    {completedCollaborations.score}
                                 </p>
                                 <p className="text-xs text-muted-foreground">points</p>
                             </div>
                         </div>
 
                         {/* Verification Bonus */}
-                        {verificationBonus.isVerified && (
-                            <div className="flex items-center justify-between p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                        <CheckCircle2 size={18} />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-emerald-500">Verified Bonus</p>
-                                        <p className="text-xs text-emerald-600/70">Account verified</p>
-                                    </div>
+                        <div className={cn(
+                            "flex items-center justify-between p-4 rounded-2xl border",
+                            verificationBonus.isVerified 
+                                ? "bg-emerald-500/5 border-emerald-500/10" 
+                                : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
+                        )}>
+                            <div className="flex items-center gap-3">
+                                <div className={cn(
+                                    "w-10 h-10 rounded-xl flex items-center justify-center",
+                                    verificationBonus.isVerified 
+                                        ? "bg-emerald-500/10 text-emerald-500" 
+                                        : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground"
+                                )}>
+                                    <CheckCircle2 size={18} />
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-bold text-emerald-500">
-                                        +{verificationBonus.score}/{verificationBonus.maxScore}
+                                <div>
+                                    <p className={cn(
+                                        "text-sm font-bold",
+                                        verificationBonus.isVerified && "text-emerald-500"
+                                    )}>
+                                        Verification Bonus
                                     </p>
-                                    <p className="text-xs text-emerald-600/70">bonus</p>
+                                    <p className={cn(
+                                        "text-xs",
+                                        verificationBonus.isVerified 
+                                            ? "text-emerald-600/70" 
+                                            : "text-muted-foreground"
+                                    )}>
+                                        {verificationBonus.isVerified ? 'Account verified' : 'Not verified'}
+                                    </p>
                                 </div>
                             </div>
-                        )}
-
-                        {/* Penalties */}
-                        {(penalties?.count ?? 0) > 0 && (
-                            <div className="flex items-col justify-between p-4 bg-red-500/5 rounded-2xl border border-red-500/10">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
-                                        <AlertTriangle size={18} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-red-500">Penalties</p>
-                                        <div className="text-xs text-muted-foreground space-y-1 mt-1">
-                                            {penalties.breakdown.cancellations > 0 && (
-                                                <p>• {penalties.breakdown.cancellations} cancellations</p>
-                                            )}
-                                            {penalties.breakdown.rejections > 0 && (
-                                                <p>• {penalties.breakdown.rejections} rejections</p>
-                                            )}
-                                            {penalties.breakdown.reports > 0 && (
-                                                <p>• {penalties.breakdown.reports} reports</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-bold text-red-500">{penalties.score}</p>
-                                    <p className="text-xs text-red-600/70">penalty</p>
-                                </div>
+                            <div className="text-right">
+                                <p className={cn(
+                                    "text-sm font-bold",
+                                    verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"
+                                )}>
+                                    {verificationBonus.isVerified ? '+' : ''}{verificationBonus.score}/{verificationBonus.maxScore}
+                                </p>
+                                <p className={cn(
+                                    "text-xs",
+                                    verificationBonus.isVerified 
+                                        ? "text-emerald-600/70" 
+                                        : "text-muted-foreground"
+                                )}>
+                                    bonus
+                                </p>
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
 
@@ -317,45 +234,15 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                     </h4>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex items-center gap-2">
-                            {getRequirementStatus(requirementsMet.score)}
-                            <span className="text-xs font-medium">
-                                Score ≥ {tierRequirements.minScore}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
                             {getRequirementStatus(requirementsMet.completedCollabs)}
                             <span className="text-xs font-medium">
-                                {tierRequirements.minCollabs}+ Collabs
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {getRequirementStatus(requirementsMet.rating)}
-                            <span className="text-xs font-medium">
-                                Rating ≥ {tierRequirements.minRating}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {getRequirementStatus(requirementsMet.completion)}
-                            <span className="text-xs font-medium">
-                                {tierRequirements.minCompletion}% Complete
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {getRequirementStatus(requirementsMet.responseTime)}
-                            <span className="text-xs font-medium">
-                                ≤ {tierRequirements.maxResponseHours}h Response
+                                {tierRequirements.minCollabs}+ Collaborations
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
                             {getRequirementStatus(requirementsMet.verified)}
                             <span className="text-xs font-medium">
-                                {tierRequirements.verified ? 'Verified' : 'No Verification'}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {getRequirementStatus(requirementsMet.penalties)}
-                            <span className="text-xs font-medium">
-                                ≤ {tierRequirements.maxPenalties} Penalties
+                                {tierRequirements.verified ? 'Verified Account' : 'No Verification Required'}
                             </span>
                         </div>
                     </div>

@@ -19,13 +19,8 @@ export interface RankingPenalties extends RankingMetric<number> {
 }
 
 export interface TierRequirements {
-    minScore: number;
     minCollabs: number;
-    minRating: number;
-    minCompletion: number;
-    maxResponseHours: number;
     verified: boolean;
-    maxPenalties: number;
 }
 
 export interface RankingBreakdown {
@@ -40,7 +35,10 @@ export interface RankingBreakdown {
     rankingTier: string;
     nextTier: string | null;
     tierProgress: number;
-    requirementsMet: Record<string, boolean>;
+    requirementsMet: {
+        completedCollabs: boolean;
+        verified: boolean;
+    };
     tierRequirements: TierRequirements;
 }
 
