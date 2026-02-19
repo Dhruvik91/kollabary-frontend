@@ -86,25 +86,25 @@ export const DashboardOverviewContainer = () => {
                         {/* Core Metrics Bento Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <MetricCard
+                                label="Completed Collaborations"
+                                value={ranking?.completedCollaborations?.count || 0}
+                                icon={CheckCircle2}
+                                color="text-blue-500"
+                                subtitle={`${ranking?.completedCollaborations?.score || 0} ranking points`}
+                            />
+                            <MetricCard
+                                label="Verification Status"
+                                value={profile?.verified ? "Verified" : "Not Verified"}
+                                icon={Shield}
+                                color={profile?.verified ? "text-emerald-500" : "text-amber-500"}
+                                subtitle={profile?.verified ? "+50 bonus points" : "Verify to unlock higher tiers"}
+                            />
+                            <MetricCard
                                 label="Average Rating"
                                 value={profile?.avgRating || "0.0"}
                                 icon={Star}
                                 color="text-yellow-500"
                                 subtitle={`Based on ${profile?.totalReviews || 0} reviews`}
-                            />
-                            <MetricCard
-                                label="Response Speed"
-                                value={`${ranking?.responseSpeed?.hours || 24}h`}
-                                icon={Zap}
-                                color="text-purple-500"
-                                subtitle="Avg. time to respond to requests"
-                            />
-                            <MetricCard
-                                label="Completion Rate"
-                                value={`${ranking?.completionRate?.percentage || 0}%`}
-                                icon={CheckCircle2}
-                                color="text-emerald-500"
-                                subtitle="Successfully completed projects"
                             />
                             <MetricCard
                                 label="Total Reach"
@@ -114,7 +114,7 @@ export const DashboardOverviewContainer = () => {
                                         : 0
                                 )}
                                 icon={TrendingUp}
-                                color="text-blue-500"
+                                color="text-purple-500"
                                 subtitle="Combined platform followers"
                             />
                         </div>

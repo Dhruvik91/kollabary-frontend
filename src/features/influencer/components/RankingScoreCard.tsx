@@ -95,81 +95,64 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
 
                 {/* Breakdown List */}
                 <div className="space-y-4">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Metric Breakdown</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Score Breakdown</h4>
 
                     <div className="grid grid-cols-1 gap-3">
-                        {/* Reliability */}
+                        {/* Completed Collaborations */}
                         <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                    <BarChart3 size={16} />
+                                    <CheckCircle2 size={16} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold">Reliability</p>
-                                    <p className="text-[10px] text-muted-foreground">{completionRate.percentage}% Completion Rate</p>
+                                    <p className="text-sm font-bold">Collaborations</p>
+                                    <p className="text-[10px] text-muted-foreground">{completedCollaborations.count} completed • 1 pt each</p>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-sm font-bold">+{Math.round(completionRate.score)}</p>
-                            </div>
-                        </div>
-
-                        {/* Communication */}
-                        <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
-                                    <Zap size={16} />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold">Responsiveness</p>
-                                    <p className="text-[10px] text-muted-foreground">Avg. {responseSpeed.hours}h response time</p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold">+{Math.round(responseSpeed.score)}</p>
+                                <p className="text-sm font-bold text-blue-500">+{completedCollaborations.score}</p>
                             </div>
                         </div>
 
                         {/* Verification Bonus */}
-                        {verificationBonus.isVerified && (
-                            <div className="flex items-center justify-between p-3 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                        <CheckCircle2 size={16} />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-emerald-500">Verified Bonus</p>
-                                        <p className="text-[10px] text-emerald-600/70">Verified Identity</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-bold text-emerald-500">+{Math.round(verificationBonus.score)}</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Adjustments / Penalties */}
                         <div className={cn(
-                            "flex items-center justify-between p-3 rounded-2xl border transition-all duration-300",
-                            (penalties.count || 0) > 0
-                                ? "bg-red-500/5 border-red-500/10"
+                            "flex items-center justify-between p-3 rounded-2xl border",
+                            verificationBonus.isVerified 
+                                ? "bg-emerald-500/5 border-emerald-500/10" 
                                 : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
                         )}>
                             <div className="flex items-center gap-3">
                                 <div className={cn(
                                     "w-8 h-8 rounded-xl flex items-center justify-center",
-                                    (penalties.count || 0) > 0 ? "bg-red-500/10 text-red-500" : "bg-zinc-500/10 text-zinc-500"
+                                    verificationBonus.isVerified 
+                                        ? "bg-emerald-500/10 text-emerald-500" 
+                                        : "bg-zinc-500/10 text-zinc-500"
                                 )}>
-                                    <AlertTriangle size={16} />
+                                    <CheckCircle2 size={16} />
                                 </div>
                                 <div>
-                                    <p className={cn("text-sm font-bold", (penalties.count || 0) > 0 ? "text-red-500" : "text-foreground")}>Adjustments</p>
-                                    <p className="text-[10px] text-muted-foreground">{(penalties.count || 0)} cancellations/penalties</p>
+                                    <p className={cn(
+                                        "text-sm font-bold",
+                                        verificationBonus.isVerified && "text-emerald-500"
+                                    )}>
+                                        Verification Bonus
+                                    </p>
+                                    <p className={cn(
+                                        "text-[10px]",
+                                        verificationBonus.isVerified 
+                                            ? "text-emerald-600/70" 
+                                            : "text-muted-foreground"
+                                    )}>
+                                        {verificationBonus.isVerified ? 'Account verified' : 'Not verified'}
+                                    </p>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className={cn("text-sm font-bold", (penalties.count || 0) > 0 ? "text-red-500" : "text-muted-foreground")}>
-                                    {Math.round(penalties.score) || 0}
+                                <p className={cn(
+                                    "text-sm font-bold",
+                                    verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"
+                                )}>
+                                    {verificationBonus.isVerified ? '+' : ''}{verificationBonus.score}
                                 </p>
                             </div>
                         </div>

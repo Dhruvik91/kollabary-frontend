@@ -50,12 +50,13 @@ import { ImageUpload } from '@/components/shared/ImageUpload';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 const profileSchema = z.object({
+    fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
     niche: z.string().min(2, 'Niche is required'),
     avatarUrl: z.string(),
     bio: z.string().min(10, 'Bio should be at least 10 characters').max(500),
     address: z.string().min(2, 'Address is required'),
     availability: z.nativeEnum(AvailabilityStatus),
-    collaborationTypes: z.array(z.nativeEnum(CollaborationType)).min(1, 'Select at least one collaboration type'),
+    collaborationTypes: z.array(z.string()).min(1, 'Select at least one collaboration type'),
     platforms: z.array(z.object({
         name: z.string(),
         handle: z.string().url('Please enter a valid profile URL (e.g. https://instagram.com/username)'),
@@ -92,6 +93,7 @@ export const InfluencerProfileForm = ({
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
+            fullName: initialData?.fullName || '',
             niche: initialData?.niche || '',
             avatarUrl: initialData?.avatarUrl || '',
             bio: initialData?.bio || '',
@@ -106,6 +108,7 @@ export const InfluencerProfileForm = ({
     React.useEffect(() => {
         if (initialData) {
             form.reset({
+                fullName: initialData.fullName || '',
                 niche: initialData.niche || '',
                 avatarUrl: initialData.avatarUrl || '',
                 bio: initialData.bio || '',
@@ -126,7 +129,7 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['niche', 'avatarUrl', 'bio', 'address']
+            ? ['fullName', 'niche', 'avatarUrl', 'bio', 'address']
             : currentStep === 1
                 ? ['platforms']
                 : ['collaborationTypes', 'availability'];
@@ -230,6 +233,23 @@ export const InfluencerProfileForm = ({
                                                 <p className="text-sm text-muted-foreground">Tell us about your brand personality.</p>
                                             </div>
                                         </div>
+
+                                        <FormField
+                                            control={form.control}
+                                            name="fullName"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <AtSign size={14} className="text-primary" />
+                                                        Full Name
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="e.g. John Doe" {...field} className="h-12 rounded-xl bg-background/50" />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
 
                                         <FormField
                                             control={form.control}

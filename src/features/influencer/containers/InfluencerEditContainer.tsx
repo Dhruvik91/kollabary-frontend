@@ -28,7 +28,11 @@ export const InfluencerEditContainer = () => {
         }));
 
         return {
-            ...profileData,
+            fullName: profileData.fullName || '',
+            niche: profileData.niche || '',
+            avatarUrl: profileData.avatarUrl || '',
+            bio: profileData.bio || '',
+            address: profileData.address || '',
             platforms: platformsArray as any,
             collaborationTypes: profileData.collaborationTypes as any,
             availability: profileData.availability as any,

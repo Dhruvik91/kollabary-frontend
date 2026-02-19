@@ -22,6 +22,7 @@ export enum CollaborationType {
 export interface InfluencerProfile {
     id: string;
     userId: string;
+    fullName?: string;
     niche: string;
     avatarUrl?: string;
     bio?: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { authKeys } from '@/hooks/use-auth.hooks';
@@ -11,7 +11,7 @@ import { AuthLayout } from '@/components/auth/AuthLayout';
  * Google OAuth Callback Page
  * Handles the redirect from Google OAuth and fetches user data
  */
-export default function CallbackPage() {
+function CallbackContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const queryClient = useQueryClient();
@@ -40,5 +40,20 @@ export default function CallbackPage() {
                 <p className="text-sm text-muted-foreground">Completing authentication...</p>
             </div>
         </AuthLayout>
+    );
+}
+
+export default function CallbackPage() {
+    return (
+        <Suspense fallback={
+            <AuthLayout title="Signing you in..." description="Please wait while we complete the authentication">
+                <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
+                    <p className="text-sm text-muted-foreground">Loading...</p>
+                </div>
+            </AuthLayout>
+        }>
+            <CallbackContent />
+        </Suspense>
     );
 }

@@ -44,7 +44,6 @@ import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { RankingScoreCard } from './RankingScoreCard';
 import { RankingBreakdownCard } from './RankingBreakdownCard';
-import { RankingGuideCard } from './RankingGuideCard';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
@@ -68,7 +67,6 @@ interface InfluencerProfileDetailProps {
     influencer: InfluencerProfile;
     ranking?: RankingBreakdown;
     isRankingLoading?: boolean;
-    tierGuide?: any;
     isOwner?: boolean;
 }
 
@@ -76,7 +74,6 @@ export const InfluencerProfileDetail = ({
     influencer,
     ranking,
     isRankingLoading,
-    tierGuide,
     isOwner = false
 }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
@@ -211,8 +208,8 @@ export const InfluencerProfileDetail = ({
                     <div className="flex-1 pb-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-4">
                             <h1 className="text-4xl font-black tracking-tight">{profile?.fullName}</h1>
-                            {influencer.rankingTier && (
-                                <RankTierBadge tier={influencer.rankingTier} size="lg" />
+                            {(ranking?.rankingTier || influencer.rankingTier) && (
+                                <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
                             )}
                             {verified && (
                                 <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
@@ -363,12 +360,7 @@ export const InfluencerProfileDetail = ({
 
                     {/* Ranking Card */}
                     {ranking ? (
-                        <>
-                            <RankingBreakdownCard breakdown={ranking} />
-                            {isOwner && tierGuide && (
-                                <RankingGuideCard guideData={tierGuide} />
-                            )}
-                        </>
+                        <RankingBreakdownCard breakdown={ranking} />
                     ) : isRankingLoading ? (
                         <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
                             <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>

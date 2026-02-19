@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
-import { useRankingBreakdown, useTierGuide } from '@/hooks/queries/useRanking';
+import { useRankingBreakdown } from '@/hooks/queries/useRanking';
 import { InfluencerProfileDetail } from '../components/InfluencerProfileDetail';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -18,7 +18,6 @@ export const InfluencerMyProfileContainer = () => {
     const router = useRouter();
     const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile();
     const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user?.id || '');
-    const { data: tierGuide } = useTierGuide();
 
     // Handle redirection to setup if profile doesn't exist (e.g., 404 from myProfile)
     useEffect(() => {
@@ -80,7 +79,6 @@ export const InfluencerMyProfileContainer = () => {
                 influencer={influencer}
                 ranking={ranking}
                 isRankingLoading={isRankingLoading}
-                tierGuide={tierGuide}
                 isOwner={true}
             />
         </motion.div>

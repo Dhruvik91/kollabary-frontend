@@ -141,110 +141,98 @@ export const RankingGuideCard = ({ guideData, className }: RankingGuideCardProps
 
             <CardContent className="p-6">
                 {activeTab === 'tiers' ? (
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {guideData.tiers.map((tier, index) => (
                             <motion.div
                                 key={tier.name}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: index * 0.05, duration: 0.2 }}
                                 className={cn(
-                                    "p-5 rounded-2xl border bg-gradient-to-br",
+                                    "p-4 rounded-2xl border bg-gradient-to-br hover:shadow-lg transition-all duration-300",
                                     getTierColor(tier.name)
                                 )}
                             >
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-2xl">{getTierIcon(tier.name)}</span>
-                                        <div>
-                                            <h4 className="font-bold text-base">{tier.name}</h4>
-                                            <p className="text-xs text-muted-foreground mt-0.5">
-                                                {tier.description}
-                                            </p>
-                                        </div>
+                                <div className="flex items-center gap-3 mb-3">
+                                    <span className="text-3xl">{getTierIcon(tier.name)}</span>
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-sm">{tier.name}</h4>
+                                        <p className="text-xs text-muted-foreground line-clamp-1">
+                                            {tier.description}
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-3 mt-4">
-                                    <div className="flex items-center gap-2 text-xs">
-                                        <span className="font-bold text-muted-foreground">Requirements:</span>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-1.5 text-xs bg-background/50 rounded-lg px-2 py-1.5">
+                                        <CheckCircle2 size={12} className="text-primary shrink-0" />
+                                        <span className="font-medium">{tier.requirements.completedCollabs}+ collaborations</span>
                                     </div>
-                                    <div className="grid grid-cols-1 gap-2">
-                                        <div className="flex items-center gap-1.5 text-xs">
-                                            <ChevronRight size={12} className="text-primary" />
-                                            <span>{tier.requirements.completedCollabs}+ completed collaborations</span>
-                                        </div>
-                                        {tier.requirements.verified && (
-                                            <div className="flex items-center gap-1.5 text-xs">
-                                                <ChevronRight size={12} className="text-primary" />
-                                                <span>Verified account required</span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {tier.benefits.length > 0 && (
-                                        <div className="mt-3 pt-3 border-t border-border/30">
-                                            <span className="text-xs font-bold text-muted-foreground">Benefits:</span>
-                                            <div className="mt-2 space-y-1">
-                                                {tier.benefits.slice(0, 3).map((benefit, i) => (
-                                                    <div key={i} className="flex items-center gap-1.5 text-xs">
-                                                        <div className="w-1 h-1 rounded-full bg-primary" />
-                                                        <span>{benefit}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                    {tier.requirements.verified && (
+                                        <div className="flex items-center gap-1.5 text-xs bg-emerald-500/10 rounded-lg px-2 py-1.5">
+                                            <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
+                                            <span className="font-medium text-emerald-700 dark:text-emerald-400">Verified required</span>
                                         </div>
                                     )}
                                 </div>
+
+                                {tier.benefits.length > 0 && (
+                                    <div className="mt-3 pt-3 border-t border-border/30">
+                                        <p className="text-xs font-bold text-muted-foreground mb-1.5">Top Benefits:</p>
+                                        <div className="space-y-1">
+                                            {tier.benefits.slice(0, 2).map((benefit, i) => (
+                                                <div key={i} className="flex items-start gap-1.5 text-xs">
+                                                    <div className="w-1 h-1 rounded-full bg-primary mt-1.5 shrink-0" />
+                                                    <span className="line-clamp-1">{benefit}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </motion.div>
                         ))}
                     </div>
                 ) : (
-                    <div className="space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {Object.entries(guideData.scoringGuide).map(([key, metric], index) => (
                             <motion.div
                                 key={key}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="p-5 rounded-2xl border border-border/50 bg-muted/20"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: index * 0.05, duration: 0.2 }}
+                                className="p-4 rounded-2xl border border-border/50 bg-muted/20 hover:shadow-lg transition-all duration-300"
                             >
-                                <div className="flex items-start gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center flex-shrink-0">
+                                <div className="flex items-start gap-3 mb-3">
+                                    <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center shrink-0">
                                         {getMetricIcon(key)}
                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h4 className="font-bold text-sm">{getMetricTitle(key)}</h4>
-                                            {metric.maxPoints && (
-                                                <span className="text-xs font-bold text-primary">
-                                                    {key === 'penalties' ? metric.impact : `Max: ${metric.maxPoints} pts`}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground mb-3">{metric.description}</p>
-
-                                        <div className="space-y-2">
-                                            <div className="p-2 rounded-lg bg-background/50 border border-border/30">
-                                                <p className="text-xs font-medium text-muted-foreground">
-                                                    <span className="font-bold">Calculation:</span> {metric.calculation || metric.impact}
-                                                </p>
-                                            </div>
-
-                                            {metric.tips && metric.tips.length > 0 && (
-                                                <div className="space-y-1.5">
-                                                    <p className="text-xs font-bold text-muted-foreground">Tips:</p>
-                                                    {metric.tips.map((tip, i) => (
-                                                        <div key={i} className="flex items-start gap-2 text-xs">
-                                                            <div className="w-1 h-1 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                                                            <span>{tip}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-bold text-sm truncate">{getMetricTitle(key)}</h4>
+                                        {metric.maxPoints && (
+                                            <span className="text-xs font-bold text-primary">
+                                                {key === 'penalties' ? metric.impact : `${metric.maxPoints} pts`}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
+                                
+                                <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{metric.description}</p>
+
+                                <div className="p-2 rounded-lg bg-background/50 border border-border/30">
+                                    <p className="text-xs font-medium text-muted-foreground line-clamp-2">
+                                        <span className="font-bold">How:</span> {metric.calculation || metric.impact}
+                                    </p>
+                                </div>
+
+                                {metric.tips && metric.tips.length > 0 && (
+                                    <div className="mt-3 pt-3 border-t border-border/30">
+                                        <p className="text-xs font-bold text-muted-foreground mb-1.5">Quick Tip:</p>
+                                        <div className="flex items-start gap-2 text-xs">
+                                            <div className="w-1 h-1 rounded-full bg-primary mt-1.5 shrink-0" />
+                                            <span className="line-clamp-2">{metric.tips[0]}</span>
+                                        </div>
+                                    </div>
+                                )}
                             </motion.div>
                         ))}
                     </div>
