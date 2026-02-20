@@ -39,8 +39,8 @@ export default function DashboardClientLayout({
                     >
                         <DashboardHeader />
                         <main className={cn(
-                            "flex-1 min-h-0 pb-16 lg:pb-0",
-                            !isMessagesPage ? 'p-4 md:p-8 lg:p-10 overflow-y-auto' : 'overflow-hidden h-full'
+                            "flex-1 min-h-0",
+                            !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-8 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                         )}>
                             {children}
                         </main>
@@ -62,8 +62,8 @@ export default function DashboardClientLayout({
                         >
                             <DashboardHeader />
                             <main className={cn(
-                                "flex-1 min-h-0 pb-16 lg:pb-0",
-                                !isMessagesPage ? 'p-4 md:p-8 lg:p-10 overflow-y-auto' : 'overflow-hidden h-full'
+                                "flex-1 min-h-0",
+                                !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-8 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                             )}>
                                 {children}
                             </main>

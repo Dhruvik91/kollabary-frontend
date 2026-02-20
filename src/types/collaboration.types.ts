@@ -51,3 +51,8 @@ export interface UpdateCollaborationDto {
     proofUrls?: string[];
     proofSubmittedAt?: string;
 }
+
+export interface CollaborationFilters {
+    status?: CollaborationStatus;
+    search?: string;
+}

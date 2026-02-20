@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { collaborationService } from '@/services/collaboration.service';
 import {
+    CollaborationFilters,
     CreateCollaborationDto,
     UpdateCollaborationStatusDto,
     UpdateCollaborationDto
@@ -8,12 +9,12 @@ import {
 import { toast } from 'sonner';
 
 /**
- * Hook to fetch all collaborations for the current user
+ * Hook to fetch collaborations for the current user with optional filters
  */
-export const useCollaborations = () => {
+export const useCollaborations = (filters?: CollaborationFilters) => {
     return useQuery({
-        queryKey: ['collaborations'],
-        queryFn: collaborationService.getCollaborations,
+        queryKey: ['collaborations', filters],
+        queryFn: () => collaborationService.getCollaborations(filters),
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
 };

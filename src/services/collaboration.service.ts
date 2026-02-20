@@ -2,6 +2,7 @@ import httpService from '@/lib/http-service';
 import { API_CONFIG } from '@/constants';
 import {
     Collaboration,
+    CollaborationFilters,
     CreateCollaborationDto,
     UpdateCollaborationStatusDto,
     UpdateCollaborationDto
@@ -9,11 +10,16 @@ import {
 
 export const collaborationService = {
     /**
-     * Fetch all collaborations for the current user
+     * Fetch all collaborations for the current user, with optional filters
      */
-    getCollaborations: async () => {
+    getCollaborations: async (filters?: CollaborationFilters) => {
+        const params: Record<string, string> = {};
+        if (filters?.status) params.status = filters.status;
+        if (filters?.search) params.search = filters.search;
+
         const response = await httpService.get<Collaboration[]>(
-            API_CONFIG.path.collaboration.base
+            API_CONFIG.path.collaboration.base,
+            { params },
         );
         return response.data;
     },
