@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
     Users,
@@ -52,6 +53,7 @@ import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmis
 import { Review } from '@/types/review.types';
 import { ReportModal } from '@/features/report/components/ReportModal';
 import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
 import {
     Select,
@@ -77,6 +79,7 @@ export const InfluencerProfileDetail = ({
     isOwner = false
 }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
+    const router = useRouter();
     const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
     const [docUrl, setDocUrl] = useState('');
     const [notes, setNotes] = useState('');
@@ -85,7 +88,7 @@ export const InfluencerProfileDetail = ({
     const { data: verificationRequests } = useMyVerificationStatus();
     const currentVerification = (verificationRequests as any[])?.[0];
 
-    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability } = influencer;
+    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName } = influencer;
 
     // Calculate total followers from all platforms
     const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
@@ -108,6 +111,7 @@ export const InfluencerProfileDetail = ({
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
 
     const handleUpdateAvailability = (status: AvailabilityStatus) => {
         updateInfluencer.mutate({ availability: status });
@@ -275,7 +279,7 @@ export const InfluencerProfileDetail = ({
 
                         <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
                             <div className="flex items-center gap-2">
-                                <span className="font-bold text-foreground">@{profile?.username}</span>
+                                <span className="font-bold text-foreground">{fullName}</span>
                             </div>
                             {profile?.location && (
                                 <div className="flex items-center gap-2">
@@ -308,9 +312,19 @@ export const InfluencerProfileDetail = ({
                                 >
                                     <Flag size={20} className="group-hover:fill-destructive transition-colors" />
                                 </Button>
-                                <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                                <Button
+                                    className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                                    disabled={isStartingChat}
+                                    onClick={() => {
+                                        startConversation(influencerUser.id, {
+                                            onSuccess: (conversation) => {
+                                                router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+                                            }
+                                        });
+                                    }}
+                                >
                                     <MessageCircle size={20} />
-                                    Contact
+                                    {isStartingChat ? 'Connecting...' : 'Contact'}
                                 </Button>
                             </>
                         )}
@@ -359,7 +373,7 @@ export const InfluencerProfileDetail = ({
                     </Card>
 
                     {/* Ranking Card */}
-                    {ranking ? (
+                    {(ranking && isOwner) ? (
                         <RankingBreakdownCard breakdown={ranking} />
                     ) : isRankingLoading ? (
                         <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">

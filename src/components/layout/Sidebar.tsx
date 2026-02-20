@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
     LayoutDashboard,
-    Users,
     Settings,
     BarChart3,
     MessageSquare,
@@ -15,7 +14,6 @@ import {
     ChevronRight,
     Rocket,
     LogOut,
-    X,
     Handshake,
     ShieldAlert,
     CheckCircle,
@@ -44,12 +42,11 @@ interface NavItemProps {
     isCollapsed: boolean;
     isActive: boolean;
     badge?: string;
-    onClick?: () => void;
 }
 
-const NavItem = ({ href, icon: Icon, label, isCollapsed, isActive, badge, onClick }: NavItemProps) => {
+const NavItem = ({ href, icon: Icon, label, isCollapsed, isActive, badge }: NavItemProps) => {
     return (
-        <Link href={href} className="block group" onClick={onClick}>
+        <Link href={href} className="block group">
             <div className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative",
                 isActive
@@ -88,8 +85,6 @@ const NavItem = ({ href, icon: Icon, label, isCollapsed, isActive, badge, onClic
 interface SidebarProps {
     isCollapsed: boolean;
     onToggleCollapse: () => void;
-    isMobileOpen?: boolean;
-    onMobileClose?: () => void;
 }
 
 /**
@@ -99,18 +94,11 @@ interface SidebarProps {
 export const Sidebar = ({
     isCollapsed,
     onToggleCollapse,
-    isMobileOpen,
-    onMobileClose
 }: SidebarProps) => {
     const pathname = usePathname();
     const { user } = useAuth();
     const logoutMutation = useLogout();
     const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
-
-    // Close mobile sidebar ONLY on navigation
-    useEffect(() => {
-        if (onMobileClose) onMobileClose();
-    }, [pathname]);
 
     const commonLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
@@ -168,7 +156,7 @@ export const Sidebar = ({
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 shrink-0">
                         <Rocket size={20} />
                     </div>
-                    {(!isCollapsed || isMobileOpen) && (
+                    {!isCollapsed && (
                         <motion.span
                             initial={{ opacity: 0, width: 0 }}
                             animate={{ opacity: 1, width: 'auto' }}
@@ -179,18 +167,6 @@ export const Sidebar = ({
                         </motion.span>
                     )}
                 </Link>
-
-                {/* Mobile Close Button */}
-                {isMobileOpen && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onMobileClose}
-                        className="lg:hidden text-muted-foreground hover:text-primary transition-colors shrink-0"
-                    >
-                        <X size={20} />
-                    </Button>
-                )}
             </div>
 
             {/* Navigation */}
@@ -199,40 +175,10 @@ export const Sidebar = ({
                     <NavItem
                         key={link.href}
                         {...link}
-                        isCollapsed={isCollapsed && !isMobileOpen}
+                        isCollapsed={isCollapsed}
                         isActive={pathname === link.href || pathname.startsWith(link.href + '/')}
-                        onClick={onMobileClose}
                     />
                 ))}
-
-                {/* Mobile-only links for better accessibility */}
-                {isMobileOpen && (
-                    <div className="pt-3 mt-3 border-t border-border/50">
-                        <div className="px-3 mb-2">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Account</span>
-                        </div>
-                        <div className="space-y-1">
-                            <NavItem
-                                href={profilePath}
-                                icon={User}
-                                label="My Profile"
-                                isCollapsed={false}
-                                isActive={pathname === profilePath}
-                                onClick={onMobileClose}
-                            />
-                            <button
-                                onClick={() => {
-                                    setIsLogoutModalOpen(true);
-                                    if (onMobileClose) onMobileClose();
-                                }}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 group"
-                            >
-                                <LogOut size={20} className="flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className="text-sm font-medium">Log out</span>
-                            </button>
-                        </div>
-                    </div>
-                )}
             </div>
 
             {/* Sidebar Footer */}
@@ -243,7 +189,7 @@ export const Sidebar = ({
                         <PopoverTrigger asChild>
                             <button className={cn(
                                 "w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group",
-                                isCollapsed && !isMobileOpen ? "justify-center" : "px-3"
+                                isCollapsed ? "justify-center" : "px-3"
                             )}>
                                 <div className="relative shrink-0">
                                     <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
@@ -259,7 +205,7 @@ export const Sidebar = ({
                                     </div>
                                     <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
                                 </div>
-                                {(!isCollapsed || isMobileOpen) && (
+                                {!isCollapsed && (
                                     <div className="flex flex-col min-w-0 text-left">
                                         <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
                                             {user.profile?.fullName || user.email.split('@')[0]}
@@ -272,18 +218,18 @@ export const Sidebar = ({
                             </button>
                         </PopoverTrigger>
                         <PopoverContent
-                            side={isCollapsed && !isMobileOpen ? "right" : "top"}
-                            align={isCollapsed && !isMobileOpen ? "center" : "end"}
+                            side={isCollapsed ? "right" : "top"}
+                            align={isCollapsed ? "center" : "end"}
                             className="w-56 p-2 rounded-2xl border-border/50 bg-background/95 backdrop-blur-sm shadow-xl"
                         >
                             <div className="space-y-1">
-                                <Link href={profilePath} onClick={onMobileClose}>
+                                <Link href={profilePath}>
                                     <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                                         <User size={18} className="text-muted-foreground" />
                                         Profile
                                     </div>
                                 </Link>
-                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS} onClick={onMobileClose}>
+                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
                                     <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                                         <Settings size={18} className="text-muted-foreground" />
                                         Settings
@@ -291,10 +237,7 @@ export const Sidebar = ({
                                 </Link>
                                 <div className="h-px bg-border/50 my-1 mx-1" />
                                 <button
-                                    onClick={() => {
-                                        setIsLogoutModalOpen(true);
-                                        if (onMobileClose) onMobileClose();
-                                    }}
+                                    onClick={() => setIsLogoutModalOpen(true)}
                                     className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                                 >
                                     <LogOut size={18} />
@@ -361,30 +304,6 @@ export const Sidebar = ({
                     {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
                 </Button>
             </aside>
-
-            {/* Mobile Drawer */}
-            <AnimatePresence>
-                {isMobileOpen && (
-                    <>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={onMobileClose}
-                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] lg:hidden"
-                        />
-                        <motion.aside
-                            initial={{ x: '-100%' }}
-                            animate={{ x: 0 }}
-                            exit={{ x: '-100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed left-0 top-0 h-screen w-[280px] bg-card border-r border-border z-[70] lg:hidden flex flex-col shadow-2xl overflow-hidden"
-                        >
-                            {sidebarContent}
-                        </motion.aside>
-                    </>
-                )}
-            </AnimatePresence>
         </>
     );
 };
