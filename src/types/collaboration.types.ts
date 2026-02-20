@@ -55,4 +55,16 @@ export interface UpdateCollaborationDto {
 export interface CollaborationFilters {
     status?: CollaborationStatus;
     search?: string;
+    page?: number;
+    limit?: number;
+}
+
+export interface PaginatedCollaborationsResponse {
+    items: Collaboration[];
+    meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
 }

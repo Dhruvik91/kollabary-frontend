@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { collaborationService } from '@/services/collaboration.service';
 import {
     CollaborationFilters,
@@ -9,13 +9,20 @@ import {
 import { toast } from 'sonner';
 
 /**
- * Hook to fetch collaborations for the current user with optional filters
+ * Hook to fetch collaborations with infinite scroll and optional filters
  */
-export const useCollaborations = (filters?: CollaborationFilters) => {
-    return useQuery({
+export const useCollaborations = (filters?: Omit<CollaborationFilters, 'page'>) => {
+    return useInfiniteQuery({
         queryKey: ['collaborations', filters],
-        queryFn: () => collaborationService.getCollaborations(filters),
-        staleTime: 5 * 60 * 1000, // 5 minutes
+        queryFn: ({ pageParam = 1 }) =>
+            collaborationService.getCollaborations({ ...filters, page: pageParam }),
+        getNextPageParam: (lastPage) => {
+            if (lastPage.meta.page < lastPage.meta.totalPages) {
+                return lastPage.meta.page + 1;
+            }
+            return undefined;
+        },
+        initialPageParam: 1,
     });
 };
 
