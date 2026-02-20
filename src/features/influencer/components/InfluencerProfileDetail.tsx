@@ -21,47 +21,28 @@ import {
     MessageCircle,
     Flag,
     AlignLeft,
-    ShieldCheck,
     ArrowLeft,
-    Clock,
-    X,
-    Plus,
-    Lock
+    Settings,
 } from 'lucide-react';
-import { useSubmitVerification, useMyVerificationStatus } from '@/hooks/queries/useVerificationQueries';
-import { VerificationStatus } from '@/types/admin.types';
-import { AnimatedModal } from '@/components/modal/AnimatedModal';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
+import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { CollaborationRequestDialog } from './CollaborationRequestDialog';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
-import { RankingScoreCard } from './RankingScoreCard';
-import { RankingBreakdownCard } from './RankingBreakdownCard';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
+import { RankingBreakdownCard } from './RankingBreakdownCard';
 import { RankingBreakdown } from '@/types/ranking';
 import { useInfluencerReviews, useDeleteReview, useUpdateReview } from '@/hooks/use-review.hooks';
 import { ReviewList } from '@/features/review/components/ReviewList';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { Review } from '@/types/review.types';
 import { ReportModal } from '@/features/report/components/ReportModal';
-import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
-import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 
 
@@ -80,13 +61,6 @@ export const InfluencerProfileDetail = ({
 }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
     const router = useRouter();
-    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-    const [docUrl, setDocUrl] = useState('');
-    const [notes, setNotes] = useState('');
-
-    const verificationMutation = useSubmitVerification();
-    const { data: verificationRequests } = useMyVerificationStatus();
-    const currentVerification = (verificationRequests as any[])?.[0];
 
     const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName } = influencer;
 
@@ -106,30 +80,11 @@ export const InfluencerProfileDetail = ({
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
     const deleteReview = useDeleteReview(influencer.id);
     const updateReview = useUpdateReview(influencer.id);
-    const updateInfluencer = useUpdateInfluencerProfile();
 
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
-
-    const handleUpdateAvailability = (status: AvailabilityStatus) => {
-        updateInfluencer.mutate({ availability: status });
-    };
-
-    const handleAddCollabType = (type: CollaborationType) => {
-        if (!collaborationTypes.includes(type as any)) {
-            updateInfluencer.mutate({
-                collaborationTypes: [...collaborationTypes, type] as any
-            });
-        }
-    };
-
-    const handleRemoveCollabType = (type: string) => {
-        updateInfluencer.mutate({
-            collaborationTypes: collaborationTypes.filter(t => t !== type) as any
-        });
-    };
 
     const handleDeleteReview = (id: string) => {
         setReviewToDelete(id);
@@ -173,13 +128,23 @@ export const InfluencerProfileDetail = ({
     return (
         <div className="max-w-6xl mx-auto space-y-8 pb-20">
             {/* Back Button */}
-            <Link
-                href={FRONTEND_ROUTES.DASHBOARD.DISCOVER}
-                className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
-            >
-                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                Back to Discovery
-            </Link>
+            {!isOwner ? (
+                <Link
+                    href={FRONTEND_ROUTES.DASHBOARD.DISCOVER}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
+                >
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    Back to Discovery
+                </Link>
+            ) : (
+                <Link
+                    href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
+                >
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    Back to Settings
+                </Link>
+            )}
 
             {/* Profile Header */}
             <div className="relative">
@@ -221,60 +186,12 @@ export const InfluencerProfileDetail = ({
                                     Verified Creator
                                 </div>
                             )}
-                            {isOwner && !verified && !currentVerification && (
-                                <button
-                                    onClick={() => setIsVerificationModalOpen(true)}
-                                    className="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-primary/20 hover:bg-primary/20 transition-all active:scale-95"
-                                >
-                                    <ShieldCheck size={14} />
-                                    Get Verified
-                                </button>
-                            )}
-                            {isOwner && !verified && currentVerification?.status === VerificationStatus.PENDING && (
-                                <div className="bg-yellow-500/10 text-yellow-600 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-yellow-500/20">
-                                    <Clock size={14} />
-                                    Verification Pending
-                                </div>
-                            )}
-                            {isOwner && !verified && currentVerification?.status === VerificationStatus.REJECTED && (
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-red-500/10 text-red-600 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-red-500/20">
-                                        <Flag size={14} />
-                                        Rejected
-                                    </div>
-                                    <button
-                                        onClick={() => setIsVerificationModalOpen(true)}
-                                        className="text-primary text-[10px] font-bold underline hover:text-primary/80 transition-colors"
-                                    >
-                                        Try Again
-                                    </button>
-                                </div>
-                            )}
 
-                            {isOwner ? (
-                                <Select
-                                    value={availability}
-                                    onValueChange={handleUpdateAvailability}
-                                    disabled={updateInfluencer.isPending}
-                                >
-                                    <SelectTrigger className="h-8 border-border/50 bg-background/50 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider w-fit">
-                                        <div className="flex items-center gap-2">
-                                            <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                            <SelectValue placeholder={availability} />
-                                        </div>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value={AvailabilityStatus.OPEN}>OPEN</SelectItem>
-                                        <SelectItem value={AvailabilityStatus.BUSY}>BUSY</SelectItem>
-                                        <SelectItem value={AvailabilityStatus.CLOSED}>CLOSED</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            ) : (
-                                <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
-                                    <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                    <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
-                                </div>
-                            )}
+                            {/* Read-only availability badge */}
+                            <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
+                                <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
+                            </div>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
@@ -296,12 +213,19 @@ export const InfluencerProfileDetail = ({
 
                     <div className="pb-4 flex gap-4">
                         {isOwner ? (
-                            <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT}>
-                                <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                                    <AlignLeft size={20} />
-                                    Edit Profile
-                                </Button>
-                            </Link>
+                            <>
+                                <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT}>
+                                    <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                                        <AlignLeft size={20} />
+                                        Edit Profile
+                                    </Button>
+                                </Link>
+                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                    <Button variant="outline" className="h-14 w-14 rounded-2xl border-border/50 hover:bg-muted transition-all flex items-center justify-center">
+                                        <Settings size={20} />
+                                    </Button>
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <Button
@@ -443,47 +367,15 @@ export const InfluencerProfileDetail = ({
                                     <div className="flex flex-wrap gap-2">
                                         {collaborationTypes.length > 0 ? (
                                             collaborationTypes.map((type) => (
-                                                <div key={type} className="group relative">
-                                                    <Badge className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold flex items-center gap-2 shadow-none hover:bg-primary/10">
-                                                        {formatCollaborationType(type)}
-                                                        {isOwner && (
-                                                            <button
-                                                                onClick={() => handleRemoveCollabType(type)}
-                                                                className="hover:text-destructive transition-colors"
-                                                                disabled={updateInfluencer.isPending}
-                                                            >
-                                                                <X size={14} />
-                                                            </button>
-                                                        )}
-                                                    </Badge>
-                                                </div>
+                                                <Badge
+                                                    key={type}
+                                                    className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold shadow-none"
+                                                >
+                                                    {formatCollaborationType(type)}
+                                                </Badge>
                                             ))
                                         ) : (
-                                            !isOwner && <span className="text-muted-foreground italic">Contact for details</span>
-                                        )}
-
-                                        {isOwner && (
-                                            <Select
-                                                key={`collab-type-${collaborationTypes.length}`}
-                                                onValueChange={(val) => handleAddCollabType(val as CollaborationType)}
-                                                disabled={updateInfluencer.isPending}
-                                            >
-                                                <SelectTrigger className="w-fit h-9 rounded-xl border-dashed border-2 px-3 text-xs font-bold">
-                                                    <div className="flex items-center gap-2">
-                                                        <Plus size={14} />
-                                                        <SelectValue placeholder="Add Type" />
-                                                    </div>
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {Object.values(CollaborationType)
-                                                        .filter(t => !collaborationTypes.includes(t as any))
-                                                        .map(t => (
-                                                            <SelectItem key={t} value={t}>
-                                                                {formatCollaborationType(t)}
-                                                            </SelectItem>
-                                                        ))}
-                                                </SelectContent>
-                                            </Select>
+                                            <span className="text-muted-foreground italic">Contact for details</span>
                                         )}
                                     </div>
                                 </div>
@@ -532,30 +424,6 @@ export const InfluencerProfileDetail = ({
                     </div>
                 </div>
             </div>
-
-            {/* Account Security (Password Update) */}
-            {isOwner && (
-                <div className="pt-6 md:pt-8">
-                    <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/30 backdrop-blur-md p-6 sm:p-8 md:p-10 lg:p-12 border-none shadow-none ring-1 ring-border/50">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3 text-primary">
-                                    <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
-                                        <Lock size={24} />
-                                    </div>
-                                    <h3 className="text-2xl font-black tracking-tight">Account Security</h3>
-                                </div>
-                                <p className="text-lg text-muted-foreground font-medium">
-                                    Keep your account secure by updating your password regularly.
-                                </p>
-                            </div>
-                            <div className="md:col-span-2 max-w-xl">
-                                <PasswordUpdateForm />
-                            </div>
-                        </div>
-                    </Card>
-                </div>
-            )}
 
             {/* Editing Modal */}
             <ReviewSubmissionModal
@@ -611,66 +479,6 @@ export const InfluencerProfileDetail = ({
                 targetType="influencer"
                 targetName={profile?.fullName || 'the Influencer'}
             />
-
-            {/* Verification Modal */}
-            <AnimatedModal
-                isOpen={isVerificationModalOpen}
-                onClose={() => setIsVerificationModalOpen(false)}
-                title="Request Profile Verification"
-                description="Submit proof of your identity or social media influence to get the verified badge."
-                size="md"
-            >
-                <div className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="docUrl" className="font-bold">Identity/Influence Proof (URL)</Label>
-                        <Input
-                            id="docUrl"
-                            placeholder="e.g. Google Drive or Dropbox link to your documents"
-                            value={docUrl}
-                            onChange={(e) => setDocUrl(e.target.value)}
-                            className="h-12 rounded-xl"
-                        />
-                        <p className="text-[10px] text-muted-foreground">Provide a link to a document or screenshot that proves your identity or reach.</p>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="v-notes" className="font-bold">Additional Notes (Optional)</Label>
-                        <Textarea
-                            id="v-notes"
-                            placeholder="Tell us why your profile should be verified..."
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            className="min-h-[100px] rounded-xl resize-none"
-                        />
-                    </div>
-
-                    <div className="flex gap-3 pt-4">
-                        <Button
-                            variant="ghost"
-                            onClick={() => setIsVerificationModalOpen(false)}
-                            className="flex-1 h-12 rounded-xl font-bold"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            className="flex-[2] h-12 rounded-xl font-black bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
-                            onClick={() => {
-                                verificationMutation.mutate({
-                                    documents: {
-                                        idProof: docUrl,
-                                        notes
-                                    }
-                                }, {
-                                    onSuccess: () => setIsVerificationModalOpen(false)
-                                });
-                            }}
-                            disabled={!docUrl || verificationMutation.isPending}
-                        >
-                            {verificationMutation.isPending ? "Submitting..." : "Submit Request"}
-                        </Button>
-                    </div>
-                </div>
-            </AnimatedModal>
         </div>
     );
 };

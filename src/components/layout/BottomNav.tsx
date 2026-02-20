@@ -9,6 +9,7 @@ import {
     Rocket,
     Handshake,
     User,
+    Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -49,7 +50,8 @@ export const BottomNav = () => {
         if (user?.role === UserRole.INFLUENCER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
-                { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+                { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
+                { href: FRONTEND_ROUTES.DASHBOARD.SETTINGS, icon: Settings, label: 'Settings' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
