@@ -362,3 +362,64 @@
     transform: translateY(0);
   }
 }
+
+/* ─── Reduced Motion Support ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── GPU Acceleration Utilities ─── */
+@layer utilities {
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .smooth-transform {
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Remove will-change after animation completes */
+  .smooth-transform:not(:hover):not(:focus) {
+    will-change: auto;
+  }
+}
+
+/* ─── Performance Optimizations ─── */
+@layer base {
+  /* Optimize paint for fixed elements */
+  [data-fixed],
+  .fixed,
+  .sticky {
+    contain: layout style;
+  }
+
+  /* Optimize scrolling containers */
+  [data-scroll-container] {
+    overflow-anchor: none;
+    overscroll-behavior: contain;
+  }
+
+  /* Touch optimization for mobile */
+  @media (pointer: coarse) {
+    button,
+    a,
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}

@@ -80,7 +80,15 @@ export const adminService = {
     },
 
     recalculateAllScores: async (): Promise<any> => {
-        const response = await httpService.post<any>(`${API_CONFIG.baseUrl}/ranking/recalculate-all`);
+        const response = await httpService.post<any>('/ranking/recalculate-all');
+        return response.data;
+    },
+
+    /**
+     * Recalculate ranking for a specific influencer
+     */
+    recalculateInfluencerScore: async (influencerId: string): Promise<any> => {
+        const response = await httpService.post<any>(`/ranking/recalculate/${influencerId}`);
         return response.data;
     },
 

@@ -25,7 +25,7 @@ export function AdminStatCard({
     return (
         <motion.div
             whileHover={{ y: -4 }}
-            className="relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all hover:shadow-md"
+            className="relative overflow-hidden rounded-2xl border border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 p-6 shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
         >
             <div className="flex items-start justify-between">
                 <div>

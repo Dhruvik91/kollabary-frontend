@@ -20,7 +20,7 @@ export const CollaborationPartnerCard = ({
     isMessaging = false
 }: CollaborationPartnerCardProps) => {
     return (
-        <Card className="rounded-3xl border-border/50 shadow-sm overflow-hidden">
+        <Card className="rounded-3xl border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300 ease-out overflow-hidden">
             <CardHeader className="pb-3 text-center lg:text-left">
                 <CardTitle className="text-lg">Partner Details</CardTitle>
             </CardHeader>

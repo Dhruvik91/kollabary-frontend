@@ -69,7 +69,7 @@ export function ReportItem({ report, index, onUpdateStatus }: ReportItemProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ delay: index * 0.05 }}
-            className="group relative rounded-2xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/20"
+            className="group relative rounded-2xl border border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
         >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">

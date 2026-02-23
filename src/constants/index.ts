@@ -69,6 +69,9 @@ export const API_CONFIG = {
         },
         uploads: {
             base: '/uploads',
+        },
+        subscription: {
+            plans: '/subscription/plans',
         }
     }
 }

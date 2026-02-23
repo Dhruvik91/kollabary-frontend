@@ -47,10 +47,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="group overflow-hidden border-border bg-card/50 backdrop-blur-sm hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 rounded-[1.5rem] h-full flex flex-col">
+            <Card className="group overflow-hidden border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-300 ease-out rounded-[1.5rem] h-full flex flex-col will-change-transform">
                 <CardContent className="p-0 flex flex-col flex-1">
                     {/* Avatar & Cover Section */}
-                    <div className="relative h-32 bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
+                    <div className="relative h-32 bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
                         <div className="absolute -bottom-10 left-6">
                             <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
                                 {displayAvatar ? (

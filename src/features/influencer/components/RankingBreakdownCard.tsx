@@ -69,7 +69,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
     };
 
     return (
-        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
+        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 overflow-hidden", className)}>
             <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 bg-muted/30">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                         {/* Completed Collaborations */}
                         <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
                             <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
                                     <Award size={18} />
                                 </div>
                                 <div className="min-w-0">
@@ -166,7 +166,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-3">
+                            <div className="text-right shrink-0 ml-3">
                                 <p className="text-sm font-bold text-blue-500 whitespace-nowrap">
                                     {completedCollaborations.score}
                                 </p>
@@ -183,7 +183,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                         )}>
                             <div className="flex items-center gap-3 min-w-0">
                                 <div className={cn(
-                                    "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
                                     verificationBonus.isVerified
                                         ? "bg-emerald-500/10 text-emerald-500"
                                         : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground"
@@ -207,7 +207,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-3">
+                            <div className="text-right shrink-0 ml-3">
                                 <p className={cn(
                                     "text-sm font-bold whitespace-nowrap",
                                     verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"

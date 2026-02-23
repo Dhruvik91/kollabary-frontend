@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminService } from '@/services/admin.service';
+import { subscriptionService } from '@/services/subscription.service';
 import { toast } from 'sonner';
 
 /**
@@ -136,6 +137,29 @@ export function useRecalculateScores() {
 }
 
 /**
+ * Hook to recalculate a single influencer's score
+ */
+export function useRecalculateInfluencerScore() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (influencerId: string) => adminService.recalculateInfluencerScore(influencerId),
+        onSuccess: (data, influencerId) => {
+            queryClient.invalidateQueries({ queryKey: ['ranking', 'breakdown', influencerId] });
+            queryClient.invalidateQueries({ queryKey: ['influencer', 'detail', influencerId] });
+            toast.success('Influencer score recalculated', {
+                description: `New score: ${data.newScore}`,
+            });
+        },
+        onError: (error: any) => {
+            toast.error('Failed to recalculate score', {
+                description: error.message,
+            });
+        },
+    });
+}
+
+/**
  * Hook to create a new influencer account
  */
 export function useCreateInfluencer() {
@@ -146,6 +170,57 @@ export function useCreateInfluencer() {
         },
         onError: (error: any) => {
             toast.error('Failed to create influencer', {
+                description: error.response?.data?.message || error.message,
+            });
+        },
+    });
+}
+
+/**
+ * Hook to fetch subscription plans
+ */
+export function useAdminSubscriptionPlans() {
+    return useQuery({
+        queryKey: adminKeys.subscriptions(),
+        queryFn: () => subscriptionService.getPlans(),
+        staleTime: 5 * 60 * 1000,
+    });
+}
+
+/**
+ * Hook to create a subscription plan
+ */
+export function useCreateSubscriptionPlan() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: any) => adminService.createSubscriptionPlan(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.subscriptions() });
+            toast.success('Subscription plan created');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to create plan', {
+                description: error.response?.data?.message || error.message,
+            });
+        },
+    });
+}
+
+/**
+ * Hook to delete a subscription plan
+ */
+export function useDeleteSubscriptionPlan() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id: string) => adminService.deleteSubscriptionPlan(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.subscriptions() });
+            toast.success('Subscription plan deleted');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to delete plan', {
                 description: error.response?.data?.message || error.message,
             });
         },

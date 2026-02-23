@@ -20,7 +20,7 @@ export const CollaborationMainInfo = ({
     onUpdateProof
 }: CollaborationMainInfoProps) => {
     return (
-        <Card className="border-none shadow-xl bg-card/50 backdrop-blur-sm overflow-hidden border-t-4 border-t-primary">
+        <Card className="border border-border/40 shadow-xl bg-card/40 backdrop-blur-xl backdrop-saturate-150 overflow-hidden border-t-4 border-t-primary rounded-3xl">
             <CardHeader className="pb-4">
                 <div className="flex justify-between items-start mb-4">
                     <CollaborationStatusBadge status={collaboration.status} className="scale-110" />
