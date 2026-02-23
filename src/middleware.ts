@@ -78,8 +78,6 @@ export function middleware(request: NextRequest) {
         FRONTEND_ROUTES.DASHBOARD.PROJECTS,
         FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP,
         '/influencer/',
-        '/influencers',
-        '/influencers/',
     ];
 
     const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));

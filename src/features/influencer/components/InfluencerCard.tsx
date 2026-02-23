@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Users, Star, TrendingUp, MapPin, CheckCircle2, MessageSquare, Eye } from 'lucide-react';
+import { Star, MapPin, CheckCircle2, MessageSquare, Eye, Award } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
@@ -18,17 +18,8 @@ interface InfluencerCardProps {
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user: influencerUser, fullName, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id } = influencer;
+    const { user: influencerUser, fullName, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id, completedCollaborations } = influencer;
     const profile = influencerUser?.profile;
-
-    // Calculate total followers from all platforms
-    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
-
-    // Calculate average engagement rate from platforms
-    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
-    const engagementRate = platformsWithEngagement.length > 0
-        ? (platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length).toFixed(1)
-        : '0.0';
 
     const displayAvatar = avatarUrl || profile?.avatarUrl;
     const { user: currentUser } = useAuth();
@@ -113,19 +104,12 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="grid grid-cols-3 gap-2 py-4 border-y border-border/50 mt-auto">
                             <div className="space-y-1">
                                 <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <Users size={12} />
-                                    <span className="text-[10px] font-medium uppercase tracking-tight">Followers</span>
+                                    <Award size={12} className="text-primary" />
+                                    <span className="text-[10px] font-medium uppercase tracking-tight">Collabs</span>
                                 </div>
                                 <p className="text-sm font-bold">
-                                    {Intl.NumberFormat('en', { notation: 'compact' }).format(followersCount)}
+                                    {completedCollaborations ?? 0}
                                 </p>
-                            </div>
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <TrendingUp size={12} />
-                                    <span className="text-[10px] font-medium uppercase tracking-tight">Eng. Rate</span>
-                                </div>
-                                <p className="text-sm font-bold text-green-500">{engagementRate}%</p>
                             </div>
                             <div className="space-y-1">
                                 <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -134,28 +118,35 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <p className="text-sm font-bold">{avgRating}</p>
-                                    <span className="text-[10px] text-muted-foreground mr-1">({totalReviews})</span>
+                                    <span className="text-[10px] text-muted-foreground">({totalReviews})</span>
                                 </div>
+                            </div>
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-1.5 text-muted-foreground">
+                                    <MessageSquare size={12} className="text-primary" />
+                                    <span className="text-[10px] font-medium uppercase tracking-tight">Reviews</span>
+                                </div>
+                                <p className="text-sm font-bold">{totalReviews}</p>
                             </div>
                         </div>
 
                         {isBrand && (
                             <div className="flex gap-2">
                                 <Button
+                                    onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(id))}
+                                    className='flex-1 h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10'
+                                >
+                                    <Eye size={16} />
+                                    Details
+                                </Button>
+                                <Button
                                     onClick={handleMessage}
                                     disabled={isStartingChat}
+                                    variant="outline"
                                     className="flex-1 h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10"
                                 >
                                     <MessageSquare size={16} />
                                     Message
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => router.push(`/influencers/${id}`)}
-                                    className="h-11 px-4 rounded-xl font-bold gap-2 border-border/50"
-                                >
-                                    <Eye size={16} />
-                                    Details
                                 </Button>
                             </div>
                         )}

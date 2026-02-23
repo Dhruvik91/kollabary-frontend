@@ -34,6 +34,7 @@ export interface InfluencerProfile {
     totalReviews: number;
     rankingScore: number;
     rankingTier?: string;
+    completedCollaborations?: number;
     verified: boolean;
     createdAt: string;
     updatedAt: string;

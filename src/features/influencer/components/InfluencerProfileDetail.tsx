@@ -61,7 +61,7 @@ export const InfluencerProfileDetail = ({
     const { user } = useAuth();
     const router = useRouter();
 
-    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName } = influencer;
+    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName, completedCollaborations } = influencer;
 
 
     const collaborationTypes = influencer.collaborationTypes || [];
@@ -292,7 +292,7 @@ export const InfluencerProfileDetail = ({
                                         <Award size={14} />
                                     </div>
                                     <p className="text-xl sm:text-2xl font-black tabular-nums">
-                                        {ranking?.completedCollaborations?.count ?? 0}
+                                        {completedCollaborations ?? 0}
                                     </p>
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
                                 </div>
@@ -368,12 +368,12 @@ export const InfluencerProfileDetail = ({
                                 <p className="text-lg text-muted-foreground leading-relaxed">
                                     {displayBio || "This creator hasn't added a bio yet, but their work speaks for itself. They specialize in high-quality content that engages and inspires their community."}
                                 </p>
-                                {address && (
+                                {/* {address && (
                                     <div className="flex items-center gap-2 text-muted-foreground pt-2">
                                         <MapPin size={16} className="text-primary" />
                                         <span className="text-sm">{address}</span>
                                     </div>
-                                )}
+                                )} */}
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -387,7 +387,8 @@ export const InfluencerProfileDetail = ({
                                             collaborationTypes.map((type) => (
                                                 <Badge
                                                     key={type}
-                                                    className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold shadow-none capitalize"
+                                                    variant="outline"
+                                                    className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold shadow-none uppercase"
                                                 >
                                                     {formatCollaborationType(type)}
                                                 </Badge>
@@ -425,7 +426,9 @@ export const InfluencerProfileDetail = ({
                     </Card>
 
                     {/* Reviews Section */}
-                    <div className="pt-4">
+                    <div
+                        className="pt-4 max-h-[600px] overflow-y-auto scroll-smooth overscroll-contain [scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent] [&]:[-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/60 hover:[&::-webkit-scrollbar-thumb]:bg-border"
+                    >
                         <ReviewList
                             reviews={reviews}
                             isLoading={isReviewsLoading}
