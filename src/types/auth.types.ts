@@ -58,6 +58,11 @@ export interface ResetPasswordData {
     newPassword: string;
 }
 
+export interface ChangePasswordData {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export interface AuthError {
     message: string;
     statusCode?: number;

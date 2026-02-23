@@ -74,12 +74,10 @@ export function middleware(request: NextRequest) {
         FRONTEND_ROUTES.DASHBOARD.ANALYTICS,
         FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS,
         FRONTEND_ROUTES.DASHBOARD.EARNINGS,
-        FRONTEND_ROUTES.DASHBOARD.DISCOVER,
+        FRONTEND_ROUTES.DASHBOARD.INFLUENCERS,
         FRONTEND_ROUTES.DASHBOARD.PROJECTS,
         FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP,
         '/influencer/',
-        '/influencers',
-        '/influencers/',
     ];
 
     const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));

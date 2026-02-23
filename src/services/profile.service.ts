@@ -1,5 +1,6 @@
 import { API_CONFIG } from '@/constants';
 import httpService from '@/lib/http-service';
+import { ChangePasswordData } from '@/types/auth.types';
 
 export interface UserProfile {
     id: string;
@@ -22,6 +23,12 @@ export interface SaveProfileDto {
     profileImage?: string; // Kept for backward compatibility
     avatarUrl?: string;
     socialLinks?: Record<string, string>;
+}
+
+export interface SearchProfilesParams {
+    query?: string;
+    page?: number;
+    limit?: number;
 }
 
 export const profileService = {
@@ -63,16 +70,17 @@ export const profileService = {
     /**
      * Search profiles
      */
-    searchProfiles: async (params: any): Promise<any> => {
-        const response = await httpService.get<any>(API_CONFIG.path.profile.search, { params });
+    searchProfiles: async (params: SearchProfilesParams): Promise<UserProfile[]> => {
+        const response = await httpService.get<UserProfile[]>(API_CONFIG.path.profile.search, { params });
         return response.data;
     },
 
     /**
      * Update account password
      */
-    changePassword: async (data: any): Promise<{ message: string }> => {
-        const response = await httpService.patch<{ message: string }>(`${API_CONFIG.path.auth.logout.replace('/logout', '')}/change-password`, data);
+    changePassword: async (data: ChangePasswordData): Promise<{ message: string }> => {
+        const response = await httpService.patch<{ message: string }>(API_CONFIG.path.auth.changePassword, data);
         return response.data;
     }
 };
+

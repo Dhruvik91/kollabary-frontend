@@ -2,6 +2,8 @@ import httpService from '@/lib/http-service';
 import { API_CONFIG } from '@/constants';
 import {
     Collaboration,
+    CollaborationFilters,
+    PaginatedCollaborationsResponse,
     CreateCollaborationDto,
     UpdateCollaborationStatusDto,
     UpdateCollaborationDto
@@ -9,11 +11,18 @@ import {
 
 export const collaborationService = {
     /**
-     * Fetch all collaborations for the current user
+     * Fetch collaborations for the current user with optional filters and pagination
      */
-    getCollaborations: async () => {
-        const response = await httpService.get<Collaboration[]>(
-            API_CONFIG.path.collaboration.base
+    getCollaborations: async (filters?: CollaborationFilters): Promise<PaginatedCollaborationsResponse> => {
+        const params: Record<string, string | number> = {};
+        if (filters?.status) params.status = filters.status;
+        if (filters?.search) params.search = filters.search;
+        if (filters?.page) params.page = filters.page;
+        if (filters?.limit) params.limit = filters.limit;
+
+        const response = await httpService.get<PaginatedCollaborationsResponse>(
+            API_CONFIG.path.collaboration.base,
+            { params },
         );
         return response.data;
     },

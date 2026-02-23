@@ -69,12 +69,12 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
     };
 
     return (
-        <Card className={cn("rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
-            <CardHeader className="p-6 border-b border-border/50 bg-muted/30">
+        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
+            <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 bg-muted/30">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Trophy size={18} className="text-primary" />
-                        <h3 className="font-bold tracking-tight">Ranking Breakdown</h3>
+                        <Trophy size={16} className="text-primary sm:w-[18px] sm:h-[18px]" />
+                        <h3 className="font-bold tracking-tight text-sm sm:text-base">Ranking Breakdown</h3>
                     </div>
                     <div className={cn("px-3 py-1 rounded-full text-xs font-bold border", getScoreBg(totalScore))}>
                         {rankingTier}
@@ -82,11 +82,11 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                 </div>
             </CardHeader>
 
-            <CardContent className="p-8 space-y-8">
+            <CardContent className="p-5 sm:p-6 md:p-8 space-y-6 md:space-y-8">
                 {/* Main Score Display */}
-                <div className="flex flex-col items-center justify-center space-y-4 py-4">
+                <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4">
                     <div className="relative">
-                        <svg className="w-40 h-40 transform -rotate-90">
+                        <svg className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
                             <circle
                                 cx="80"
                                 cy="80"
@@ -155,19 +155,19 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                     <div className="grid grid-cols-1 gap-3">
                         {/* Completed Collaborations */}
                         <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                            <div className="flex items-center gap-3 min-w-0">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0">
                                     <Award size={18} />
                                 </div>
-                                <div>
-                                    <p className="text-sm font-bold">Completed Collaborations</p>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-bold truncate">Completed Collaborations</p>
                                     <p className="text-xs text-muted-foreground">
                                         {completedCollaborations.count} completed • 1 point each
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <p className="text-sm font-bold text-blue-500">
+                            <div className="text-right flex-shrink-0 ml-3">
+                                <p className="text-sm font-bold text-blue-500 whitespace-nowrap">
                                     {completedCollaborations.score}
                                 </p>
                                 <p className="text-xs text-muted-foreground">points</p>
@@ -177,47 +177,47 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                         {/* Verification Bonus */}
                         <div className={cn(
                             "flex items-center justify-between p-4 rounded-2xl border",
-                            verificationBonus.isVerified 
-                                ? "bg-emerald-500/5 border-emerald-500/10" 
+                            verificationBonus.isVerified
+                                ? "bg-emerald-500/5 border-emerald-500/10"
                                 : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
                         )}>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 min-w-0">
                                 <div className={cn(
-                                    "w-10 h-10 rounded-xl flex items-center justify-center",
-                                    verificationBonus.isVerified 
-                                        ? "bg-emerald-500/10 text-emerald-500" 
+                                    "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                                    verificationBonus.isVerified
+                                        ? "bg-emerald-500/10 text-emerald-500"
                                         : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground"
                                 )}>
                                     <CheckCircle2 size={18} />
                                 </div>
-                                <div>
+                                <div className="min-w-0">
                                     <p className={cn(
-                                        "text-sm font-bold",
+                                        "text-sm font-bold truncate",
                                         verificationBonus.isVerified && "text-emerald-500"
                                     )}>
                                         Verification Bonus
                                     </p>
                                     <p className={cn(
                                         "text-xs",
-                                        verificationBonus.isVerified 
-                                            ? "text-emerald-600/70" 
+                                        verificationBonus.isVerified
+                                            ? "text-emerald-600/70"
                                             : "text-muted-foreground"
                                     )}>
                                         {verificationBonus.isVerified ? 'Account verified' : 'Not verified'}
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right flex-shrink-0 ml-3">
                                 <p className={cn(
-                                    "text-sm font-bold",
+                                    "text-sm font-bold whitespace-nowrap",
                                     verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"
                                 )}>
                                     {verificationBonus.isVerified ? '+' : ''}{verificationBonus.score}/{verificationBonus.maxScore}
                                 </p>
                                 <p className={cn(
                                     "text-xs",
-                                    verificationBonus.isVerified 
-                                        ? "text-emerald-600/70" 
+                                    verificationBonus.isVerified
+                                        ? "text-emerald-600/70"
                                         : "text-muted-foreground"
                                 )}>
                                     bonus

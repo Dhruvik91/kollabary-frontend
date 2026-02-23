@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { loginSchema, LoginFormData } from '@/lib/validations/auth.validation';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,7 +61,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                     <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
                         <Link
-                            href="/auth/forgot-password"
+                            href={FRONTEND_ROUTES.AUTH.FORGOT_PASSWORD}
                             className="text-sm text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                             tabIndex={isLoading ? -1 : 0}
                         >
@@ -169,7 +170,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
             <p className="text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{' '}
                 <Link
-                    href="/auth/signup"
+                    href={FRONTEND_ROUTES.AUTH.SIGNUP}
                     className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >

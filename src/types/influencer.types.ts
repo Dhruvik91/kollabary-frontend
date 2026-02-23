@@ -34,6 +34,7 @@ export interface InfluencerProfile {
     totalReviews: number;
     rankingScore: number;
     rankingTier?: string;
+    completedCollaborations?: number;
     verified: boolean;
     createdAt: string;
     updatedAt: string;
@@ -45,6 +46,10 @@ export interface SearchInfluencersDto {
     search?: string;
     platform?: string;
     minFollowers?: number;
+    rankingTier?: string;
+    minRating?: number;
+    maxRating?: number;
+    verified?: boolean;
     page?: number;
     limit?: number;
 }

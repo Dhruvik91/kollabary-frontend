@@ -4,19 +4,21 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchema, ChangePasswordFormData } from '@/lib/validations/auth.validation';
-import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Lock, ShieldCheck } from 'lucide-react';
 
 interface PasswordUpdateFormProps {
-    onSuccess?: () => void;
+    onSubmit: (data: { currentPassword: string; newPassword: string }) => void;
+    isLoading: boolean;
 }
 
-export const PasswordUpdateForm = ({ onSuccess }: PasswordUpdateFormProps) => {
-    const { mutate: changePassword, isPending } = useChangePasswordMutation();
-
+/**
+ * Password Update Form (Dumb Component)
+ * Pure presentational form for changing account password
+ */
+export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormProps) => {
     const {
         register,
         handleSubmit,
@@ -31,84 +33,92 @@ export const PasswordUpdateForm = ({ onSuccess }: PasswordUpdateFormProps) => {
         },
     });
 
-    const onSubmit = (data: ChangePasswordFormData) => {
-        changePassword(
-            {
-                currentPassword: data.currentPassword,
-                newPassword: data.newPassword,
-            },
-            {
-                onSuccess: () => {
-                    reset();
-                    if (onSuccess) onSuccess();
-                },
-            }
-        );
+    const handleFormSubmit = (data: ChangePasswordFormData) => {
+        onSubmit({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+        });
+        reset();
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6" noValidate>
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="currentPassword">Current Password</Label>
                     <div className="relative">
-                        <Lock className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                        <Lock className="absolute left-3 top-3 text-muted-foreground" size={18} aria-hidden="true" />
                         <Input
                             id="currentPassword"
                             type="password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
+                            disabled={isLoading}
+                            aria-invalid={!!errors.currentPassword}
+                            aria-describedby={errors.currentPassword ? 'current-password-error' : undefined}
                             {...register('currentPassword')}
                         />
                     </div>
                     {errors.currentPassword && (
-                        <p className="text-sm text-destructive font-medium">{errors.currentPassword.message}</p>
+                        <p id="current-password-error" className="text-sm text-destructive font-medium" role="alert">
+                            {errors.currentPassword.message}
+                        </p>
                     )}
                 </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="newPassword">New Password</Label>
                     <div className="relative">
-                        <Lock className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                        <Lock className="absolute left-3 top-3 text-muted-foreground" size={18} aria-hidden="true" />
                         <Input
                             id="newPassword"
                             type="password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
+                            disabled={isLoading}
+                            aria-invalid={!!errors.newPassword}
+                            aria-describedby={errors.newPassword ? 'new-password-error' : undefined}
                             {...register('newPassword')}
                         />
                     </div>
                     {errors.newPassword && (
-                        <p className="text-sm text-destructive font-medium">{errors.newPassword.message}</p>
+                        <p id="new-password-error" className="text-sm text-destructive font-medium" role="alert">
+                            {errors.newPassword.message}
+                        </p>
                     )}
                 </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Confirm New Password</Label>
                     <div className="relative">
-                        <ShieldCheck className="absolute left-3 top-3 text-muted-foreground" size={18} />
+                        <ShieldCheck className="absolute left-3 top-3 text-muted-foreground" size={18} aria-hidden="true" />
                         <Input
                             id="confirmPassword"
                             type="password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
+                            disabled={isLoading}
+                            aria-invalid={!!errors.confirmPassword}
+                            aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
                             {...register('confirmPassword')}
                         />
                     </div>
                     {errors.confirmPassword && (
-                        <p className="text-sm text-destructive font-medium">{errors.confirmPassword.message}</p>
+                        <p id="confirm-password-error" className="text-sm text-destructive font-medium" role="alert">
+                            {errors.confirmPassword.message}
+                        </p>
                     )}
                 </div>
             </div>
 
             <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isLoading}
                 className="w-full h-12 rounded-2xl font-bold bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
             >
-                {isPending ? (
+                {isLoading ? (
                     <div className="flex items-center gap-2">
-                        <Loader2 className="animate-spin" size={18} />
+                        <Loader2 className="animate-spin" size={18} aria-hidden="true" />
                         Updating Password...
                     </div>
                 ) : (
@@ -118,3 +128,4 @@ export const PasswordUpdateForm = ({ onSuccess }: PasswordUpdateFormProps) => {
         </form>
     );
 };
+

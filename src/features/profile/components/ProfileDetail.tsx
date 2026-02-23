@@ -19,6 +19,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FRONTEND_ROUTES } from '@/constants';
 import { PasswordUpdateForm } from './PasswordUpdateForm';
+import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -28,6 +29,7 @@ interface ProfileDetailProps {
 export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) => {
     const { fullName, username, bio, location, socialLinks, profileImage, avatarUrl } = profile;
     const displayImage = avatarUrl || profileImage;
+    const changePasswordMutation = useChangePasswordMutation();
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-20">
@@ -163,7 +165,10 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                                 </p>
                             </div>
                             <div className="md:col-span-2 max-w-lg">
-                                <PasswordUpdateForm />
+                                <PasswordUpdateForm
+                                    onSubmit={(data) => changePasswordMutation.mutate(data)}
+                                    isLoading={changePasswordMutation.isPending}
+                                />
                             </div>
                         </div>
                     </Card>

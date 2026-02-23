@@ -71,7 +71,7 @@ export const DashboardOverviewContainer = () => {
                 </div>
 
                 {isInfluencer && (
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.DISCOVER}>
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
                         <Button className="h-14 px-8 rounded-2xl bg-primary text-primary-foreground font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all gap-2">
                             Explore Creators
                             <ArrowUpRight size={20} />

@@ -56,6 +56,10 @@ export const InfluencerDiscoverContainer = () => {
             niche: '',
             platform: '',
             minFollowers: undefined,
+            rankingTier: '',
+            minRating: undefined,
+            maxRating: undefined,
+            verified: undefined,
         });
     };
 
@@ -67,24 +71,25 @@ export const InfluencerDiscoverContainer = () => {
     }
 
     return (
-        <div className="space-y-8 pb-20 px-4 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Header Section */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                <div className="space-y-4">
+            <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 sm:gap-6">
+                <div className="space-y-3 sm:space-y-4">
                     <DiscoverHeader />
 
                     {/* Mobile Filter Trigger */}
-                    <div className="lg:hidden flex items-center gap-3">
+                    <div className="xl:hidden flex items-center gap-2 sm:gap-3">
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="flex-1 h-14 rounded-3xl border-border/50 bg-background/50 backdrop-blur-xl font-bold flex items-center justify-center gap-3 shadow-xl shadow-black/5"
+                                    className="flex-1 h-12 sm:h-14 rounded-2xl sm:rounded-3xl border-border/50 bg-background/50 backdrop-blur-xl font-bold flex items-center justify-center gap-2 sm:gap-3 shadow-xl shadow-black/5 text-sm sm:text-base"
                                 >
-                                    <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                        <Filter size={18} />
+                                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                                        <Filter size={16} className="sm:w-[18px] sm:h-[18px]" />
                                     </div>
-                                    Filter & Search
+                                    <span className="hidden xs:inline">Filter & Search</span>
+                                    <span className="xs:hidden">Filters</span>
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="bottom" className="h-[85vh] rounded-t-[3.5rem] p-0 border-t border-border/50 bg-background/80 backdrop-blur-2xl">
@@ -111,15 +116,15 @@ export const InfluencerDiscoverContainer = () => {
                     </div>
                 </div>
 
-                <div className="hidden lg:block">
+                <div className="hidden xl:block">
                     <DiscoverNetworkStats total={totalCount} />
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 md:gap-8">
                 {/* Fixed Side Filters for Large Screens */}
-                <div className="hidden lg:block lg:col-span-1 space-y-6">
-                    <div className="sticky top-24">
+                <div className="hidden xl:block xl:col-span-1 space-y-4 md:space-y-6">
+                    <div className="sticky top-20 md:top-24">
                         <InfluencerFilters
                             filters={filters}
                             onFilterChange={handleFilterChange}
@@ -129,7 +134,7 @@ export const InfluencerDiscoverContainer = () => {
                 </div>
 
                 {/* Main Content Grid */}
-                <div className="lg:col-span-3">
+                <div className="xl:col-span-3">
                     {isLoading ? (
                         <DiscoverLoadingState />
                     ) : isError ? (

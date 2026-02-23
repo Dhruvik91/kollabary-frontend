@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { AuthGuard } from '@/components/guards/AuthGuard';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
@@ -14,12 +15,13 @@ export default function DashboardClientLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathName = usePathname();
 
     const isSetupPage = pathName === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP ||
         pathName === FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
+
+    const isMessagesPage = pathName === FRONTEND_ROUTES.DASHBOARD.MESSAGES;
 
     return (
         <AuthGuard>
@@ -28,8 +30,6 @@ export default function DashboardClientLayout({
                     <Sidebar
                         isCollapsed={isCollapsed}
                         onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-                        isMobileOpen={isMobileSidebarOpen}
-                        onMobileClose={() => setIsMobileSidebarOpen(false)}
                     />
                     <div
                         className={cn(
@@ -37,13 +37,14 @@ export default function DashboardClientLayout({
                             isCollapsed ? "lg:pl-20" : "lg:pl-64"
                         )}
                     >
-                        <DashboardHeader onMenuClick={() => setIsMobileSidebarOpen(true)} />
+                        <DashboardHeader />
                         <main className={cn(
                             "flex-1 min-h-0",
-                            pathName !== FRONTEND_ROUTES.DASHBOARD.MESSAGES ? 'p-4 md:p-8 lg:p-10 overflow-y-auto' : 'overflow-hidden h-full'
+                            !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-8 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                         )}>
                             {children}
                         </main>
+                        <BottomNav />
                     </div>
                 </div>
             ) : (
@@ -52,8 +53,6 @@ export default function DashboardClientLayout({
                         <Sidebar
                             isCollapsed={isCollapsed}
                             onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-                            isMobileOpen={isMobileSidebarOpen}
-                            onMobileClose={() => setIsMobileSidebarOpen(false)}
                         />
                         <div
                             className={cn(
@@ -61,13 +60,14 @@ export default function DashboardClientLayout({
                                 isCollapsed ? "lg:pl-20" : "lg:pl-64"
                             )}
                         >
-                            <DashboardHeader onMenuClick={() => setIsMobileSidebarOpen(true)} />
+                            <DashboardHeader />
                             <main className={cn(
                                 "flex-1 min-h-0",
-                                pathName !== FRONTEND_ROUTES.DASHBOARD.MESSAGES ? 'p-4 md:p-8 lg:p-10 overflow-y-auto' : 'overflow-hidden h-full'
+                                !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-8 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                             )}>
                                 {children}
                             </main>
+                            <BottomNav />
                         </div>
                     </div>
                 </ProfileSetupGuard>
@@ -75,3 +75,4 @@ export default function DashboardClientLayout({
         </AuthGuard>
     );
 }
+
