@@ -3,22 +3,27 @@
 import { useAuth } from '@/contexts/auth-context';
 import {
     Loader2,
-    User,
     Shield,
     CheckCircle2,
-    Calendar,
     TrendingUp,
-    Zap,
     Star,
     Trophy,
-    ArrowUpRight
+    ArrowUpRight,
+    Briefcase,
+    Clock,
+    Handshake,
+    Search,
+    MessageSquare,
+    FolderOpen,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MetricCard } from '../components/MetricCard';
 import { AccountDetailCard } from '../components/AccountDetailCard';
 import { UserRole } from '@/types/auth.types';
+import { CollaborationStatus } from '@/types/collaboration.types';
 import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { useRankingBreakdown } from '@/hooks/queries/useRanking';
+import { useCollaborations } from '@/hooks/use-collaboration.hooks';
 import { RankingScoreCard } from '@/features/influencer/components/RankingScoreCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,11 +34,30 @@ export const DashboardOverviewContainer = () => {
     const { user, isLoading: isAuthLoading } = useAuth();
 
     const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const isUser = user?.role === UserRole.USER;
 
     const { data: profile, isLoading: isProfileLoading } = useMyInfluencerProfile(isInfluencer);
     const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(user?.id || '', isInfluencer);
 
-    const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading));
+    // Collaboration data for USER role
+    const { data: allCollabs, isLoading: isAllCollabsLoading } = useCollaborations(isUser ? {} : undefined, isUser);
+    const { data: activeCollabs, isLoading: isActiveCollabsLoading } = useCollaborations(
+        isUser ? { status: CollaborationStatus.IN_PROGRESS } : undefined, isUser
+    );
+    const { data: completedCollabs, isLoading: isCompletedCollabsLoading } = useCollaborations(
+        isUser ? { status: CollaborationStatus.COMPLETED } : undefined, isUser
+    );
+    const { data: pendingCollabs, isLoading: isPendingCollabsLoading } = useCollaborations(
+        isUser ? { status: CollaborationStatus.REQUESTED } : undefined, isUser
+    );
+
+    const totalCollabs = allCollabs?.pages?.[0]?.meta?.total ?? 0;
+    const activeCount = activeCollabs?.pages?.[0]?.meta?.total ?? 0;
+    const completedCount = completedCollabs?.pages?.[0]?.meta?.total ?? 0;
+    const pendingCount = pendingCollabs?.pages?.[0]?.meta?.total ?? 0;
+
+    const isUserCollabsLoading = isUser && (isAllCollabsLoading || isActiveCollabsLoading || isCompletedCollabsLoading || isPendingCollabsLoading);
+    const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading;
 
     if (isLoading) {
         return (
@@ -43,6 +67,33 @@ export const DashboardOverviewContainer = () => {
             </div>
         );
     }
+
+    const quickActions = [
+        {
+            label: 'Explore Creators',
+            description: 'Discover talented influencers to collaborate with',
+            href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS,
+            icon: Search,
+            color: 'text-purple-500',
+            bgColor: 'bg-purple-500/10',
+        },
+        {
+            label: 'My Collaborations',
+            description: 'Manage and track all your collaboration projects',
+            href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS,
+            icon: FolderOpen,
+            color: 'text-blue-500',
+            bgColor: 'bg-blue-500/10',
+        },
+        {
+            label: 'Messages',
+            description: 'Chat with creators and manage conversations',
+            href: FRONTEND_ROUTES.DASHBOARD.MESSAGES,
+            icon: MessageSquare,
+            color: 'text-emerald-500',
+            bgColor: 'bg-emerald-500/10',
+        },
+    ];
 
     return (
         <div className="space-y-8 md:space-y-12 max-w-7xl mx-auto pb-20">
@@ -66,11 +117,11 @@ export const DashboardOverviewContainer = () => {
                     <p className="text-lg text-muted-foreground max-w-2xl">
                         {isInfluencer
                             ? "Track your influence, manage collaborations, and grow your creator brand."
-                            : "Manage your account settings and explore the Kollabary network."}
+                            : "Discover creators, manage collaborations, and grow your brand."}
                     </p>
                 </div>
 
-                {isInfluencer && (
+                {!isInfluencer && (
                     <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
                         <Button className="h-14 px-8 rounded-2xl bg-primary text-primary-foreground font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all gap-2">
                             Explore Creators
@@ -109,7 +160,7 @@ export const DashboardOverviewContainer = () => {
                             <MetricCard
                                 label="Total Reach"
                                 value={Intl.NumberFormat('en', { notation: 'compact' }).format(
-                                    profile?.platforms 
+                                    profile?.platforms
                                         ? Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0)
                                         : 0
                                 )}
@@ -142,17 +193,71 @@ export const DashboardOverviewContainer = () => {
                     </div>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <MetricCard label="Role" value={user?.role || ''} icon={Shield} color="text-blue-500" />
-                    <MetricCard label="Status" value={user?.status || ''} icon={CheckCircle2} color="text-emerald-500" />
-                    <MetricCard label="Verified" value={user?.emailVerified ? 'Yes' : 'No'} icon={User} color="text-purple-500" />
-                    <MetricCard label="Joined" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''} icon={Calendar} color="text-amber-500" />
+                <div className="space-y-8">
+                    {/* USER Metrics Bento Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <MetricCard
+                            label="Total Collaborations"
+                            value={totalCollabs}
+                            icon={Briefcase}
+                            color="text-blue-500"
+                            subtitle="All-time collaboration requests"
+                        />
+                        <MetricCard
+                            label="Active Projects"
+                            value={activeCount}
+                            icon={Handshake}
+                            color="text-emerald-500"
+                            subtitle="Currently in progress"
+                        />
+                        <MetricCard
+                            label="Completed"
+                            value={completedCount}
+                            icon={CheckCircle2}
+                            color="text-purple-500"
+                            subtitle="Successfully finished"
+                        />
+                        <MetricCard
+                            label="Pending Requests"
+                            value={pendingCount}
+                            icon={Clock}
+                            color="text-amber-500"
+                            subtitle="Awaiting creator response"
+                        />
+                    </div>
+
+                    {/* Quick Actions Card */}
+                    <Card className="rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden">
+                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                            <h3 className="font-bold tracking-tight">Quick Actions</h3>
+                            <p className="text-sm text-muted-foreground mt-1">Jump right into what matters most</p>
+                        </div>
+                        <CardContent className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {quickActions.map((action) => (
+                                    <Link key={action.href} href={action.href}>
+                                        <motion.div
+                                            whileHover={{ y: -4, scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            className="group p-5 rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 cursor-pointer"
+                                        >
+                                            <div className={`w-11 h-11 rounded-xl ${action.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                                                <action.icon size={20} className={action.color} />
+                                            </div>
+                                            <h4 className="font-bold text-sm tracking-tight mb-1">{action.label}</h4>
+                                            <p className="text-xs text-muted-foreground leading-relaxed">{action.description}</p>
+                                        </motion.div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             )}
 
-            <div className="pt-8 border-t border-border/50">
+            {/* <div className="pt-8 border-t border-border/50">
                 <AccountDetailCard email={user?.email} id={user?.id} />
-            </div>
+            </div> */}
         </div>
     );
 };

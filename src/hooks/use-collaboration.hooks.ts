@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 /**
  * Hook to fetch collaborations with infinite scroll and optional filters
  */
-export const useCollaborations = (filters?: Omit<CollaborationFilters, 'page'>) => {
+export const useCollaborations = (filters?: Omit<CollaborationFilters, 'page'>, enabled = true) => {
     return useInfiniteQuery({
         queryKey: ['collaborations', filters],
         queryFn: ({ pageParam = 1 }) =>
@@ -23,6 +23,7 @@ export const useCollaborations = (filters?: Omit<CollaborationFilters, 'page'>) 
             return undefined;
         },
         initialPageParam: 1,
+        enabled,
     });
 };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
     Award,
@@ -61,13 +62,13 @@ export const RankingGuideCard = ({ guideData, className }: RankingGuideCardProps
         return 'from-emerald-500/20 to-green-500/10 border-emerald-500/30';
     };
 
-    const getTierIcon = (tierName: string) => {
-        if (tierName.includes('Icon')) return '👑';
-        if (tierName.includes('Elite')) return '⭐';
-        if (tierName.includes('Pro')) return '💎';
-        if (tierName.includes('Trusted')) return '🏆';
-        if (tierName.includes('Emerging')) return '🌟';
-        return '🚀';
+    const getTierBadge = (tierName: string): string => {
+        if (tierName.includes('Icon')) return '/badges/kollabary_icon.png';
+        if (tierName.includes('Elite')) return '/badges/elite_creator.png';
+        if (tierName.includes('Pro')) return '/badges/pro_influencer.png';
+        if (tierName.includes('Trusted')) return '/badges/trusted_collaborator.png';
+        if (tierName.includes('Emerging')) return '/badges/emerging_partner.png';
+        return '/badges/rising_creator.png';
     };
 
     const getMetricIcon = (key: string) => {
@@ -154,7 +155,13 @@ export const RankingGuideCard = ({ guideData, className }: RankingGuideCardProps
                                 )}
                             >
                                 <div className="flex items-center gap-3 mb-3">
-                                    <span className="text-3xl">{getTierIcon(tier.name)}</span>
+                                    <Image
+                                        src={getTierBadge(tier.name)}
+                                        alt={`${tier.name} badge`}
+                                        width={44}
+                                        height={44}
+                                        className="shrink-0 drop-shadow-md"
+                                    />
                                     <div className="flex-1">
                                         <h4 className="font-bold text-sm">{tier.name}</h4>
                                         <p className="text-xs text-muted-foreground line-clamp-1">
@@ -215,7 +222,7 @@ export const RankingGuideCard = ({ guideData, className }: RankingGuideCardProps
                                         )}
                                     </div>
                                 </div>
-                                
+
                                 <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{metric.description}</p>
 
                                 <div className="p-2 rounded-lg bg-background/50 border border-border/30">
