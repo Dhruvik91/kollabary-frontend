@@ -27,6 +27,7 @@ export function ResetPasswordContainer({ token }: ResetPasswordContainerProps) {
             onSubmit={handleSubmit}
             isLoading={resetPasswordMutation.isPending}
             error={resetPasswordMutation.error?.message}
+            success={resetPasswordMutation.isSuccess}
         />
     );
 }

@@ -8,6 +8,7 @@ export const API_CONFIG = {
             me: '/user-auth/me',
             forgotPassword: '/user-auth/forgot-password',
             resetPassword: '/user-auth/reset-password',
+            changePassword: '/user-auth/change-password',
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
             createInfluencer: '/user-auth/admin/create-influencer',

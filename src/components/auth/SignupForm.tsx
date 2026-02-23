@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signupSchema, SignupFormData } from '@/lib/validations/auth.validation';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -240,7 +241,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth }: SignupF
             <p className="text-center text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <Link
-                    href="/auth/login"
+                    href={FRONTEND_ROUTES.AUTH.LOGIN}
                     className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >

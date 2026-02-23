@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
+import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import {
     Select,
     SelectContent,
@@ -59,6 +60,7 @@ export const InfluencerSettingsView = ({
 }: InfluencerSettingsViewProps) => {
     const updateInfluencer = useUpdateInfluencerProfile();
     const verificationMutation = useSubmitVerification();
+    const changePasswordMutation = useChangePasswordMutation();
 
     const currentVerification = (verificationRequests as any[])?.[0];
     const { availability, verified } = influencer;
@@ -334,7 +336,10 @@ export const InfluencerSettingsView = ({
                         </div>
                         <CardContent className="p-6">
                             <div className="max-w-lg">
-                                <PasswordUpdateForm />
+                                <PasswordUpdateForm
+                                    onSubmit={(data) => changePasswordMutation.mutate(data)}
+                                    isLoading={changePasswordMutation.isPending}
+                                />
                             </div>
                         </CardContent>
                     </Card>

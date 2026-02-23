@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { forgotPasswordSchema, ForgotPasswordFormData } from '@/lib/validations/auth.validation';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -39,7 +40,7 @@ export function ForgotPasswordForm({ onSubmit, isLoading, success }: ForgotPassw
                     </AlertDescription>
                 </Alert>
 
-                <Link href="/auth/login">
+                <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
                     <Button variant="outline" className="w-full">
                         <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
                         Back to login
@@ -94,7 +95,7 @@ export function ForgotPasswordForm({ onSubmit, isLoading, success }: ForgotPassw
                 </Button>
 
                 {/* Back to Login Link */}
-                <Link href="/auth/login">
+                <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
                     <Button variant="ghost" className="w-full" type="button" disabled={isLoading}>
                         <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
                         Back to login

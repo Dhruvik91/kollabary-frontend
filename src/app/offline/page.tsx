@@ -1,3 +1,5 @@
+'use client';
+
 import { WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -9,7 +11,7 @@ export default function OfflinePage() {
         <div className="w-20 h-20 mx-auto rounded-full bg-muted flex items-center justify-center">
           <WifiOff size={40} className="text-muted-foreground" />
         </div>
-        
+
         <div className="space-y-2">
           <h1 className="text-3xl font-black tracking-tight">You're Offline</h1>
           <p className="text-muted-foreground">
@@ -24,7 +26,7 @@ export default function OfflinePage() {
           >
             Try Again
           </Button>
-          
+
           <Button
             variant="outline"
             asChild

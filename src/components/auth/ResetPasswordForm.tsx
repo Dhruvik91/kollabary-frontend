@@ -3,24 +3,27 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordSchema, ResetPasswordFormData } from '@/lib/validations/auth.validation';
+import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 interface ResetPasswordFormProps {
     onSubmit: (data: ResetPasswordFormData) => void;
     isLoading: boolean;
     error?: string;
+    success?: boolean;
 }
 
 /**
  * Reset Password Form Component (Dumb Component)
  * Pure presentational component for resetting password with token
  */
-export function ResetPasswordForm({ onSubmit, isLoading, error }: ResetPasswordFormProps) {
+export function ResetPasswordForm({ onSubmit, isLoading, error, success }: ResetPasswordFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const {
@@ -52,6 +55,26 @@ export function ResetPasswordForm({ onSubmit, isLoading, error }: ResetPasswordF
     };
 
     const passwordStrength = getPasswordStrength(newPassword);
+
+    if (success) {
+        return (
+            <div className="space-y-6">
+                <Alert className="border-green-500 bg-green-50 dark:bg-green-950">
+                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    <AlertDescription className="text-green-800 dark:text-green-200">
+                        Your password has been reset successfully. You can now sign in with your new password.
+                    </AlertDescription>
+                </Alert>
+
+                <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
+                    <Button variant="outline" className="w-full">
+                        <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+                        Back to login
+                    </Button>
+                </Link>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
