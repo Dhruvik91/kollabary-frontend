@@ -41,7 +41,7 @@ export const BottomNav = () => {
         if (user?.role === UserRole.USER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
-                { href: FRONTEND_ROUTES.DASHBOARD.DISCOVER, icon: Rocket, label: 'Discover' },
+                { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Influencers' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];

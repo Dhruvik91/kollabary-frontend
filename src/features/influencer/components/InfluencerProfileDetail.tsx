@@ -130,7 +130,7 @@ export const InfluencerProfileDetail = ({
             {/* Back Button */}
             {!isOwner ? (
                 <Link
-                    href={FRONTEND_ROUTES.DASHBOARD.DISCOVER}
+                    href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}
                     className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -149,109 +149,121 @@ export const InfluencerProfileDetail = ({
             {/* Profile Header */}
             <div className="relative">
                 {/* Banner */}
-                <div className="h-64 rounded-[3rem] bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-border/50 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20" />
+                <div className="h-44 sm:h-56 md:h-64 rounded-[2rem] sm:rounded-[3rem] bg-linear-to-r from-primary/12 via-primary/6 to-transparent border border-border/50 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary)/0.18),transparent_55%),radial-gradient(circle_at_80%_10%,hsl(var(--primary)/0.12),transparent_45%)]" />
+                    <div className="absolute inset-0 opacity-15 mask-[radial-gradient(circle_at_center,black,transparent_70%)] bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-size-[44px_44px]" />
                 </div>
 
                 {/* Profile Info Overlay */}
-                <div className="px-4 sm:px-8 -mt-24 relative z-10 flex flex-col md:flex-row md:items-end gap-6 md:gap-8">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden border-4 sm:border-6 md:border-8 border-background shadow-2xl"
-                    >
-                        {displayAvatar ? (
-                            <Image
-                                src={displayAvatar}
-                                alt={profile?.fullName || 'Influencer'}
-                                fill
-                                className="object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-5xl font-bold">
-                                {profile?.fullName?.charAt(0) || '?'}
-                            </div>
-                        )}
-                    </motion.div>
+                <div className="px-4 sm:px-8 -mt-16 sm:-mt-20 md:-mt-24 relative z-10">
+                    <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-border/50 bg-card/40 backdrop-blur-xl shadow-xl shadow-black/5 p-4 sm:p-6 md:p-8">
+                        <div className="flex flex-col md:flex-row md:items-end gap-4 sm:gap-6 md:gap-8">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.35, ease: 'easeOut' }}
+                                className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden ring-4 ring-background shadow-2xl"
+                            >
+                                {displayAvatar ? (
+                                    <Image
+                                        src={displayAvatar}
+                                        alt={profile?.fullName || fullName || 'Influencer'}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-3xl sm:text-4xl font-black">
+                                        {(profile?.fullName || fullName || '?')?.charAt(0)}
+                                    </div>
+                                )}
+                            </motion.div>
 
-                    <div className="flex-1 min-w-0 pb-4 space-y-3 md:space-y-4">
-                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight truncate max-w-[280px] sm:max-w-none">{profile?.fullName}</h1>
-                            {(ranking?.rankingTier || influencer.rankingTier) && (
-                                <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
-                            )}
-                            {verified && (
-                                <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-blue-500/20">
-                                    <CheckCircle2 size={14} />
-                                    Verified Creator
+                            <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight truncate">
+                                            {profile?.fullName || fullName || 'Creator'}
+                                        </h1>
+                                        {(ranking?.rankingTier || influencer.rankingTier) && (
+                                            <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        {verified && (
+                                            <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border border-blue-500/20">
+                                                <CheckCircle2 size={14} />
+                                                Verified Creator
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-full border border-border/50">
+                                            <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            )}
 
-                            {/* Read-only availability badge */}
-                            <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full border border-border/50">
-                                <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                <span className="text-xs font-bold uppercase tracking-wider">{availability}</span>
+                                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-muted-foreground">
+                                    {profile?.location && (
+                                        <div className="flex items-center gap-2">
+                                            <MapPin size={16} className="text-primary" />
+                                            <span className="text-sm truncate">{profile.location}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex items-center gap-2">
+                                        <Briefcase size={16} className="text-primary" />
+                                        <span className="text-sm truncate">{niche}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="w-full md:w-auto flex items-center gap-3 sm:gap-4">
+                                {isOwner ? (
+                                    <>
+                                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT} className="flex-1 md:flex-none">
+                                            <Button className="w-full md:w-auto px-5 sm:px-6 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                                                <AlignLeft size={18} />
+                                                Edit Profile
+                                            </Button>
+                                        </Link>
+                                        <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                            <Button
+                                                variant="outline"
+                                                className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-muted transition-colors flex items-center justify-center"
+                                            >
+                                                <Settings size={18} />
+                                            </Button>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => setIsReportModalOpen(true)}
+                                            className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-colors flex items-center justify-center"
+                                            title="Report Influencer"
+                                        >
+                                            <Flag size={18} />
+                                        </Button>
+                                        <Button
+                                            className="flex-1 md:flex-none px-5 sm:px-6 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                                            disabled={isStartingChat}
+                                            onClick={() => {
+                                                startConversation(influencerUser.id, {
+                                                    onSuccess: (conversation) => {
+                                                        router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+                                                    },
+                                                });
+                                            }}
+                                        >
+                                            <MessageCircle size={18} />
+                                            {isStartingChat ? 'Connecting...' : 'Contact'}
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </div>
-
-                        <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                                <span className="font-bold text-foreground">{fullName}</span>
-                            </div>
-                            {profile?.location && (
-                                <div className="flex items-center gap-2">
-                                    <MapPin size={18} className="text-primary" />
-                                    <span>{profile.location}</span>
-                                </div>
-                            )}
-                            <div className="flex items-center gap-2">
-                                <Briefcase size={18} className="text-primary" />
-                                <span>{niche}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="pb-4 flex gap-4">
-                        {isOwner ? (
-                            <>
-                                <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT}>
-                                    <Button className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                                        <AlignLeft size={20} />
-                                        Edit Profile
-                                    </Button>
-                                </Link>
-                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
-                                    <Button variant="outline" className="h-14 w-14 rounded-2xl border-border/50 hover:bg-muted transition-all flex items-center justify-center">
-                                        <Settings size={20} />
-                                    </Button>
-                                </Link>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setIsReportModalOpen(true)}
-                                    className="w-14 h-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-all flex items-center justify-center group"
-                                    title="Report Influencer"
-                                >
-                                    <Flag size={20} className="group-hover:fill-destructive transition-colors" />
-                                </Button>
-                                <Button
-                                    className="px-8 h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
-                                    disabled={isStartingChat}
-                                    onClick={() => {
-                                        startConversation(influencerUser.id, {
-                                            onSuccess: (conversation) => {
-                                                router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
-                                            }
-                                        });
-                                    }}
-                                >
-                                    <MessageCircle size={20} />
-                                    {isStartingChat ? 'Connecting...' : 'Contact'}
-                                </Button>
-                            </>
-                        )}
                     </div>
                 </div>
             </div>

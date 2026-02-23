@@ -90,7 +90,7 @@ export const FRONTEND_ROUTES = {
         ANALYTICS: '/analytics',
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
-        DISCOVER: '/discover',
+        INFLUENCERS: '/influencers',
         PROJECTS: '/projects',
         OVERVIEW: '/overview',
         INFLUENCER_SETUP: '/influencer/setup',

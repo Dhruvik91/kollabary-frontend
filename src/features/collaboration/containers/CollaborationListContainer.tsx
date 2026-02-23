@@ -84,7 +84,7 @@ export const CollaborationListContainer = () => {
                             Clear Filters
                         </Button>
                     ) : (
-                        <Button className="rounded-full px-8" onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.DISCOVER)}>
+                        <Button className="rounded-full px-8" onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCERS)}>
                             <Plus size={18} className="mr-2" />
                             Find Partners
                         </Button>

@@ -103,7 +103,7 @@ export const Sidebar = ({
     const commonLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
-        { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages', badge: '3' },
+        { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
     ];
 
     const adminLinks = [
@@ -114,20 +114,15 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
     ];
 
-    const influencerLinks = [
-        { href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS, icon: Briefcase, label: 'Campaigns' },
-        { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: BarChart3, label: 'Earnings' },
-    ];
 
     const brandLinks = [
-        { href: FRONTEND_ROUTES.DASHBOARD.DISCOVER, icon: Rocket, label: 'Discover' },
-        { href: FRONTEND_ROUTES.DASHBOARD.PROJECTS, icon: Briefcase, label: 'My Projects' },
+        { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Influencers' },
     ];
 
     const getLinksByRole = () => {
         switch (user?.role) {
             case UserRole.ADMIN: return [...commonLinks, ...adminLinks];
-            case UserRole.INFLUENCER: return [...commonLinks, ...influencerLinks];
+            case UserRole.INFLUENCER: return [...commonLinks];
             case UserRole.USER: return [...commonLinks, ...brandLinks];
             default: return commonLinks;
         }
