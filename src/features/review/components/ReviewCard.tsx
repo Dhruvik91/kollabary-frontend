@@ -37,10 +37,6 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
     return (
         <Card className={cn("group border-border/50 bg-card/30 backdrop-blur-xl rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500", className)}>
             <CardContent className="p-6 relative">
-                <div className="absolute top-4 right-4 opacity-10 text-primary group-hover:scale-110 transition-transform duration-500">
-                    <Quote size={40} />
-                </div>
-
                 <div className="flex items-start gap-4">
                     <Avatar className="h-12 w-12 border-2 border-background shadow-lg">
                         <AvatarImage src={review.reviewer.profile?.avatarUrl} />

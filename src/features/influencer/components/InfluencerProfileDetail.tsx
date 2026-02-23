@@ -426,9 +426,7 @@ export const InfluencerProfileDetail = ({
                     </Card>
 
                     {/* Reviews Section */}
-                    <div
-                        className="pt-4 max-h-[600px] overflow-y-auto scroll-smooth overscroll-contain [scrollbar-width:thin] [scrollbar-color:hsl(var(--border))_transparent] [&]:[-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/60 hover:[&::-webkit-scrollbar-thumb]:bg-border"
-                    >
+                    <div className="">
                         <ReviewList
                             reviews={reviews}
                             isLoading={isReviewsLoading}

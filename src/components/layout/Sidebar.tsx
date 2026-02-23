@@ -224,12 +224,16 @@ export const Sidebar = ({
                                         Profile
                                     </div>
                                 </Link>
-                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
-                                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
-                                        <Settings size={18} className="text-muted-foreground" />
-                                        Settings
-                                    </div>
-                                </Link>
+                                {
+                                    user.role === UserRole.INFLUENCER && (
+                                        <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                            <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
+                                                <Settings size={18} className="text-muted-foreground" />
+                                                Settings
+                                            </div>
+                                        </Link>
+                                    )
+                                }
                                 <div className="h-px bg-border/50 my-1 mx-1" />
                                 <button
                                     onClick={() => setIsLogoutModalOpen(true)}
