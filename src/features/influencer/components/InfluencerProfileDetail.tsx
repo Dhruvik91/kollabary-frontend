@@ -6,9 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
-    Users,
     Star,
-    TrendingUp,
     MapPin,
     CheckCircle2,
     Instagram,
@@ -23,6 +21,7 @@ import {
     AlignLeft,
     ArrowLeft,
     Settings,
+    Award,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -64,14 +63,7 @@ export const InfluencerProfileDetail = ({
 
     const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName } = influencer;
 
-    // Calculate total followers from all platforms
-    const followersCount = Object.values(platforms || {}).reduce((sum: number, platform: any) => sum + (platform.followers || 0), 0);
 
-    // Calculate average engagement rate from platforms
-    const platformsWithEngagement = Object.values(platforms || {}).filter((p: any) => p.engagementRate);
-    const avgEngagementRate = platformsWithEngagement.length > 0
-        ? platformsWithEngagement.reduce((sum: number, p: any) => sum + (p.engagementRate || 0), 0) / platformsWithEngagement.length
-        : 0;
     const collaborationTypes = influencer.collaborationTypes || [];
     const profile = influencerUser?.profile;
     const displayBio = bio || profile?.bio;
@@ -180,13 +172,10 @@ export const InfluencerProfileDetail = ({
 
                             <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
                                 <div className="flex flex-col gap-2">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight truncate">
+                                    <div className="flex items-center gap-3">
+                                        <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight truncate min-w-0">
                                             {profile?.fullName || fullName || 'Creator'}
                                         </h1>
-                                        {(ranking?.rankingTier || influencer.rankingTier) && (
-                                            <RankTierBadge tier={ranking?.rankingTier || influencer.rankingTier} size="lg" />
-                                        )}
                                     </div>
 
                                     <div className="flex flex-wrap items-center gap-2">
@@ -271,47 +260,64 @@ export const InfluencerProfileDetail = ({
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
                 {/* Left Column: Stats & Socials */}
                 <div className="xl:col-span-1 space-y-6 md:space-y-8">
-                    {/* Stats Card */}
+                    {/* Creator Stats Card */}
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
                         <div className="p-6 border-b border-border/50 bg-muted/30">
-                            <h3 className="font-bold tracking-tight">Channel Performance</h3>
+                            <h3 className="font-bold tracking-tight">Creator Stats</h3>
                         </div>
-                        <CardContent className="p-8 space-y-8">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-2 text-muted-foreground">
-                                        <Users size={16} />
-                                        <span className="text-xs font-bold uppercase">Total Reach</span>
-                                    </div>
-                                    <p className="text-3xl font-black">
-                                        {Intl.NumberFormat('en', { notation: 'compact' }).format(followersCount)}
-                                    </p>
+                        <CardContent className="p-6 sm:p-8 space-y-6">
+                            {/* Ranking Tier Badge */}
+                            {isRankingLoading ? (
+                                <div className="flex flex-col items-center justify-center py-4 space-y-3">
+                                    <div className="w-[72px] h-[72px] rounded-2xl bg-muted/50 animate-pulse" />
+                                    <div className="w-28 h-4 rounded-lg bg-muted/50 animate-pulse" />
                                 </div>
-                                <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-                                    <TrendingUp size={24} />
+                            ) : (ranking?.rankingTier || influencer.rankingTier) ? (
+                                <div className="flex flex-col items-center justify-center py-4 space-y-2">
+                                    <RankTierBadge
+                                        tier={ranking?.rankingTier || influencer.rankingTier}
+                                        size="lg"
+                                        showDescription
+                                    />
+                                    <span className="text-sm font-bold text-foreground">
+                                        {ranking?.rankingTier || influencer.rankingTier}
+                                    </span>
                                 </div>
-                            </div>
+                            ) : null}
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
-                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Eng. Rate</p>
-                                    <p className="text-xl font-bold text-green-500">{avgEngagementRate.toFixed(1)}%</p>
-                                </div>
-                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50">
-                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg Rating</p>
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-xl font-bold">{avgRating}</p>
-                                        <Star size={14} className="fill-yellow-500 text-yellow-500" />
+                            {/* Stats Grid */}
+                            <div className="grid grid-cols-3 gap-3">
+                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                    <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                        <Award size={14} />
                                     </div>
+                                    <p className="text-xl sm:text-2xl font-black tabular-nums">
+                                        {ranking?.completedCollaborations?.count ?? 0}
+                                    </p>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
+                                </div>
+                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                    <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
+                                        <Star size={14} className="fill-yellow-500" />
+                                    </div>
+                                    <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
+                                </div>
+                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                    <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                        <MessageCircle size={14} />
+                                    </div>
+                                    <p className="text-xl sm:text-2xl font-black tabular-nums">{totalReviews}</p>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Reviews</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Ranking Card */}
+                    {/* Ranking Breakdown Card (Owner Only) */}
                     {(ranking && isOwner) ? (
                         <RankingBreakdownCard breakdown={ranking} />
-                    ) : isRankingLoading ? (
+                    ) : isRankingLoading && isOwner ? (
                         <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
                             <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>
                         </Card>
@@ -381,7 +387,7 @@ export const InfluencerProfileDetail = ({
                                             collaborationTypes.map((type) => (
                                                 <Badge
                                                     key={type}
-                                                    className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold shadow-none"
+                                                    className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold shadow-none capitalize"
                                                 >
                                                     {formatCollaborationType(type)}
                                                 </Badge>
@@ -403,20 +409,13 @@ export const InfluencerProfileDetail = ({
                                 </div>
                             </div>
 
-                            <div className="pt-8 border-t border-border/50 flex flex-wrap gap-4">
-                                <Button
-                                    variant="outline"
-                                    className="flex-1 min-w-[200px] h-14 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 border-none"
-                                >
-                                    View Media Kit
-                                    <ExternalLink size={18} />
-                                </Button>
+                            <div className="pt-8 border-t border-border/50 w-full">
                                 {(user?.role === UserRole.USER || user?.role === UserRole.ADMIN) && user?.id !== influencer.user.id && (
                                     <CollaborationRequestDialog
                                         influencerId={influencer.id}
                                         influencerName={profile?.fullName || 'Creator'}
                                     >
-                                        <Button className="flex-1 min-w-[200px] h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                        <Button className="flex-1 !w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all ">
                                             Start Collaboration
                                         </Button>
                                     </CollaborationRequestDialog>
