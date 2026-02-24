@@ -24,10 +24,10 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Features', href: '#features' },
-        { name: 'Solutions', href: '#solutions' },
-        { name: 'Pricing', href: '#pricing' },
-        { name: 'About', href: '#about' },
+        { name: 'Features', href: '/#features' },
+        { name: 'Solutions', href: FRONTEND_ROUTES.SOLUTIONS },
+        { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
+        { name: 'About', href: FRONTEND_ROUTES.ABOUT },
     ];
 
     return (
