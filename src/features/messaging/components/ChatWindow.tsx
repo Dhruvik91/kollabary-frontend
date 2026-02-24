@@ -6,7 +6,7 @@ import { MessageBubble } from './MessageBubble';
 import { useAuth } from '@/contexts/auth-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, MoreVertical, Search, Trash2, ArrowLeft } from 'lucide-react';
+import { Settings, MoreVertical, Trash2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -55,8 +55,8 @@ export const ChatWindow = ({
 
     return (
         <div className="flex flex-col h-full bg-background relative overflow-hidden">
-            {/* Header - Integrated and Clean */}
-            <div className="flex items-center justify-between px-6 py-4 border-b bg-background/40 backdrop-blur-xl z-20 shrink-0">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-border/30 glass-card bg-card/60 z-20 shrink-0">
                 <div className="flex items-center gap-4">
                     {onBack && (
                         <Button
@@ -85,10 +85,7 @@ export const ChatWindow = ({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">
-                        <Search size={18} />
-                    </Button>
+                <div className="flex items-center gap-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">

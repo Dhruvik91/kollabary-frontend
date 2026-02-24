@@ -53,7 +53,7 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                 {/* Main Score Display */}
                 <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4">
                     <div className="relative">
-                        <svg className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
+                        <svg viewBox="0 0 160 160" className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
                             <circle
                                 cx="80"
                                 cy="80"
@@ -117,15 +117,15 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                         {/* Verification Bonus */}
                         <div className={cn(
                             "flex items-center justify-between p-3 rounded-2xl border",
-                            verificationBonus.isVerified 
-                                ? "bg-emerald-500/5 border-emerald-500/10" 
+                            verificationBonus.isVerified
+                                ? "bg-emerald-500/5 border-emerald-500/10"
                                 : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
                         )}>
                             <div className="flex items-center gap-3">
                                 <div className={cn(
                                     "w-8 h-8 rounded-xl flex items-center justify-center",
-                                    verificationBonus.isVerified 
-                                        ? "bg-emerald-500/10 text-emerald-500" 
+                                    verificationBonus.isVerified
+                                        ? "bg-emerald-500/10 text-emerald-500"
                                         : "bg-zinc-500/10 text-zinc-500"
                                 )}>
                                     <CheckCircle2 size={16} />
@@ -139,8 +139,8 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                                     </p>
                                     <p className={cn(
                                         "text-[10px]",
-                                        verificationBonus.isVerified 
-                                            ? "text-emerald-600/70" 
+                                        verificationBonus.isVerified
+                                            ? "text-emerald-600/70"
                                             : "text-muted-foreground"
                                     )}>
                                         {verificationBonus.isVerified ? 'Account verified' : 'Not verified'}
