@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
     Settings,
@@ -12,6 +13,7 @@ import {
     Flag,
     Plus,
     X,
+    ArrowLeft,
 } from 'lucide-react';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
 import { VerificationStatus } from '@/types/admin.types';
@@ -26,6 +28,7 @@ import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/type
 import { cn } from '@/lib/utils';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { FRONTEND_ROUTES } from '@/constants';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import {
@@ -108,6 +111,14 @@ export const InfluencerSettingsView = ({
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-20">
+            <Link
+                href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE}
+                className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
+            >
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Profile
+            </Link>
+
             {/* Page Header */}
             <div className="space-y-2">
                 <div className="flex items-center gap-3">
