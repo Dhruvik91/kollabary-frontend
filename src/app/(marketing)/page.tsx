@@ -3,6 +3,8 @@ import { Features } from "@/components/landing/Features";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { FRONTEND_ROUTES } from "@/constants";
 
 export default function Home() {
   return (
@@ -28,14 +30,18 @@ export default function Home() {
                   Join 500+ premium brands scaling their reach through authentic human partnerships.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                  <Button
-                    variant={null}
-                    className="h-14 px-10 bg-primary-foreground text-primary font-bold rounded-full hover:bg-primary-foreground hover:opacity-90 transition-all duration-300 shadow-xl shadow-black/10">
-                    Get Started Now
-                  </Button>
-                  <Button variant={null} className="h-14 px-10 border border-primary-foreground/20 bg-primary-foreground/5 backdrop-blur-sm text-primary-foreground font-bold rounded-full hover:bg-primary-foreground/10 transition-all duration-300">
-                    Book a Demo
-                  </Button>
+                  <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
+                    <Button
+                      variant={null}
+                      className="h-14 px-10 bg-primary-foreground text-primary font-bold rounded-full hover:bg-primary-foreground hover:opacity-90 transition-all duration-300 shadow-xl shadow-black/10">
+                      Get Started Now
+                    </Button>
+                  </Link>
+                  <a href="mailto:demo@kollabary.com?subject=Book a Demo">
+                    <Button variant={null} className="h-14 px-10 border border-primary-foreground/20 bg-primary-foreground/5 backdrop-blur-sm text-primary-foreground font-bold rounded-full hover:bg-primary-foreground/10 transition-all duration-300">
+                      Book a Demo
+                    </Button>
+                  </a>
                 </div>
               </div>
             </div>
