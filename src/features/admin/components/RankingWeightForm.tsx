@@ -25,14 +25,14 @@ export function RankingWeightForm({
         <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm"
+            className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm"
         >
             <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                     <TrendingUp size={20} className="text-primary" />
                     Algorithm Weights
                 </h3>
-                <div className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold text-blue-600">
+                <div className="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-bold text-blue-500 border border-blue-500/20">
                     SYSTEM ACTIVE
                 </div>
             </div>

@@ -98,7 +98,7 @@ export function AdminDetailGrid({ stats }: AdminDetailGridProps) {
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.1 * idx }}
-                    className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm hover:shadow-md transition-all"
+                    className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm hover:shadow-md transition-all"
                 >
                     <div className="mb-6 flex items-center gap-3">
                         <div className={cn("rounded-xl p-2", section.bg, section.color)}>
@@ -112,8 +112,7 @@ export function AdminDetailGrid({ stats }: AdminDetailGridProps) {
                             <div
                                 key={item.label}
                                 className={cn(
-                                    "rounded-xl border border-border/30 p-3 transition-colors",
-                                    item.highlight ? "bg-muted/30 border-primary/20" : "hover:bg-muted/10"
+                                    "bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl text-center transition-colors"
                                 )}
                             >
                                 <div className="flex items-center gap-2 mb-1">

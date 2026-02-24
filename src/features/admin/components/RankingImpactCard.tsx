@@ -10,7 +10,7 @@ export function RankingImpactCard() {
             <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm"
+                className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm"
             >
                 <h3 className="mb-4 text-lg font-semibold flex items-center gap-2">
                     <Info size={20} className="text-blue-500" />
@@ -22,7 +22,7 @@ export function RankingImpactCard() {
                         This score directly impacts their visibility in discovery and search results.
                     </p>
 
-                    <div className="rounded-xl bg-muted/50 p-4 space-y-3 border border-border/30">
+                    <div className="rounded-xl bg-muted/50 glass-section p-4 space-y-3 border border-border/30">
                         <div className="flex items-center gap-3">
                             <div className="h-2 w-2 rounded-full bg-primary" />
                             <span>Scores are updated daily at 00:00 UTC.</span>

@@ -8,17 +8,26 @@ import {
     TrendingUp,
     Award,
     XCircle,
+    Star,
+    MessageCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RankingBreakdown } from '@/types/ranking';
 import { cn } from '@/lib/utils';
+import { RankTierBadge } from '@/components/shared/RankTierBadge';
 
 interface RankingBreakdownCardProps {
     breakdown: RankingBreakdown;
     className?: string;
+    stats?: {
+        completedCollaborations: number;
+        avgRating: number;
+        totalReviews: number;
+        rankingTier?: string;
+    };
 }
 
-export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownCardProps) => {
+export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBreakdownCardProps) => {
     const {
         totalScore,
         completedCollaborations,
@@ -112,6 +121,41 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                         </div>
                     </div>
                 </div>
+
+                {/* Inline Creator Stats (when stats prop provided) */}
+                {stats && (
+                    <div className="space-y-4">
+                        {stats.rankingTier && (
+                            <div className="flex flex-col items-center justify-center py-2 space-y-1">
+                                <RankTierBadge tier={stats.rankingTier} size="md" showDescription />
+                                <span className="text-xs font-bold text-foreground">{stats.rankingTier}</span>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-3 gap-2">
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-primary mb-1">
+                                    <Award size={12} />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.completedCollaborations}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Collabs</p>
+                            </div>
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-yellow-500 mb-1">
+                                    <Star size={12} className="fill-yellow-500" />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.avgRating}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Rating</p>
+                            </div>
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-primary mb-1">
+                                    <MessageCircle size={12} />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.totalReviews}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Tier Progress */}
                 {nextTier && (

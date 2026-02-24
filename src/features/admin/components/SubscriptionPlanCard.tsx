@@ -29,7 +29,7 @@ export function SubscriptionPlanCard({ plan, index, onDelete }: SubscriptionPlan
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ delay: index * 0.1 }}
             className={cn(
-                "relative flex flex-col rounded-3xl border border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 p-8 shadow-sm transition-all duration-300 ease-out hover:shadow-xl hover:border-primary/20 h-full will-change-transform",
+                "relative flex flex-col rounded-3xl border border-border/40 bg-card/50 glass-card p-8 shadow-sm transition-all duration-300 ease-out hover:shadow-xl hover:border-primary/20 h-full will-change-transform",
                 plan.popular && "ring-2 ring-blue-500 ring-offset-4 dark:ring-offset-black"
             )}
         >

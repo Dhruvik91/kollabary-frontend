@@ -121,7 +121,7 @@ export const Sidebar = ({
 
     const getLinksByRole = () => {
         switch (user?.role) {
-            case UserRole.ADMIN: return [...commonLinks, ...adminLinks];
+            case UserRole.ADMIN: return [...adminLinks];
             case UserRole.INFLUENCER: return [...commonLinks];
             case UserRole.USER: return [...commonLinks, ...brandLinks];
             default: return commonLinks;

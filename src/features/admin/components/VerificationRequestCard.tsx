@@ -46,7 +46,7 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ delay: index * 0.05 }}
-            className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
+            className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card/50 glass-card shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
         >
             <div className="p-5">
                 <div className="flex items-center justify-between mb-4">

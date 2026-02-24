@@ -254,61 +254,84 @@ export const InfluencerProfileDetail = ({
                         </div>
                     </div>
 
+                    {/* Ranking Card - Mobile Only (shows after banner) */}
+                    {isOwner && (ranking || isRankingLoading) && (
+                        <div className="xl:hidden">
+                            {ranking ? (
+                                <RankingBreakdownCard
+                                    breakdown={ranking}
+                                    stats={{
+                                        completedCollaborations: completedCollaborations ?? 0,
+                                        avgRating,
+                                        totalReviews,
+                                        rankingTier: ranking?.rankingTier || influencer.rankingTier,
+                                    }}
+                                />
+                            ) : (
+                                <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
+                                    <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>
+                                </Card>
+                            )}
+                        </div>
+                    )}
+
                     {/* Content Grid: Stats/Socials + About/Reviews */}
                     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
                         {/* Left Column: Stats & Socials */}
                         <div className="xl:col-span-1 space-y-6 md:space-y-8">
-                            {/* Creator Stats Card */}
-                            <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
-                                <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
-                                    <h3 className="font-bold tracking-tight">Creator Stats</h3>
-                                </div>
-                                <CardContent className="p-6 sm:p-8 space-y-6">
-                                    {isRankingLoading ? (
-                                        <div className="flex flex-col items-center justify-center py-4 space-y-3">
-                                            <div className="w-[72px] h-[72px] rounded-2xl bg-muted/50 animate-pulse" />
-                                            <div className="w-28 h-4 rounded-lg bg-muted/50 animate-pulse" />
-                                        </div>
-                                    ) : (ranking?.rankingTier || influencer.rankingTier) ? (
-                                        <div className="flex flex-col items-center justify-center py-4 space-y-2">
-                                            <RankTierBadge
-                                                tier={ranking?.rankingTier || influencer.rankingTier}
-                                                size="lg"
-                                                showDescription
-                                            />
-                                            <span className="text-sm font-bold text-foreground">
-                                                {ranking?.rankingTier || influencer.rankingTier}
-                                            </span>
-                                        </div>
-                                    ) : null}
-
-                                    <div className="grid grid-cols-3 gap-3">
-                                        <div className="bg-zinc-100 glass-chip p-4 rounded-2xl border border-border/50 text-center">
-                                            <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
-                                                <Award size={14} />
-                                            </div>
-                                            <p className="text-xl sm:text-2xl font-black tabular-nums">
-                                                {completedCollaborations ?? 0}
-                                            </p>
-                                            <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
-                                        </div>
-                                        <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
-                                            <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
-                                                <Star size={14} className="fill-yellow-500" />
-                                            </div>
-                                            <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
-                                            <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
-                                        </div>
-                                        <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
-                                            <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
-                                                <MessageCircle size={14} />
-                                            </div>
-                                            <p className="text-xl sm:text-2xl font-black tabular-nums">{totalReviews}</p>
-                                            <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Reviews</p>
-                                        </div>
+                            {/* Creator Stats Card (non-owner only, owners see stats in Ranking sidebar) */}
+                            {!isOwner && (
+                                <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                                    <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                                        <h3 className="font-bold tracking-tight">Creator Stats</h3>
                                     </div>
-                                </CardContent>
-                            </Card>
+                                    <CardContent className="p-6 sm:p-8 space-y-6">
+                                        {isRankingLoading ? (
+                                            <div className="flex flex-col items-center justify-center py-4 space-y-3">
+                                                <div className="w-[72px] h-[72px] rounded-2xl bg-muted/50 animate-pulse" />
+                                                <div className="w-28 h-4 rounded-lg bg-muted/50 animate-pulse" />
+                                            </div>
+                                        ) : (ranking?.rankingTier || influencer.rankingTier) ? (
+                                            <div className="flex flex-col items-center justify-center py-4 space-y-2">
+                                                <RankTierBadge
+                                                    tier={ranking?.rankingTier || influencer.rankingTier}
+                                                    size="lg"
+                                                    showDescription
+                                                />
+                                                <span className="text-sm font-bold text-foreground">
+                                                    {ranking?.rankingTier || influencer.rankingTier}
+                                                </span>
+                                            </div>
+                                        ) : null}
+
+                                        <div className="grid grid-cols-3 gap-3">
+                                            <div className="bg-zinc-100 glass-chip p-4 rounded-2xl border border-border/50 text-center">
+                                                <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                                    <Award size={14} />
+                                                </div>
+                                                <p className="text-xl sm:text-2xl font-black tabular-nums">
+                                                    {completedCollaborations ?? 0}
+                                                </p>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
+                                            </div>
+                                            <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
+                                                <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
+                                                    <Star size={14} className="fill-yellow-500" />
+                                                </div>
+                                                <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
+                                            </div>
+                                            <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
+                                                <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                                    <MessageCircle size={14} />
+                                                </div>
+                                                <p className="text-xl sm:text-2xl font-black tabular-nums">{totalReviews}</p>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Reviews</p>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            )}
 
                             {/* Socials Card */}
                             <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
@@ -422,10 +445,18 @@ export const InfluencerProfileDetail = ({
 
                 {/* Ranking Breakdown Sticky Sidebar (Owner Only) */}
                 {isOwner && (ranking || isRankingLoading) && (
-                    <div className="w-full xl:w-[380px] xl:shrink-0">
+                    <div className="hidden xl:block w-full xl:w-[380px] xl:shrink-0">
                         <div className="xl:sticky xl:top-24">
                             {ranking ? (
-                                <RankingBreakdownCard breakdown={ranking} />
+                                <RankingBreakdownCard
+                                    breakdown={ranking}
+                                    stats={{
+                                        completedCollaborations: completedCollaborations ?? 0,
+                                        avgRating,
+                                        totalReviews,
+                                        rankingTier: ranking?.rankingTier || influencer.rankingTier,
+                                    }}
+                                />
                             ) : (
                                 <Card className="rounded-[2.5rem] border-border/50 bg-card/10 backdrop-blur-md h-[450px] animate-pulse flex items-center justify-center">
                                     <div className="text-muted-foreground/50 font-bold uppercase tracking-widest animate-pulse">Calculating Score...</div>

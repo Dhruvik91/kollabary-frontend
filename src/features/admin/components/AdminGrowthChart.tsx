@@ -20,7 +20,7 @@ export function AdminGrowthChart({ stats }: AdminGrowthChartProps) {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
-            className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm"
+            className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm"
         >
             <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
