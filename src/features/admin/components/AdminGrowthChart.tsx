@@ -19,7 +19,7 @@ export function AdminGrowthChart({ stats }: AdminGrowthChartProps) {
         <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.1 }}
             className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm"
         >
             <div className="mb-6 flex items-center justify-between">
@@ -47,19 +47,19 @@ export function AdminGrowthChart({ stats }: AdminGrowthChartProps) {
                         <motion.div
                             initial={{ height: 0 }}
                             animate={{ height: `${(data.newUsers / maxVal) * 100}%` }}
-                            transition={{ duration: 0.8, delay: 0.5 + (i * 0.05) }}
+                            transition={{ duration: 0.5, delay: 0.15 + (i * 0.02) }}
                             className="w-full rounded-t-sm bg-blue-500/80 transition-all hover:bg-blue-600"
                         />
                         <motion.div
                             initial={{ height: 0 }}
                             animate={{ height: `${(data.newCollaborations / maxVal) * 100}%` }}
-                            transition={{ duration: 0.8, delay: 0.6 + (i * 0.05) }}
+                            transition={{ duration: 0.5, delay: 0.2 + (i * 0.02) }}
                             className="w-full rounded-t-sm bg-indigo-500/60 transition-all hover:bg-indigo-600"
                         />
                         <motion.div
                             initial={{ height: 0 }}
                             animate={{ height: `${(data.newReviews / maxVal) * 100}%` }}
-                            transition={{ duration: 0.8, delay: 0.7 + (i * 0.05) }}
+                            transition={{ duration: 0.5, delay: 0.25 + (i * 0.02) }}
                             className="w-full rounded-t-sm bg-emerald-500/60 transition-all hover:bg-emerald-600"
                         />
                         <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">

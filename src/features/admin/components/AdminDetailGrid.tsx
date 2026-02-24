@@ -97,7 +97,7 @@ export function AdminDetailGrid({ stats }: AdminDetailGridProps) {
                     key={section.title}
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 * idx }}
+                    transition={{ delay: 0.04 * idx }}
                     className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm hover:shadow-md transition-all"
                 >
                     <div className="mb-6 flex items-center gap-3">

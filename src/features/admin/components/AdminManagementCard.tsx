@@ -14,7 +14,7 @@ export function AdminManagementCard({ stats }: AdminManagementCardProps) {
         <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.1 }}
             className="rounded-2xl border border-border/50 bg-card/50 glass-card p-6 shadow-sm"
         >
             <h3 className="mb-4 text-lg font-semibold flex items-center gap-2">
