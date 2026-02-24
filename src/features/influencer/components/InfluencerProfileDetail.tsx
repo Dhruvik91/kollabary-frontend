@@ -148,7 +148,7 @@ export const InfluencerProfileDetail = ({
 
                 {/* Profile Info Overlay */}
                 <div className="px-4 sm:px-8 -mt-16 sm:-mt-20 md:-mt-24 relative z-10">
-                    <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-border/50 bg-card/40 backdrop-blur-xl shadow-xl shadow-black/5 p-4 sm:p-6 md:p-8">
+                    <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-border/50 bg-card/40 glass-card-elevated shadow-xl shadow-black/5 p-4 sm:p-6 md:p-8">
                         <div className="flex flex-col md:flex-row md:items-end gap-4 sm:gap-6 md:gap-8">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -261,8 +261,8 @@ export const InfluencerProfileDetail = ({
                 {/* Left Column: Stats & Socials */}
                 <div className="xl:col-span-1 space-y-6 md:space-y-8">
                     {/* Creator Stats Card */}
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <h3 className="font-bold tracking-tight">Creator Stats</h3>
                         </div>
                         <CardContent className="p-6 sm:p-8 space-y-6">
@@ -287,7 +287,7 @@ export const InfluencerProfileDetail = ({
 
                             {/* Stats Grid */}
                             <div className="grid grid-cols-3 gap-3">
-                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                <div className="bg-zinc-100 glass-chip p-4 rounded-2xl border border-border/50 text-center">
                                     <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
                                         <Award size={14} />
                                     </div>
@@ -296,14 +296,14 @@ export const InfluencerProfileDetail = ({
                                     </p>
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
                                 </div>
-                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
                                     <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
                                         <Star size={14} className="fill-yellow-500" />
                                     </div>
                                     <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
                                 </div>
-                                <div className="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-2xl border border-border/50 text-center">
+                                <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
                                     <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
                                         <MessageCircle size={14} />
                                     </div>
@@ -324,8 +324,8 @@ export const InfluencerProfileDetail = ({
                     ) : null}
 
                     {/* Socials Card */}
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <h3 className="font-bold tracking-tight">Connected Platforms</h3>
                         </div>
                         <CardContent className="p-6 space-y-4">
@@ -335,10 +335,10 @@ export const InfluencerProfileDetail = ({
                                     href={data.handle}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-between p-4 bg-background/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all group"
+                                    className="flex items-center justify-between p-4 bg-background/50 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                        <div className="w-10 h-10 bg-zinc-100 glass-chip rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                                             {getPlatformIcon(name)}
                                         </div>
                                         <div>
@@ -361,7 +361,7 @@ export const InfluencerProfileDetail = ({
 
                 {/* Right Column: About & Collabs */}
                 <div className="xl:col-span-2 space-y-6 md:space-y-8">
-                    <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 lg:p-12">
+                    <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/50 glass-card p-6 sm:p-8 md:p-10 lg:p-12">
                         <div className="space-y-6 md:space-y-8">
                             <div className="space-y-4">
                                 <h3 className="text-2xl font-black tracking-tight">About {profile?.fullName?.split(' ')[0] || 'Creator'}</h3>

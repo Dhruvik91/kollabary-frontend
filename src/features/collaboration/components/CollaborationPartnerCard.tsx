@@ -20,12 +20,12 @@ export const CollaborationPartnerCard = ({
     isMessaging = false
 }: CollaborationPartnerCardProps) => {
     return (
-        <Card className="rounded-3xl border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300 ease-out overflow-hidden">
+        <Card className="rounded-3xl border-border/40 bg-card/40 glass-card shadow-sm hover:shadow-lg hover:border-primary/20 transition-shadow duration-300 ease-out overflow-hidden">
             <CardHeader className="pb-3 text-center lg:text-left">
                 <CardTitle className="text-lg">Partner Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="flex flex-col lg:flex-row items-center gap-4 p-4 bg-muted/20 rounded-2xl border border-border/20 text-center lg:text-left">
+                <div className="flex flex-col lg:flex-row items-center gap-4 p-4 glass-section bg-muted/20 rounded-2xl border border-border/20 text-center lg:text-left">
                     <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                         <UserIcon size={28} />
                     </div>

@@ -20,7 +20,7 @@ export const CollaborationMainInfo = ({
     onUpdateProof
 }: CollaborationMainInfoProps) => {
     return (
-        <Card className="border border-border/40 shadow-xl bg-card/40 backdrop-blur-xl backdrop-saturate-150 overflow-hidden border-t-4 border-t-primary rounded-3xl">
+        <Card className="border border-border/40 bg-card/40 glass-card-elevated shadow-xl overflow-hidden border-t-4 border-t-primary rounded-3xl">
             <CardHeader className="pb-4">
                 <div className="flex justify-between items-start mb-4">
                     <CollaborationStatusBadge status={collaboration.status} className="scale-110" />
@@ -44,7 +44,7 @@ export const CollaborationMainInfo = ({
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-                    <div className="space-y-4 p-5 bg-muted/30 rounded-2xl border border-border/50">
+                    <div className="space-y-4 p-5 bg-muted/30 glass-section rounded-2xl border border-border/50">
                         <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-1">Timeline</h3>
                         <div className="flex items-center gap-3 text-foreground font-medium">
                             <Calendar className="text-primary" size={20} />
@@ -54,7 +54,7 @@ export const CollaborationMainInfo = ({
                             </span>
                         </div>
                     </div>
-                    <div className="space-y-4 p-5 bg-muted/30 rounded-2xl border border-border/50">
+                    <div className="space-y-4 p-5 bg-muted/30 glass-section rounded-2xl border border-border/50">
                         <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-1">Proposed Terms</h3>
                         <div className="text-foreground font-medium text-sm">
                             {collaboration.proposedTerms ?

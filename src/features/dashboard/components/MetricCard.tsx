@@ -29,7 +29,7 @@ export const MetricCard = ({
     className
 }: MetricCardProps) => {
     return (
-        <Card className={cn("rounded-[2rem] border-border/50 backdrop-blur-sm overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 group", className)}>
+        <Card className={cn("rounded-[2rem] border-border/50 glass-card overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-shadow duration-500 group", className)}>
             <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                     <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-500", color.replace('text-', 'bg-').concat('/10'))}>

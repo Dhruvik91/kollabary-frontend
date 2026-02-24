@@ -129,8 +129,8 @@ export const InfluencerSettingsView = ({
             >
                 {/* 1. Availability */}
                 <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500">
                                     <Radio size={20} />
@@ -187,8 +187,8 @@ export const InfluencerSettingsView = ({
 
                 {/* 2. Collaboration Types */}
                 <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                                     <Calendar size={20} />
@@ -250,8 +250,8 @@ export const InfluencerSettingsView = ({
 
                 {/* 3. Account Verification */}
                 <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
                                     <ShieldCheck size={20} />
@@ -322,8 +322,8 @@ export const InfluencerSettingsView = ({
 
                 {/* 4. Password & Security */}
                 <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
-                        <div className="p-6 border-b border-border/50 bg-muted/30">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500">
                                     <Lock size={20} />

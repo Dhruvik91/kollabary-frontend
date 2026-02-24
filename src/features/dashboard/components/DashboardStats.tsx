@@ -25,7 +25,7 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-card border border-border p-6 rounded-3xl group hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                    className="bg-card border border-border glass-card p-6 rounded-3xl group hover:shadow-lg hover:shadow-primary/5 transition-shadow duration-300"
                 >
                     <div className="flex items-center gap-4">
                         <div className={cn("p-3 rounded-2xl bg-muted/50 transition-colors", stat.color)}>

@@ -42,7 +42,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
 
     return (
         <>
-            <Card className="hover:shadow-lg border-border group overflow-hidden relative">
+            <Card className="glass-card border-border hover:shadow-lg group overflow-hidden relative rounded-2xl transition-shadow duration-300">
                 <CardHeader className="pb-2">
                     <div className="flex justify-between items-start mb-2">
                         <CollaborationStatusBadge status={collaboration.status} />
@@ -99,7 +99,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="pt-2 border-t border-border bg-muted/20">
+                <CardFooter className="pt-2 border-t border-border glass-section bg-muted/20">
                     <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATION_DETAIL(collaboration.id)} className="w-full">
                         <Button variant="ghost" size="sm" className="w-full justify-between hover:bg-primary/10 hover:text-primary group">
                             View Details

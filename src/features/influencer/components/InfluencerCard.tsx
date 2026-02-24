@@ -47,10 +47,10 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="group overflow-hidden border-border/40 bg-card/40 backdrop-blur-xl backdrop-saturate-150 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-300 ease-out rounded-[1.5rem] h-full flex flex-col will-change-transform">
+            <Card className="group overflow-hidden border-border/40 bg-card/40 glass-card hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-300 ease-out rounded-[1.5rem] h-full flex flex-col">
                 <CardContent className="p-0 flex flex-col flex-1">
                     {/* Avatar & Cover Section */}
-                    <div className="relative h-32 bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900">
+                    <div className="relative h-32 bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-white/[0.06] dark:to-white/[0.03]">
                         <div className="absolute -bottom-10 left-6">
                             <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
                                 {displayAvatar ? (
@@ -89,11 +89,11 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2">
-                            <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg">
+                            <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-white/[0.10] text-zinc-600 dark:text-zinc-400 rounded-lg">
                                 {niche}
                             </span>
                             {(influencer.address || profile?.location) && (
-                                <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg">
+                                <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-white/[0.10] text-zinc-500 dark:text-zinc-400 rounded-lg">
                                     <MapPin size={10} />
                                     {influencer.address || profile?.location}
                                 </span>
