@@ -169,6 +169,7 @@
 
   .dark ::selection {
     background: oklch(0.7 0.2 290 / 0.3);
+    color: #ffffff;
   }
 
   /* ── Focus Rings ── */
