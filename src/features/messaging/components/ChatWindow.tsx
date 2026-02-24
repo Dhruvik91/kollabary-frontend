@@ -152,8 +152,8 @@ export const ChatWindow = ({
                 </div>
             </div>
 
-            {/* Input Wrapper - Integrated */}
-            <div className="px-6 py-6 pb-8 bg-background/80 backdrop-blur-xl border-t shrink-0">
+            {/* Input Wrapper - Pinned to bottom */}
+            <div className="px-4 sm:px-6 py-3 pb-4 bg-background/80 backdrop-blur-xl border-t border-border/30 shrink-0">
                 <div className="max-w-4xl mx-auto w-full">
                     {children}
                 </div>

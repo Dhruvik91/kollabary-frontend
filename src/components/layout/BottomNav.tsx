@@ -69,8 +69,7 @@ export const BottomNav = () => {
 
     return (
         <nav
-            className="fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border"
-            style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+            className={cn("fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border", `${pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : 'block'}`)}
             aria-label="Bottom navigation"
         >
             <div className="flex items-center justify-around h-16">

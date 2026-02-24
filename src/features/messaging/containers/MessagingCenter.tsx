@@ -9,10 +9,11 @@ import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-import { Plus } from 'lucide-react';
+import { Plus, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
+import { Button } from '@/components/ui/button';
 
 export const MessagingCenter = () => {
     const searchParams = useSearchParams();
@@ -90,6 +91,18 @@ export const MessagingCenter = () => {
                     "w-full lg:w-[320px] xl:w-[380px] border-r border-border/50 flex flex-col bg-muted/10 shrink-0 min-h-0",
                     activeConversationId ? "hidden lg:flex" : "flex"
                 )}>
+                    {/* Mobile Back Header */}
+                    <div className="flex items-center gap-3 px-4 py-3 border-b border-border/30 lg:hidden shrink-0">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.OVERVIEW)}
+                            className="h-9 w-9 rounded-xl hover:bg-muted/50"
+                        >
+                            <ArrowLeft size={18} />
+                        </Button>
+                        <h2 className="font-bold text-sm tracking-tight">Messages</h2>
+                    </div>
                     {/* Conversation Scroller */}
                     <div className="flex-1 overflow-hidden min-h-0 flex flex-col">
                         {isLoadingConversations ? (
