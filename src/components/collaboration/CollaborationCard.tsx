@@ -27,7 +27,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
 
     const isRequester = user?.id === collaboration.requester.id;
     const canEdit = isRequester && (collaboration.status === CollaborationStatus.REQUESTED || collaboration.status === CollaborationStatus.ACCEPTED);
-    const canDelete = isRequester; // User requested to allow deletion regardless of status
+    const canDelete = isRequester && collaboration.status === CollaborationStatus.REQUESTED;
 
     const partner = isInfluencer ? collaboration.requester : collaboration.influencer.user;
     const dateRange = collaboration.startDate && collaboration.endDate

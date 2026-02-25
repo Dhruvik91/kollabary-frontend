@@ -3,7 +3,8 @@
 import {
     useCollaborationDetail,
     useUpdateCollaborationStatus,
-    useUpdateCollaboration
+    useUpdateCollaboration,
+    useDeleteCollaboration
 } from '@/hooks/use-collaboration.hooks';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { useAuth } from '@/contexts/auth-context';
@@ -22,11 +23,13 @@ import { CollaborationLoadingState } from '../components/CollaborationLoadingSta
 import { CollaborationErrorState } from '../components/CollaborationErrorState';
 import { CollaborationProgressActions } from '../components/CollaborationProgressActions';
 import { ProofUploadDialog } from '../components/ProofUploadDialog';
+import { EditCollaborationDialog } from '../components/EditCollaborationDialog';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useCreateReview } from '@/hooks/use-review.hooks';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Star, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -43,6 +46,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const { data: collaboration, isLoading, isError, error } = useCollaborationDetail(id);
     const { mutate: updateStatus, isPending: isUpdating } = useUpdateCollaborationStatus(id);
     const { mutate: updateCollaboration, isPending: isUpdatingDetails } = useUpdateCollaboration(id);
+    const { mutate: deleteCollaboration, isPending: isDeleting } = useDeleteCollaboration();
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
     const { mutate: createReview, isPending: isCreatingReview } = useCreateReview();
     const { user } = useAuth();
@@ -50,6 +54,8 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
 
     const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const handleMessagePartner = () => {
         if (!collaboration) return;
@@ -125,6 +131,17 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         });
     };
 
+    const handleDelete = () => {
+        deleteCollaboration(id, {
+            onSuccess: () => {
+                router.push(FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS);
+            }
+        });
+    };
+
+    const canEditDetail = isRequester && (collaboration.status === CollaborationStatus.REQUESTED || collaboration.status === CollaborationStatus.ACCEPTED);
+    const canDeleteDetail = isRequester && collaboration.status === CollaborationStatus.REQUESTED;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -132,8 +149,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             transition={{ duration: 0.5 }}
             className="space-y-8 max-w-5xl mx-auto"
         >
-            {/* Header with Navigation */}
-            <CollaborationHeader />
+            {/* Header with Navigation & Actions */}
+            <CollaborationHeader
+                canEdit={canEditDetail}
+                canDelete={canDeleteDetail}
+                onEdit={() => setIsEditDialogOpen(true)}
+                onDelete={() => setIsDeleteDialogOpen(true)}
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content Area */}
@@ -216,6 +238,52 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                 onSubmit={handleReviewSubmit}
                 isLoading={isCreatingReview}
             />
+
+            {/* Edit Dialog */}
+            {canEditDetail && (
+                <EditCollaborationDialog
+                    collaboration={collaboration}
+                    isOpen={isEditDialogOpen}
+                    onClose={() => setIsEditDialogOpen(false)}
+                />
+            )}
+
+            {/* Delete Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isDeleteDialogOpen}
+                onClose={() => setIsDeleteDialogOpen(false)}
+                title="Delete Collaboration"
+                description="Are you sure you want to delete this collaboration request? This action cannot be undone."
+                size="sm"
+            >
+                <div className="flex flex-col items-center gap-6 py-4">
+                    <div className="h-20 w-20 rounded-3xl bg-destructive/10 flex items-center justify-center text-destructive animate-pulse">
+                        <AlertCircle size={40} />
+                    </div>
+
+                    <div className="flex gap-4 w-full">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsDeleteDialogOpen(false)}
+                            className="flex-1 h-12 rounded-2xl font-bold border-border/50"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="flex-1 h-12 rounded-2xl font-bold shadow-xl shadow-destructive/20 active:scale-95 transition-all"
+                        >
+                            {isDeleting ? (
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                            ) : (
+                                'Delete'
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
         </motion.div>
     );
 };
