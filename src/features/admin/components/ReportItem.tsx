@@ -69,64 +69,72 @@ export function ReportItem({ report, index, onUpdateStatus }: ReportItemProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ delay: index * 0.05 }}
-            className="group relative rounded-2xl border border-border/40 bg-card/50 glass-card p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
+            className="group relative rounded-2xl border border-border/40 bg-card/50 glass-card p-4 md:p-5 shadow-sm transition-all duration-300 ease-out hover:shadow-lg hover:border-primary/20 will-change-transform"
         >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-start gap-4">
-                    <div className="mt-1 rounded-full bg-muted p-2 text-muted-foreground">
-                        <ShieldAlert size={20} />
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="flex items-start gap-3 md:gap-4 pr-8 sm:pr-0">
+                        <div className="mt-1 rounded-full bg-muted p-2 text-muted-foreground shrink-0">
+                            <ShieldAlert size={20} />
+                        </div>
+                        <div className="min-w-0">
+                            <div className="flex flex-col gap-1.5 mb-2">
+                                <h3 className="font-semibold text-foreground break-words leading-tight">{report.reason}</h3>
+                                <div className="flex">
+                                    <StatusBadge status={report.status} />
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1.5 min-w-0">
+                                    <UserIcon size={14} className="shrink-0" />
+                                    <span className="truncate">By: {report.reporter.email}</span>
+                                </span>
+                                <span className="hidden xs:block h-1 w-1 rounded-full bg-muted-foreground/30" />
+                                <span className="flex items-center gap-1.5">
+                                    <Clock size={14} className="shrink-0" />
+                                    {format(new Date(report.createdAt), 'MMM d, yyyy')}
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-semibold text-foreground">{report.reason}</h3>
-                            <StatusBadge status={report.status} />
-                        </div>
-                        <div className="mt-1 flex items-center gap-3 text-sm text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                                <UserIcon size={14} />
-                                By: {report.reporter.email}
-                            </span>
-                            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-                            <span className="flex items-center gap-1">
-                                <Clock size={14} />
-                                {format(new Date(report.createdAt), 'MMM d, yyyy')}
-                            </span>
-                        </div>
+
+                    <div className="flex items-center gap-2 self-start sm:self-center">
+                        <Button variant="outline" size="sm" className="rounded-lg h-9 gap-2 font-medium bg-background/50 hover:bg-background transition-colors">
+                            <ExternalLink size={14} />
+                            <span>Inspect</span>
+                        </Button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-end md:self-center">
-                    <Button variant="outline" size="sm" className="rounded-lg h-9 gap-2">
-                        <ExternalLink size={14} />
-                        Inspect
-                    </Button>
-
+                {/* 3-dot menu absolutely positioned at top-right */}
+                <div className="absolute top-4 right-4 focus-within:opacity-100">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg">
-                                <MoreVertical size={18} />
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-muted/50 transition-colors">
+                                <MoreVertical size={18} className="text-muted-foreground" />
+                                <span className="sr-only">Open menu</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 rounded-xl">
+                        <DropdownMenuContent align="end" className="w-48 rounded-xl glass-card border-border/40">
                             <DropdownMenuItem
                                 onClick={() => onUpdateStatus(report.id, ReportStatus.UNDER_REVIEW)}
-                                className="gap-2"
+                                className="gap-2 cursor-pointer"
                             >
                                 <Clock size={16} /> Mark Under Review
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => onUpdateStatus(report.id, ReportStatus.RESOLVED)}
-                                className="gap-2 text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50"
+                                className="gap-2 text-emerald-600 focus:text-emerald-700 focus:bg-emerald-500/10 cursor-pointer"
                             >
                                 <CheckCircle2 size={16} /> Resolve Report
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-            </div>
 
-            <div className="mt-4 rounded-xl bg-muted/30 p-4 text-sm text-muted-foreground border border-border/30">
-                {report.description || "No additional description provided."}
+                <div className="rounded-xl bg-muted/20 p-4 text-sm text-muted-foreground/90 border border-border/20 leading-relaxed">
+                    {report.description || "No additional description provided."}
+                </div>
             </div>
         </motion.div>
     );

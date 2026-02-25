@@ -53,7 +53,7 @@ export function AdminReportsContainer() {
     }
 
     return (
-        <div className="space-y-6 pb-10">
+        <div className="space-y-6 pb-10 px-0 sm:px-4 md:px-0">
             {/* Header */}
             <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">User Reports</h1>

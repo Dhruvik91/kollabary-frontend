@@ -4,6 +4,7 @@ import React from 'react';
 import { StaticPageLayout, StaticSection } from '@/components/marketing/StaticPageLayout';
 import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 export default function ContactPage() {
     return (

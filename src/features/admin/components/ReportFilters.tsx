@@ -20,8 +20,8 @@ export function ReportFilters({
     onStatusFilterChange
 }: ReportFiltersProps) {
     return (
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-1 group">
+        <div className="flex flex-col lg:flex-row gap-4 lg:items-center">
+            <div className="relative w-full lg:flex-1 group">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
                 <Input
                     placeholder="Search reports by user or reason..."
@@ -31,9 +31,9 @@ export function ReportFilters({
                 />
             </div>
 
-            <div className="flex items-center gap-2">
-                <Filter size={18} className="text-muted-foreground" />
-                <div className="flex bg-muted/50 p-1 rounded-xl border border-border/50">
+            <div className="flex items-center gap-2 w-full overflow-hidden">
+                <Filter size={18} className="text-muted-foreground shrink-0" />
+                <div className="flex bg-muted/50 p-1 rounded-xl border border-border/50 overflow-x-auto no-scrollbar scroll-smooth w-full">
                     {['ALL', ...Object.values(ReportStatus)].map((status) => (
                         <button
                             key={status}
@@ -45,7 +45,9 @@ export function ReportFilters({
                                     : "text-muted-foreground hover:text-foreground"
                             )}
                         >
-                            {status.charAt(0) + status.slice(1).toLowerCase().replace('_', ' ')}
+                            <span className="whitespace-nowrap">
+                                {status.charAt(0) + status.slice(1).toLowerCase().replace('_', ' ')}
+                            </span>
                         </button>
                     ))}
                 </div>
