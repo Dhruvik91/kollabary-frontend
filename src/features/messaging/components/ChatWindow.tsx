@@ -24,6 +24,8 @@ interface ChatWindowProps {
     onViewProfile?: () => void;
     onBack?: () => void;
     children: React.ReactNode; // For Input
+    onDeleteMessage?: (messageId: string) => void;
+    onUpdateMessage?: (messageId: string, newMessage: string) => void;
 }
 
 export const ChatWindow = ({
@@ -33,7 +35,9 @@ export const ChatWindow = ({
     onDeleteConversation,
     onViewProfile,
     onBack,
-    children
+    children,
+    onDeleteMessage,
+    onUpdateMessage
 }: ChatWindowProps) => {
     const { user } = useAuth();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -142,6 +146,8 @@ export const ChatWindow = ({
                                     message={msg}
                                     isOwn={msg.sender.id === user?.id}
                                     showAvatar={showAvatar}
+                                    onDelete={onDeleteMessage}
+                                    onUpdate={onUpdateMessage}
                                 />
                             );
                         })

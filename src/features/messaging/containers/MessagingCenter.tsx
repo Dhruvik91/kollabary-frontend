@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useConversations, useMessageHistory, useSendMessage, useDeleteConversation } from '@/hooks/use-messaging.hooks';
+import { useConversations, useMessageHistory, useSendMessage, useDeleteConversation, useUpdateMessage, useDeleteMessage } from '@/hooks/use-messaging.hooks';
 import { ConversationList } from '../components/ConversationList';
 import { ChatWindow } from '../components/ChatWindow';
 import { MessageInput } from '../components/MessageInput';
@@ -40,6 +40,8 @@ export const MessagingCenter = () => {
 
     const { mutate: sendMessage, isPending: isSending } = useSendMessage(activeConversationId || '');
     const { mutate: deleteConversation } = useDeleteConversation();
+    const { mutate: updateMessage } = useUpdateMessage(activeConversationId || '');
+    const { mutate: deleteMessage } = useDeleteMessage(activeConversationId || '');
 
     const activeConversation = conversations.find(c => c.id === activeConversationId);
 
@@ -55,6 +57,14 @@ export const MessagingCenter = () => {
                 onSuccess: () => setActiveConversationId(null)
             });
         }
+    };
+
+    const handleDeleteMessage = (messageId: string) => {
+        deleteMessage(messageId);
+    };
+
+    const handleUpdateMessage = (messageId: string, newMessage: string) => {
+        updateMessage({ messageId, message: newMessage });
     };
 
     const handleViewProfile = () => {
@@ -149,6 +159,8 @@ export const MessagingCenter = () => {
                                     onDeleteConversation={handleDeleteConversation}
                                     onViewProfile={handleViewProfile}
                                     onBack={() => setActiveConversationId(null)}
+                                    onDeleteMessage={handleDeleteMessage}
+                                    onUpdateMessage={handleUpdateMessage}
                                 >
                                     <MessageInput
                                         onSendMessage={handleSendMessage}

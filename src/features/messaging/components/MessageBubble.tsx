@@ -1,18 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Message } from '@/types/messaging.types';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FileText, Download, ExternalLink, MoreVertical, Pencil, Trash2, X, Check } from 'lucide-react';
 import Image from 'next/image';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface MessageBubbleProps {
     message: Message;
     isOwn: boolean;
     showAvatar?: boolean;
+    onDelete?: (messageId: string) => void;
+    onUpdate?: (messageId: string, newMessage: string) => void;
 }
 
 const S3_PATTERN = /^https?:\/\/.*\.s3[.\-].*\.amazonaws\.com\/.+/i;
@@ -49,15 +59,62 @@ function getFilenameFromUrl(url: string): string {
 export const MessageBubble = ({
     message,
     isOwn,
-    showAvatar = true
+    showAvatar = true,
+    onDelete,
+    onUpdate
 }: MessageBubbleProps) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState(message.message);
+
     const initials = message.sender.profile?.fullName
         ? message.sender.profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase()
         : message.sender.email[0].toUpperCase();
 
     const messageType = getMessageType(message.message);
 
+    const handleUpdate = () => {
+        if (editValue.trim() && editValue !== message.message) {
+            onUpdate?.(message.id, editValue);
+        }
+        setIsEditing(false);
+    };
+
     const renderContent = () => {
+        if (isEditing) {
+            return (
+                <div className="flex flex-col gap-2 min-w-[200px]">
+                    <Input
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        className="bg-white/10 border-white/20 text-white focus-visible:ring-white/20 h-9"
+                        autoFocus
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleUpdate();
+                            if (e.key === 'Escape') setIsEditing(false);
+                        }}
+                    />
+                    <div className="flex justify-end gap-1">
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 rounded-lg hover:bg-white/10 text-white"
+                            onClick={() => setIsEditing(false)}
+                        >
+                            <X size={14} />
+                        </Button>
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 rounded-lg bg-white/20 hover:bg-white/30 text-white"
+                            onClick={handleUpdate}
+                        >
+                            <Check size={14} />
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
         const url = message.message.trim();
 
         if (messageType === 'image') {
@@ -147,25 +204,85 @@ export const MessageBubble = ({
             {!showAvatar && !isOwn && <div className="w-9" />}
 
             <div className={cn(
-                "flex flex-col max-w-[75%] md:max-w-[70%] gap-1.5",
+                "flex flex-col max-w-[85%] sm:max-w-[75%] md:max-w-[70%] gap-1.5 min-w-0",
                 isOwn ? "items-end" : "items-start"
             )}>
                 <div className={cn(
-                    "relative rounded-[1.25rem] text-[14px] leading-relaxed transition-all shadow-sm",
-                    messageType === 'image' ? "p-1.5" : "px-4 py-3",
-                    isOwn
-                        ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-br-none shadow-primary/10"
-                        : "bg-muted/40 text-foreground rounded-bl-none border border-border/20 backdrop-blur-md"
+                    "flex items-center gap-2 group/bubble",
+                    isOwn && "flex-row"
                 )}>
-                    {renderContent()}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild className="sm:pointer-events-none">
+                            <div className={cn(
+                                "relative rounded-[1.25rem] text-[14px] leading-relaxed transition-all shadow-sm break-words min-w-0 cursor-pointer sm:cursor-default pointer-events-auto",
+                                messageType === 'image' ? "p-1.5" : "px-4 py-3",
+                                isOwn
+                                    ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-br-none shadow-primary/10"
+                                    : "bg-muted/40 text-foreground rounded-bl-none border border-border/20 backdrop-blur-md"
+                            )}>
+                                {renderContent()}
+                            </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align={isOwn ? "end" : "start"} className="rounded-xl border-border/50 shadow-xl p-1 min-w-[120px]">
+                            {messageType === 'text' && (
+                                <DropdownMenuItem
+                                    className="gap-2 rounded-lg py-2 cursor-pointer"
+                                    onClick={() => setIsEditing(true)}
+                                >
+                                    <Pencil size={14} />
+                                    <span className="text-xs font-bold">Edit</span>
+                                </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem
+                                className="gap-2 rounded-lg py-2 text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                                onClick={() => onDelete?.(message.id)}
+                            >
+                                <Trash2 size={14} />
+                                <span className="text-xs font-bold">Delete</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {isOwn && (
+                        <div className={cn(
+                            "transition-all duration-200 shrink-0 hidden sm:block",
+                            "opacity-0 group-hover/bubble:opacity-100"
+                        )}>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full bg-muted/20 hover:bg-muted/40 text-muted-foreground transition-all">
+                                        <MoreVertical size={14} />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="rounded-xl border-border/50 shadow-xl p-1 min-w-[120px]">
+                                    {messageType === 'text' && (
+                                        <DropdownMenuItem
+                                            className="gap-2 rounded-lg py-2 cursor-pointer"
+                                            onClick={() => setIsEditing(true)}
+                                        >
+                                            <Pencil size={14} />
+                                            <span className="text-xs font-bold">Edit</span>
+                                        </DropdownMenuItem>
+                                    )}
+                                    <DropdownMenuItem
+                                        className="gap-2 rounded-lg py-2 text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                                        onClick={() => onDelete?.(message.id)}
+                                    >
+                                        <Trash2 size={14} />
+                                        <span className="text-xs font-bold">Delete</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    )}
                 </div>
 
-                <div className="flex items-center gap-2 px-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div className="flex items-center gap-2 px-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200">
                     <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                         {format(new Date(message.createdAt), 'h:mm a')}
                     </span>
                     {message.updatedAt && message.updatedAt !== message.createdAt && (
-                        <span className="text-[10px] text-muted-foreground italic tracking-tight">(edited)</span>
+                        <span className="text-[10px] text-muted-foreground italic tracking-tight opacity-70">(edited)</span>
                     )}
                 </div>
             </div>

@@ -46,13 +46,12 @@ export const useStartConversation = () => {
 /**
  * Hook to send a message
  */
-export const useSendMessage = (conversationId: string) => {
+export function useSendMessage(conversationId: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (message: string) => messagingService.sendMessage(conversationId, message),
         onSuccess: () => {
-            // Invalidate to show the new message immediately
             queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
             queryClient.invalidateQueries({ queryKey: ['conversations'] });
         },
@@ -60,7 +59,45 @@ export const useSendMessage = (conversationId: string) => {
             toast.error(error.message || 'Failed to send message');
         },
     });
-};
+}
+
+/**
+ * Hook to update a message
+ */
+export function useUpdateMessage(conversationId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ messageId, message }: { messageId: string; message: string }) =>
+            messagingService.updateMessage(messageId, message),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
+            toast.success('Message updated');
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to update message');
+        },
+    });
+}
+
+/**
+ * Hook to delete a message
+ */
+export function useDeleteMessage(conversationId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (messageId: string) => messagingService.deleteMessage(messageId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
+            queryClient.invalidateQueries({ queryKey: ['conversations'] });
+            toast.success('Message deleted');
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Failed to delete message');
+        },
+    });
+}
 
 /**
  * Hook to delete a conversation
