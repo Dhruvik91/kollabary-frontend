@@ -1,25 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import { useAdminReports, useUpdateReportStatus } from '@/hooks/use-admin.hooks';
 import { ReportStatus } from '@/types/report.types';
 import { ReportList } from '../components/ReportList';
 import { ReportFilters } from '../components/ReportFilters';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useDebounce } from '@/hooks/use-debounce';
 
 export function AdminReportsContainer() {
-    const { data: reports, isLoading, isError } = useAdminReports();
     const updateStatus = useUpdateReportStatus();
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<ReportStatus | 'ALL'>('ALL');
+    const debouncedSearch = useDebounce(searchQuery, 500);
 
-    const filteredReports = reports?.filter(report => {
-        const matchesSearch =
-            report.reporter.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            report.reason.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesStatus = statusFilter === 'ALL' || report.status === statusFilter;
-        return matchesSearch && matchesStatus;
-    }) || [];
+    const { data: reports, isLoading, isError } = useAdminReports({
+        search: debouncedSearch || undefined,
+        status: statusFilter === 'ALL' ? undefined : statusFilter
+    });
+
+    const handleClearFilters = () => {
+        setSearchQuery('');
+        setStatusFilter('ALL');
+    };
 
     const handleStatusUpdate = (reportId: string, newStatus: ReportStatus) => {
         updateStatus.mutate({
@@ -66,11 +70,12 @@ export function AdminReportsContainer() {
                 onSearchChange={setSearchQuery}
                 statusFilter={statusFilter}
                 onStatusFilterChange={setStatusFilter}
+                onClearFilters={handleClearFilters}
             />
 
             {/* Reports List */}
             <ReportList
-                reports={filteredReports}
+                reports={reports || []}
                 onUpdateStatus={handleStatusUpdate}
             />
         </div>

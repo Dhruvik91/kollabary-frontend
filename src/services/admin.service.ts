@@ -13,10 +13,12 @@ export const adminService = {
     },
 
     /**
-     * Fetch all user reports
+     * Fetch all user reports with optional filters
      */
-    getReports: async (): Promise<Report[]> => {
-        const response = await httpService.get<Report[]>(API_CONFIG.path.admin.reports);
+    getReports: async (filters?: { search?: string; status?: string }): Promise<Report[]> => {
+        const response = await httpService.get<Report[]>(API_CONFIG.path.admin.reports, {
+            params: filters
+        });
         return response.data;
     },
 

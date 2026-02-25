@@ -27,12 +27,12 @@ export function useAdminStats() {
 }
 
 /**
- * Hook to fetch all user reports
+ * Hook to fetch all user reports with optional filters
  */
-export function useAdminReports() {
+export function useAdminReports(filters?: { search?: string; status?: string }) {
     return useQuery({
-        queryKey: adminKeys.reports(),
-        queryFn: adminService.getReports,
+        queryKey: [...adminKeys.reports(), filters],
+        queryFn: () => adminService.getReports(filters),
     });
 }
 

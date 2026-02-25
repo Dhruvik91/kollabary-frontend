@@ -74,9 +74,6 @@ export function ReportItem({ report, index, onUpdateStatus }: ReportItemProps) {
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div className="flex items-start gap-3 md:gap-4 pr-8 sm:pr-0">
-                        <div className="mt-1 rounded-full bg-muted p-2 text-muted-foreground shrink-0">
-                            <ShieldAlert size={20} />
-                        </div>
                         <div className="min-w-0">
                             <div className="flex flex-col gap-1.5 mb-2">
                                 <h3 className="font-semibold text-foreground break-words leading-tight">{report.reason}</h3>
@@ -95,14 +92,13 @@ export function ReportItem({ report, index, onUpdateStatus }: ReportItemProps) {
                                     {format(new Date(report.createdAt), 'MMM d, yyyy')}
                                 </span>
                             </div>
+                            <div className="flex items-center gap-2 self-start sm:self-center mt-2">
+                                <Button variant="outline" size="sm" className="rounded-lg h-9 gap-2 font-medium bg-background/50 hover:bg-background transition-colors">
+                                    <ExternalLink size={14} />
+                                    <span>Inspect</span>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 self-start sm:self-center">
-                        <Button variant="outline" size="sm" className="rounded-lg h-9 gap-2 font-medium bg-background/50 hover:bg-background transition-colors">
-                            <ExternalLink size={14} />
-                            <span>Inspect</span>
-                        </Button>
                     </div>
                 </div>
 
