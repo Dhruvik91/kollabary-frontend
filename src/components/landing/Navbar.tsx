@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
-import { Logo } from '@/components/shared/Logo';
+import { LightModeIcon, DarkModeIcon } from '@/assets/logo';
+import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { FRONTEND_ROUTES } from '@/constants';
 
@@ -15,6 +16,12 @@ import { FRONTEND_ROUTES } from '@/constants';
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -42,7 +49,13 @@ export const Navbar = () => {
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
                 <Link href="/" className="flex items-center active:scale-95 transition-transform">
-                    <Logo />
+                    {!mounted ? (
+                        <div className="w-[150px] h-[100px] bg-muted/20 animate-pulse rounded" />
+                    ) : resolvedTheme === 'dark' ? (
+                        <DarkModeIcon width={150} height={100} className="transition-opacity hover:opacity-90" />
+                    ) : (
+                        <LightModeIcon width={150} height={100} className="transition-opacity hover:opacity-90" />
+                    )}
                 </Link>
 
                 {/* Desktop Nav */}
