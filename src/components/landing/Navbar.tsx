@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Rocket } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { Logo } from '@/components/shared/Logo';
 import { cn } from '@/lib/utils';
 import { FRONTEND_ROUTES } from '@/constants';
 
@@ -40,11 +41,8 @@ export const Navbar = () => {
             )}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground group-hover:scale-110 transition-transform duration-300">
-                        <Rocket size={20} />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight">Kollabary</span>
+                <Link href="/" className="flex items-center active:scale-95 transition-transform">
+                    <Logo />
                 </Link>
 
                 {/* Desktop Nav */}
