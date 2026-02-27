@@ -9,6 +9,7 @@ import { LightModeIcon, DarkModeIcon } from '@/assets/logo';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { FRONTEND_ROUTES } from '@/constants';
+import { Logo } from '../shared/Logo';
 
 /**
  * Navbar component with glassmorphism and sticky behavior
@@ -48,15 +49,11 @@ export const Navbar = () => {
             )}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="flex items-center active:scale-95 transition-transform">
-                    {!mounted ? (
-                        <div className="w-[150px] h-[100px] bg-muted/20 animate-pulse rounded" />
-                    ) : resolvedTheme === 'dark' ? (
-                        <DarkModeIcon width={150} height={100} className="transition-opacity hover:opacity-90" />
-                    ) : (
-                        <LightModeIcon width={150} height={100} className="transition-opacity hover:opacity-90" />
-                    )}
-                </Link>
+                <div className="relative ">
+                    <Link href="/" className="active:scale-95 transition-transform">
+                        <Logo className="w-64" />
+                    </Link>
+                </div>
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-8">

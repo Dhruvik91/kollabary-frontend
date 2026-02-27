@@ -39,7 +39,7 @@ export default function HelpCenterPage() {
                         <summary className="list-none font-bold cursor-pointer flex justify-between items-center text-foreground hover:text-primary transition-colors">
                             How do I verify my brand account? <span className="text-primary">{"+"}</span>
                         </summary>
-                        <p className="mt-3 text-sm opacity-80 leading-relaxed">To verify your brand, go to Settings > Verification and upload your business credentials. Review typically takes 24-48 hours.</p>
+                        <p className="mt-3 text-sm opacity-80 leading-relaxed">To verify your brand, go to Settings &gt; Verification and upload your business credentials. Review typically takes 24-48 hours.</p>
                     </details>
                     <details className="group border-b border-border/50 pb-4">
                         <summary className="list-none font-bold cursor-pointer flex justify-between items-center text-foreground hover:text-primary transition-colors">

@@ -49,19 +49,15 @@ export function Logo({
         : logoLightCollapsed;
 
     return (
-        <div className={cn("items-center", className)}>
+        <div className={cn("", className)}>
             <motion.div
                 layout
-                className={cn(
-                    "relative shrink-0",
-                    !isCollapsed && "hover:scale-105"
-                )}
             >
                 <Image
                     src={isCollapsed ? logoCollapsedSrc : logoSrc}
                     alt="Kollabary Logo"
                     className={cn(
-                        "object-contain transition-all duration-300 w-full h-auto"
+                        "object-contain transition-all duration-300 w-full h-auto absolute -top-20 right-12"
                     )}
                 />
             </motion.div>
