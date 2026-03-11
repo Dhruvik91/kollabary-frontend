@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
-import { LightModeIcon, DarkModeIcon } from '@/assets/logo';
-import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { FRONTEND_ROUTES } from '@/constants';
 import { Logo } from '../shared/Logo';
@@ -17,7 +15,6 @@ import { Logo } from '../shared/Logo';
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -48,10 +45,10 @@ export const Navbar = () => {
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                <div className="relative ">
+            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
+                <div className="flex items-center">
                     <Link href="/" className="active:scale-95 transition-transform">
-                        <Logo className="w-64" />
+                        <Logo className="w-32 sm:w-40 md:w-44 lg:w-48" />
                     </Link>
                 </div>
 

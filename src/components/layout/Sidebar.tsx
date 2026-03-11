@@ -147,9 +147,9 @@ export const Sidebar = ({
     const sidebarContent = (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Sidebar Header */}
-            <div className="h-28 flex items-center justify-center border-b border-border/50 shrink-0">
+            <div className="h-28 flex items-center justify-center border-b border-border/50 shrink-0 px-3">
                 <Link href="/overview" className="active:scale-95 transition-transform">
-                    <Logo isCollapsed={isCollapsed} />
+                    <Logo isCollapsed={isCollapsed} className={cn(isCollapsed ? "w-12" : "w-40")} />
                 </Link>
             </div>
 

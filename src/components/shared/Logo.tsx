@@ -1,15 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useTheme } from 'next-themes';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-import logoLight from '../../../public/logo/light_mode_logo.png';
-import logoDark from '../../../public/logo/dark_mode_logo.png';
-import logoLightCollapsed from '../../../public/logo/light_icon.png';
-import logoDarkCollapsed from '../../../public/logo/dark_icon.png';
+import { DarkModeIcon, DarkModeLogo, LightModeIcon, LightModeLogo } from '@/assets/logo';
 
 interface LogoProps {
     className?: string;
@@ -40,27 +35,19 @@ export function Logo({
         return <div className={cn("w-10 h-10 bg-zinc-100 dark:bg-zinc-800 animate-pulse rounded-xl", className)} />;
     }
 
-    const logoSrc = resolvedTheme === 'dark'
-        ? logoDark
-        : logoLight;
-
-    const logoCollapsedSrc = resolvedTheme === 'dark'
-        ? logoDarkCollapsed
-        : logoLightCollapsed;
-
     return (
-        <div className={cn("", className)}>
-            <motion.div
-                layout
-            >
-                <Image
-                    src={isCollapsed ? logoCollapsedSrc : logoSrc}
-                    alt="Kollabary Logo"
-                    className={cn(
-                        "object-contain transition-all duration-300 w-full h-auto absolute -top-20 right-12"
-                    )}
-                />
-            </motion.div>
+        <div className={cn("flex items-center justify-center", className)} aria-label="Kollabary Logo">
+            {isCollapsed ? (
+                resolvedTheme === 'dark' ? (
+                    <DarkModeIcon width={48} height={48} className="w-12 h-12" />
+                ) : (
+                    <LightModeIcon width={48} height={48} className="w-12 h-12" />
+                )
+            ) : resolvedTheme === 'dark' ? (
+                <DarkModeLogo width={160} height={48} className="w-40 h-12" />
+            ) : (
+                <LightModeLogo width={160} height={48} className="w-40 h-12" />
+            )}
         </div>
     );
 }
