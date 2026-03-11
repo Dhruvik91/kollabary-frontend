@@ -16,14 +16,19 @@ export function ReportList({ reports, onUpdateStatus }: ReportListProps) {
         <div className="space-y-4">
             <AnimatePresence mode="popLayout">
                 {reports.length > 0 ? (
-                    reports.map((report, idx) => (
-                        <ReportItem
-                            key={report.id}
-                            report={report}
-                            index={idx}
-                            onUpdateStatus={onUpdateStatus}
-                        />
-                    ))
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                        {
+                            reports.map((report, idx) => (
+                                <ReportItem
+                                    key={report.id}
+                                    report={report}
+                                    index={idx}
+                                    onUpdateStatus={onUpdateStatus}
+                                />
+                            ))
+                        }
+                    </div>
+
                 ) : (
                     <div className="flex flex-col items-center justify-center py-20 bg-muted/20 rounded-2xl border border-dashed border-border/50">
                         <ShieldAlert size={48} className="text-muted-foreground/30" />

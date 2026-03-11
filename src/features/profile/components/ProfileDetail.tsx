@@ -47,7 +47,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] bg-zinc-100 dark:bg-zinc-800 border-4 md:border-8 border-background shadow-2xl overflow-hidden flex items-center justify-center relative group"
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] bg-zinc-100 glass-chip border-4 md:border-8 border-background shadow-2xl overflow-hidden flex items-center justify-center relative group"
                     >
                         {displayImage ? (
                             <Image src={displayImage} alt={fullName} fill className="object-cover" />
@@ -98,8 +98,8 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left: Social Links */}
                 <div className="lg:col-span-1 space-y-6">
-                    <Card className="rounded-[2rem] border-border/50 bg-card/30 backdrop-blur-md overflow-hidden border-none shadow-none ring-1 ring-border/50">
-                        <div className="p-6 border-b border-border/50 bg-muted/20 flex items-center gap-3">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/30 glass-card overflow-hidden border-none shadow-none ring-1 ring-border/50">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/20 flex items-center gap-3">
                             <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
                                 <Globe size={18} />
                             </div>
@@ -132,7 +132,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
 
                 {/* Center/Right: Bio */}
                 <div className="lg:col-span-2">
-                    <Card className="rounded-[2rem] border-border/50 bg-card/30 backdrop-blur-md p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
+                    <Card className="rounded-[2rem] border-border/50 bg-card/30 glass-card p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 text-primary">
                                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -151,7 +151,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
             {/* Account Security (Password Update) */}
             {isOwner && (
                 <div className="lg:col-span-3">
-                    <Card className="rounded-[2.5rem] border-border/50 bg-card/30 backdrop-blur-md p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
+                    <Card className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3 text-primary">

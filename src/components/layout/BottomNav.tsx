@@ -10,6 +10,11 @@ import {
     Handshake,
     User,
     Settings,
+    TrendingUp,
+    ShieldAlert,
+    CheckCircle,
+    CreditCard,
+    UserPlus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -58,7 +63,11 @@ export const BottomNav = () => {
 
         // Fallback (ADMIN or unknown) – only overview
         return [
-            { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Overview' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
         ];
     };
 
@@ -69,8 +78,7 @@ export const BottomNav = () => {
 
     return (
         <nav
-            className="fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border"
-            style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+            className={cn("fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border", `${pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : 'block'}`)}
             aria-label="Bottom navigation"
         >
             <div className="flex items-center justify-around h-16">

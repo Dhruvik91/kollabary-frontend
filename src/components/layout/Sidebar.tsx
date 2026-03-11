@@ -23,6 +23,7 @@ import {
     UserPlus
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import { Logo } from '@/components/shared/Logo';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { useLogout } from '@/hooks/use-auth.hooks';
@@ -121,7 +122,7 @@ export const Sidebar = ({
 
     const getLinksByRole = () => {
         switch (user?.role) {
-            case UserRole.ADMIN: return [...commonLinks, ...adminLinks];
+            case UserRole.ADMIN: return [...adminLinks];
             case UserRole.INFLUENCER: return [...commonLinks];
             case UserRole.USER: return [...commonLinks, ...brandLinks];
             default: return commonLinks;
@@ -146,21 +147,9 @@ export const Sidebar = ({
     const sidebarContent = (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Sidebar Header */}
-            <div className="h-16 flex items-center justify-between px-5 border-b border-border/50 mb-6 shrink-0">
-                <Link href="/overview" className="flex items-center gap-3 active:scale-95 transition-transform overflow-hidden">
-                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 shrink-0">
-                        <Rocket size={20} />
-                    </div>
-                    {!isCollapsed && (
-                        <motion.span
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: 'auto' }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="font-bold text-xl tracking-tight whitespace-nowrap overflow-hidden"
-                        >
-                            Kollabary
-                        </motion.span>
-                    )}
+            <div className="h-28 flex items-center justify-center border-b border-border/50 shrink-0 px-3">
+                <Link href="/overview" className="active:scale-95 transition-transform">
+                    <Logo isCollapsed={isCollapsed} className={cn(isCollapsed ? "w-12" : "w-40")} />
                 </Link>
             </div>
 
@@ -224,12 +213,16 @@ export const Sidebar = ({
                                         Profile
                                     </div>
                                 </Link>
-                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
-                                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
-                                        <Settings size={18} className="text-muted-foreground" />
-                                        Settings
-                                    </div>
-                                </Link>
+                                {
+                                    user.role === UserRole.INFLUENCER && (
+                                        <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                            <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
+                                                <Settings size={18} className="text-muted-foreground" />
+                                                Settings
+                                            </div>
+                                        </Link>
+                                    )
+                                }
                                 <div className="h-px bg-border/50 my-1 mx-1" />
                                 <button
                                     onClick={() => setIsLogoutModalOpen(true)}

@@ -1,40 +1,37 @@
 'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import {
     Trophy,
     CheckCircle2,
-    Star,
-    Zap,
-    BarChart3,
-    AlertTriangle,
     Check,
     TrendingUp,
     Award,
-    Clock,
-    Target,
     XCircle,
+    Star,
+    MessageCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RankingBreakdown } from '@/types/ranking';
 import { cn } from '@/lib/utils';
+import { RankTierBadge } from '@/components/shared/RankTierBadge';
 
 interface RankingBreakdownCardProps {
     breakdown: RankingBreakdown;
     className?: string;
+    stats?: {
+        completedCollaborations: number;
+        avgRating: number;
+        totalReviews: number;
+        rankingTier?: string;
+    };
 }
 
-export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownCardProps) => {
+export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBreakdownCardProps) => {
     const {
         totalScore,
         completedCollaborations,
-        paidPromotions,
-        averageRating,
-        responseSpeed,
-        completionRate,
         verificationBonus,
-        penalties,
         rankingTier,
         nextTier,
         tierProgress,
@@ -69,8 +66,8 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
     };
 
     return (
-        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
-            <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 bg-muted/30">
+        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/40 bg-card/40 glass-card overflow-hidden", className)}>
+            <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 glass-section bg-muted/30">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Trophy size={16} className="text-primary sm:w-[18px] sm:h-[18px]" />
@@ -82,11 +79,11 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                 </div>
             </CardHeader>
 
-            <CardContent className="p-5 sm:p-6 md:p-8 space-y-6 md:space-y-8">
+            <CardContent className="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-8">
                 {/* Main Score Display */}
                 <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4">
                     <div className="relative">
-                        <svg className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
+                        <svg viewBox="0 0 160 160" className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
                             <circle
                                 cx="80"
                                 cy="80"
@@ -94,7 +91,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                                 stroke="currentColor"
                                 strokeWidth="12"
                                 fill="transparent"
-                                className="text-zinc-100 dark:text-zinc-800"
+                                className="text-zinc-100 dark:text-white/[0.10]"
                             />
                             <motion.circle
                                 cx="80"
@@ -114,7 +111,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                             <motion.span
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className={cn("text-5xl font-black tabular-nums", getScoreColor(totalScore))}
+                                className={cn("text-4xl sm:text-5xl font-black tabular-nums", getScoreColor(totalScore))}
                             >
                                 {totalScore}
                             </motion.span>
@@ -125,9 +122,44 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                     </div>
                 </div>
 
+                {/* Inline Creator Stats (when stats prop provided) */}
+                {stats && (
+                    <div className="space-y-4">
+                        {stats.rankingTier && (
+                            <div className="flex flex-col items-center justify-center py-2 space-y-1">
+                                <RankTierBadge tier={stats.rankingTier} size="md" showDescription />
+                                <span className="text-xs font-bold text-foreground">{stats.rankingTier}</span>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-3 gap-2">
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-primary mb-1">
+                                    <Award size={12} />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.completedCollaborations}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Collabs</p>
+                            </div>
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-yellow-500 mb-1">
+                                    <Star size={12} className="fill-yellow-500" />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.avgRating}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Rating</p>
+                            </div>
+                            <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">
+                                <div className="flex items-center justify-center text-primary mb-1">
+                                    <MessageCircle size={12} />
+                                </div>
+                                <p className="text-lg font-black tabular-nums">{stats.totalReviews}</p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Tier Progress */}
                 {nextTier && (
-                    <div className="space-y-3 p-4 bg-muted/30 rounded-2xl border border-border/30">
+                    <div className="space-y-3 p-4 glass-section bg-muted/30 rounded-2xl border border-border/30">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <TrendingUp size={16} className="text-primary" />
@@ -135,7 +167,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                             </div>
                             <span className="text-sm font-bold text-primary">{tierProgress}%</span>
                         </div>
-                        <div className="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-zinc-200 glass-chip rounded-full h-2 overflow-hidden">
                             <motion.div
                                 className="h-full bg-primary rounded-full"
                                 initial={{ width: 0 }}
@@ -154,19 +186,19 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
 
                     <div className="grid grid-cols-1 gap-3">
                         {/* Completed Collaborations */}
-                        <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-border/30">
+                        <div className="flex items-center justify-between p-3 sm:p-4 bg-zinc-50 glass-section rounded-2xl border border-border/30">
                             <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
                                     <Award size={18} />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-sm font-bold truncate">Completed Collaborations</p>
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs sm:text-sm font-bold">Completed Collaborations</p>
+                                    <p className="text-[11px] sm:text-xs text-muted-foreground">
                                         {completedCollaborations.count} completed • 1 point each
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-3">
+                            <div className="text-right shrink-0 ml-3">
                                 <p className="text-sm font-bold text-blue-500 whitespace-nowrap">
                                     {completedCollaborations.score}
                                 </p>
@@ -176,23 +208,23 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
 
                         {/* Verification Bonus */}
                         <div className={cn(
-                            "flex items-center justify-between p-4 rounded-2xl border",
+                            "flex items-center justify-between p-3 sm:p-4 rounded-2xl border",
                             verificationBonus.isVerified
                                 ? "bg-emerald-500/5 border-emerald-500/10"
-                                : "bg-zinc-50 dark:bg-zinc-800/30 border-border/30"
+                                : "bg-zinc-50 dark:bg-white/[0.06] border-border/30 dark:border-white/[0.08]"
                         )}>
                             <div className="flex items-center gap-3 min-w-0">
                                 <div className={cn(
-                                    "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
                                     verificationBonus.isVerified
                                         ? "bg-emerald-500/10 text-emerald-500"
-                                        : "bg-zinc-200 dark:bg-zinc-700 text-muted-foreground"
+                                        : "bg-zinc-200 glass-chip text-muted-foreground"
                                 )}>
                                     <CheckCircle2 size={18} />
                                 </div>
                                 <div className="min-w-0">
                                     <p className={cn(
-                                        "text-sm font-bold truncate",
+                                        "text-xs sm:text-sm font-bold",
                                         verificationBonus.isVerified && "text-emerald-500"
                                     )}>
                                         Verification Bonus
@@ -207,7 +239,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                                     </p>
                                 </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-3">
+                            <div className="text-right shrink-0 ml-3">
                                 <p className={cn(
                                     "text-sm font-bold whitespace-nowrap",
                                     verificationBonus.isVerified ? "text-emerald-500" : "text-muted-foreground"
@@ -232,7 +264,7 @@ export const RankingBreakdownCard = ({ breakdown, className }: RankingBreakdownC
                     <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
                         Current Tier Requirements
                     </h4>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="flex items-center gap-2">
                             {getRequirementStatus(requirementsMet.completedCollabs)}
                             <span className="text-xs font-medium">

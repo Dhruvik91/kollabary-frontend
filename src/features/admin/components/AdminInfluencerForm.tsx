@@ -36,7 +36,7 @@ export function AdminInfluencerForm({ onSubmit, isLoading }: AdminInfluencerForm
     });
 
     return (
-        <Card className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border-border bg-card/50 backdrop-blur-sm">
+        <Card className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border-border bg-card/50 glass-card">
             <CardHeader className="space-y-1">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <UserPlus size={24} />

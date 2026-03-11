@@ -16,8 +16,8 @@ export const AccountDetailCard = ({ email, id }: AccountDetailCardProps) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
         >
-            <Card className="border-border shadow-none rounded-[2rem] overflow-hidden">
-                <CardHeader className="bg-muted/30 pb-6 border-b border-border">
+            <Card className="border-border glass-card shadow-none rounded-[2rem] overflow-hidden">
+                <CardHeader className="glass-section bg-muted/30 pb-6 border-b border-border">
                     <CardTitle>Account Overview</CardTitle>
                     <CardDescription>Detailed information about your Kollabary profile</CardDescription>
                 </CardHeader>

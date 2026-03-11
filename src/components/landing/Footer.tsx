@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Rocket, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
+import { FRONTEND_ROUTES } from '@/constants';
 
 /**
  * Premium Footer component
@@ -14,36 +15,36 @@ export const Footer = () => {
         {
             title: 'Platform',
             links: [
-                { name: 'Discover', href: '#' },
-                { name: 'Campaigns', href: '#' },
-                { name: 'Analytics', href: '#' },
-                { name: 'Pricing', href: '#' },
+                { name: 'Discover', href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS },
+                { name: 'Campaigns', href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS },
+                { name: 'Analytics', href: FRONTEND_ROUTES.DASHBOARD.ANALYTICS },
+                { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
             ],
         },
         {
             title: 'Company',
             links: [
-                { name: 'About', href: '#' },
-                { name: 'Careers', href: '#' },
-                { name: 'Press', href: '#' },
-                { name: 'Contact', href: '#' },
+                { name: 'About', href: FRONTEND_ROUTES.ABOUT },
+                { name: 'Careers', href: FRONTEND_ROUTES.CAREERS },
+                { name: 'Press', href: FRONTEND_ROUTES.PRESS },
+                { name: 'Contact', href: FRONTEND_ROUTES.CONTACT },
             ],
         },
         {
             title: 'Resources',
             links: [
-                { name: 'Blog', href: '#' },
-                { name: 'Docs', href: '#' },
-                { name: 'Guides', href: '#' },
-                { name: 'Help Center', href: '#' },
+                { name: 'Blog', href: FRONTEND_ROUTES.BLOG },
+                { name: 'Docs', href: FRONTEND_ROUTES.DOCS },
+                { name: 'Guides', href: FRONTEND_ROUTES.GUIDES },
+                { name: 'Help Center', href: FRONTEND_ROUTES.HELP_CENTER },
             ],
         },
         {
             title: 'Legal',
             links: [
-                { name: 'Privacy', href: '#' },
-                { name: 'Terms', href: '#' },
-                { name: 'Cookies', href: '#' },
+                { name: 'Privacy', href: FRONTEND_ROUTES.PRIVACY },
+                { name: 'Terms', href: FRONTEND_ROUTES.TERMS },
+                { name: 'Cookies', href: FRONTEND_ROUTES.COOKIES },
             ],
         },
     ];

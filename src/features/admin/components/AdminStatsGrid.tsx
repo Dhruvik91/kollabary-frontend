@@ -52,7 +52,7 @@ export function AdminStatsGrid({ stats }: AdminStatsGridProps) {
                     key={card.title}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
+                    transition={{ delay: idx * 0.04 }}
                 >
                     <AdminStatCard {...card} />
                 </motion.div>

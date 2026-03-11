@@ -65,7 +65,7 @@ export const ConversationList = ({
                             transition={{ delay: idx * 0.03 }}
                             onClick={() => onSelectConversation(conversation.id)}
                             className={cn(
-                                "flex items-center gap-3 p-2.5 text-left transition-all duration-200 rounded-xl group relative overflow-hidden mx-1",
+                                "flex items-center gap-3 p-2.5 text-left transition-all duration-200 rounded-xl group relative overflow-hidden mx-1 cursor-pointer",
                                 isActive
                                     ? "bg-primary/10 text-primary"
                                     : "hover:bg-muted/50 text-foreground"

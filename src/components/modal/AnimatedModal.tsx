@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/dialog';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { modalVariants } from '@/lib/motion';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -38,6 +37,30 @@ const sizeClasses = {
     full: 'sm:max-w-[95vw]',
 };
 
+const overlayAnimation = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+};
+
+const modalAnimation = {
+    hidden: {
+        opacity: 0,
+        scale: 0.96,
+        y: 8,
+    },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+    },
+    exit: {
+        opacity: 0,
+        scale: 0.96,
+        y: 8,
+    },
+};
+
 /**
  * AnimatedModal - A premium, generic modal component
  * Combines Shadcn UI's accessibility with Framer Motion animations
@@ -57,6 +80,12 @@ export const AnimatedModal = ({
 }: AnimatedModalProps) => {
     const shouldReduceMotion = useReducedMotion();
 
+    const reducedVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+        exit: { opacity: 0 },
+    };
+
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <AnimatePresence>
@@ -64,11 +93,12 @@ export const AnimatedModal = ({
                     <DialogPortal forceMount>
                         <DialogPrimitive.Overlay asChild>
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.15 }}
-                                className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]"
+                                variants={shouldReduceMotion ? reducedVariants : overlayAnimation}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                className="fixed inset-0 z-50 bg-black/40"
                             />
                         </DialogPrimitive.Overlay>
                         <DialogPrimitive.Content
@@ -77,14 +107,22 @@ export const AnimatedModal = ({
                         >
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
                                 <motion.div
-                                    initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
-                                    animate={shouldReduceMotion ? { opacity: 1 } : "visible"}
-                                    exit={shouldReduceMotion ? { opacity: 0 } : "exit"}
-                                    variants={modalVariants}
-                                    transition={{ duration: 0.15 }}
+                                    variants={shouldReduceMotion ? reducedVariants : modalAnimation}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    transition={
+                                        shouldReduceMotion
+                                            ? { duration: 0.15 }
+                                            : {
+                                                type: 'spring',
+                                                damping: 30,
+                                                stiffness: 400,
+                                                mass: 0.8,
+                                            }
+                                    }
                                     className={cn(
                                         "w-full bg-background border border-border/50 rounded-3xl shadow-xl flex flex-col max-h-[90vh] relative pointer-events-auto transform-gpu",
-                                        "will-change-transform will-change-opacity",
                                         sizeClasses[size],
                                         className,
                                         contentClassName
@@ -135,3 +173,4 @@ export const AnimatedModal = ({
         </Dialog>
     );
 };
+

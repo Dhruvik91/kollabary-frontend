@@ -20,6 +20,8 @@ export function AuthGuard({ children, redirectTo = '/auth/login' }: AuthGuardPro
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
+            // Clear the role cookie so middleware doesn't redirect us back
+            document.cookie = "user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax";
             router.push(redirectTo);
         }
     }, [isAuthenticated, isLoading, router, redirectTo]);

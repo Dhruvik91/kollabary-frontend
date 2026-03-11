@@ -69,6 +69,9 @@ export const API_CONFIG = {
         },
         uploads: {
             base: '/uploads',
+        },
+        subscription: {
+            plans: '/subscription/plans',
         }
     }
 }
@@ -110,4 +113,20 @@ export const FRONTEND_ROUTES = {
         }
     },
     HOME: '/',
+    TERMS: '/terms',
+    PRIVACY: '/privacy',
+    COOKIES: '/cookies',
+    ABOUT: '/about',
+    CAREERS: '/careers',
+    PRESS: '/press',
+    CONTACT: '/contact',
+    BLOG: '/blog',
+    DOCS: '/docs',
+    GUIDES: '/guides',
+    HELP_CENTER: '/help-center',
+    PRICING: '/pricing',
+    SOLUTIONS: '/solutions',
+    MARKETING_DISCOVER: '/discover',
+    MARKETING_CAMPAIGNS: '/marketing-campaigns',
+    MARKETING_ANALYTICS: '/marketing-analytics',
 }

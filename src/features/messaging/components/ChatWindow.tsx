@@ -6,7 +6,7 @@ import { MessageBubble } from './MessageBubble';
 import { useAuth } from '@/contexts/auth-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, MoreVertical, Search, Trash2, ArrowLeft } from 'lucide-react';
+import { Settings, MoreVertical, Trash2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -24,6 +24,8 @@ interface ChatWindowProps {
     onViewProfile?: () => void;
     onBack?: () => void;
     children: React.ReactNode; // For Input
+    onDeleteMessage?: (messageId: string) => void;
+    onUpdateMessage?: (messageId: string, newMessage: string) => void;
 }
 
 export const ChatWindow = ({
@@ -33,7 +35,9 @@ export const ChatWindow = ({
     onDeleteConversation,
     onViewProfile,
     onBack,
-    children
+    children,
+    onDeleteMessage,
+    onUpdateMessage
 }: ChatWindowProps) => {
     const { user } = useAuth();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -55,8 +59,8 @@ export const ChatWindow = ({
 
     return (
         <div className="flex flex-col h-full bg-background relative overflow-hidden">
-            {/* Header - Integrated and Clean */}
-            <div className="flex items-center justify-between px-6 py-4 border-b bg-background/40 backdrop-blur-xl z-20 shrink-0">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-border/30 glass-card bg-card/60 z-20 shrink-0">
                 <div className="flex items-center gap-4">
                     {onBack && (
                         <Button
@@ -85,10 +89,7 @@ export const ChatWindow = ({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">
-                        <Search size={18} />
-                    </Button>
+                <div className="flex items-center gap-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">
@@ -145,6 +146,8 @@ export const ChatWindow = ({
                                     message={msg}
                                     isOwn={msg.sender.id === user?.id}
                                     showAvatar={showAvatar}
+                                    onDelete={onDeleteMessage}
+                                    onUpdate={onUpdateMessage}
                                 />
                             );
                         })
@@ -152,8 +155,8 @@ export const ChatWindow = ({
                 </div>
             </div>
 
-            {/* Input Wrapper - Integrated */}
-            <div className="px-6 py-6 pb-8 bg-background/80 backdrop-blur-xl border-t shrink-0">
+            {/* Input Wrapper - Pinned to bottom */}
+            <div className="px-4 sm:px-6 py-3 pb-4 bg-background/80 backdrop-blur-xl border-t border-border/30 shrink-0">
                 <div className="max-w-4xl mx-auto w-full">
                     {children}
                 </div>

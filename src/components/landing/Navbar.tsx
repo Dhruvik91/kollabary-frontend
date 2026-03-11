@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Rocket } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FRONTEND_ROUTES } from '@/constants';
+import { Logo } from '../shared/Logo';
 
 /**
  * Navbar component with glassmorphism and sticky behavior
@@ -14,6 +15,11 @@ import { FRONTEND_ROUTES } from '@/constants';
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -24,10 +30,10 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Features', href: '#features' },
-        { name: 'Solutions', href: '#solutions' },
-        { name: 'Pricing', href: '#pricing' },
-        { name: 'About', href: '#about' },
+        { name: 'Features', href: '/#features' },
+        { name: 'Solutions', href: FRONTEND_ROUTES.SOLUTIONS },
+        { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
+        { name: 'About', href: FRONTEND_ROUTES.ABOUT },
     ];
 
     return (
@@ -39,13 +45,12 @@ export const Navbar = () => {
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground group-hover:scale-110 transition-transform duration-300">
-                        <Rocket size={20} />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight">Kollabary</span>
-                </Link>
+            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
+                <div className="flex items-center">
+                    <Link href="/" className="active:scale-95 transition-transform">
+                        <Logo className="w-32 sm:w-40 md:w-44 lg:w-48" />
+                    </Link>
+                </div>
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-8">
