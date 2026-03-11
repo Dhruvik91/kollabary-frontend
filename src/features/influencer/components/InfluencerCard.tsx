@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Star, MapPin, CheckCircle2, MessageSquare, Eye, Award } from 'lucide-react';
+import { Star, MapPin, CheckCircle2, MessageSquare, Eye, Award, ShieldCheck, Crown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
@@ -47,105 +47,131 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="group overflow-hidden border-border/40 bg-card/40 glass-card hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-300 ease-out rounded-[1.5rem] h-full flex flex-col">
-                <CardContent className="p-0 flex flex-col flex-1">
-                    {/* Avatar & Cover Section */}
-                    <div className="relative h-32 bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-white/[0.06] dark:to-white/[0.03]">
-                        <div className="absolute -bottom-10 left-6">
-                            <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background shadow-xl">
-                                {displayAvatar ? (
-                                    <Image
-                                        src={displayAvatar}
-                                        alt={fullName || profile?.fullName || 'Influencer'}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-                                        {(fullName || profile?.fullName)?.charAt(0) || '?'}
+            <Card className="group  border-border/40 bg-card/40 glass-card hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0">
+                <CardContent className="p-0 flex flex-col flex-1 relative">
+                    {/* Header/Cover Image Section */}
+                    <div className="relative h-28 w-full overflow-hidden">
+                        {/* Modern Gradient Background */}
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-primary/5 to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent rounded-t-[2rem]" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary-rgb),0.1),transparent_50%)] " />
+
+                        {/* Subtle Pattern */}
+                        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+                    </div>
+
+
+                    {/* Profile Section with Overlapping Avatar */}
+                    <div className="relative px-6 -mt-22 mb-2">
+                        <div className="flex justify-between items-end">
+                            <div className="relative">
+                                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background/80 backdrop-blur-sm shadow-2xl group-hover:scale-105 transition-transform duration-500 group-hover:border-primary/30">
+                                    {displayAvatar ? (
+                                        <Image
+                                            src={displayAvatar}
+                                            alt={fullName || profile?.fullName || 'Influencer'}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-linear-to-br from-primary/80 to-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
+                                            {(fullName || profile?.fullName)?.charAt(0) || '?'}
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                {/* Verified Stamp on Avatar */}
+                                {verified && (
+                                    <div className="absolute -top-3 -right-3 z-20 pointer-events-none animate-in fade-in zoom-in duration-500">
+                                        <div className="relative rotate-12 group-hover:rotate-[5deg] group-hover:scale-110 transition-all duration-700">
+                                            {/* Prismatic Outer Glow */}
+                                            <div className="absolute inset-[-4px] bg-linear-to-tr from-cyan-500/40 via-blue-500/40 to-purple-500/40 rounded-full blur-lg opacity-60 animate-pulse" />
+                                            
+                                            {/* Minimalist Glass Seed */}
+                                            <div className="relative w-10 h-10 bg-slate-950/60 backdrop-blur-xl border border-white/30 rounded-xl flex items-center justify-center shadow-xl">
+                                                <ShieldCheck size={14} className="text-white fill-blue-400/20" />
+                                                {/* Corner Accent */}
+                                                <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-blue-400 rounded-tr-sm opacity-60" />
+                                            </div>
+                                        </div>
                                     </div>
+                                )}
+                                {/* Status Indicator */}
+                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-background rounded-full border-2 border-background flex items-center justify-center">
+                                    <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                                </div>
+                            </div>
+
+                            {/* Tier Badge Floating Right */}
+                            <div className="pb-1 transition-all duration-500 group-hover:translate-x-1">
+                                {influencer.rankingTier && (
+                                    <RankTierBadge tier={influencer.rankingTier} size="md" />
                                 )}
                             </div>
                         </div>
-                        {verified && (
-                            <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-md p-1.5 rounded-full shadow-sm border border-border/50">
-                                <CheckCircle2 size={16} className="text-blue-500" />
-                            </div>
-                        )}
                     </div>
 
                     {/* Content Section */}
-                    <div className="pt-12 pb-6 px-6 space-y-4 flex flex-col flex-1">
-                        <div>
-                            <h3 className="text-lg font-bold line-clamp-1">
+                    <div className="pb-6 px-6 space-y-5 flex flex-col flex-1">
+                        <div className="space-y-1.5">
+                            <h3 className="text-xl font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300">
                                 {fullName || profile?.fullName || 'Unknown Creator'}
                             </h3>
-                            <div className="flex items-center justify-between mt-1">
-                                {influencer.rankingTier && (
-                                    <RankTierBadge tier={influencer.rankingTier} size="sm" />
+
+                            {/* Tags / Badges */}
+                            <div className="flex flex-wrap gap-1.5">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10">
+                                    {niche}
+                                </span>
+                                {(influencer.address || profile?.location) && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 border border-transparent">
+                                        <MapPin size={10} className="text-primary/60" />
+                                        {influencer.address || profile?.location}
+                                    </span>
                                 )}
                             </div>
                         </div>
 
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2">
-                            <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-zinc-100 dark:bg-white/[0.10] text-zinc-600 dark:text-zinc-400 rounded-lg">
-                                {niche}
-                            </span>
-                            {(influencer.address || profile?.location) && (
-                                <span className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-medium bg-zinc-100 dark:bg-white/[0.10] text-zinc-500 dark:text-zinc-400 rounded-lg">
-                                    <MapPin size={10} />
-                                    {influencer.address || profile?.location}
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Stats Grid */}
-                        <div className="grid grid-cols-3 gap-2 py-4 border-y border-border/50 mt-auto">
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <Award size={12} className="text-primary" />
-                                    <span className="text-[10px] font-medium uppercase tracking-tight">Collabs</span>
-                                </div>
-                                <p className="text-sm font-bold">
-                                    {completedCollaborations ?? 0}
-                                </p>
-                            </div>
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <Star size={12} className="text-yellow-500 fill-amber-400" />
-                                    <span className="text-[10px] font-medium uppercase tracking-tight">Rating</span>
-                                </div>
+                        {/* Stats Grid - Modern Layout */}
+                        <div className="grid grid-cols-3 gap-3 p-3 bg-zinc-50/50 dark:bg-white/[0.02] rounded-2xl border border-border/40 mt-auto group-hover:border-primary/20 transition-colors duration-300">
+                            <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
+                                <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Collabs</span>
                                 <div className="flex items-center gap-1">
-                                    <p className="text-sm font-bold">{avgRating}</p>
-                                    <span className="text-[10px] text-muted-foreground">({totalReviews})</span>
+                                    <Award size={12} className="text-primary/70" />
+                                    <p className="text-sm font-black italic">{completedCollaborations ?? 0}</p>
                                 </div>
                             </div>
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <MessageSquare size={12} className="text-primary" />
-                                    <span className="text-[10px] font-medium uppercase tracking-tight">Reviews</span>
+                            <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
+                                <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Rating</span>
+                                <div className="flex items-center gap-0.5">
+                                    <Star size={12} className="text-yellow-500 fill-yellow-500" />
+                                    <p className="text-sm font-black italic">{avgRating}</p>
                                 </div>
-                                <p className="text-sm font-bold">{totalReviews}</p>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-1">
+                                <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Reviews</span>
+                                <div className="flex items-center gap-1">
+                                    <MessageSquare size={12} className="text-primary/70" />
+                                    <p className="text-sm font-black italic">{totalReviews}</p>
+                                </div>
                             </div>
                         </div>
 
                         {isBrand && (
-                            <div className="flex gap-2">
+                            <div className="grid grid-cols-2 gap-3 pt-2">
                                 <Button
                                     onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(id))}
-                                    className='flex-1 h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10'
+                                    className='h-11 rounded-xl font-black text-xs uppercase tracking-widest gap-2 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 active:scale-95 transition-all'
                                 >
-                                    <Eye size={16} />
+                                    <Eye size={16} strokeWidth={3} />
                                     Details
                                 </Button>
                                 <Button
                                     onClick={handleMessage}
                                     disabled={isStartingChat}
                                     variant="outline"
-                                    className="flex-1 h-11 rounded-xl font-bold gap-2 shadow-lg shadow-primary/10"
+                                    className="h-11 rounded-xl font-black text-xs uppercase tracking-widest gap-2 border-2 hover:bg-zinc-50 dark:hover:bg-white/5 active:scale-95 transition-all shadow-sm"
                                 >
-                                    <MessageSquare size={16} />
+                                    <MessageSquare size={16} strokeWidth={3} />
                                     Message
                                 </Button>
                             </div>

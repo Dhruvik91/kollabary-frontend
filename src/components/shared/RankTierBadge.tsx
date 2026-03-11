@@ -56,6 +56,43 @@ const tierConfigs: Record<string, {
     }
 };
 
+const tierConfigsV2: Record<string, {
+    label: string;
+    image: string;
+    description: string;
+}> = {
+    'Rising Creator': {
+        label: 'Rising Creator',
+        image: '/badgesV2/rising_creator.png',
+        description: 'New influencer building initial trust.'
+    },
+    'Emerging Partner': {
+        label: 'Emerging Partner',
+        image: '/badgesV2/emerging_partner.png',
+        description: 'Actively collaborating and gaining traction.'
+    },
+    'Trusted Collaborator': {
+        label: 'Trusted Collaborator',
+        image: '/badgesV2/trusted_collaborator.png',
+        description: 'Reliable influencer with consistent performance.'
+    },
+    'Pro Influencer': {
+        label: 'Pro Influencer',
+        image: '/badgesV2/pro_influencer.png',
+        description: 'High-performing creator with strong presence.'
+    },
+    'Elite Creator': {
+        label: 'Elite Creator',
+        image: '/badgesV2/elite_creator.png',
+        description: 'Top-tier influencer with proven consistency.'
+    },
+    'Kollabary Icon': {
+        label: 'Kollabary Icon',
+        image: '/badgesV2/kollabary_icon.png',
+        description: 'Platform leader. Trusted at scale.'
+    }
+};
+
 const sizeMap = {
     sm: { width: 40, height: 40, className: 'w-10 h-10' },
     md: { width: 56, height: 56, className: 'w-14 h-14' },
@@ -68,7 +105,7 @@ export const RankTierBadge = ({
     className,
     size = 'md'
 }: RankTierBadgeProps) => {
-    const config = tierConfigs[tier] || tierConfigs['Rising Creator'];
+    const config = tierConfigsV2[tier] || tierConfigsV2['Rising Creator'];
     const dimensions = sizeMap[size];
 
     return (
