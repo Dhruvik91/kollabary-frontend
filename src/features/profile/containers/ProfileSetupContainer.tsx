@@ -16,9 +16,9 @@ export function ProfileSetupContainer({ mode = 'setup' }: ProfileSetupContainerP
     const router = useRouter();
     const { mutate: saveProfile, isPending: isSaving } = useSaveProfile();
     const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
-    const { data: initialProfile, isLoading: isProfileLoading } = useMyProfile();
-
     const isEdit = mode === 'edit';
+    const { data: initialProfile, isLoading: isProfileLoading } = useMyProfile(isEdit);
+
     const isPending = isSaving || isUpdating;
 
     const handleSubmit = (data: ProfileFormValues) => {
