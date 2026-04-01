@@ -11,9 +11,20 @@ interface ReviewListProps {
     isLoading: boolean;
     onEdit?: (review: Review) => void;
     onDelete?: (id: string) => void;
+    maxItems?: number;
+    totalCount?: number;
+    showHeader?: boolean;
 }
 
-export const ReviewList = ({ reviews, isLoading, onEdit, onDelete }: ReviewListProps) => {
+export const ReviewList = ({
+    reviews,
+    isLoading,
+    onEdit,
+    onDelete,
+    maxItems,
+    totalCount,
+    showHeader = true,
+}: ReviewListProps) => {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
@@ -30,7 +41,7 @@ export const ReviewList = ({ reviews, isLoading, onEdit, onDelete }: ReviewListP
             <div className="flex flex-col items-center justify-center py-20 text-center space-y-6 bg-muted/5 rounded-[3rem] border-2 border-dashed border-border/50">
                 <div className="relative">
                     <div className="absolute -inset-4 bg-primary/5 rounded-full blur-xl animate-pulse" />
-                    <div className="relative w-20 h-20 rounded-[2.5rem] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary/40 rotate-6 border border-primary/10">
+                    <div className="relative w-20 h-20 rounded-[2.5rem] bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary/40 rotate-6 border border-primary/10">
                         <MessageSquareOff size={40} />
                     </div>
                 </div>
@@ -44,24 +55,29 @@ export const ReviewList = ({ reviews, isLoading, onEdit, onDelete }: ReviewListP
         );
     }
 
+    const reviewsToRender = typeof maxItems === 'number' ? reviews.slice(0, maxItems) : reviews;
+    const displayTotalCount = typeof totalCount === 'number' ? totalCount : reviews.length;
+
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between px-2">
-                <div className="flex items-center gap-3">
-                    <div className="h-8 w-1 bg-primary rounded-full" />
-                    <h3 className="text-lg font-black tracking-tighter uppercase">Recent Feedback</h3>
+            {showHeader && (
+                <div className="flex items-center justify-between px-2">
+                    <div className="flex items-center gap-3">
+                        <div className="h-8 w-1 bg-primary rounded-full" />
+                        <h3 className="text-lg font-black tracking-tighter uppercase">Recent Feedback</h3>
+                    </div>
+                    <div className="flex items-center gap-2 bg-muted/30 px-3 py-1.5 rounded-2xl border border-border/50">
+                        <Star size={14} className="text-yellow-500 fill-yellow-500" />
+                        <span className="text-sm font-black italic">
+                            {displayTotalCount} total reviews
+                        </span>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 bg-muted/30 px-3 py-1.5 rounded-2xl border border-border/50">
-                    <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                    <span className="text-sm font-black italic">
-                        {reviews.length} total reviews
-                    </span>
-                </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-1 gap-6">
                 <AnimatePresence mode="popLayout">
-                    {reviews.map((review, index) => (
+                    {reviewsToRender.map((review, index) => (
                         <motion.div
                             key={review.id}
                             initial={{ opacity: 0, y: 20 }}

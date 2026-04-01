@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -43,6 +43,12 @@ import { ReportModal } from '@/features/report/components/ReportModal';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { Badge } from '@/components/ui/badge';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+} from '@/components/ui/sheet';
 
 
 interface InfluencerProfileDetailProps {
@@ -76,7 +82,22 @@ export const InfluencerProfileDetail = ({
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isAllReviewsOpen, setIsAllReviewsOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mediaQuery = window.matchMedia('(min-width: 1024px)');
+        const handleChange = () => setIsDesktop(mediaQuery.matches);
+        handleChange();
+        if (typeof mediaQuery.addEventListener === 'function') {
+            mediaQuery.addEventListener('change', handleChange);
+            return () => mediaQuery.removeEventListener('change', handleChange);
+        }
+        mediaQuery.addListener(handleChange);
+        return () => mediaQuery.removeListener(handleChange);
+    }, []);
 
     const handleDeleteReview = (id: string) => {
         setReviewToDelete(id);
@@ -314,14 +335,14 @@ export const InfluencerProfileDetail = ({
                                                 </p>
                                                 <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
                                             </div>
-                                            <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
+                                            <div className="bg-zinc-100 dark:bg-white/10 p-4 rounded-2xl border border-border/50 dark:border-white/12 text-center">
                                                 <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
                                                     <Star size={14} className="fill-yellow-500" />
                                                 </div>
                                                 <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
                                                 <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
                                             </div>
-                                            <div className="bg-zinc-100 dark:bg-white/[0.10] p-4 rounded-2xl border border-border/50 dark:border-white/[0.12] text-center">
+                                            <div className="bg-zinc-100 dark:bg-white/10 p-4 rounded-2xl border border-border/50 dark:border-white/12 text-center">
                                                 <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
                                                     <MessageCircle size={14} />
                                                 </div>
@@ -420,7 +441,7 @@ export const InfluencerProfileDetail = ({
                                                 influencerId={influencer.id}
                                                 influencerName={profile?.fullName || 'Creator'}
                                             >
-                                                <Button className="flex-1 !w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                                <Button className="flex-1 w-full! h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                                                     Start Collaboration
                                                 </Button>
                                             </CollaborationRequestDialog>
@@ -434,9 +455,24 @@ export const InfluencerProfileDetail = ({
                                 <ReviewList
                                     reviews={reviews}
                                     isLoading={isReviewsLoading}
+                                    maxItems={2}
+                                    totalCount={reviews.length}
                                     onEdit={setEditingReview}
                                     onDelete={handleDeleteReview}
                                 />
+
+                                {!isReviewsLoading && reviews.length > 2 && (
+                                    <div className="mt-6 flex justify-center">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => setIsAllReviewsOpen(true)}
+                                            className="h-12 px-8 rounded-2xl font-bold border-border/50 bg-background/50"
+                                        >
+                                            Show more reviews
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -521,6 +557,48 @@ export const InfluencerProfileDetail = ({
                 targetType="influencer"
                 targetName={profile?.fullName || 'the Influencer'}
             />
+
+            <Sheet open={isAllReviewsOpen && !isDesktop} onOpenChange={setIsAllReviewsOpen}>
+                <SheetContent
+                    side="bottom"
+                    className="h-[85vh] rounded-t-[3.5rem] p-0 border-t border-border/50 bg-background/80 backdrop-blur-2xl"
+                >
+                    <SheetHeader className="px-8 pt-8 pb-4 border-b border-border/50">
+                        <SheetTitle className="text-2xl font-black tracking-tight">
+                            All Reviews
+                        </SheetTitle>
+                    </SheetHeader>
+                    <div className="overflow-y-auto h-full px-8 py-8 pb-24">
+                        <ReviewList
+                            reviews={reviews}
+                            isLoading={isReviewsLoading}
+                            showHeader={false}
+                            totalCount={reviews.length}
+                            onEdit={setEditingReview}
+                            onDelete={handleDeleteReview}
+                        />
+                    </div>
+                </SheetContent>
+            </Sheet>
+
+            <AnimatedModal
+                isOpen={isAllReviewsOpen && isDesktop}
+                onClose={() => setIsAllReviewsOpen(false)}
+                title="All Reviews"
+                description={`Showing all feedback for ${profile?.fullName || fullName || 'this creator'}.`}
+                size="lg"
+            >
+                <div className="max-h-[70vh] overflow-y-auto pr-1">
+                    <ReviewList
+                        reviews={reviews}
+                        isLoading={isReviewsLoading}
+                        showHeader={false}
+                        totalCount={reviews.length}
+                        onEdit={setEditingReview}
+                        onDelete={handleDeleteReview}
+                    />
+                </div>
+            </AnimatedModal>
         </div>
     );
 };
