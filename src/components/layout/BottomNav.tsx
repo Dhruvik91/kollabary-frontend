@@ -15,6 +15,7 @@ import {
     CheckCircle,
     CreditCard,
     UserPlus,
+    Bookmark,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -45,16 +46,17 @@ export const BottomNav = () => {
 
         if (user?.role === UserRole.USER) {
             return [
-                { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
-                { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Influencers' },
-                { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+                { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
+                { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
+                { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
+                { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: Bookmark, label: 'Recents' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
 
         if (user?.role === UserRole.INFLUENCER) {
             return [
-                { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+                { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.SETTINGS, icon: Settings, label: 'Settings' },
                 { href: profileHref, icon: User, label: 'Profile' },
@@ -63,11 +65,11 @@ export const BottomNav = () => {
 
         // Fallback (ADMIN or unknown) – only overview
         return [
-            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Overview' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Home' },
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
-            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
-            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },
-            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verify' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subs' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Explore' },
         ];
     };
 
@@ -106,13 +108,13 @@ export const BottomNav = () => {
                                 />
                             )}
                             <Icon
-                                size={22}
+                                size={20}
                                 className={cn(
-                                    'transition-transform duration-200',
+                                    'transition-all duration-200',
                                     active && 'scale-110'
                                 )}
                             />
-                            <span className="text-[10px] font-semibold leading-none mt-0.5">
+                            <span className="text-[9px] font-medium leading-none mt-1 truncate max-w-full px-1">
                                 {item.label}
                             </span>
                         </Link>

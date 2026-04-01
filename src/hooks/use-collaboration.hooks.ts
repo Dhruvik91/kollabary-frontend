@@ -113,3 +113,21 @@ export const useDeleteCollaboration = () => {
         },
     });
 };
+
+/**
+ * Hook to fetch influencers the user has collaborated with
+ */
+export const useMyInfluencers = (filters?: Omit<{ page?: number; limit?: number; search?: string; niche?: string }, 'page'>) => {
+    return useInfiniteQuery({
+        queryKey: ['my-influencers', filters],
+        queryFn: ({ pageParam = 1 }) =>
+            collaborationService.getMyInfluencers({ ...filters, page: pageParam }),
+        getNextPageParam: (lastPage: any) => {
+            if (lastPage.meta.page < lastPage.meta.totalPages) {
+                return lastPage.meta.page + 1;
+            }
+            return undefined;
+        },
+        initialPageParam: 1,
+    });
+};

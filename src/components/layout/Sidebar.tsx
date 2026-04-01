@@ -117,7 +117,8 @@ export const Sidebar = ({
 
 
     const brandLinks = [
-        { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Influencers' },
+        { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Discover' },
+        { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
     ];
 
     const getLinksByRole = () => {

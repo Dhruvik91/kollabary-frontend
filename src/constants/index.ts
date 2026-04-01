@@ -15,6 +15,7 @@ export const API_CONFIG = {
         },
         collaboration: {
             base: '/collaboration',
+            myInfluencers: '/collaboration/my-influencers',
             detail: (id: string) => `/collaboration/${id}`,
             status: (id: string) => `/collaboration/${id}/status`,
         },
@@ -95,6 +96,7 @@ export const FRONTEND_ROUTES = {
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
         INFLUENCERS: '/influencers',
+        MY_INFLUENCERS: '/my-influencers',
         PROJECTS: '/projects',
         OVERVIEW: '/overview',
         INFLUENCER_SETUP: '/influencer/setup',

@@ -79,4 +79,21 @@ export const collaborationService = {
         );
         return response.data;
     },
+
+    /**
+     * Get influencers the user has collaborated with
+     */
+    getMyInfluencers: async (filters?: { page?: number; limit?: number; search?: string; niche?: string }) => {
+        const params: Record<string, string | number> = {};
+        if (filters?.page) params.page = filters.page;
+        if (filters?.limit) params.limit = filters.limit;
+        if (filters?.search) params.search = filters.search;
+        if (filters?.niche) params.niche = filters.niche;
+
+        const response = await httpService.get(
+            API_CONFIG.path.collaboration.myInfluencers,
+            { params }
+        );
+        return response.data;
+    },
 };
