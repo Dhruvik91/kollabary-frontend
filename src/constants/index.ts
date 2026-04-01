@@ -73,6 +73,13 @@ export const API_CONFIG = {
         },
         subscription: {
             plans: '/subscription/plans',
+        },
+        auction: {
+            base: '/auctions',
+            my: '/auctions/my',
+            detail: (id: string) => `/auctions/${id}`,
+            bids: (id: string) => `/auctions/${id}/bids`,
+            acceptBid: (id: string) => `/auctions/bids/${id}/accept`,
         }
     }
 }
@@ -105,6 +112,9 @@ export const FRONTEND_ROUTES = {
         INFLUENCER_DETAIL: (id: string) => `/influencers/${id}`,
         PROFILE: '/profile',
         PROFILE_SETUP: '/profile/setup',
+        AUCTIONS: '/auctions',
+        AUCTION_DETAIL: (id: string) => `/auctions/${id}`,
+        AUCTION_CREATE: '/auctions/create',
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',
