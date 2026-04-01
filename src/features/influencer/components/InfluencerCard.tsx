@@ -47,7 +47,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="group  border-border/40 bg-card/40 glass-card hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0">
+            <Card className="border-border/40 bg-card/40 glass-card hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0">
                 <CardContent className="p-0 flex flex-col flex-1 relative">
                     {/* Header/Cover Image Section */}
                     <div className="relative h-28 w-full overflow-hidden">

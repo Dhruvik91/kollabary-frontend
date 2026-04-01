@@ -31,7 +31,7 @@ export const DashboardHeader = () => {
 
     return (
         <header className="sticky top-0 right-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
-            <div className="flex items-center gap-4 flex-grow max-w-xl">
+            <div className="flex items-center gap-4 max-w-xl invisible">
                 <div className="relative group flex-grow hidden sm:flex items-center">
                     <Search className="absolute left-3 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
                     <Input

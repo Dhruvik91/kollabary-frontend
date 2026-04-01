@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Conversation, Message } from '@/types/messaging.types';
 import { MessageBubble } from './MessageBubble';
 import { useAuth } from '@/contexts/auth-context';
@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 
 interface ChatWindowProps {
     conversation: Conversation;
@@ -41,6 +42,7 @@ export const ChatWindow = ({
 }: ChatWindowProps) => {
     const { user } = useAuth();
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [isDeleteConversationModalOpen, setIsDeleteConversationModalOpen] = useState(false);
 
     const partner = conversation.userOne.id === user?.id
         ? conversation.userTwo
@@ -97,7 +99,11 @@ export const ChatWindow = ({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="rounded-2xl border-border/50 shadow-2xl min-w-[200px] p-2">
-                            <DropdownMenuItem className="gap-3 rounded-xl p-3 text-destructive focus:text-destructive focus:bg-destructive/10" onClick={onDeleteConversation}>
+                            <DropdownMenuItem
+                                className="gap-3 rounded-xl p-3 text-destructive focus:text-destructive focus:bg-destructive/10"
+                                disabled={!onDeleteConversation}
+                                onClick={() => setIsDeleteConversationModalOpen(true)}
+                            >
                                 <Trash2 size={16} />
                                 <span className="font-bold">Delete Conversation</span>
                             </DropdownMenuItem>
@@ -109,6 +115,36 @@ export const ChatWindow = ({
                     </DropdownMenu>
                 </div>
             </div>
+
+            <AnimatedModal
+                isOpen={isDeleteConversationModalOpen}
+                onClose={() => setIsDeleteConversationModalOpen(false)}
+                title="Delete Conversation"
+                description="Are you sure you want to delete this conversation? This action cannot be undone."
+                size="sm"
+            >
+                <div className="flex flex-col items-center gap-6 py-4">
+                    <div className="flex gap-4 w-full">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsDeleteConversationModalOpen(false)}
+                            className="flex-1 h-12 rounded-2xl font-bold border-border/50"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                onDeleteConversation?.();
+                                setIsDeleteConversationModalOpen(false);
+                            }}
+                            className="flex-1 h-12 rounded-2xl font-bold shadow-xl shadow-destructive/20 active:scale-95 transition-all"
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
 
             {/* Messages Area - Edge to Edge */}
             <div
