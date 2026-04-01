@@ -25,13 +25,14 @@ import { CollaborationProgressActions } from '../components/CollaborationProgres
 import { ProofUploadDialog } from '../components/ProofUploadDialog';
 import { EditCollaborationDialog } from '../components/EditCollaborationDialog';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
-import { useCreateReview } from '@/hooks/use-review.hooks';
+import { useCreateReview, useInfluencerReviews } from '@/hooks/use-review.hooks';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, AlertCircle, Loader2 } from 'lucide-react';
+import { Star, AlertCircle, Loader2, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 interface CollaborationDetailContainerProps {
     id: string;
@@ -49,6 +50,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const { mutate: deleteCollaboration, isPending: isDeleting } = useDeleteCollaboration();
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
     const { mutate: createReview, isPending: isCreatingReview } = useCreateReview();
+    const { data: influencerReviews = [] } = useInfluencerReviews(collaboration?.influencer?.id || '');
     const { user } = useAuth();
     const router = useRouter();
 
@@ -71,6 +73,35 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         });
     };
 
+    const handleShare = async () => {
+        try {
+            const url = typeof window !== 'undefined' ? window.location.href : '';
+            if (!url) return;
+
+            const nav = typeof navigator !== 'undefined' ? (navigator as Navigator & { share?: any; clipboard?: any }) : undefined;
+
+            if (nav && 'share' in nav) {
+                await nav.share({
+                    title: 'Kollabary Collaboration',
+                    url,
+                });
+                return;
+            }
+
+            const clipboard: any = (nav as any)?.clipboard;
+            if (clipboard?.writeText) {
+                await clipboard.writeText(url);
+                toast.success('Link copied to clipboard');
+                return;
+            }
+
+            toast.error('Sharing is not supported on this browser');
+        } catch (error: any) {
+            if (error?.name === 'AbortError') return;
+            toast.error('Failed to share');
+        }
+    };
+
     // Loading State
     if (isLoading) {
         return <CollaborationLoadingState />;
@@ -84,6 +115,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     // Derived State
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const partner = isInfluencer ? collaboration.requester : collaboration.influencer;
+    const hasReviewForThisCollaboration = influencerReviews.some((review) => review.collaboration?.id === collaboration.id);
 
     // Authorization check: Only requester or influencer can view
     const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.user.id || user?.role === UserRole.ADMIN;
@@ -119,7 +151,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         CollaborationStatus.COMPLETED
     ].includes(collaboration.status);
 
-    const canReview = isRequester && collaboration.status === CollaborationStatus.COMPLETED;
+    const canReview = isRequester && collaboration.status === CollaborationStatus.COMPLETED && !hasReviewForThisCollaboration;
 
     const handleReviewSubmit = (data: { rating: number; comment: string }) => {
         createReview({
@@ -165,6 +197,17 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                         collaboration={collaboration}
                         canSubmitProof={canSubmitProof}
                         onUpdateProof={() => setIsProofDialogOpen(true)}
+                        headerActions={
+                            <Button
+                                type="button"
+                                onClick={handleShare}
+                                variant="outline"
+                                size="icon"
+                                className="rounded-xl w-10 h-10 bg-background/50 border-border/50 hover:bg-muted font-bold transition-all shrink-0"
+                            >
+                                <Share2 size={18} />
+                            </Button>
+                        }
                     />
 
                     {/* Pending Actions (Accept/Reject) */}
@@ -187,7 +230,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
 
                     {/* Review Action */}
                     {canReview && (
-                        <Card className="rounded-[2.5rem] border-border/50 bg-primary/5 p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-dashed border-primary/20">
+                        <Card className="rounded-[2.5rem] bg-primary/5 p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-dashed border-primary/20">
                             <div className="space-y-1 text-center md:text-left">
                                 <h3 className="text-xl font-black tracking-tight flex items-center gap-2 justify-center md:justify-start">
                                     <Star size={24} className="text-yellow-500 fill-yellow-500" />

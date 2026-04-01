@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Star, MapPin, CheckCircle2, MessageSquare, Eye, Award, ShieldCheck, Crown } from 'lucide-react';
+import { Star, MapPin, MessageSquare, Eye, Award, ShieldCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
@@ -18,7 +18,7 @@ interface InfluencerCardProps {
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user: influencerUser, fullName, niche, platforms, avatarUrl, avgRating, totalReviews, verified, id, completedCollaborations } = influencer;
+    const { user: influencerUser, fullName, niche, avatarUrl, avgRating, totalReviews, verified, id, completedCollaborations } = influencer;
     const profile = influencerUser?.profile;
 
     const displayAvatar = avatarUrl || profile?.avatarUrl;
@@ -47,7 +47,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="group  border-border/40 bg-card/40 glass-card hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0">
+            <Card className="border-border/40 bg-card/40 glass-card hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0">
                 <CardContent className="p-0 flex flex-col flex-1 relative">
                     {/* Header/Cover Image Section */}
                     <div className="relative h-28 w-full overflow-hidden">
@@ -132,7 +132,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         </div>
 
                         {/* Stats Grid - Modern Layout */}
-                        <div className="grid grid-cols-3 gap-3 p-3 bg-zinc-50/50 dark:bg-white/[0.02] rounded-2xl border border-border/40 mt-auto group-hover:border-primary/20 transition-colors duration-300">
+                        <div className="grid grid-cols-3 gap-3 p-3 bg-zinc-50/50 dark:bg-white/2 rounded-2xl border border-border/40 mt-auto group-hover:border-primary/20 transition-colors duration-300">
                             <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Collabs</span>
                                 <div className="flex items-center gap-1">

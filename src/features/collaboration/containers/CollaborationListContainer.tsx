@@ -83,12 +83,12 @@ export const CollaborationListContainer = () => {
                         >
                             Clear Filters
                         </Button>
-                    ) : (
+                    ) : (!isInfluencer && (
                         <Button className="rounded-full px-8" onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCERS)}>
                             <Plus size={18} className="mr-2" />
                             Find Partners
                         </Button>
-                    )}
+                    ))}
                 </div>
             ) : (
                 <>

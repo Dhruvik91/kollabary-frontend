@@ -39,6 +39,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-brand-gradient-muted: var(--brand-gradient-muted);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -52,100 +53,95 @@
 :root {
   --radius: 0.625rem;
   /* Surfaces */
-  --background: oklch(0.98 0.005 290);
-  /* Cool off-white with purple tint */
-  --foreground: oklch(0.18 0.03 285);
-  /* Deep purple-dark */
+  --background: oklch(0.98 0.005 330);
+  --foreground: oklch(0.2 0.04 310);
   --card: oklch(1 0 0);
-  /* #FFFFFF */
-  --card-foreground: oklch(0.18 0.03 285);
+  --card-foreground: oklch(0.2 0.04 310);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.03 285);
-  /* Brand — Purple-600 primary */
-  --primary: oklch(0.55 0.24 290);
-  /* #7C3AED — Violet-600 */
+  --popover-foreground: oklch(0.2 0.04 310);
+  /* Brand — Coral primary (matches gradient middle) */
+  --primary: oklch(0.65 0.15 15);
   --primary-foreground: oklch(1 0 0);
-  /* White */
-  --secondary: oklch(0.7 0.16 290);
-  /* #A78BFA — Violet-400 */
-  --secondary-foreground: oklch(0.18 0.03 285);
-  /* Neutrals — cool-tinted */
-  --muted: oklch(0.96 0.006 285);
-  --muted-foreground: oklch(0.5 0.015 280);
-  --accent: oklch(0.94 0.025 290);
-  /* Very light violet wash */
-  --accent-foreground: oklch(0.18 0.03 285);
+  --secondary: oklch(0.32 0.12 290);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.96 0.01 330);
+  --muted-foreground: oklch(0.5 0.02 310);
+  --accent: oklch(0.95 0.02 340);
+  --accent-foreground: oklch(0.2 0.04 310);
   /* Semantic */
   --destructive: oklch(0.577 0.245 27.325);
   /* Structure */
-  --border: oklch(0.92 0.01 285);
-  --input: oklch(0.92 0.01 285);
-  --ring: oklch(0.55 0.24 290);
-  /* Purple focus ring */
-  /* Charts — Purple spectrum */
-  --chart-1: oklch(0.55 0.24 290);
-  /* Violet */
-  --chart-2: oklch(0.7 0.16 290);
-  /* Light Violet */
-  --chart-3: oklch(0.5 0.22 310);
-  /* Fuchsia */
-  --chart-4: oklch(0.65 0.18 265);
-  /* Indigo */
-  --chart-5: oklch(0.75 0.12 320);
-  /* Lavender Pink */
+  --border: oklch(0.92 0.01 330);
+  --input: oklch(0.92 0.01 330);
+  --ring: oklch(0.65 0.15 15);
+  /* Charts — Peach to Coral to Purple spectrum */
+  --chart-1: oklch(0.80 0.12 55);
+  --chart-2: oklch(0.72 0.14 35);
+  --chart-3: oklch(0.65 0.15 15);
+  --chart-4: oklch(0.48 0.14 305);
+  --chart-5: oklch(0.32 0.12 290);
+  /* Brand Gradient */
+  --brand-gradient-degrees: 90deg;
+ --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
+    #E91E8C 0%,
+    #6B1B6F 100%);
+
   /* Sidebar */
   --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.18 0.03 285);
-  --sidebar-primary: oklch(0.55 0.24 290);
+  --sidebar-foreground: oklch(0.2 0.04 310);
+  --sidebar-primary: oklch(0.65 0.15 15);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0.02 290);
-  --sidebar-accent-foreground: oklch(0.18 0.03 285);
-  --sidebar-border: oklch(0.92 0.01 285);
-  --sidebar-ring: oklch(0.55 0.24 290);
+  --sidebar-accent: oklch(0.96 0.02 330);
+  --sidebar-accent-foreground: oklch(0.2 0.04 310);
+  --sidebar-border: oklch(0.92 0.01 330);
+  --sidebar-ring: oklch(0.65 0.15 15);
 }
 
 /* ─── Dark Mode · Purple Palette ─── */
 .dark {
   /* Surfaces — deep cool darks */
-  --background: oklch(0.14 0.025 285);
-  --foreground: oklch(0.92 0.006 290);
-  --card: oklch(0.18 0.025 285);
-  --card-foreground: oklch(0.92 0.006 290);
-  --popover: oklch(0.2 0.03 285);
-  --popover-foreground: oklch(0.92 0.006 290);
-  /* Brand — brighter purple for dark mode */
-  --primary: oklch(0.7 0.2 290);
-  /* #A78BFA — Violet-400 */
-  --primary-foreground: oklch(0.14 0.025 285);
-  --secondary: oklch(0.8 0.13 290);
-  /* #C4B5FD — Violet-300 */
-  --secondary-foreground: oklch(0.14 0.025 285);
+  --background: oklch(0.14 0.03 310);
+  --foreground: oklch(0.95 0.01 330);
+  --card: oklch(0.18 0.03 310);
+  --card-foreground: oklch(0.95 0.01 330);
+  --popover: oklch(0.2 0.035 310);
+  --popover-foreground: oklch(0.95 0.01 330);
+  /* Brand — Coral primary (matches gradient middle) */
+  --primary: oklch(0.70 0.16 15);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.38 0.14 290);
+  --secondary-foreground: oklch(1 0 0);
   /* Neutrals */
-  --muted: oklch(0.25 0.02 285);
-  --muted-foreground: oklch(0.65 0.015 290);
-  --accent: oklch(0.28 0.04 290);
-  --accent-foreground: oklch(0.92 0.006 290);
+  --muted: oklch(0.25 0.025 310);
+  --muted-foreground: oklch(0.65 0.02 320);
+  --accent: oklch(0.28 0.045 320);
+  --accent-foreground: oklch(0.95 0.01 330);
   /* Semantic */
   --destructive: oklch(0.704 0.191 22.216);
   /* Structure */
-  --border: oklch(0.28 0.025 285);
-  --input: oklch(0.3 0.025 285);
-  --ring: oklch(0.7 0.2 290);
-  /* Charts */
-  --chart-1: oklch(0.7 0.2 290);
-  --chart-2: oklch(0.8 0.13 290);
-  --chart-3: oklch(0.6 0.18 310);
-  --chart-4: oklch(0.68 0.16 265);
-  --chart-5: oklch(0.78 0.1 320);
+  --border: oklch(0.28 0.03 310);
+  --input: oklch(0.3 0.03 310);
+  --ring: oklch(0.70 0.16 15);
+  /* Charts — Peach to Coral to Purple spectrum */
+  --chart-1: oklch(0.82 0.13 55);
+  --chart-2: oklch(0.75 0.15 35);
+  --chart-3: oklch(0.70 0.16 15);
+  --chart-4: oklch(0.50 0.15 305);
+  --chart-5: oklch(0.38 0.14 290);
+  /* Brand Gradient */
+  --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
+    #E91E8C 0%,
+    #6B1B6F 100%);
+
   /* Sidebar */
-  --sidebar: oklch(0.17 0.025 285);
-  --sidebar-foreground: oklch(0.92 0.006 290);
-  --sidebar-primary: oklch(0.7 0.2 290);
-  --sidebar-primary-foreground: oklch(0.14 0.025 285);
-  --sidebar-accent: oklch(0.25 0.04 290);
-  --sidebar-accent-foreground: oklch(0.92 0.006 290);
-  --sidebar-border: oklch(0.28 0.025 285);
-  --sidebar-ring: oklch(0.7 0.2 290);
+  --sidebar: oklch(0.17 0.03 310);
+  --sidebar-foreground: oklch(0.95 0.01 330);
+  --sidebar-primary: oklch(0.70 0.16 15);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.25 0.045 320);
+  --sidebar-accent-foreground: oklch(0.95 0.01 330);
+  --sidebar-border: oklch(0.28 0.03 310);
+  --sidebar-ring: oklch(0.70 0.16 15);
 }
 
 /* ─── Base Layer ─── */
@@ -161,26 +157,26 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* ── Selection — Purple tint ── */
+  /* ── Selection — Coral tint ── */
   ::selection {
-    background: oklch(0.55 0.24 290 / 0.2);
+    background: oklch(0.65 0.15 15 / 0.2);
     color: inherit;
   }
 
   .dark ::selection {
-    background: oklch(0.7 0.2 290 / 0.3);
+    background: oklch(0.70 0.16 15 / 0.3);
     color: #ffffff;
   }
 
   /* ── Focus Rings ── */
   :focus-visible {
-    outline: 2px solid oklch(0.55 0.24 290 / 0.5);
+    outline: 2px solid oklch(0.65 0.15 15 / 0.5);
     outline-offset: 2px;
     border-radius: var(--radius);
   }
 
   .dark :focus-visible {
-    outline-color: oklch(0.7 0.2 290 / 0.5);
+    outline-color: oklch(0.70 0.16 15 / 0.5);
   }
 
   /* ── Smooth scroll ── */
@@ -215,7 +211,7 @@
 /* ─── Custom Scrollbar ─── */
 * {
   scrollbar-width: thin;
-  scrollbar-color: oklch(0.7 0.06 290 / 0.35) transparent;
+  scrollbar-color: oklch(0.65 0.15 15 / 0.35) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -228,25 +224,25 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: oklch(0.7 0.06 290 / 0.3);
+  background: oklch(0.65 0.15 15 / 0.3);
   border-radius: 999px;
   transition: background 0.2s ease;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.55 0.15 290 / 0.5);
+  background: oklch(0.65 0.15 15 / 0.5);
 }
 
 .dark * {
-  scrollbar-color: oklch(0.4 0.04 285 / 0.4) transparent;
+  scrollbar-color: oklch(0.50 0.15 305 / 0.4) transparent;
 }
 
 .dark *::-webkit-scrollbar-thumb {
-  background: oklch(0.4 0.04 285 / 0.35);
+  background: oklch(0.50 0.15 305 / 0.35);
 }
 
 .dark *::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.6 0.12 290 / 0.5);
+  background: oklch(0.70 0.16 15 / 0.5);
 }
 
 /* ─── Utility Classes ─── */
@@ -356,32 +352,32 @@
     }
   }
 
-  /* Gradient text — Violet → Lavender */
+  /* Gradient text — Peach → Coral → Purple */
   .text-gradient {
-    background: linear-gradient(135deg, oklch(0.55 0.24 290), oklch(0.75 0.12 320));
+    background: linear-gradient(135deg, oklch(0.80 0.12 55), oklch(0.65 0.15 15), oklch(0.32 0.12 290));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .dark .text-gradient {
-    background: linear-gradient(135deg, oklch(0.7 0.2 290), oklch(0.8 0.1 320));
+    background: linear-gradient(135deg, oklch(0.82 0.13 55), oklch(0.70 0.16 15), oklch(0.38 0.14 290));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Purple glow */
+  /* Coral glow */
   .glow-primary {
     box-shadow:
-      0 0 0 1px oklch(0.55 0.24 290 / 0.1),
-      0 4px 16px oklch(0.55 0.24 290 / 0.08);
+      0 0 0 1px oklch(0.65 0.15 15 / 0.1),
+      0 4px 16px oklch(0.65 0.15 15 / 0.08);
   }
 
   .dark .glow-primary {
     box-shadow:
-      0 0 0 1px oklch(0.7 0.2 290 / 0.15),
-      0 4px 16px oklch(0.7 0.2 290 / 0.1);
+      0 0 0 1px oklch(0.70 0.16 15 / 0.15),
+      0 4px 16px oklch(0.70 0.16 15 / 0.1);
   }
 
   /* Noise texture overlay */
@@ -398,18 +394,18 @@
   /* Shimmer loading */
   .shimmer {
     background: linear-gradient(90deg,
-        oklch(0.96 0.006 285) 0%,
-        oklch(0.98 0.005 290) 50%,
-        oklch(0.96 0.006 285) 100%);
+        oklch(0.96 0.01 330) 0%,
+        oklch(0.98 0.005 340) 50%,
+        oklch(0.96 0.01 330) 100%);
     background-size: 200% 100%;
     animation: shimmer 1.8s ease-in-out infinite;
   }
 
   .dark .shimmer {
     background: linear-gradient(90deg,
-        oklch(0.25 0.02 285) 0%,
-        oklch(0.3 0.025 285) 50%,
-        oklch(0.25 0.02 285) 100%);
+        oklch(0.25 0.025 310) 0%,
+        oklch(0.3 0.03 320) 50%,
+        oklch(0.25 0.025 310) 100%);
     background-size: 200% 100%;
   }
 
@@ -425,7 +421,7 @@
 
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px oklch(0.55 0.24 290 / 0.08);
+    box-shadow: 0 8px 24px oklch(0.65 0.15 15 / 0.08);
   }
 
   .dark .hover-lift:hover {

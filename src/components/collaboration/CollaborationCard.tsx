@@ -42,7 +42,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
 
     return (
         <>
-            <Card className="glass-card border-border hover:shadow-lg group overflow-hidden relative rounded-2xl transition-shadow duration-300">
+            <Card className="glass-card border-border overflow-hidden relative rounded-2xl transition-shadow duration-300">
                 <CardHeader className="pb-2">
                     <div className="flex justify-between items-start mb-2">
                         <CollaborationStatusBadge status={collaboration.status} />
@@ -76,7 +76,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                             <span className="text-xs text-muted-foreground">{format(new Date(collaboration.createdAt), 'MMM d, yyyy')}</span>
                         </div>
                     </div>
-                    <CardTitle className="text-lg line-clamp-1 group-hover:text-primary">
+                    <CardTitle className="text-lg line-clamp-1">
                         {collaboration.title}
                     </CardTitle>
                 </CardHeader>
@@ -99,9 +99,9 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="pt-2 border-t border-border glass-section bg-muted/20">
+                <CardFooter className="pt-2">
                     <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATION_DETAIL(collaboration.id)} className="w-full">
-                        <Button variant="ghost" size="sm" className="w-full justify-between hover:bg-primary/10 hover:text-primary group">
+                        <Button size="sm" className="w-full justify-between group">
                             View Details
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </Button>

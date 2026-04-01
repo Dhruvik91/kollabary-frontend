@@ -1,9 +1,11 @@
+
+'use client';
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Share2, Pencil, Trash2 } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { FRONTEND_ROUTES } from '@/constants';
-import { cn } from '@/lib/utils';
 
 interface CollaborationHeaderProps {
     canEdit?: boolean;
@@ -19,7 +21,7 @@ export const CollaborationHeader = ({
     onDelete
 }: CollaborationHeaderProps) => {
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full min-w-0">
             <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS}>
                 <Button variant="ghost" size="sm" className="group rounded-xl h-10 px-4 hover:bg-muted/50">
                     <ArrowLeft size={16} className="mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -27,7 +29,8 @@ export const CollaborationHeader = ({
                 </Button>
             </Link>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end min-w-0">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap min-w-0">
                 {canEdit && (
                     <Button
                         onClick={onEdit}
@@ -52,11 +55,7 @@ export const CollaborationHeader = ({
                     </Button>
                 )}
 
-                <div className="w-px h-6 bg-border/50 mx-1 hidden sm:block" />
-
-                <Button variant="outline" size="icon" className="rounded-xl w-10 h-10 bg-background/50 border-border/50 hover:bg-muted font-bold transition-all shrink-0">
-                    <Share2 size={18} />
-                </Button>
+                </div>
             </div>
         </div>
     );

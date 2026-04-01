@@ -35,10 +35,10 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
     };
 
     return (
-        <Card className={cn("group border-border/50 bg-card/30 glass-card rounded-3xl overflow-hidden hover:shadow-2xl transition-shadow duration-500", className)}>
-            <CardContent className="p-6 relative">
-                <div className="flex items-start gap-4">
-                    <Avatar className="h-12 w-12 border-2 border-background shadow-lg">
+        <Card className={cn("group border-border/50 bg-card/30 glass-card rounded-3xl overflow-hidden transition-shadow duration-500", className)}>
+            <CardContent className="p-4 sm:p-5 relative">
+                <div className="flex items-start gap-3 sm:gap-4">
+                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12 border-2 border-background shadow-lg shrink-0">
                         <AvatarImage src={review.reviewer.profile?.avatarUrl} />
                         <AvatarFallback className="bg-primary/5 text-primary font-bold text-xs">
                             {review.reviewer.profile?.fullName?.[0] || review.reviewer.email[0].toUpperCase()}
@@ -56,22 +56,22 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
                                 </p>
                             </div>
 
-                            <div className="flex items-center gap-1 bg-yellow-500/5 px-2 py-1 rounded-full border border-yellow-500/10">
+                            <div className="flex items-center gap-1 bg-yellow-500/5 px-2 py-1 rounded-full border border-yellow-500/10 shrink-0">
                                 {renderStars(review.rating)}
                             </div>
                         </div>
 
-                        <p className="text-sm leading-relaxed text-muted-foreground italic line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
+                        <p className="text-sm leading-relaxed text-muted-foreground italic line-clamp-3">
                             "{review.comment}"
                         </p>
 
                         {isOwner && (onEdit || onDelete) && (
-                            <div className="flex items-center gap-2 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="flex items-center gap-2 pt-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
                                 {onEdit && (
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="h-8 rounded-xl gap-2 hover:bg-primary/10 hover:text-primary transition-all font-bold text-[11px]"
+                                        className="h-8 px-3 rounded-xl gap-2 hover:bg-primary/10 hover:text-primary transition-all font-bold text-[11px]"
                                         onClick={() => onEdit(review)}
                                     >
                                         <Edit2 size={12} />
@@ -82,7 +82,7 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="h-8 rounded-xl gap-2 hover:bg-destructive/10 hover:text-destructive transition-all font-bold text-[11px]"
+                                        className="h-8 px-3 rounded-xl gap-2 hover:bg-destructive/10 hover:text-destructive transition-all font-bold text-[11px]"
                                         onClick={() => onDelete(review.id)}
                                     >
                                         <Trash2 size={12} />

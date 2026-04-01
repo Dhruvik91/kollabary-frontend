@@ -16,6 +16,13 @@ export function useMyProfile(enabled: boolean = true) {
         queryFn: profileService.getProfile,
         enabled,
         staleTime: 5 * 60 * 1000, // 5 minutes
+        retry: (failureCount, error: any) => {
+            // Don't retry on 404 - profile doesn't exist yet (new user)
+            if (error?.response?.status === 404) {
+                return false;
+            }
+            return failureCount < 3;
+        },
     });
 }
 

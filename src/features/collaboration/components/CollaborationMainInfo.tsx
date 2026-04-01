@@ -12,22 +12,29 @@ interface CollaborationMainInfoProps {
     collaboration: Collaboration;
     canSubmitProof?: boolean;
     onUpdateProof?: () => void;
+    headerActions?: React.ReactNode;
 }
 
 export const CollaborationMainInfo = ({
     collaboration,
     canSubmitProof = false,
-    onUpdateProof
+    onUpdateProof,
+    headerActions
 }: CollaborationMainInfoProps) => {
     return (
         <Card className="border border-border/40 bg-card/40 glass-card-elevated shadow-xl overflow-hidden border-t-4 border-t-primary rounded-3xl">
             <CardHeader className="pb-4">
                 <div className="flex justify-between items-start mb-4">
-                    <CollaborationStatusBadge status={collaboration.status} className="scale-110" />
-                    <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                        <Clock size={14} />
-                        Created {format(new Date(collaboration.createdAt), 'MMM d, yyyy')}
-                    </span>
+                    <div className="flex flex-col items-start justify-baseline gap-3">
+                        <CollaborationStatusBadge status={collaboration.status} className="scale-110" />
+                        <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                            <Clock size={14} />
+                            Created {format(new Date(collaboration.createdAt), 'MMM d, yyyy')}
+                        </span>
+                    </div>
+                   
+                    {headerActions}
+
                 </div>
                 <CardTitle className="text-3xl font-extrabold tracking-tight">
                     {collaboration.title}
