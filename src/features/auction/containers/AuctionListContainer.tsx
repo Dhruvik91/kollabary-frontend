@@ -24,6 +24,9 @@ export const AuctionListContainer = () => {
         search: debouncedSearch,
         limit: 9,
     }), [debouncedSearch]);
+    
+    const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const isBrand = user?.role === UserRole.USER || user?.role === UserRole.ADMIN;
 
     const { 
         data: allData, 
@@ -39,7 +42,7 @@ export const AuctionListContainer = () => {
         fetchNextPage: fetchNextBids,
         hasNextPage: hasNextBids,
         isFetchingNextPage: isFetchingNextBids
-    } = useInfiniteMyBids();
+    } = useInfiniteMyBids({ enabled: isInfluencer });
 
     const { 
         data: myAuctionsData, 
@@ -47,10 +50,9 @@ export const AuctionListContainer = () => {
         fetchNextPage: fetchNextMyAuctions,
         hasNextPage: hasNextMyAuctions,
         isFetchingNextPage: isFetchingNextMyAuctions
-    } = useInfiniteMyAuctions();
+    } = useInfiniteMyAuctions({ enabled: isBrand });
 
-    const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const isBrand = user?.role === UserRole.USER || user?.role === UserRole.ADMIN;
+
 
     // Flatten pages
     const auctions = useMemo(() => 

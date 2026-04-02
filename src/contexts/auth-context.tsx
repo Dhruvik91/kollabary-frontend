@@ -64,7 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return {
                 ...user,
                 profile: fallbackProfile,
-                influencerProfile: { id: influencerProfile.id }
+                influencerProfile: { 
+                    id: influencerProfile.id,
+                    fullName: fallbackProfile.fullName,
+                    avatarUrl: fallbackProfile.avatarUrl
+                }
             };
         }
 

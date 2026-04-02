@@ -42,7 +42,7 @@ export const useMyAuctions = () => {
   });
 };
 
-export const useInfiniteMyAuctions = () => {
+export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
     return useInfiniteQuery({
       queryKey: [...auctionKeys.myAuctions(), 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
@@ -54,6 +54,7 @@ export const useInfiniteMyAuctions = () => {
         return undefined;
       },
       initialPageParam: 1,
+      enabled: options?.enabled ?? true,
     });
 };
 
@@ -64,7 +65,7 @@ export const useMyBids = () => {
   });
 };
 
-export const useInfiniteMyBids = () => {
+export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
     return useInfiniteQuery({
       queryKey: [...auctionKeys.myBids(), 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
@@ -76,6 +77,7 @@ export const useInfiniteMyBids = () => {
         return undefined;
       },
       initialPageParam: 1,
+      enabled: options?.enabled ?? true,
     });
 };
 
