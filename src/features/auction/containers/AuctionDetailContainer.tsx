@@ -14,6 +14,8 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { AuctionDetailHeader } from '../components/AuctionDetailHeader';
 import { AuctionInfoGrid } from '../components/AuctionInfoGrid';
 import { BrandCard } from '../components/BrandCard';
+import { messagingService } from '@/services/messaging.service';
+import { toast } from 'sonner';
 
 interface AuctionDetailContainerProps {
     id: string;
@@ -32,8 +34,28 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     };
 
     const handleAcceptBid = async (bidId: string) => {
-        await acceptBidMutation.mutateAsync(bidId);
-        router.refresh();
+        if (!auction) return;
+        try {
+            await acceptBidMutation.mutateAsync(bidId);
+        } catch (error) {
+            // Error handled by mutation hook
+        }
+    };
+
+    const handleRejectBid = async (bidId: string) => {
+        if (!auction) return;
+        // Backend doesn't have a reject endpoint yet, so we show a friendly message
+        toast.info('Rejecting bids feature is coming soon!');
+    };
+
+    const handleContactClick = async () => {
+        if (!auction) return;
+        try {
+            const conversation = await messagingService.getOrCreateConversation(auction.creator.id);
+            router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+        } catch (error) {
+            toast.error('Failed to start conversation. Please try again.');
+        }
     };
 
     if (isLoading) {
@@ -99,8 +121,9 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                             <BidList
                                 bids={auction.bids || []}
                                 onAccept={handleAcceptBid}
-                                onReject={() => { }}
+                                onReject={handleRejectBid}
                                 showActions={true}
+                                isProcessing={acceptBidMutation.isPending}
                             />
                         </div>
                     )}
@@ -148,7 +171,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     <BrandCard
                         brandName={auction.creator.profile?.fullName || 'Brand'}
                         avatarLetter={auction.creator.profile?.fullName?.charAt(0) || 'B'}
-                        onContactClick={() => { }}
+                        onContactClick={handleContactClick}
                     />
                 </div>
             </div>

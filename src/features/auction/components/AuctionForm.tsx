@@ -25,6 +25,11 @@ import {
 import { CollaborationType } from '@/types/influencer.types';
 import { CreateAuctionDto } from '@/types/auction.types';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface AuctionFormProps {
     initialData?: Partial<CreateAuctionDto>;
@@ -51,15 +56,15 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Auction Title</FormLabel>
+                            <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Auction Title</FormLabel>
                             <FormControl>
-                                <Input placeholder="e.g., Summer Brand Ambassador Program" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
+                                <Input placeholder="e.g., Summer Brand Ambassador Program" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -71,11 +76,11 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Detailed Description</FormLabel>
+                            <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Detailed Description</FormLabel>
                             <FormControl>
                                 <Textarea 
                                     placeholder="Explain your requirements, deliverables, and specific goals..." 
-                                    className="min-h-32 rounded-xl border-2 focus:border-primary transition-all resize-none" 
+                                    className="min-h-24 rounded-xl border-border/50 focus:border-primary transition-all resize-none" 
                                     {...field} 
                                 />
                             </FormControl>
@@ -90,9 +95,9 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         name="minBudget"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Min Budget ($)</FormLabel>
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Min Budget ($)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
+                                    <Input type="number" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -103,9 +108,9 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         name="maxBudget"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Max Budget ($)</FormLabel>
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Max Budget ($)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
+                                    <Input type="number" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -118,11 +123,37 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         control={form.control}
                         name="deadline"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Deadline</FormLabel>
-                                <FormControl>
-                                    <Input type="date" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
-                                </FormControl>
+                            <FormItem className="flex flex-col">
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Deadline</FormLabel>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <FormControl>
+                                            <Button
+                                                variant="outline"
+                                                className={cn(
+                                                    "h-11 rounded-xl border-border/50 text-left font-normal pl-3",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                            >
+                                                {field.value ? (
+                                                    format(new Date(field.value), "PPP")
+                                                ) : (
+                                                    <span>Pick a date</span>
+                                                )}
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value ? new Date(field.value) : undefined}
+                                            onSelect={(date) => field.onChange(date?.toISOString())}
+                                            disabled={(date) => date < new Date()}
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -132,10 +163,10 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         name="category"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Category</FormLabel>
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Category</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
-                                        <SelectTrigger className="rounded-xl border-2 h-12">
+                                        <SelectTrigger className="rounded-xl border-border/50 h-11">
                                             <SelectValue placeholder="Select type" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -156,9 +187,9 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                 <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 active:scale-95 transition-all"
+                    className="w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest bg-primary hover:bg-primary/90 shadow-lg shadow-primary/10 active:scale-[0.98] transition-all mt-2"
                 >
-                    {initialData ? 'Update Auction' : 'Post Auction'}
+                    {isLoading ? 'Processing...' : (initialData ? 'Update Auction' : 'Post Auction')}
                 </Button>
             </form>
         </Form>

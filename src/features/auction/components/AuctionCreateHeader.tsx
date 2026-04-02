@@ -11,7 +11,7 @@ export const AuctionCreateHeader = () => {
             highlightedTitle="Requirements."
             subtitle="Let influencers know what you're looking for and find the perfect collaborator for your brand."
             icon={Gavel}
-            className="mb-8"
+            className="mb-4"
         />
     );
 };
