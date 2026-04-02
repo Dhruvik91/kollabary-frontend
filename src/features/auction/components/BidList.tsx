@@ -16,8 +16,8 @@ interface BidListProps {
 export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = true }: BidListProps) => {
     if (bids.length === 0) {
         return (
-            <div className="p-8 text-center bg-zinc-50 dark:bg-white/2 rounded-2xl border-2 border-dashed border-border/40">
-                <p className="text-sm font-bold uppercase tracking-widest text-zinc-400">No bids yet</p>
+            <div className="p-8 text-center bg-muted/30 dark:bg-white/2 rounded-2xl border-2 border-dashed border-border/60">
+                <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">No bids yet</p>
             </div>
         );
     }
@@ -33,7 +33,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                     className={`p-6 rounded-2xl border-2 transition-all ${
                         bid.status === BidStatus.ACCEPTED 
                             ? 'border-green-500/30 bg-green-500/5 shadow-2xl shadow-green-500/5' 
-                            : 'border-border/40 bg-card/40'
+                            : 'border-border bg-card shadow-sm'
                     }`}
                 >
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -45,12 +45,12 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                 <h4 className="font-black text-lg uppercase tracking-tight">
                                     {bid.influencer.profile?.fullName || 'Anonymous Influencer'}
                                 </h4>
-                                <div className="flex items-center gap-3 text-zinc-500">
+                                <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1 text-primary font-black uppercase text-xs">
                                         <DollarSign size={14} />
                                         <span>{bid.amount}</span>
                                     </div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-border/40">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-muted dark:bg-white/5 border border-border">
                                         {bid.status}
                                     </span>
                                 </div>
@@ -58,7 +58,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                         </div>
 
                         <div className="flex-1 md:max-w-md lg:max-w-xl">
-                            <div className="flex gap-2 items-start text-sm text-zinc-600 dark:text-zinc-400 italic">
+                            <div className="flex gap-2 items-start text-sm text-foreground/70 dark:text-muted-foreground italic">
                                 <MessageCircle size={16} className="mt-0.5 flex-shrink-0 text-primary/40" />
                                 <p>"{bid.proposal}"</p>
                             </div>

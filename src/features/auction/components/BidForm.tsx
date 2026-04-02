@@ -40,9 +40,9 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
-                <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+                <div className="bg-primary/5 dark:bg-primary/10 p-4 rounded-2xl border border-primary/10 dark:border-primary/20">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Budget Hint</p>
-                    <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm font-semibold text-foreground/80">
                         {suggestedMin && suggestedMax 
                             ? `The brand's budget range is $${suggestedMin} - $${suggestedMax}.`
                             : suggestedMin ? `The brand's starting budget is $${suggestedMin}.`
@@ -55,7 +55,7 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                     name="amount"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Your Bid Amount ($)</FormLabel>
+                            <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Bid Amount ($)</FormLabel>
                             <FormControl>
                                 <Input type="number" placeholder="Enter your rate" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
                             </FormControl>
@@ -69,7 +69,7 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                     name="proposal"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-xs font-black uppercase tracking-widest text-zinc-500">Your Pitch</FormLabel>
+                            <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Pitch</FormLabel>
                             <FormControl>
                                 <Textarea 
                                     placeholder="Explain why you are the best fit for this collaboration..." 

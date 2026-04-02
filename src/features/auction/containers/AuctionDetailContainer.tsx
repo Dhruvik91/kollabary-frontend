@@ -54,7 +54,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
             <Button
                 variant="ghost"
                 onClick={() => router.back()}
-                className="text-gray-400 hover:text-white"
+                className="text-muted-foreground hover:text-foreground transition-colors"
             >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Auctions
@@ -63,7 +63,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-xl relative overflow-hidden">
+                    <div className="bg-card border border-border rounded-2xl p-8 backdrop-blur-xl relative overflow-hidden">
                         <AuctionDetailHeader auction={auction} isCompleted={isCompleted} />
 
                         <div className="mt-8 space-y-6">
@@ -76,8 +76,8 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                             />
 
                             <div className="space-y-4">
-                                <h3 className="text-xl font-semibold text-white">About this Opportunity</h3>
-                                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                <h3 className="text-xl font-semibold text-foreground">About this Opportunity</h3>
+                                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                                     {auction.description}
                                 </p>
                             </div>
@@ -86,11 +86,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
                     {/* Bid Management / List */}
                     {isOwner && (
-                        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl">
-                            <div className="p-6 border-b border-white/10 flex items-center justify-between">
+                        <div className="bg-card border border-border rounded-2xl overflow-hidden backdrop-blur-xl">
+                            <div className="p-6 border-b border-border flex items-center justify-between">
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">Auction Bids</h3>
-                                    <p className="text-sm text-gray-400">Review and accept the best proposal.</p>
+                                    <h3 className="text-xl font-bold text-foreground">Auction Bids</h3>
+                                    <p className="text-sm text-muted-foreground">Review and accept the best proposal.</p>
                                 </div>
                                 <div className="px-3 py-1 rounded-full border border-primary/50 text-primary text-xs font-medium">
                                     {auction.bids?.length || 0} Total
@@ -108,8 +108,8 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     {!isOwner && isCompleted && (
                         <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-8 text-center backdrop-blur-xl">
                             <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                            <h3 className="text-xl font-bold text-white">Auction Completed</h3>
-                            <p className="text-gray-400 mt-2">This opportunity has been successfully awarded.</p>
+                            <h3 className="text-xl font-bold text-foreground">Auction Completed</h3>
+                            <p className="text-muted-foreground mt-2">This opportunity has been successfully awarded.</p>
                         </div>
                     )}
                 </div>
@@ -117,22 +117,22 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                 {/* Sidebar Actions */}
                 <div className="space-y-8">
                     {isInfluencer && !isCompleted && (
-                        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl sticky top-8">
+                        <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-xl sticky top-8">
                             {hasAlreadyBid ? (
                                 <div className="text-center space-y-4 py-4">
                                     <div className="bg-primary/20 p-3 rounded-full w-fit mx-auto">
                                         <CheckCircle className="h-8 w-8 text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-bold text-white">You&apos;ve Already Bid</h3>
-                                        <p className="text-sm text-gray-400 mt-1">Your proposal is being reviewed by the brand.</p>
+                                        <h3 className="text-lg font-bold text-foreground">You&apos;ve Already Bid</h3>
+                                        <p className="text-sm text-muted-foreground mt-1">Your proposal is being reviewed by the brand.</p>
                                     </div>
                                 </div>
                             ) : (
                                 <>
                                     <div className="flex items-center gap-2 mb-6">
                                         <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                                        <h3 className="text-lg font-bold text-white">Place Your Bid</h3>
+                                        <h3 className="text-lg font-bold text-foreground">Place Your Bid</h3>
                                     </div>
                                     <BidForm
                                         onSubmit={handlePlaceBid}
@@ -174,8 +174,8 @@ const AuctionDetailSkeleton = () => (
 
 const AuctionNotFound = ({ onBack }: { onBack: () => void }) => (
     <div className="max-w-2xl mx-auto py-20 text-center">
-        <h2 className="text-2xl font-bold text-white">Auction not found</h2>
-        <p className="text-gray-400 mt-2">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+        <h2 className="text-2xl font-bold text-foreground">Auction not found</h2>
+        <p className="text-muted-foreground mt-2">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         <Button onClick={onBack} className="mt-6 bg-primary text-black">
             Back to Auctions
         </Button>

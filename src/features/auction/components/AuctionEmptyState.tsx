@@ -13,11 +13,11 @@ export const AuctionEmptyState = ({
 }: AuctionEmptyStateProps) => {
     return (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="bg-white/5 p-6 rounded-full mb-4">
-                <Gavel className="h-12 w-12 text-gray-500" />
+            <div className="bg-muted/50 p-6 rounded-full mb-4">
+                <Gavel className="h-12 w-12 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-medium text-white">{title}</h3>
-            <p className="text-gray-400 mt-2">
+            <h3 className="text-xl font-bold text-foreground">{title}</h3>
+            <p className="text-muted-foreground mt-2">
                 {description}
             </p>
         </div>

@@ -14,17 +14,17 @@ export const AuctionSearch = ({ search, onSearchChange, onFilterClick }: Auction
     return (
         <div className="flex items-center gap-4">
             <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                     placeholder="Search auctions by title or description..."
                     value={search}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:ring-primary/50"
+                    className="pl-10 bg-card border-border text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 rounded-xl"
                 />
             </div>
             <Button 
                 variant="outline" 
-                className="border-white/10 text-white hover:bg-white/5"
+                className="border-border text-foreground hover:bg-muted/50 rounded-xl"
                 onClick={onFilterClick}
             >
                 <Filter className="mr-2 h-4 w-4" />

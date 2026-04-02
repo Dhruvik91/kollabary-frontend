@@ -19,31 +19,31 @@ export const AuctionInfoGrid = ({
     bidsCount 
 }: AuctionInfoGridProps) => {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-border">
             <div className="space-y-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Budget Range</p>
-                <p className="text-lg font-medium text-white flex items-center">
-                    <DollarSign className="h-4 w-4 text-primary" />
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Budget Range</p>
+                <p className="text-lg font-bold text-foreground flex items-center">
+                    <DollarSign className="h-4 w-4 text-primary mr-1" />
                     {minBudget || 0} - ${maxBudget || 'Open'}
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Deadline</p>
-                <p className="text-lg font-medium text-white flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Deadline</p>
+                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
                     <Calendar className="h-4 w-4 text-primary" />
                     {format(new Date(deadline), 'MMM dd, yyyy')}
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Category</p>
-                <p className="text-lg font-medium text-white flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Category</p>
+                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
                     <Tag className="h-4 w-4 text-primary" />
                     {category || 'General'}
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Bids Count</p>
-                <p className="text-lg font-medium text-white flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Bids Count</p>
+                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
                     <Gavel className="h-4 w-4 text-primary" />
                     {bidsCount || 0} Bids
                 </p>

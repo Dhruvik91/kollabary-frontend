@@ -35,7 +35,7 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
             transition={{ duration: 0.3 }}
             className="h-full"
         >
-            <Card className="border-border/40 bg-card/40 glass-card hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0 overflow-hidden">
+        <Card className="border-border bg-card shadow-sm hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0 overflow-hidden">
                 <CardContent className="p-6 flex flex-col gap-4 h-full relative">
                     {/* Header: Title and Creator */}
                     <div className="space-y-3">
@@ -44,13 +44,13 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                                 {title}
                             </h3>
                             <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                                status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-500' : 'bg-zinc-500/10 text-zinc-500'
+                                status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'
                             }`}>
                                 {status}
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                        <div className="flex items-center gap-2 text-muted-foreground">
                             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
                                 <User size={12} className="text-primary" />
                             </div>
@@ -71,20 +71,20 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                     )}
 
                     {/* Description excerpt */}
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-3">
+                    <p className="text-sm text-muted-foreground line-clamp-3">
                         {description}
                     </p>
 
                     {/* Stats/Info Grid */}
-                    <div className="grid grid-cols-2 gap-3 p-4 bg-zinc-50/50 dark:bg-white/2 rounded-2xl border border-border/40 mt-auto">
+                    <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 dark:bg-white/2 rounded-2xl border border-border mt-auto">
                         <div className="flex flex-col gap-1">
-                            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter flex items-center gap-1">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
                                 <DollarSign size={10} /> Budget
                             </span>
                             <p className="text-sm font-black italic truncate">{budgetRange}</p>
                         </div>
                         <div className="flex flex-col gap-1">
-                            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter flex items-center gap-1">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
                                 <Calendar size={10} /> Deadline
                             </span>
                             <p className="text-sm font-black italic truncate">{formattedDeadline}</p>
