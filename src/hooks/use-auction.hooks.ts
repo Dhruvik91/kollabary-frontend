@@ -10,12 +10,20 @@ export const auctionKeys = {
   details: () => [...auctionKeys.all, 'detail'] as const,
   detail: (id: string) => [...auctionKeys.details(), id] as const,
   myBids: () => [...auctionKeys.all, 'my-bids'] as const,
+  myAuctions: () => [...auctionKeys.all, 'my-auctions'] as const,
 };
 
 export const useAuctions = () => {
   return useQuery({
     queryKey: auctionKeys.lists(),
     queryFn: () => auctionService.getAuctions(),
+  });
+};
+
+export const useMyAuctions = () => {
+  return useQuery({
+    queryKey: auctionKeys.myAuctions(),
+    queryFn: () => auctionService.getMyAuctions(),
   });
 };
 

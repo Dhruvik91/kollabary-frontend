@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { Bid, BidStatus } from '@/types/auction.types';
 import { Button } from '@/components/ui/button';
-import { Check, X, User, DollarSign, MessageCircle, ExternalLink } from 'lucide-react';
+import { Check, X, User, DollarSign, MessageCircle, ExternalLink, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 
 interface BidListProps {
     bids: Bid[];
@@ -17,6 +19,7 @@ interface BidListProps {
 
 export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = true }: BidListProps) => {
     const router = useRouter();
+    const [rejectingBidId, setRejectingBidId] = useState<string | null>(null);
 
     if (bids.length === 0) {
         return (
@@ -30,12 +33,19 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
         router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(influencerId));
     };
 
+    const confirmReject = () => {
+        if (rejectingBidId) {
+            onReject(rejectingBidId);
+            setRejectingBidId(null);
+        }
+    };
+
     return (
         <div className="space-y-4">
             {bids.map((bid, index) => {
                 const profile = bid.influencer.profile;
                 const influencerProfile = bid.influencer.influencerProfile;
-
+                
                 const influencerName = influencerProfile?.fullName || profile?.fullName || profile?.username || 'Anonymous Influencer';
                 const avatarUrl = influencerProfile?.avatarUrl || profile?.avatarUrl;
                 const influencerId = influencerProfile?.id;
@@ -53,7 +63,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                     >
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex items-start gap-4 flex-1">
-                                <div
+                                <div 
                                     className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary/30 transition-all"
                                     onClick={() => influencerId && handleInfluencerClick(influencerId)}
                                 >
@@ -64,7 +74,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <div
+                                    <div 
                                         className="flex items-center gap-2 cursor-pointer group"
                                         onClick={() => influencerId && handleInfluencerClick(influencerId)}
                                     >
@@ -97,7 +107,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                     <Button
                                         size="sm"
                                         variant="outline"
-                                        onClick={() => onReject(bid.id)}
+                                        onClick={() => setRejectingBidId(bid.id)}
                                         disabled={isProcessing}
                                         className="rounded-xl h-10 px-4 border-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all active:scale-95"
                                     >
@@ -125,6 +135,51 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                     </motion.div>
                 );
             })}
+
+            <AnimatedModal
+                isOpen={!!rejectingBidId}
+                onClose={() => setRejectingBidId(null)}
+                title={
+                    <div className="flex items-center gap-3 text-red-500">
+                        <AlertTriangle className="h-6 w-6" />
+                        <span>Reject Bid?</span>
+                    </div>
+                }
+                description="Are you sure you want to reject this proposal? This action cannot be undone, and the influencer will be notified."
+                footer={
+                    <div className="flex justify-end gap-3">
+                        <Button 
+                            variant="ghost" 
+                            onClick={() => setRejectingBidId(null)}
+                            className="rounded-xl font-bold uppercase text-[10px] tracking-widest"
+                        >
+                            Cancel
+                        </Button>
+                        <Button 
+                            variant="destructive" 
+                            onClick={confirmReject}
+                            className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20"
+                        >
+                            Confirm Rejection
+                        </Button>
+                    </div>
+                }
+            >
+                <div className="py-4 space-y-4">
+                    {(() => {
+                        const bid = bids.find(b => b.id === rejectingBidId);
+                        if (!bid) return null;
+                        const name = bid.influencer.influencerProfile?.fullName || bid.influencer.profile?.fullName || 'this influencer';
+                        return (
+                            <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
+                                <p className="text-sm text-foreground/80 leading-relaxed">
+                                    You are about to reject the bid from <span className="font-bold text-red-500">{name}</span> for <span className="font-bold text-foreground">${bid.amount}</span>.
+                                </p>
+                            </div>
+                        );
+                    })()}
+                </div>
+            </AnimatedModal>
         </div>
     );
 };
