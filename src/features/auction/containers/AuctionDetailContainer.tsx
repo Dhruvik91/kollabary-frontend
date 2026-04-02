@@ -224,6 +224,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     <BrandCard
                         brandName={auction.creator.profile?.fullName || 'Brand'}
                         avatarLetter={auction.creator.profile?.fullName?.charAt(0) || 'B'}
+                        avatarUrl={auction.creator.profile?.avatarUrl}
                         onContactClick={handleContactClick}
                     />
                 </div>

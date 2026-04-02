@@ -30,7 +30,7 @@ export interface User {
     createdAt: string;
     updatedAt: string;
     profile?: Profile;
-    influencerProfile?: { id: string };
+    influencerProfile?: { id: string, fullName: string, avatarUrl?: string };
 }
 
 export interface AuthResponse {
