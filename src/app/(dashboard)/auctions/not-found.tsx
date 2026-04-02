@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { FileQuestion, Home } from 'lucide-react';
-import Link from 'next/link';
+'use client';
+
+import { FileQuestion } from 'lucide-react';
+import { BackButton } from '@/components/shared/BackButton';
 
 export default function AuctionsNotFound() {
   return (
@@ -12,12 +13,7 @@ export default function AuctionsNotFound() {
       <p className="text-gray-400 mt-2 max-w-md mx-auto">
         The auction or page you're looking for doesn't exist.
       </p>
-      <Link href="/auctions" className="mt-8">
-        <Button className="bg-primary text-black flex items-center gap-2 font-semibold">
-           <Home className="h-4 w-4" />
-           Back to Auctions
-        </Button>
-      </Link>
+      <BackButton label="Back to Auctions" />
     </div>
   );
 }

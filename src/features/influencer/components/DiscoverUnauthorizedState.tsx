@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ShieldAlert, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { ShieldAlert } from 'lucide-react';
+import { BackButton } from '@/components/shared/BackButton';
 import { FRONTEND_ROUTES } from '@/constants';
 
 export const DiscoverUnauthorizedState = () => {
@@ -20,12 +19,7 @@ export const DiscoverUnauthorizedState = () => {
                 </p>
             </div>
 
-            <Button asChild className="h-14 px-10 rounded-2xl font-bold bg-primary shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2">
-                <Link href={FRONTEND_ROUTES.DASHBOARD.OVERVIEW}>
-                    <ArrowLeft size={20} />
-                    Back to Dashboard
-                </Link>
-            </Button>
+            <BackButton label="Back to Dashboard" />
         </div>
     );
 };

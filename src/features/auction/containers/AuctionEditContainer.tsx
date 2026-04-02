@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BackButton } from '@/components/shared/BackButton';
 import { AuctionForm } from '@/features/auction/components/AuctionForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { useAuctionDetail, useUpdateAuction } from '@/hooks/use-auction.hooks';
@@ -41,9 +42,7 @@ export const AuctionEditContainer = ({ id }: AuctionEditContainerProps) => {
         return (
             <div className="text-center py-20">
                 <h2 className="text-2xl font-bold">Auction not found</h2>
-                <Button onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS)} className="mt-4">
-                    Back to Auctions
-                </Button>
+                <BackButton label="Back to Auctions" className="mt-4 px-6 h-10 border border-border/50" />
             </div>
         );
     }
@@ -51,14 +50,7 @@ export const AuctionEditContainer = ({ id }: AuctionEditContainerProps) => {
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             <div className="flex items-center justify-between">
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="text-muted-foreground hover:text-foreground transition-colors p-0 font-medium"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
-                </Button>
+                <BackButton label="Back" className="p-0" />
             </div>
 
             <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-xl relative overflow-hidden group transition-all duration-300">

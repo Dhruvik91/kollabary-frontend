@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BackButton } from '@/components/shared/BackButton';
 import { AuctionForm } from '@/features/auction/components/AuctionForm';
 import { AuctionCreateHeader } from '@/features/auction/components/AuctionCreateHeader';
 import { useCreateAuction } from '@/hooks/use-auction.hooks';
@@ -26,14 +26,7 @@ export const AuctionCreateContainer = () => {
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             <div className="flex items-center justify-between">
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="text-gray-400 hover:text-white transition-colors"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Auctions
-                </Button>
+                <BackButton label="Back to Auctions" className="p-0" />
             </div>
 
             <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-xl relative overflow-hidden group transition-all duration-300">

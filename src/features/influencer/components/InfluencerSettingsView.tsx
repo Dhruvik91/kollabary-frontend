@@ -13,8 +13,8 @@ import {
     Flag,
     Plus,
     X,
-    ArrowLeft,
 } from 'lucide-react';
+import { BackButton } from '@/components/shared/BackButton';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
 import { VerificationStatus } from '@/types/admin.types';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
@@ -111,13 +111,7 @@ export const InfluencerSettingsView = ({
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
-            <Link
-                href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE}
-                className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
-            >
-                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                Back to Profile
-            </Link>
+            <BackButton label="Back to Profile" className="p-0" />
 
             {/* Page Header */}
             <div className="space-y-2">

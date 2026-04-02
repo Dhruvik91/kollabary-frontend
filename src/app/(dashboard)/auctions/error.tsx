@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCcw } from 'lucide-react';
+import { BackButton } from '@/components/shared/BackButton';
 
 export default function AuctionsError({
   error,
@@ -29,9 +30,7 @@ export default function AuctionsError({
           <RefreshCcw className="h-4 w-4" />
           Try Again
         </Button>
-        <Button variant="outline" onClick={() => window.location.href = '/overview'} className="border-white/10 text-white">
-          Back to Overview
-        </Button>
+        <BackButton label="Back to Overview" />
       </div>
     </div>
   );

@@ -19,7 +19,6 @@ import {
     MessageCircle,
     Flag,
     AlignLeft,
-    ArrowLeft,
     Settings,
     Award,
 } from 'lucide-react';
@@ -49,6 +48,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
+import { BackButton } from '@/components/shared/BackButton';
 
 
 interface InfluencerProfileDetailProps {
@@ -142,13 +142,7 @@ export const InfluencerProfileDetail = ({
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Back Button */}
             {!isOwner && (
-                <Link
-                    href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
-                >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to Discovery
-                </Link>
+                <BackButton label="Back to Discovery" className="p-0" />
             )}
 
             {/* Main Layout: Left content + Right ranking sidebar */}

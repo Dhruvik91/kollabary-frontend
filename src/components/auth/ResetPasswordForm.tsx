@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
+import { BackButton } from '@/components/shared/BackButton';
 import { useState } from 'react';
 
 interface ResetPasswordFormProps {
@@ -66,12 +66,7 @@ export function ResetPasswordForm({ onSubmit, isLoading, error, success }: Reset
                     </AlertDescription>
                 </Alert>
 
-                <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
-                    <Button variant="outline" className="w-full">
-                        <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-                        Back to login
-                    </Button>
-                </Link>
+                <BackButton label="Back to login" className="w-full" />
             </div>
         );
     }

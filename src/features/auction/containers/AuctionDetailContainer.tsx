@@ -16,6 +16,7 @@ import {
 } from '@/hooks/use-auction.hooks';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
+import { BackButton } from '@/components/shared/BackButton';
 import { FRONTEND_ROUTES } from '@/constants';
 import { AuctionDetailHeader } from '../components/AuctionDetailHeader';
 import { AuctionInfoGrid } from '../components/AuctionInfoGrid';
@@ -87,7 +88,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     }
 
     if (isError || !auction) {
-        return <AuctionNotFound onBack={() => router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS)} />;
+        return <AuctionNotFound onBack={() => router.back()} />;
     }
 
     const isOwner = user?.id === auction.creator.id;
@@ -98,14 +99,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             <div className="flex items-center justify-between">
-                <Button
-                    variant="ghost"
-                    onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS)}
-                    className="text-muted-foreground hover:text-foreground transition-colors p-0 font-medium"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Auctions
-                </Button>
+                <BackButton label="Back to Auctions" className="p-0" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -252,8 +246,6 @@ const AuctionNotFound = ({ onBack }: { onBack: () => void }) => (
     <div className="max-w-2xl mx-auto py-20 text-center">
         <h2 className="text-2xl font-bold text-foreground">Auction not found</h2>
         <p className="text-muted-foreground mt-2">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <Button onClick={onBack} className="mt-6">
-            Back to Auctions
-        </Button>
+        <BackButton label="Back to Auctions" className="mt-6 px-6 h-10 border border-border/50" />
     </div>
 );

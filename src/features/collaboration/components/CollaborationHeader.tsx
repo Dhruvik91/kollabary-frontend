@@ -2,10 +2,9 @@
 'use client';
 
 import React from 'react';
+import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import { FRONTEND_ROUTES } from '@/constants';
+import { Pencil, Trash2 } from 'lucide-react';
 
 interface CollaborationHeaderProps {
     canEdit?: boolean;
@@ -22,12 +21,7 @@ export const CollaborationHeader = ({
 }: CollaborationHeaderProps) => {
     return (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full min-w-0">
-            <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS}>
-                <Button variant="ghost" size="sm" className="group rounded-xl h-10 px-4 hover:bg-muted/50">
-                    <ArrowLeft size={16} className="mr-2 group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-bold">Back to List</span>
-                </Button>
-            </Link>
+            <BackButton label="Back to List" />
 
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end min-w-0">
                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap min-w-0">
