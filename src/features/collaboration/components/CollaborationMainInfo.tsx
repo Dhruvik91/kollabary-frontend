@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CollaborationStatusBadge } from '@/components/collaboration/CollaborationStatusBadge';
+import { CollaborationStatusBadge } from '@/features/collaboration/components/CollaborationStatusBadge';
 import { Collaboration } from '@/types/collaboration.types';
 import { format } from 'date-fns';
 import { Calendar, Clock, FileText, CheckCircle2, Link as LinkIcon, ExternalLink, Upload } from 'lucide-react';
@@ -32,7 +32,7 @@ export const CollaborationMainInfo = ({
                             Created {format(new Date(collaboration.createdAt), 'MMM d, yyyy')}
                         </span>
                     </div>
-                   
+
                     {headerActions}
 
                 </div>

@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { auctionService } from '@/services/auction.service';
 import { CreateAuctionDto, CreateBidDto } from '@/types/auction.types';
 import { toast } from 'sonner';
@@ -6,17 +6,32 @@ import { toast } from 'sonner';
 export const auctionKeys = {
   all: ['auctions'] as const,
   lists: () => [...auctionKeys.all, 'list'] as const,
-  list: (filters: string) => [...auctionKeys.lists(), { filters }] as const,
+  list: (filters: any) => [...auctionKeys.lists(), filters] as const,
   details: () => [...auctionKeys.all, 'detail'] as const,
   detail: (id: string) => [...auctionKeys.details(), id] as const,
   myBids: () => [...auctionKeys.all, 'my-bids'] as const,
   myAuctions: () => [...auctionKeys.all, 'my-auctions'] as const,
 };
 
-export const useAuctions = () => {
+export const useAuctions = (filters?: any) => {
   return useQuery({
-    queryKey: auctionKeys.lists(),
-    queryFn: () => auctionService.getAuctions(),
+    queryKey: auctionKeys.list(filters),
+    queryFn: () => auctionService.getAuctions(filters),
+  });
+};
+
+export const useInfiniteAuctions = (filters?: any) => {
+  return useInfiniteQuery({
+    queryKey: [...auctionKeys.list(filters), 'infinite'],
+    queryFn: ({ pageParam = 1 }) => 
+      auctionService.getAuctions({ ...filters, page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.page < lastPage.meta.totalPages) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 };
 
@@ -27,11 +42,41 @@ export const useMyAuctions = () => {
   });
 };
 
+export const useInfiniteMyAuctions = () => {
+    return useInfiniteQuery({
+      queryKey: [...auctionKeys.myAuctions(), 'infinite'],
+      queryFn: ({ pageParam = 1 }) => 
+        auctionService.getMyAuctions({ page: pageParam }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.meta.page < lastPage.meta.totalPages) {
+          return lastPage.meta.page + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
+    });
+};
+
 export const useMyBids = () => {
   return useQuery({
     queryKey: auctionKeys.myBids(),
     queryFn: () => auctionService.getMyBids(),
   });
+};
+
+export const useInfiniteMyBids = () => {
+    return useInfiniteQuery({
+      queryKey: [...auctionKeys.myBids(), 'infinite'],
+      queryFn: ({ pageParam = 1 }) => 
+        auctionService.getMyBids({ page: pageParam }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.meta.page < lastPage.meta.totalPages) {
+          return lastPage.meta.page + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
+    });
 };
 
 export const useAuctionDetail = (id: string) => {
@@ -48,57 +93,8 @@ export const useCreateAuction = () => {
     mutationFn: (data: CreateAuctionDto) => auctionService.createAuction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
-      toast.success('Auction posted successfully!');
-    },
-    onError: (error: unknown) => {
-      console.error('Create auction error:', error);
-      toast.error('Failed to post auction. Please try again.');
-    },
-  });
-};
-
-export const usePlaceBid = (auctionId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (data: CreateBidDto) => auctionService.placeBid(auctionId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
-      toast.success('Bid placed successfully!');
-    },
-    onError: (error: unknown) => {
-      console.error('Place bid error:', error);
-      toast.error('Failed to place bid. You might have already bid on this auction.');
-    },
-  });
-};
-
-export const useAcceptBid = (auctionId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (bidId: string) => auctionService.acceptBid(bidId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
-      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
-      toast.success('Bid accepted! A new collaboration has been created.');
-    },
-    onError: (error: unknown) => {
-      console.error('Accept bid error:', error);
-      toast.error('Failed to accept bid.');
-    },
-  });
-};
-
-export const useRejectBid = (auctionId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
-      toast.success('Bid rejected.');
-    },
-    onError: (error: unknown) => {
-      console.error('Reject bid error:', error);
-      toast.error('Failed to reject bid.');
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
+      toast.success('Auction created successfully!');
     },
   });
 };
@@ -112,10 +108,6 @@ export const useUpdateAuction = (id: string) => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Auction updated successfully!');
     },
-    onError: (error: unknown) => {
-      console.error('Update auction error:', error);
-      toast.error('Failed to update auction.');
-    },
   });
 };
 
@@ -125,11 +117,43 @@ export const useDeleteAuction = () => {
     mutationFn: (id: string) => auctionService.deleteAuction(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
-      toast.success('Auction deleted successfully.');
-    },
-    onError: (error: unknown) => {
-      console.error('Delete auction error:', error);
-      toast.error('Failed to delete auction.');
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
+      toast.success('Auction deleted successfully!');
     },
   });
+};
+
+export const usePlaceBid = (auctionId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateBidDto) => auctionService.placeBid(auctionId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
+      toast.success('Bid placed successfully!');
+    },
+  });
+};
+
+export const useAcceptBid = (auctionId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (bidId: string) => auctionService.acceptBid(bidId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+      toast.success('Bid accepted successfully!');
+    },
+  });
+};
+
+export const useRejectBid = (auctionId: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+        toast.success('Bid rejected successfully');
+      },
+    });
 };

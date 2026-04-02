@@ -1,23 +1,25 @@
 import { API_CONFIG } from '@/constants';
 import httpService from '@/lib/http-service';
-import { Auction, Bid, CreateAuctionDto, CreateBidDto } from '@/types/auction.types';
+import { Auction, Bid, CreateAuctionDto, CreateBidDto, PaginatedResponse } from '@/types/auction.types';
 
 export const auctionService = {
     /**
-     * Fetch all collaboration auctions with optional filters
+     * Fetch all collaboration auctions with optional filters and pagination
      */
-    getAuctions: async (filters?: { status?: string; category?: string }): Promise<Auction[]> => {
-        const response = await httpService.get<Auction[]>(API_CONFIG.path.auction.base, { 
+    getAuctions: async (filters?: { status?: string; category?: string; page?: number; limit?: number }): Promise<PaginatedResponse<Auction>> => {
+        const response = await httpService.get<PaginatedResponse<Auction>>(API_CONFIG.path.auction.base, { 
             params: filters 
         });
         return response.data;
     },
 
     /**
-     * Fetch auctions created by the current user
+     * Fetch auctions created by the current user with pagination
      */
-    getMyAuctions: async (): Promise<Auction[]> => {
-        const response = await httpService.get<Auction[]>(API_CONFIG.path.auction.my);
+    getMyAuctions: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Auction>> => {
+        const response = await httpService.get<PaginatedResponse<Auction>>(API_CONFIG.path.auction.my, {
+            params
+        });
         return response.data;
     },
 
@@ -62,10 +64,12 @@ export const auctionService = {
     },
 
     /**
-     * Fetch bids placed by the current influencer
+     * Fetch bids placed by the current influencer with pagination
      */
-    getMyBids: async (): Promise<Bid[]> => {
-        const response = await httpService.get<Bid[]>(API_CONFIG.path.auction.myBids);
+    getMyBids: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Bid>> => {
+        const response = await httpService.get<PaginatedResponse<Bid>>(API_CONFIG.path.auction.myBids, {
+            params
+        });
         return response.data;
     },
 

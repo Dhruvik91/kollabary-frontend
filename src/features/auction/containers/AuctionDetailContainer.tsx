@@ -7,12 +7,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BidForm } from '@/features/auction/components/BidForm';
 import { BidList } from '@/features/auction/components/BidList';
 import { CreateBidDto } from '@/types/auction.types';
-import { 
-    useAuctionDetail, 
-    usePlaceBid, 
-    useAcceptBid, 
+import {
+    useAuctionDetail,
+    usePlaceBid,
+    useAcceptBid,
     useDeleteAuction,
-    useRejectBid 
+    useRejectBid
 } from '@/hooks/use-auction.hooks';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
@@ -112,9 +112,9 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
                     <div className="bg-card border border-border rounded-2xl p-8 backdrop-blur-xl relative overflow-hidden">
-                        <AuctionDetailHeader 
-                            auction={auction} 
-                            isCompleted={isCompleted} 
+                        <AuctionDetailHeader
+                            auction={auction}
+                            isCompleted={isCompleted}
                             onEdit={isOwner && !isCompleted ? handleEdit : undefined}
                             onDelete={isOwner ? handleRemove : undefined}
                         />
@@ -181,23 +181,22 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
                                         return (
                                             <>
-                                                <div className={`p-3 rounded-full w-fit mx-auto ${
-                                                    isAccepted ? 'bg-green-500/20' : isRejected ? 'bg-red-500/20' : 'bg-primary/20'
-                                                }`}>
-                                                    {isAccepted ? <CheckCircle className="h-8 w-8 text-green-500" /> : 
-                                                     isRejected ? <XCircle className="h-8 w-8 text-red-500" /> : 
-                                                     <Clock className="h-8 w-8 text-primary" />}
+                                                <div className={`p-3 rounded-full w-fit mx-auto ${isAccepted ? 'bg-green-500/20' : isRejected ? 'bg-red-500/20' : 'bg-primary/20'
+                                                    }`}>
+                                                    {isAccepted ? <CheckCircle className="h-8 w-8 text-green-500" /> :
+                                                        isRejected ? <XCircle className="h-8 w-8 text-red-500" /> :
+                                                            <Clock className="h-8 w-8 text-primary" />}
                                                 </div>
                                                 <div>
                                                     <h3 className="text-lg font-bold text-foreground">
                                                         {isAccepted ? 'Bid Accepted!' : isRejected ? 'Bid Rejected' : 'You\'ve Already Bid'}
                                                     </h3>
                                                     <p className="text-sm text-muted-foreground mt-1">
-                                                        {isAccepted 
-                                                            ? 'Congratulations! The brand has accepted your proposal.' 
-                                                            : isRejected 
-                                                            ? 'The brand has decided to move forward with another proposal.' 
-                                                            : 'Your proposal is being reviewed by the brand.'}
+                                                        {isAccepted
+                                                            ? 'Congratulations! The brand has accepted your proposal.'
+                                                            : isRejected
+                                                                ? 'The brand has decided to move forward with another proposal.'
+                                                                : 'Your proposal is being reviewed by the brand.'}
                                                     </p>
                                                 </div>
                                             </>
@@ -253,7 +252,7 @@ const AuctionNotFound = ({ onBack }: { onBack: () => void }) => (
     <div className="max-w-2xl mx-auto py-20 text-center">
         <h2 className="text-2xl font-bold text-foreground">Auction not found</h2>
         <p className="text-muted-foreground mt-2">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <Button onClick={onBack} className="mt-6 bg-primary text-black">
+        <Button onClick={onBack} className="mt-6">
             Back to Auctions
         </Button>
     </div>
