@@ -32,6 +32,7 @@ const collaborationSchema = z.object({
     title: z.string().min(5, 'Title must be at least 5 characters'),
     description: z.string().min(20, 'Description must be at least 20 characters'),
     proposedTerms: z.string().min(10, 'Please outline your proposed terms'),
+    agreedTerms: z.string().optional(),
     startDate: z.date({
         message: "A start date is required.",
     }),
@@ -65,6 +66,7 @@ export const CollaborationRequestDialog = ({
             title: '',
             description: '',
             proposedTerms: '',
+            agreedTerms: '',
         },
     });
 
@@ -76,6 +78,9 @@ export const CollaborationRequestDialog = ({
             proposedTerms: {
                 details: values.proposedTerms,
             },
+            agreedTerms: values.agreedTerms ? {
+                details: values.agreedTerms,
+            } : undefined,
             startDate: values.startDate.toISOString(),
             endDate: values.endDate.toISOString(),
         };
@@ -153,6 +158,24 @@ export const CollaborationRequestDialog = ({
                                         <Textarea
                                             placeholder="e.g. 2 Instagram Posts, 1 YouTube Integration, Paid promotion..."
                                             className="min-h-[100px] rounded-xl bg-muted/50 border-border/50 focus:ring-primary resize-none"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="agreedTerms"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="font-bold text-primary">Agreed Budget / Terms (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="e.g. $500, Product Gift, or 'Talked on DM'"
+                                            className="h-12 rounded-xl bg-primary/5 border-primary/20 focus:ring-primary"
                                             {...field}
                                         />
                                     </FormControl>

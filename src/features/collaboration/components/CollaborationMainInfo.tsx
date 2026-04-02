@@ -56,19 +56,41 @@ export const CollaborationMainInfo = ({
                         <div className="flex items-center gap-3 text-foreground font-medium">
                             <Calendar className="text-primary" size={20} />
                             <span>
-                                {collaboration.startDate ? format(new Date(collaboration.startDate), 'MMM d, yyyy') : 'TBD'} -
-                                {collaboration.endDate ? format(new Date(collaboration.endDate), 'MMM d, yyyy') : 'TBD'}
+                                {collaboration.startDate && collaboration.endDate ? (
+                                    `${format(new Date(collaboration.startDate), 'MMM d, yyyy')} - ${format(new Date(collaboration.endDate), 'MMM d, yyyy')}`
+                                ) : collaboration.endDate ? (
+                                    `Deadline: ${format(new Date(collaboration.endDate), 'MMM d, yyyy')}`
+                                ) : collaboration.startDate ? (
+                                    `Starts: ${format(new Date(collaboration.startDate), 'MMM d, yyyy')}`
+                                ) : (
+                                    'TBD'
+                                )}
                             </span>
                         </div>
                     </div>
                     <div className="space-y-4 p-5 bg-muted/30 glass-section rounded-2xl border border-border/50">
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-1">Proposed Terms</h3>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                            {collaboration.agreedTerms ? 'Agreed Terms' : 'Proposed Terms'}
+                        </h3>
                         <div className="text-foreground font-medium text-sm">
-                            {collaboration.proposedTerms ?
-                                (typeof collaboration.proposedTerms === 'object' ?
-                                    (collaboration.proposedTerms as any).details || JSON.stringify(collaboration.proposedTerms) :
-                                    collaboration.proposedTerms) :
-                                'Standard terms apply'}
+                            {collaboration.agreedTerms ? (
+                                <div className="space-y-1">
+                                    {(collaboration.agreedTerms as any).bidAmount && (
+                                        <div className="text-primary font-bold text-base mb-1">
+                                            ${(collaboration.agreedTerms as any).bidAmount}
+                                        </div>
+                                    )}
+                                    <div className="opacity-90">
+                                        {(collaboration.agreedTerms as any).proposal || (collaboration.agreedTerms as any).details || 'Terms accepted as negotiated.'}
+                                    </div>
+                                </div>
+                            ) : collaboration.proposedTerms ? (
+                                <div className="opacity-90">
+                                    {(collaboration.proposedTerms as any).details || JSON.stringify(collaboration.proposedTerms)}
+                                </div>
+                            ) : (
+                                'Standard terms apply'
+                            )}
                         </div>
                     </div>
                 </div>
