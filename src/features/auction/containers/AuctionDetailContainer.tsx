@@ -1,13 +1,19 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BidForm } from '@/features/auction/components/BidForm';
 import { BidList } from '@/features/auction/components/BidList';
 import { CreateBidDto } from '@/types/auction.types';
-import { useAuctionDetail, usePlaceBid, useAcceptBid } from '@/hooks/use-auction.hooks';
+import { 
+    useAuctionDetail, 
+    usePlaceBid, 
+    useAcceptBid, 
+    useDeleteAuction,
+    useRejectBid 
+} from '@/hooks/use-auction.hooks';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -28,6 +34,8 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const { data: auction, isLoading, isError } = useAuctionDetail(id);
     const placeBidMutation = usePlaceBid(id);
     const acceptBidMutation = useAcceptBid(id);
+    const rejectBidMutation = useRejectBid(id);
+    const { mutateAsync: deleteAuction } = useDeleteAuction();
 
     const handlePlaceBid = async (data: CreateBidDto) => {
         await placeBidMutation.mutateAsync(data);
@@ -44,8 +52,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
     const handleRejectBid = async (bidId: string) => {
         if (!auction) return;
-        // Backend doesn't have a reject endpoint yet, so we show a friendly message
-        toast.info('Rejecting bids feature is coming soon!');
+        try {
+            await rejectBidMutation.mutateAsync(bidId);
+        } catch (error) {
+            // Error handled by mutation hook
+        }
     };
 
     const handleContactClick = async () => {
@@ -55,6 +66,19 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
             router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
         } catch (error) {
             toast.error('Failed to start conversation. Please try again.');
+        }
+    };
+
+    const handleEdit = () => {
+        router.push(`${FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id)}/edit`);
+    };
+
+    const handleRemove = async () => {
+        try {
+            await deleteAuction(id);
+            router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
+        } catch (error) {
+            // Error managed by hook
         }
     };
 
@@ -73,20 +97,27 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
-            <Button
-                variant="ghost"
-                onClick={() => router.back()}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Auctions
-            </Button>
+            <div className="flex items-center justify-between">
+                <Button
+                    variant="ghost"
+                    onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS)}
+                    className="text-muted-foreground hover:text-foreground transition-colors p-0 font-medium"
+                >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Auctions
+                </Button>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
                     <div className="bg-card border border-border rounded-2xl p-8 backdrop-blur-xl relative overflow-hidden">
-                        <AuctionDetailHeader auction={auction} isCompleted={isCompleted} />
+                        <AuctionDetailHeader 
+                            auction={auction} 
+                            isCompleted={isCompleted} 
+                            onEdit={isOwner && !isCompleted ? handleEdit : undefined}
+                            onDelete={isOwner ? handleRemove : undefined}
+                        />
 
                         <div className="mt-8 space-y-6">
                             <AuctionInfoGrid
@@ -143,13 +174,35 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                         <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-xl sticky top-8">
                             {hasAlreadyBid ? (
                                 <div className="text-center space-y-4 py-4">
-                                    <div className="bg-primary/20 p-3 rounded-full w-fit mx-auto">
-                                        <CheckCircle className="h-8 w-8 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-bold text-foreground">You&apos;ve Already Bid</h3>
-                                        <p className="text-sm text-muted-foreground mt-1">Your proposal is being reviewed by the brand.</p>
-                                    </div>
+                                    {(() => {
+                                        const myBid = auction.bids?.find(bid => bid.influencer.id === user?.id);
+                                        const isRejected = myBid?.status === 'REJECTED';
+                                        const isAccepted = myBid?.status === 'ACCEPTED';
+
+                                        return (
+                                            <>
+                                                <div className={`p-3 rounded-full w-fit mx-auto ${
+                                                    isAccepted ? 'bg-green-500/20' : isRejected ? 'bg-red-500/20' : 'bg-primary/20'
+                                                }`}>
+                                                    {isAccepted ? <CheckCircle className="h-8 w-8 text-green-500" /> : 
+                                                     isRejected ? <XCircle className="h-8 w-8 text-red-500" /> : 
+                                                     <Clock className="h-8 w-8 text-primary" />}
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-foreground">
+                                                        {isAccepted ? 'Bid Accepted!' : isRejected ? 'Bid Rejected' : 'You\'ve Already Bid'}
+                                                    </h3>
+                                                    <p className="text-sm text-muted-foreground mt-1">
+                                                        {isAccepted 
+                                                            ? 'Congratulations! The brand has accepted your proposal.' 
+                                                            : isRejected 
+                                                            ? 'The brand has decided to move forward with another proposal.' 
+                                                            : 'Your proposal is being reviewed by the brand.'}
+                                                    </p>
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             ) : (
                                 <>

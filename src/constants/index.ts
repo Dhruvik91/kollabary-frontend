@@ -80,6 +80,8 @@ export const API_CONFIG = {
             detail: (id: string) => `/auctions/${id}`,
             bids: (id: string) => `/auctions/${id}/bids`,
             acceptBid: (id: string) => `/auctions/bids/${id}/accept`,
+            rejectBid: (id: string) => `/auctions/bids/${id}/reject`,
+            myBids: '/auctions/my/bids',
         }
     }
 }
@@ -115,6 +117,7 @@ export const FRONTEND_ROUTES = {
         AUCTIONS: '/auctions',
         AUCTION_DETAIL: (id: string) => `/auctions/${id}`,
         AUCTION_CREATE: '/auctions/create',
+        AUCTION_EDIT: (id: string) => `/auctions/${id}/edit`,
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',

@@ -54,6 +54,22 @@ export const auctionService = {
     },
 
     /**
+     * Reject a specific bid for an auction
+     */
+    rejectBid: async (id: string): Promise<void> => {
+        const response = await httpService.post<void>(API_CONFIG.path.auction.rejectBid(id));
+        return response.data;
+    },
+
+    /**
+     * Fetch bids placed by the current influencer
+     */
+    getMyBids: async (): Promise<Bid[]> => {
+        const response = await httpService.get<Bid[]>(API_CONFIG.path.auction.myBids);
+        return response.data;
+    },
+
+    /**
      * Update an existing auction's details
      */
     updateAuction: async (id: string, data: Partial<CreateAuctionDto>): Promise<Auction> => {

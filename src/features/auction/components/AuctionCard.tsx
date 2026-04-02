@@ -1,10 +1,28 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Gavel, Calendar, DollarSign, Tag, User } from 'lucide-react';
+import { Gavel, Calendar, DollarSign, Tag, User, Edit2, Trash2, MoreVertical, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Auction, AuctionStatus } from '@/types/auction.types';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useDeleteAuction } from '@/hooks/use-auction.hooks';
+import { useState } from 'react';
+import { Auction, AuctionStatus, BidStatus } from '@/types/auction.types';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -13,19 +31,35 @@ import { UserRole } from '@/types/auth.types';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 interface AuctionCardProps {
-    auction: Auction;
+    auction: Auction & { myBidStatus?: BidStatus };
 }
 
 export const AuctionCard = ({ auction }: AuctionCardProps) => {
-    const { id, title, description, minBudget, maxBudget, deadline, status, category, creator } = auction;
+    const { id, title, description, minBudget, maxBudget, deadline, status, category, creator, myBidStatus } = auction;
     const router = useRouter();
     const { user } = useAuth();
     const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const isOwner = user?.id === creator.id;
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const { mutateAsync: deleteAuction } = useDeleteAuction();
 
     const formattedDeadline = format(new Date(deadline), 'PPP');
     const budgetRange = minBudget && maxBudget 
         ? `$${minBudget} - $${maxBudget}` 
         : minBudget ? `From $${minBudget}` : maxBudget ? `Up to $${maxBudget}` : 'Competitive';
+
+    const getStatusStyles = (status: BidStatus) => {
+        switch (status) {
+            case BidStatus.ACCEPTED:
+                return { color: 'text-green-500 bg-green-500/10', icon: CheckCircle };
+            case BidStatus.REJECTED:
+                return { color: 'text-red-500 bg-red-500/10', icon: XCircle };
+            default:
+                return { color: 'text-yellow-500 bg-yellow-500/10', icon: Clock };
+        }
+    };
+
+    const StatusIcon = myBidStatus ? getStatusStyles(myBidStatus).icon : null;
 
     return (
         <motion.div
@@ -40,13 +74,49 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                     {/* Header: Title and Creator */}
                     <div className="space-y-3">
                         <div className="flex justify-between items-start gap-4">
-                            <h3 className="text-xl font-black tracking-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
-                                {title}
-                            </h3>
-                            <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                                status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'
-                            }`}>
-                                {status}
+                            <div className="space-y-1">
+                                <h3 className="text-xl font-black tracking-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                                    {title}
+                                </h3>
+                                {myBidStatus && (
+                                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getStatusStyles(myBidStatus).color}`}>
+                                        {StatusIcon && <StatusIcon size={12} />}
+                                        My Bid: {myBidStatus}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+                                    status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'
+                                }`}>
+                                    {status}
+                                </div>
+
+                                {isOwner && (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg hover:bg-muted">
+                                                <MoreVertical size={14} className="text-muted-foreground" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="rounded-xl border-border/50">
+                                            <DropdownMenuItem 
+                                                onClick={() => router.push(`${FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id)}/edit`)}
+                                                className="gap-2 font-bold text-xs uppercase tracking-widest cursor-pointer"
+                                            >
+                                                <Edit2 size={14} />
+                                                Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem 
+                                                onClick={() => setShowDeleteDialog(true)}
+                                                className="gap-2 font-bold text-xs uppercase tracking-widest text-destructive focus:text-destructive cursor-pointer"
+                                            >
+                                                <Trash2 size={14} />
+                                                Delete
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )}
                             </div>
                         </div>
 
@@ -103,6 +173,30 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* Deletion Confirmation */}
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent className="rounded-[2rem] border-border/50 p-8 shadow-2xl">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-2xl font-black italic">ARE YOU SURE?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-muted-foreground font-medium pt-2">
+                            This will permanently delete the auction <span className="text-foreground font-bold italic">“{title}”</span> and all its associated bids. This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="pt-6">
+                        <AlertDialogCancel className="rounded-xl border-border/50 font-bold uppercase tracking-widest text-xs h-12">Cancel</AlertDialogCancel>
+                        <AlertDialogAction 
+                            onClick={async () => {
+                                await deleteAuction(id);
+                                setShowDeleteDialog(false);
+                            }}
+                            className="rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold uppercase tracking-widest text-xs h-12"
+                        >
+                            Delete Forever
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </motion.div>
     );
 };

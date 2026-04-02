@@ -9,12 +9,20 @@ export const auctionKeys = {
   list: (filters: string) => [...auctionKeys.lists(), { filters }] as const,
   details: () => [...auctionKeys.all, 'detail'] as const,
   detail: (id: string) => [...auctionKeys.details(), id] as const,
+  myBids: () => [...auctionKeys.all, 'my-bids'] as const,
 };
 
 export const useAuctions = () => {
   return useQuery({
     queryKey: auctionKeys.lists(),
     queryFn: () => auctionService.getAuctions(),
+  });
+};
+
+export const useMyBids = () => {
+  return useQuery({
+    queryKey: auctionKeys.myBids(),
+    queryFn: () => auctionService.getMyBids(),
   });
 };
 
@@ -68,6 +76,52 @@ export const useAcceptBid = (auctionId: string) => {
     onError: (error: unknown) => {
       console.error('Accept bid error:', error);
       toast.error('Failed to accept bid.');
+    },
+  });
+};
+
+export const useRejectBid = (auctionId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+      toast.success('Bid rejected.');
+    },
+    onError: (error: unknown) => {
+      console.error('Reject bid error:', error);
+      toast.error('Failed to reject bid.');
+    },
+  });
+};
+
+export const useUpdateAuction = (id: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Partial<CreateAuctionDto>) => auctionService.updateAuction(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+      toast.success('Auction updated successfully!');
+    },
+    onError: (error: unknown) => {
+      console.error('Update auction error:', error);
+      toast.error('Failed to update auction.');
+    },
+  });
+};
+
+export const useDeleteAuction = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => auctionService.deleteAuction(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+      toast.success('Auction deleted successfully.');
+    },
+    onError: (error: unknown) => {
+      console.error('Delete auction error:', error);
+      toast.error('Failed to delete auction.');
     },
   });
 };
