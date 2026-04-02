@@ -47,9 +47,8 @@ export function ProfileSetupContainer({ mode = 'setup' }: ProfileSetupContainerP
     }
 
     return (
-        <div className="min-h-screen py-12 md:py-20 px-4">
-            <div className="max-w-4xl mx-auto">
-                <motion.div
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0 pt-8 sm:pt-12">
+            <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center mb-12"
@@ -70,7 +69,6 @@ export function ProfileSetupContainer({ mode = 'setup' }: ProfileSetupContainerP
                     initialData={initialProfile || undefined}
                     isEdit={isEdit}
                 />
-            </div>
         </div>
     );
 }

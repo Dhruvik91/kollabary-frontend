@@ -110,7 +110,7 @@ export const InfluencerSettingsView = ({
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pb-20">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             <Link
                 href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE}
                 className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"

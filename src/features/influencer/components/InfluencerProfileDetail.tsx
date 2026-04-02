@@ -139,7 +139,7 @@ export const InfluencerProfileDetail = ({
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-20">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Back Button */}
             {!isOwner && (
                 <Link

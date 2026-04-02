@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MetricCard } from '../components/MetricCard';
-import { AccountDetailCard } from '../components/AccountDetailCard';
 import { UserRole } from '@/types/auth.types';
 import { CollaborationStatus } from '@/types/collaboration.types';
 import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
@@ -28,6 +27,7 @@ import { RankingScoreCard } from '@/features/influencer/components/RankingScoreC
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
+import { PageHeader } from '@/components/shared/PageHeader';
 import Link from 'next/link';
 
 export const DashboardOverviewContainer = () => {
@@ -96,40 +96,26 @@ export const DashboardOverviewContainer = () => {
     ];
 
     return (
-        <div className="space-y-8 md:space-y-12 max-w-7xl mx-auto pb-20">
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="space-y-2">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center gap-3 text-primary"
-                    >
-                        <Trophy size={20} />
-                        <span className="text-sm font-black uppercase tracking-[0.2em]">Dashboard Overview</span>
-                    </motion.div>
-                    <motion.h1
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter"
-                    >
-                        Welcome, <span className="text-primary italic">{user?.email.split('@')[0]}</span>
-                    </motion.h1>
-                    <p className="text-lg text-muted-foreground max-w-2xl">
-                        {isInfluencer
-                            ? "Track your influence, manage collaborations, and grow your creator brand."
-                            : "Discover creators, manage collaborations, and grow your brand."}
-                    </p>
-                </div>
-
-                {!isInfluencer && (
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
-                        <Button className="h-14 px-8 rounded-2xl bg-primary text-primary-foreground font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all gap-2">
-                            Explore Creators
-                            <ArrowUpRight size={20} />
-                        </Button>
-                    </Link>
-                )}
-            </header>
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+            <PageHeader
+                label="Dashboard Overview"
+                title="Welcome,"
+                highlightedTitle={user?.email.split('@')[0] || 'User'}
+                subtitle={isInfluencer
+                    ? "Track your influence, manage collaborations, and grow your creator brand."
+                    : "Discover creators, manage collaborations, and grow your brand."}
+                icon={Trophy}
+                action={
+                    !isInfluencer && (
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
+                            <Button className="h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
+                                <span className="uppercase tracking-widest text-xs">Explore Creators</span>
+                                <ArrowUpRight size={20} className="stroke-[3]" />
+                            </Button>
+                        </Link>
+                    )
+                }
+            />
 
             {isInfluencer ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -254,10 +240,6 @@ export const DashboardOverviewContainer = () => {
                     </Card>
                 </div>
             )}
-
-            {/* <div className="pt-8 border-t border-border/50">
-                <AccountDetailCard email={user?.email} id={user?.id} />
-            </div> */}
         </div>
     );
 };

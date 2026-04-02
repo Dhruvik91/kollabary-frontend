@@ -8,8 +8,9 @@ import { MyInfluencersEmptyState } from '../components/MyInfluencersEmptyState';
 import { MyInfluencersList } from '../components/MyInfluencersList';
 import { useDebounce } from 'use-debounce';
 import { Input } from '@/components/ui/input';
-import { Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { Search, X, Users } from 'lucide-react';
 
 export const MyInfluencersContainer = () => {
     const [filters, setFilters] = useState<{
@@ -48,38 +49,35 @@ export const MyInfluencersContainer = () => {
     const totalCount = (data?.pages[0] as any)?.meta?.total || 0;
     const hasActiveFilters = Boolean(filters.search || filters.niche);
 
-
-    const hasActiveFiltersForClear = Boolean(filters.search || filters.niche);
-
     return (
-        <div className="space-y-6 pb-20">
-            <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div className="space-y-2">
-                        <h1 className="text-3xl md:text-4xl font-black tracking-tight">My Influencers</h1>
-                        <p className="text-muted-foreground text-lg">
-                            Creators you've collaborated with before. Start a new collaboration with ease!
-                        </p>
-                    </div>
-
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+            <PageHeader
+                label="My Influencers"
+                title="Manage Your"
+                highlightedTitle="Network."
+                subtitle="Creators you've collaborated with before. Start a new collaboration with ease!"
+                icon={Users}
+                action={
                     <div className="flex items-center gap-2">
-                        {hasActiveFiltersForClear && (
+                        {hasActiveFilters && (
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={handleResetFilters}
-                                className="h-10 px-4 text-xs font-bold rounded-xl hover:bg-destructive/10 hover:text-destructive"
+                                className="h-10 px-4 text-xs font-bold rounded-xl hover:bg-destructive/10 hover:text-destructive transition-all"
                             >
                                 <X size={14} className="mr-1" />
                                 Clear Filters
                             </Button>
                         )}
-                        <div className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-black uppercase tracking-widest">
+                        <div className="px-5 py-2 bg-primary/10 text-primary border border-primary/20 rounded-xl text-[10px] font-black uppercase tracking-widest">
                             {totalCount} Found
                         </div>
                     </div>
-                </div>
+                }
+            />
 
+            <div className="space-y-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="relative">
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -97,25 +95,25 @@ export const MyInfluencersContainer = () => {
                         className="h-12 rounded-xl border-border/50 bg-background/50"
                     />
                 </div>
-            </div>
 
-            {isLoading ? (
-                <MyInfluencersLoadingState />
-            ) : isError ? (
-                <MyInfluencersErrorState onRetry={() => refetch()} />
-            ) : allInfluencers.length === 0 ? (
-                <MyInfluencersEmptyState
-                    hasFilters={hasActiveFilters}
-                    onReset={handleResetFilters}
-                />
-            ) : (
-                <MyInfluencersList
-                    influencers={allInfluencers}
-                    hasNextPage={hasNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    fetchNextPage={fetchNextPage}
-                />
-            )}
+                {isLoading ? (
+                    <MyInfluencersLoadingState />
+                ) : isError ? (
+                    <MyInfluencersErrorState onRetry={() => refetch()} />
+                ) : allInfluencers.length === 0 ? (
+                    <MyInfluencersEmptyState
+                        hasFilters={hasActiveFilters}
+                        onReset={handleResetFilters}
+                    />
+                ) : (
+                    <MyInfluencersList
+                        influencers={allInfluencers}
+                        hasNextPage={hasNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        fetchNextPage={fetchNextPage}
+                    />
+                )}
+            </div>
         </div>
     );
 };

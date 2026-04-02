@@ -78,7 +78,7 @@ export const InfluencerEditContainer = () => {
     }
 
     return (
-        <div className="min-h-full py-12 px-4 sm:px-6 lg:px-8 bg-zinc-50/50 dark:bg-black/50">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0 bg-zinc-50/50 dark:bg-black/50 pt-8 sm:pt-12">
             <div className="max-w-2xl mx-auto mb-8">
                 <Button variant="ghost" asChild className="mb-8 rounded-xl">
                     <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE} className="flex items-center gap-2">

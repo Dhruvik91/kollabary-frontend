@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { auctionService } from '@/features/auction/api/auction-service';
+import { auctionService } from '@/services/auction.service';
 import { CreateAuctionDto, CreateBidDto } from '@/types/auction.types';
 import { toast } from 'sonner';
 
@@ -34,7 +34,7 @@ export const useCreateAuction = () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Auction posted successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Create auction error:', error);
       toast.error('Failed to post auction. Please try again.');
     },
@@ -49,7 +49,7 @@ export const usePlaceBid = (auctionId: string) => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
       toast.success('Bid placed successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Place bid error:', error);
       toast.error('Failed to place bid. You might have already bid on this auction.');
     },
@@ -65,7 +65,7 @@ export const useAcceptBid = (auctionId: string) => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Bid accepted! A new collaboration has been created.');
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Accept bid error:', error);
       toast.error('Failed to accept bid.');
     },
