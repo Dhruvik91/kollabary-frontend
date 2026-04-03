@@ -30,49 +30,49 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Features', href: '/#features' },
-        { name: 'Solutions', href: FRONTEND_ROUTES.SOLUTIONS },
+        { name: 'For Brands', href: '#brands' },
+        { name: 'For Influencers', href: '#influencers' },
+        { name: 'How It Works', href: '#how-it-works' },
         { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
-        { name: 'About', href: FRONTEND_ROUTES.ABOUT },
     ];
 
     return (
         <nav
             className={cn(
-                'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
+                'fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-7xl rounded-full border',
                 isScrolled
-                    ? 'bg-background/80 backdrop-blur-md py-3 border-border shadow-sm'
+                    ? 'bg-background/40 backdrop-blur-xl py-3 border-white/20 shadow-2xl shadow-primary/10'
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
-            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div className="container mx-auto px-6 flex items-center justify-between">
                 <div className="flex items-center">
                     <Link href="/" className="active:scale-95 transition-transform">
-                        <Logo className="w-32 sm:w-40 md:w-44 lg:w-48" />
+                        <Logo className="w-32 sm:w-40 md:w-44" />
                     </Link>
                 </div>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-8 px-6 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                            className="text-sm font-semibold text-foreground/80 hover:text-primary transition-all hover:scale-105"
                         >
                             {link.name}
                         </Link>
                     ))}
                 </div>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-3">
                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="font-semibold hover:bg-white/10 rounded-full px-5">
                             Log in
                         </Button>
                     </Link>
                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
-                        <Button size="sm" className="rounded-full px-6 shadow-lg shadow-primary/20">
+                        <Button size="sm" className="rounded-full px-6 font-bold bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/25 border-none h-10 transition-transform active:scale-95">
                             Get Started
                         </Button>
                     </Link>
@@ -82,7 +82,7 @@ export const Navbar = () => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden text-foreground h-10 w-10 p-2"
+                    className="md:hidden text-foreground h-10 w-10 p-2 rounded-full hover:bg-white/10"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label="Toggle menu"
                 >
