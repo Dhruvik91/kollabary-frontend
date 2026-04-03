@@ -5,6 +5,7 @@ import { useMe } from '@/hooks/use-auth.hooks';
 import { useMyProfile } from '@/hooks/queries/useProfileQueries';
 import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
 import { User, UserRole } from '@/types/auth.types';
+import { FRONTEND_ROUTES } from '@/constants';
 
 interface AuthContextValue {
     user: User | null | undefined;
@@ -20,7 +21,10 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
  * Manages global authentication state
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const { data: user, isLoading: isAuthLoading, isError: isAuthError } = useMe();
+    const isAuthRoute = typeof window !== 'undefined' && 
+        Object.values(FRONTEND_ROUTES.AUTH).some(route => window.location.pathname.startsWith(route));
+    
+    const { data: user, isLoading: isAuthLoading, isError: isAuthError } = useMe(!isAuthRoute);
 
     // Regular users fetch from /profile
     const shouldFetchUserProfile = !!user && user.role === UserRole.USER && !user.profile;

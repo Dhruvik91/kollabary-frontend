@@ -99,6 +99,7 @@ class HttpService {
               FRONTEND_ROUTES.AUTH.SIGNUP,
               FRONTEND_ROUTES.AUTH.FORGOT_PASSWORD,
               FRONTEND_ROUTES.AUTH.RESET_PASSWORD,
+              FRONTEND_ROUTES.AUTH.VERIFY_EMAIL,
               FRONTEND_ROUTES.AUTH.CALLBACK,
             ];
 

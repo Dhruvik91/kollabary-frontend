@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Rocket, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
 import { FRONTEND_ROUTES } from '@/constants';
+import { Logo } from '../shared/Logo';
 
 /**
  * Premium Footer component with glassmorphism and modern branding
@@ -55,12 +56,11 @@ export const Footer = () => {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-16 mb-24">
                     <div className="lg:col-span-2 space-y-8">
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-primary-foreground group-hover:rotate-12 transition-all duration-500 shadow-lg shadow-primary/20">
-                                <Rocket size={24} />
-                            </div>
-                            <span className="text-2xl font-black tracking-tighter">Kollabary</span>
-                        </Link>
+                        <div className="flex items-center">
+                            <Link href="/" className="active:scale-95 transition-transform">
+                                <Logo className="w-32 sm:w-40 md:w-44" />
+                            </Link>
+                        </div>
                         <p className="text-muted-foreground max-w-sm leading-relaxed text-lg font-medium">
                             The premium destination for authentic collaborations between visionary brands and creative minds.
                         </p>
@@ -73,9 +73,9 @@ export const Footer = () => {
                         </div>
                     </div>
 
-                    {sections.map((section) => (section && 
+                    {sections.map((section) => (section &&
                         <div key={section.title} className="space-y-6">
-                            <h4 className="font-bold text-xs uppercase tracking-[0.2em] text-muted-foreground/40">{section.title}</h4>
+                            <h4 className="font-bold text-xs uppercase tracking-[0.2em]">{section.title}</h4>
                             <ul className="space-y-4">
                                 {section.links.map((link) => (
                                     <li key={link.name}>

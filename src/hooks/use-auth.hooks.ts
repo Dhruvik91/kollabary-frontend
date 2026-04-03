@@ -42,6 +42,7 @@ export function useMe(enabled = true) {
  */
 export function useSignup() {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     return useMutation({
         mutationFn: (credentials: SignupCredentials) => authService.signup(credentials),
@@ -51,7 +52,7 @@ export function useSignup() {
             });
 
             // Redirect to verify email page with email as query param
-            window.location.href = `${FRONTEND_ROUTES.AUTH.VERIFY_EMAIL}?email=${encodeURIComponent(variables.email)}`;
+            router.push(`${FRONTEND_ROUTES.AUTH.VERIFY_EMAIL}?email=${encodeURIComponent(variables.email)}`);
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)
@@ -202,6 +203,7 @@ export function useResetPassword() {
  */
 export function useVerifyEmail() {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     return useMutation({
         mutationFn: (data: VerifyEmailData) => authService.verifyEmail(data),
@@ -217,7 +219,7 @@ export function useVerifyEmail() {
             });
 
             // Redirect to dashboard
-            window.location.href = '/';
+            router.push('/');
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

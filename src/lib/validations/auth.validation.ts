@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserRole } from '@/types/auth.types';
 
 /**
  * Login form validation schema
@@ -33,6 +34,7 @@ export const signupSchema = z
             .string()
             .min(1, 'Please confirm your password')
             .min(6, 'Confirm password must be at least 6 characters long'),
+        role: z.nativeEnum(UserRole),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',

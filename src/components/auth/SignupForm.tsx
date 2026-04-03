@@ -9,8 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Building2, User } from 'lucide-react';
 import { useState } from 'react';
+import { UserRole } from '@/types/auth.types';
+import { cn } from '@/lib/utils';
 
 interface SignupFormProps {
     onSubmit: (data: SignupFormData) => void;
@@ -30,9 +32,13 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth }: SignupF
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm<SignupFormData>({
         resolver: zodResolver(signupSchema),
+        defaultValues: {
+            role: UserRole.USER,
+        },
     });
 
     const password = watch('password', '');
@@ -56,9 +62,55 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth }: SignupF
 
     const passwordStrength = getPasswordStrength(password);
 
+    const role = watch('role', UserRole.USER);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
             <div className="space-y-4">
+                {/* Role Selection */}
+                <div className="space-y-2 mb-6">
+                    <Label className="text-sm font-medium">I am a...</Label>
+                    <div className="grid grid-cols-2 gap-4">
+                        <button
+                            type="button"
+                            onClick={() => setValue('role', UserRole.USER)}
+                            className={cn(
+                                "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 gap-2 cursor-pointer",
+                                role === UserRole.USER
+                                    ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10"
+                                    : "border-border/50 hover:border-primary/30 text-muted-foreground hover:bg-muted/50"
+                            )}
+                        >
+                            <div className={cn(
+                                "p-2 rounded-xl transition-colors",
+                                role === UserRole.USER ? "bg-primary/20" : "bg-muted"
+                            )}>
+                                <Building2 size={24} />
+                            </div>
+                            <span className="font-bold text-sm">Brand</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setValue('role', UserRole.INFLUENCER)}
+                            className={cn(
+                                "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 gap-2 cursor-pointer",
+                                role === UserRole.INFLUENCER
+                                    ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10"
+                                    : "border-border/50 hover:border-primary/30 text-muted-foreground hover:bg-muted/50"
+                            )}
+                        >
+                            <div className={cn(
+                                "p-2 rounded-xl transition-colors",
+                                role === UserRole.INFLUENCER ? "bg-primary/20" : "bg-muted"
+                            )}>
+                                <User size={24} />
+                            </div>
+                            <span className="font-bold text-sm">Influencer</span>
+                        </button>
+                    </div>
+                </div>
+
                 {/* Email Field */}
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>

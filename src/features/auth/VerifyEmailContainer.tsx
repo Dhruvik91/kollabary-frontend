@@ -16,12 +16,10 @@ export function VerifyEmailContainer() {
     const resendMutation = useResendOtp();
 
     const handleVerify = (otp: string) => {
-        if (!email) return;
         verifyMutation.mutate({ email, otp });
     };
 
     const handleResend = () => {
-        if (!email) return;
         resendMutation.mutate({ email });
     };
 
