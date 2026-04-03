@@ -51,6 +51,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+                { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: Handshake, label: 'Recents' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }

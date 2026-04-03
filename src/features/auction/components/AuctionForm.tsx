@@ -64,7 +64,7 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         <FormItem>
                             <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Auction Title</FormLabel>
                             <FormControl>
-                                <Input placeholder="e.g., Summer Brand Ambassador Program" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
+                                <Input placeholder="e.g., Summer Brand Ambassador Program" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all placeholder:text-[13px] sm:placeholder:text-sm" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -80,7 +80,7 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                             <FormControl>
                                 <Textarea 
                                     placeholder="Explain your requirements, deliverables, and specific goals..." 
-                                    className="min-h-24 rounded-xl border-border/50 focus:border-primary transition-all resize-none" 
+                                    className="min-h-24 rounded-xl border-border/50 focus:border-primary transition-all resize-none placeholder:text-[13px] sm:placeholder:text-sm" 
                                     {...field} 
                                 />
                             </FormControl>
@@ -138,7 +138,7 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                                                 {field.value ? (
                                                     format(new Date(field.value), "PPP")
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span className="text-[13px] sm:text-sm">Pick a date</span>
                                                 )}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
@@ -166,8 +166,8 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                                 <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Category</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
-                                        <SelectTrigger className="rounded-xl border-border/50 h-11">
-                                            <SelectValue placeholder="Select type" />
+                                        <SelectTrigger className="rounded-xl border-border/50 h-11 text-[13px] sm:text-sm">
+                                            <SelectValue placeholder="Select type" className="placeholder:text-[13px] sm:placeholder:text-sm" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
