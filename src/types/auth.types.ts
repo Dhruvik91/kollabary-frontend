@@ -63,6 +63,15 @@ export interface ChangePasswordData {
     newPassword: string;
 }
 
+export interface VerifyEmailData {
+    email: string;
+    otp: string;
+}
+
+export interface ResendOtpData {
+    email: string;
+}
+
 export interface AuthError {
     message: string;
     statusCode?: number;

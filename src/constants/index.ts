@@ -9,6 +9,8 @@ export const API_CONFIG = {
             forgotPassword: '/user-auth/forgot-password',
             resetPassword: '/user-auth/reset-password',
             changePassword: '/user-auth/change-password',
+            verifyEmail: '/user-auth/verify-email',
+            resendVerifyEmail: '/user-auth/resend-verify-email',
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
             createInfluencer: '/user-auth/admin/create-influencer',
@@ -92,6 +94,7 @@ export const FRONTEND_ROUTES = {
         SIGNUP: '/auth/signup',
         FORGOT_PASSWORD: '/auth/forgot-password',
         RESET_PASSWORD: '/auth/reset-password',
+        VERIFY_EMAIL: '/auth/verify-email',
         CALLBACK: '/auth/callback',
     },
     DASHBOARD: {
