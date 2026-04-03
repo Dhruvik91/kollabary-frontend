@@ -12,10 +12,10 @@ import { ArrowRight, Sparkles } from 'lucide-react';
  */
 export const Hero = () => {
     return (
-        <section className="relative pt-32 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-[#fff3f8]">
+        <section className="relative pt-32 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-background">
             {/* Background Orbs with Brand Colors */}
             <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 w-[600px] h-[600px] bg-secondary/8 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container mx-auto px-6 relative">
                 <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
@@ -23,7 +23,7 @@ export const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-secondary text-xs md:text-sm font-bold mb-10 tracking-widest uppercase shadow-sm"
+                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass border border-border text-foreground text-xs md:text-sm font-bold mb-10 tracking-widest uppercase shadow-sm"
                     >
                         <Sparkles size={14} className="text-primary" />
                         <span>The Radiant Pulse of Collaboration</span>
@@ -33,7 +33,7 @@ export const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7, delay: 0.1 }}
-                        className="text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] text-[#1f1a1e]"
+                        className="text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] text-foreground"
                     >
                         Bridge the Gap Between <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Passion</span> & Partnership
@@ -59,7 +59,7 @@ export const Hero = () => {
                                 Get Started Now <ArrowRight className="ml-2" size={20} />
                             </Button>
                         </Link>
-                        <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold bg-white/20 backdrop-blur-xl border-white/30 text-secondary hover:bg-white/30 w-full sm:w-auto transition-all">
+                        <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all">
                             Book a Demo
                         </Button>
                     </motion.div>

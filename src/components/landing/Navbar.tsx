@@ -18,6 +18,7 @@ export const Navbar = () => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 
@@ -41,7 +42,7 @@ export const Navbar = () => {
             className={cn(
                 'fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-7xl rounded-full border',
                 isScrolled
-                    ? 'bg-background/40 backdrop-blur-xl py-3 border-white/20 shadow-2xl shadow-primary/10'
+                    ? 'glass-card-elevated py-3 border-primary/20 shadow-2xl shadow-primary/10'
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
@@ -53,12 +54,12 @@ export const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8 px-6 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10">
+                <div className="hidden md:flex items-center gap-8 px-6 py-2 rounded-full">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-semibold text-foreground/80 hover:text-primary transition-all hover:scale-105"
+                            className="text-sm font-semibold text-foreground/70 hover:text-primary transition-all hover:scale-110"
                         >
                             {link.name}
                         </Link>
@@ -67,12 +68,12 @@ export const Navbar = () => {
 
                 <div className="hidden md:flex items-center gap-3">
                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
-                        <Button variant="ghost" size="sm" className="font-semibold hover:bg-white/10 rounded-full px-5">
+                        <Button variant="ghost" size="sm" className="font-semibold hover:bg-primary/10 rounded-full px-5 text-foreground">
                             Log in
                         </Button>
                     </Link>
                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
-                        <Button size="sm" className="rounded-full px-6 font-bold bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/25 border-none h-10 transition-transform active:scale-95">
+                        <Button size="sm" className="rounded-full px-6 font-bold bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/25 border-none h-10 transition-transform active:scale-95">
                             Get Started
                         </Button>
                     </Link>
@@ -82,7 +83,7 @@ export const Navbar = () => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden text-foreground h-10 w-10 p-2 rounded-full hover:bg-white/10"
+                    className="md:hidden text-foreground h-10 w-10 p-2 rounded-full hover:bg-primary/10"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label="Toggle menu"
                 >

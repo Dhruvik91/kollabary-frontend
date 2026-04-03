@@ -67,11 +67,11 @@ export const Features = () => {
     return (
         <>
             {/* For Brands Section */}
-            <section id="brands" className="py-32 bg-white relative overflow-hidden">
+            <section id="brands" className="py-32 bg-background relative overflow-hidden">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col lg:flex-row items-center gap-20">
                         <div className="lg:w-1/2">
-                            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight text-[#1f1a1e]">
+                            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight text-foreground">
                                 Empowering <span className="text-primary">Brands</span> <br />
                                 to Scale Authenticity.
                             </h2>
@@ -86,9 +86,9 @@ export const Features = () => {
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="flex items-start gap-6 p-6 rounded-3xl hover:bg-[#fff3f8] transition-colors"
+                                        className="flex items-start gap-6 p-6 rounded-3xl hover:bg-muted/50 transition-colors"
                                     >
-                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color}`}>
+                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color} glass`}>
                                             <feature.icon size={28} />
                                         </div>
                                         <div>
@@ -122,16 +122,16 @@ export const Features = () => {
             </section>
 
             {/* For Influencers Section */}
-            <section id="influencers" className="py-32 bg-[#1f1a1e] text-white relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,#52368c22_0%,transparent_50%)]" />
+            <section id="influencers" className="py-32 bg-secondary text-secondary-foreground relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="flex flex-col lg:flex-row-reverse items-center gap-20">
                         <div className="lg:w-1/2">
                             <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                                Built for <span className="text-secondary opacity-90 text-primary">Creators</span> <br />
+                                Built for <span className="text-primary">Creators</span> <br />
                                 to Thrive Professionally.
                             </h2>
-                            <p className="text-lg text-white/70 mb-12 max-w-xl leading-relaxed font-medium">
+                            <p className="text-lg text-secondary-foreground/70 mb-12 max-w-xl leading-relaxed font-medium">
                                 Turn your creative passion into a sustainable career with direct access to top-tier brand partnerships and professional growth tools.
                             </p>
                             <div className="space-y-8">
@@ -144,12 +144,12 @@ export const Features = () => {
                                         transition={{ delay: index * 0.1 }}
                                         className="flex items-start gap-6 p-6 rounded-3xl hover:bg-white/5 transition-colors"
                                     >
-                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color} border border-white/10`}>
+                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color} border border-white/10 glass`}>
                                             <feature.icon size={28} />
                                         </div>
                                         <div>
                                             <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                                            <p className="text-white/60 font-medium">{feature.description}</p>
+                                            <p className="text-secondary-foreground/60 font-medium">{feature.description}</p>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -170,10 +170,10 @@ export const Features = () => {
             </section>
 
             {/* How It Works Section */}
-            <section id="how-it-works" className="py-32 bg-[#fff3f8]">
+            <section id="how-it-works" className="py-32 bg-muted/30">
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-3xl mx-auto mb-20">
-                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-[#1f1a1e]">How Kollabary Works</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">How Kollabary Works</h2>
                         <p className="text-lg text-muted-foreground font-medium">Simple steps to build lasting, impactful partnerships.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -184,12 +184,12 @@ export const Features = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="relative p-10 bg-white rounded-[3rem] shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-shadow group overflow-hidden"
+                                className="relative p-10 bg-card rounded-[3rem] shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-shadow group overflow-hidden border border-border/50"
                             >
                                 <div className="absolute top-0 right-0 p-8 text-6xl font-black text-primary/5 group-hover:text-primary/10 transition-colors uppercase italic">
                                     {step.number}
                                 </div>
-                                <h3 className="text-2xl font-black mb-4 text-secondary">{step.title}</h3>
+                                <h3 className="text-2xl font-black mb-4 text-primary">{step.title}</h3>
                                 <p className="text-muted-foreground font-medium leading-relaxed">{step.description}</p>
                             </motion.div>
                         ))}
@@ -198,7 +198,7 @@ export const Features = () => {
             </section>
 
             {/* Stats Section */}
-            <section className="py-20 border-y border-gray-100 bg-white">
+            <section className="py-20 border-y border-border bg-background">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                         {[
