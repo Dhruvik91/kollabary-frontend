@@ -240,7 +240,10 @@ export const InfluencerProfileDetail = ({
                                             )}
                                             <div className="flex items-center gap-2">
                                                 <LayoutGrid size={16} className="text-primary" />
-                                                <span className="text-sm truncate">{categories.slice(0, 2).join(', ')}{categories.length > 2 ? '...' : ''}</span>
+                                                <span className="text-sm truncate">
+                                                    {(categories || []).slice(0, 2).join(', ')}
+                                                    {(categories || []).length > 2 ? '...' : ''}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
