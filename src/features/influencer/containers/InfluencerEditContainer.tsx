@@ -22,16 +22,40 @@ export const InfluencerEditContainer = () => {
         const platformsArray = Object.entries(profileData.platforms || {}).map(([name, data]) => ({
             name,
             handle: (data as any).handle,
-            followers: (data as any).followers,
-            engagementRate: (data as any).engagementRate,
+            followers: Number((data as any).followers) || 0,
+            engagementRate: (data as any).engagementRate !== undefined ? Number((data as any).engagementRate) : undefined,
         }));
+
+        const genderRatio = profileData.audienceGenderRatio || { male: 0, female: 0, other: 0 };
+        const ageBrackets = profileData.audienceAgeBrackets || { '13-17': 0, '18-24': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55-64': 0, '65+': 0 };
 
         return {
             fullName: profileData.fullName || '',
-            niche: profileData.niche || '',
+            categories: Array.isArray(profileData.categories) ? profileData.categories.join(', ') : '',
             avatarUrl: profileData.avatarUrl || '',
             bio: profileData.bio || '',
             address: profileData.address || '',
+            locationCountry: profileData.locationCountry || '',
+            locationCity: profileData.locationCity || '',
+            gender: profileData.gender || '',
+            languages: Array.isArray(profileData.languages) ? profileData.languages.join(', ') : '',
+            audienceTopCountries: Array.isArray(profileData.audienceTopCountries) ? profileData.audienceTopCountries.join(', ') : '',
+            audienceGenderRatio: {
+                male: Number(genderRatio.male) || 0,
+                female: Number(genderRatio.female) || 0,
+                other: Number(genderRatio.other) || 0,
+            },
+            audienceAgeBrackets: {
+                '13-17': Number(ageBrackets['13-17']) || 0,
+                '18-24': Number(ageBrackets['18-24']) || 0,
+                '25-34': Number(ageBrackets['25-34']) || 0,
+                '35-44': Number(ageBrackets['35-44']) || 0,
+                '45-54': Number(ageBrackets['45-54']) || 0,
+                '55-64': Number(ageBrackets['55-64']) || 0,
+                '65+': Number(ageBrackets['65+']) || 0,
+            },
+            minPrice: profileData.minPrice ? Number(profileData.minPrice) : 0,
+            maxPrice: profileData.maxPrice ? Number(profileData.maxPrice) : 0,
             platforms: platformsArray as any,
             collaborationTypes: profileData.collaborationTypes as any,
             availability: profileData.availability as any,

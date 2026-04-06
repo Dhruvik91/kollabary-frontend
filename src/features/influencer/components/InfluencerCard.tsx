@@ -18,7 +18,7 @@ interface InfluencerCardProps {
 }
 
 export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
-    const { user: influencerUser, fullName, niche, avatarUrl, avgRating, totalReviews, verified, id, completedCollaborations } = influencer;
+    const { user: influencerUser, fullName, avatarUrl, avgRating, totalReviews, verified, id, completedCollaborations, categories = [] } = influencer;
     const profile = influencerUser?.profile;
 
     const displayAvatar = avatarUrl || profile?.avatarUrl;
@@ -120,7 +120,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                             {/* Tags / Badges */}
                             <div className="flex flex-wrap gap-1.5">
                                 <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10">
-                                    {niche}
+                                    {categories[0] || 'Creator'}
                                 </span>
                                 {(influencer.address || profile?.location) && (
                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 border border-transparent">

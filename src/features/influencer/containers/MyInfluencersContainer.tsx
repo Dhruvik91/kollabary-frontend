@@ -15,7 +15,7 @@ import { Search, X, Users } from 'lucide-react';
 export const MyInfluencersContainer = () => {
     const [filters, setFilters] = useState<{
         search?: string;
-        niche?: string;
+        category?: string;
         limit?: number;
     }>({
         limit: 10,
@@ -33,7 +33,7 @@ export const MyInfluencersContainer = () => {
         refetch,
     } = useMyInfluencers(debouncedFilters);
 
-    const handleFilterChange = (newFilters: Partial<{ search?: string; niche?: string }>) => {
+    const handleFilterChange = (newFilters: Partial<{ search?: string; category?: string }>) => {
         setFilters((prev) => ({ ...prev, ...newFilters }));
     };
 
@@ -41,13 +41,13 @@ export const MyInfluencersContainer = () => {
         setFilters({
             limit: 10,
             search: '',
-            niche: '',
+            category: '',
         });
     };
 
     const allInfluencers = data?.pages.flatMap((page: any) => page.items) || [];
     const totalCount = (data?.pages[0] as any)?.meta?.total || 0;
-    const hasActiveFilters = Boolean(filters.search || filters.niche);
+    const hasActiveFilters = Boolean(filters.search || filters.category);
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
@@ -89,9 +89,9 @@ export const MyInfluencersContainer = () => {
                         />
                     </div>
                     <Input
-                        placeholder="Filter by niche..."
-                        value={filters.niche || ''}
-                        onChange={(e) => handleFilterChange({ niche: e.target.value })}
+                        placeholder="Filter by category..."
+                        value={filters.category || ''}
+                        onChange={(e) => handleFilterChange({ category: e.target.value })}
                         className="h-12 rounded-xl border-border/50 bg-background/50"
                     />
                 </div>

@@ -23,10 +23,21 @@ export interface InfluencerProfile {
     id: string;
     userId: string;
     fullName?: string;
-    niche: string;
+    categories?: string[];
     avatarUrl?: string;
     bio?: string;
     address?: string;
+    locationCountry?: string;
+    locationCity?: string;
+    gender?: string;
+    languages?: string[];
+    totalFollowers: number;
+    avgEngagementRate: number;
+    audienceGenderRatio?: any;
+    audienceAgeBrackets?: any;
+    audienceTopCountries?: string[];
+    minPrice?: number;
+    maxPrice?: number;
     platforms: Record<string, { handle: string; followers: number; engagementRate?: number }>;
     collaborationTypes: string[];
     availability: AvailabilityStatus;
@@ -42,10 +53,19 @@ export interface InfluencerProfile {
 }
 
 export interface SearchInfluencersDto {
-    niche?: string;
+    categories?: string[];
     search?: string;
     platform?: string;
     minFollowers?: number;
+    maxFollowers?: number;
+    minEngagementRate?: number;
+    locationCountry?: string;
+    locationCity?: string;
+    gender?: string;
+    languages?: string[];
+    priceMin?: number;
+    priceMax?: number;
+    audienceGender?: string;
     rankingTier?: string;
     minRating?: number;
     maxRating?: number;
@@ -65,7 +85,7 @@ export interface SearchInfluencersResponse {
 }
 
 export interface CreateInfluencerProfileDto {
-    niche: string;
+    categories: string[];
     avatarUrl?: string;
     bio?: string;
     address?: string;

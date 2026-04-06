@@ -8,10 +8,10 @@ import { cn } from '@/lib/utils';
 interface MyInfluencersFiltersProps {
     filters: {
         search?: string;
-        niche?: string;
+        category?: string;
         limit?: number;
     };
-    onFilterChange: (filters: Partial<{ search?: string; niche?: string }>) => void;
+    onFilterChange: (filters: Partial<{ search?: string; category?: string }>) => void;
     onReset: () => void;
     className?: string;
 }
@@ -22,7 +22,7 @@ export const MyInfluencersFilters = ({
     onReset,
     className,
 }: MyInfluencersFiltersProps) => {
-    const hasActiveFilters = filters.search || filters.niche;
+    const hasActiveFilters = filters.search || filters.category;
 
     return (
         <Card className={cn(
@@ -63,12 +63,12 @@ export const MyInfluencersFilters = ({
 
                 <div className="space-y-2">
                     <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
-                        Niche
+                        Category
                     </label>
                     <Input
-                        placeholder="Filter by niche..."
-                        value={filters.niche || ''}
-                        onChange={(e) => onFilterChange({ niche: e.target.value })}
+                        placeholder="Filter by category..."
+                        value={filters.category || ''}
+                        onChange={(e) => onFilterChange({ category: e.target.value })}
                         className="h-12 rounded-xl border-border/50 bg-background/50"
                     />
                 </div>

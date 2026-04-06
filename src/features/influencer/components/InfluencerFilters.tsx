@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, SlidersHorizontal, Users, Globe2, Briefcase, ChevronDown, Check, Award, Star, CheckCircle2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Users, Globe2, Briefcase, ChevronDown, Check, Award, Star, CheckCircle2, LayoutGrid } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SearchInfluencersDto } from '@/types/influencer.types';
@@ -23,16 +23,6 @@ interface InfluencerFiltersProps {
     className?: string;
 }
 
-const NICHE_OPTIONS = [
-    { label: 'All Categories', value: '' },
-    { label: 'Lifestyle', value: 'Lifestyle' },
-    { label: 'Fitness', value: 'Fitness' },
-    { label: 'Technology', value: 'Technology' },
-    { label: 'Fashion', value: 'Fashion' },
-    { label: 'Beauty', value: 'Beauty' },
-    { label: 'Travel', value: 'Travel' },
-    { label: 'Finance', value: 'Finance' },
-];
 
 const PLATFORM_OPTIONS = [
     { label: 'All Platforms', value: '' },
@@ -86,77 +76,132 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                     </div>
                 </div>
 
-                {/* Niche */}
+                {/* Categories (Multi) */}
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                        Content Niche
+                        Categories
                     </label>
                     <div className="relative group">
-                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
+                        <LayoutGrid className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
+                        <Input
+                            placeholder="Search categories (e.g. Beauty, Tech)"
+                            className="pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 font-medium"
+                            value={filters.categories?.join(', ') || ''}
+                            onChange={(e) => onFilterChange({ categories: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
+                        />
+                    </div>
+                </div>
+
+                {/* Follower Range */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Min Followers
+                        </label>
+                        <div className="relative group">
+                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                            <Input
+                                type="number"
+                                placeholder="0"
+                                className="pl-10 h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm"
+                                value={filters.minFollowers ?? ''}
+                                onChange={(e) => onFilterChange({ minFollowers: e.target.value === '' ? undefined : Number(e.target.value) })}
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Max Followers
+                        </label>
+                        <div className="relative group">
+                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                            <Input
+                                type="number"
+                                placeholder="Any"
+                                className="pl-10 h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm"
+                                value={filters.maxFollowers ?? ''}
+                                onChange={(e) => onFilterChange({ maxFollowers: e.target.value === '' ? undefined : Number(e.target.value) })}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Price Range */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Min Price ($)
+                        </label>
+                        <Input
+                            type="number"
+                            placeholder="0"
+                            className="h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm"
+                            value={filters.priceMin ?? ''}
+                            onChange={(e) => onFilterChange({ priceMin: e.target.value === '' ? undefined : Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Max Price ($)
+                        </label>
+                        <Input
+                            type="number"
+                            placeholder="Any"
+                            className="h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm"
+                            value={filters.priceMax ?? ''}
+                            onChange={(e) => onFilterChange({ priceMax: e.target.value === '' ? undefined : Number(e.target.value) })}
+                        />
+                    </div>
+                </div>
+
+                {/* Engagement & Gender */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Min ER (%)
+                        </label>
+                        <Input
+                            type="number"
+                            step="0.1"
+                            placeholder="0.0"
+                            className="h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm"
+                            value={filters.minEngagementRate ?? ''}
+                            onChange={(e) => onFilterChange({ minEngagementRate: e.target.value === '' ? undefined : Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                            Gender
+                        </label>
                         <Select
-                            value={filters.niche || 'all'}
-                            onValueChange={(val) => onFilterChange({ niche: val === 'all' ? '' : val })}
+                            value={filters.gender || 'all'}
+                            onValueChange={(val) => onFilterChange({ gender: val === 'all' ? undefined : val })}
                         >
-                            <SelectTrigger className="w-full pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 transition-all font-medium hover:bg-background/80 hover:cursor-pointer">
-                                <SelectValue placeholder="All Categories" />
+                            <SelectTrigger className="h-11 bg-background/50 border-border/50 rounded-xl focus:ring-primary/20 font-medium text-sm">
+                                <SelectValue placeholder="Any" />
                             </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 backdrop-blur-xl">
-                                {NICHE_OPTIONS.map((opt) => (
-                                    <SelectItem key={opt.value} value={opt.value || 'all'} className="rounded-xl hover:cursor-pointer px-4">
-                                        {opt.label}
-                                    </SelectItem>
-                                ))}
+                            <SelectContent className="rounded-xl">
+                                <SelectItem value="all">Any</SelectItem>
+                                <SelectItem value="Male">Male</SelectItem>
+                                <SelectItem value="Female">Female</SelectItem>
+                                <SelectItem value="Non-binary">Non-binary</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                 </div>
 
-                {/* Platform */}
+                {/* Country Filter */}
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                        Primary Platform
+                        Location (Country)
                     </label>
                     <div className="relative group">
                         <Globe2 className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
-                        <Select
-                            value={filters.platform || 'all'}
-                            onValueChange={(val) => onFilterChange({ platform: val === 'all' ? '' : val })}
-                        >
-                            <SelectTrigger className="w-full pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 transition-all font-medium hover:bg-background/80 hover:cursor-pointer">
-                                <SelectValue placeholder="All Platforms" />
-                            </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 backdrop-blur-xl">
-                                {PLATFORM_OPTIONS.map((opt) => (
-                                    <SelectItem key={opt.value} value={opt.value || 'all'} className="rounded-xl hover:cursor-pointer px-4">
-                                        {opt.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-
-                {/* Min Followers */}
-                <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                        Minimum Followers
-                    </label>
-                    <div className="relative group">
-                        <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
                         <Input
-                            type="number"
-                            placeholder="e.g. 10000"
+                            placeholder="e.g. United States"
                             className="pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 font-medium"
-                            value={filters.minFollowers !== undefined && filters.minFollowers !== null ? filters.minFollowers : ''}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === '') {
-                                    onFilterChange({ minFollowers: undefined });
-                                } else {
-                                    const num = Number(val);
-                                    if (!isNaN(num)) onFilterChange({ minFollowers: num });
-                                }
-                            }}
+                            value={filters.locationCountry || ''}
+                            onChange={(e) => onFilterChange({ locationCountry: e.target.value })}
                         />
                     </div>
                 </div>
@@ -186,55 +231,8 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                     </div>
                 </div>
 
-                {/* Rating Filter */}
-                <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                        Minimum Rating
-                    </label>
-                    <div className="relative group">
-                        <Star className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
-                        <Select
-                            value={
-                                filters.minRating === 4 ? '4+' :
-                                filters.minRating === 3 ? '3+' :
-                                filters.minRating === 2 ? '2+' :
-                                'all'
-                            }
-                            onValueChange={(val) => {
-                                if (val === 'all') {
-                                    onFilterChange({ minRating: undefined, maxRating: undefined });
-                                } else if (val === '4+') {
-                                    onFilterChange({ minRating: 4, maxRating: 5 });
-                                } else if (val === '3+') {
-                                    onFilterChange({ minRating: 3, maxRating: 5 });
-                                } else if (val === '2+') {
-                                    onFilterChange({ minRating: 2, maxRating: 5 });
-                                }
-                            }}
-                        >
-                            <SelectTrigger className="w-full pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 transition-all font-medium hover:bg-background/80 hover:cursor-pointer">
-                                <SelectValue placeholder="Any Rating" />
-                            </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 backdrop-blur-xl">
-                                {RATING_OPTIONS.map((opt) => (
-                                    <SelectItem 
-                                        key={opt.label} 
-                                        value={opt.value || (opt.minValue ? `${opt.minValue}+` : 'all')} 
-                                        className="rounded-xl hover:cursor-pointer px-4"
-                                    >
-                                        {opt.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-
                 {/* Verified Filter */}
                 <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                        Verification Status
-                    </label>
                     <button
                         type="button"
                         onClick={() => onFilterChange({ verified: filters.verified ? undefined : true })}
@@ -258,7 +256,7 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                 variant="ghost"
                 onClick={onReset || (() => onFilterChange({ 
                     search: '', 
-                    niche: '', 
+                    categories: [],
                     platform: '', 
                     minFollowers: undefined, 
                     rankingTier: '', 
