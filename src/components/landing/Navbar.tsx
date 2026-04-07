@@ -18,6 +18,7 @@ export const Navbar = () => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 
@@ -30,49 +31,49 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Features', href: '/#features' },
-        { name: 'Solutions', href: FRONTEND_ROUTES.SOLUTIONS },
+        { name: 'For Brands', href: '#brands' },
+        { name: 'For Influencers', href: '#influencers' },
+        { name: 'How It Works', href: '#how-it-works' },
         { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
-        { name: 'About', href: FRONTEND_ROUTES.ABOUT },
     ];
 
     return (
         <nav
             className={cn(
-                'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
+                'fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-7xl rounded-full border',
                 isScrolled
-                    ? 'bg-background/80 backdrop-blur-md py-3 border-border shadow-sm'
+                    ? 'glass-card-elevated py-3 border-primary/20 shadow-2xl shadow-primary/10'
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
-            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div className="container mx-auto px-6 flex items-center justify-between">
                 <div className="flex items-center">
                     <Link href="/" className="active:scale-95 transition-transform">
-                        <Logo className="w-32 sm:w-40 md:w-44 lg:w-48" />
+                        <Logo className="w-32 sm:w-40 md:w-44" />
                     </Link>
                 </div>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-8 px-6 py-2 rounded-full">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                            className="text-sm font-semibold text-foreground/70 hover:text-primary transition-all hover:scale-110"
                         >
                             {link.name}
                         </Link>
                     ))}
                 </div>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-3">
                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="font-semibold hover:bg-primary/10 rounded-full px-5 text-foreground">
                             Log in
                         </Button>
                     </Link>
                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
-                        <Button size="sm" className="rounded-full px-6 shadow-lg shadow-primary/20">
+                        <Button size="sm" className="rounded-full px-6 font-bold bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/25 border-none h-10 transition-transform active:scale-95">
                             Get Started
                         </Button>
                     </Link>
@@ -82,7 +83,7 @@ export const Navbar = () => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden text-foreground h-10 w-10 p-2"
+                    className="md:hidden text-foreground h-10 w-10 p-2 rounded-full hover:bg-primary/10"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label="Toggle menu"
                 >

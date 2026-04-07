@@ -7,8 +7,11 @@ import {
     SignupCredentials,
     ForgotPasswordData,
     ResetPasswordData,
+    VerifyEmailData,
+    ResendOtpData,
     User,
     AuthResponse,
+    MessageResponse,
 } from '@/types/auth.types';
 import axios from 'axios';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -39,22 +42,17 @@ export function useMe(enabled = true) {
  */
 export function useSignup() {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     return useMutation({
         mutationFn: (credentials: SignupCredentials) => authService.signup(credentials),
-        onSuccess: (data: AuthResponse) => {
-            // Invalidate and refetch user data
-            queryClient.invalidateQueries({ queryKey: authKeys.me() });
-
-            // Set role cookie for middleware (accessible by JS)
-            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
-
-            toast.success('Account created successfully!', {
-                description: 'Welcome to Kollabary',
+        onSuccess: (data: MessageResponse, variables) => {
+            toast.success('Account created!', {
+                description: data.message || 'Please check your email for the verification code.',
             });
 
-            // Reload to trigger middleware redirection
-            window.location.href = '/';
+            // Redirect to verify email page with email as query param
+            router.push(`${FRONTEND_ROUTES.AUTH.VERIFY_EMAIL}?email=${encodeURIComponent(variables.email)}`);
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)
@@ -91,14 +89,24 @@ export function useLogin() {
             // Reload to trigger middleware redirection
             window.location.href = '/';
         },
-        onError: (error: Error) => {
+        onError: (error: Error, variables) => {
             const message = axios.isAxiosError(error)
                 ? error.response?.data?.message || error.message
                 : error.message || 'Failed to login. Please try again.';
 
-            toast.error('Login failed', {
-                description: message,
-            });
+            if (message === 'Please verify your email address before logging in.') {
+                toast.error('Verification required', {
+                    description: message,
+                    action: {
+                        label: 'Verify Now',
+                        onClick: () => window.location.href = `${FRONTEND_ROUTES.AUTH.VERIFY_EMAIL}?email=${encodeURIComponent(variables.email)}`,
+                    },
+                });
+            } else {
+                toast.error('Login failed', {
+                    description: message,
+                });
+            }
             return message;
         },
     });
@@ -183,6 +191,66 @@ export function useResetPassword() {
                 : error.message || 'Failed to reset password. Please try again.';
 
             toast.error('Reset failed', {
+                description: message,
+            });
+            return message;
+        },
+    });
+}
+
+/**
+ * Hook to handle email verification
+ */
+export function useVerifyEmail() {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    return useMutation({
+        mutationFn: (data: VerifyEmailData) => authService.verifyEmail(data),
+        onSuccess: (data: AuthResponse) => {
+            // Invalidate and refetch user data
+            queryClient.invalidateQueries({ queryKey: authKeys.me() });
+
+            // Set role cookie for middleware
+            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
+            toast.success('Email verified successfully!', {
+                description: 'Welcome to Kollabary',
+            });
+
+            // Redirect to dashboard
+            router.push('/');
+        },
+        onError: (error: Error) => {
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Verification failed. Please try again.';
+
+            toast.error('Verification failed', {
+                description: message,
+            });
+            return message;
+        },
+    });
+}
+
+/**
+ * Hook to resend verification OTP
+ */
+export function useResendOtp() {
+    return useMutation({
+        mutationFn: (data: ResendOtpData) => authService.resendOtp(data),
+        onSuccess: (data) => {
+            toast.success('OTP sent!', {
+                description: data.message,
+            });
+        },
+        onError: (error: Error) => {
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to resend OTP. Please try again.';
+
+            toast.error('Action failed', {
                 description: message,
             });
             return message;

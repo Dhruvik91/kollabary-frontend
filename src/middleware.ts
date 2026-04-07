@@ -32,6 +32,7 @@ export function middleware(request: NextRequest) {
         FRONTEND_ROUTES.AUTH.SIGNUP,
         FRONTEND_ROUTES.AUTH.FORGOT_PASSWORD,
         FRONTEND_ROUTES.AUTH.RESET_PASSWORD,
+        FRONTEND_ROUTES.AUTH.VERIFY_EMAIL
     ];
 
     // Check if the current route is an auth route

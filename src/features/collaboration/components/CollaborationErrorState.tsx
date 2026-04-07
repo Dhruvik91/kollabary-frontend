@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
+import { BackButton } from '@/components/shared/BackButton';
+import { AlertCircle } from 'lucide-react';
 import { FRONTEND_ROUTES } from '@/constants';
 
 interface CollaborationErrorStateProps {
@@ -22,12 +21,7 @@ export const CollaborationErrorState = ({ message = "Collaboration not found" }:
                     The collaboration request you are looking for might have been removed or you don't have permission to view it.
                 </p>
             </div>
-            <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS}>
-                <Button variant="outline" className="h-12 px-8 rounded-2xl font-bold">
-                    <ArrowLeft size={18} className="mr-2" />
-                    Back to Collaborations
-                </Button>
-            </Link>
+            <BackButton label="Back to Collaborations" />
         </div>
     );
 };

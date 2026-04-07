@@ -34,6 +34,7 @@ export interface CreateCollaborationDto {
     title: string;
     description?: string;
     proposedTerms?: Record<string, unknown>;
+    agreedTerms?: Record<string, unknown>;
     startDate?: string;
     endDate?: string;
 }
@@ -46,6 +47,7 @@ export interface UpdateCollaborationDto {
     title?: string;
     description?: string;
     proposedTerms?: Record<string, unknown>;
+    agreedTerms?: Record<string, unknown>;
     startDate?: string;
     endDate?: string;
     proofUrls?: string[];

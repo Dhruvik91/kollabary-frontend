@@ -83,12 +83,12 @@ export const collaborationService = {
     /**
      * Get influencers the user has collaborated with
      */
-    getMyInfluencers: async (filters?: { page?: number; limit?: number; search?: string; niche?: string }) => {
+    getMyInfluencers: async (filters?: { page?: number; limit?: number; search?: string; category?: string }) => {
         const params: Record<string, string | number> = {};
         if (filters?.page) params.page = filters.page;
         if (filters?.limit) params.limit = filters.limit;
         if (filters?.search) params.search = filters.search;
-        if (filters?.niche) params.niche = filters.niche;
+        if (filters?.category) params.category = filters.category;
 
         const response = await httpService.get(
             API_CONFIG.path.collaboration.myInfluencers,

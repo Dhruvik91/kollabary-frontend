@@ -19,9 +19,9 @@ import {
     MessageCircle,
     Flag,
     AlignLeft,
-    ArrowLeft,
     Settings,
     Award,
+    LayoutGrid,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -49,6 +49,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
+import { BackButton } from '@/components/shared/BackButton';
 
 
 interface InfluencerProfileDetailProps {
@@ -67,13 +68,38 @@ export const InfluencerProfileDetail = ({
     const { user } = useAuth();
     const router = useRouter();
 
-    const { user: influencerUser, niche, platforms, avatarUrl, bio, address, avgRating, totalReviews, verified, availability, fullName, completedCollaborations } = influencer;
+    const { 
+        user: influencerUser, 
+        categories = [], 
+        platforms, 
+        avatarUrl, 
+        bio, 
+        address, 
+        avgRating, 
+        totalReviews, 
+        verified, 
+        availability, 
+        fullName, 
+        completedCollaborations,
+        totalFollowers,
+        avgEngagementRate,
+        locationCountry,
+        locationCity,
+        languages,
+        minPrice,
+        maxPrice,
+        audienceTopCountries,
+        gender
+    } = influencer;
 
 
     const collaborationTypes = influencer.collaborationTypes || [];
     const profile = influencerUser?.profile;
     const displayBio = bio || profile?.bio;
     const displayAvatar = avatarUrl || profile?.avatarUrl;
+    const displayLocation = locationCity && locationCountry 
+        ? `${locationCity}, ${locationCountry}` 
+        : profile?.location || address;
 
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
     const deleteReview = useDeleteReview(influencer.id);
@@ -139,16 +165,10 @@ export const InfluencerProfileDetail = ({
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-20">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Back Button */}
             {!isOwner && (
-                <Link
-                    href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors group"
-                >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to Discovery
-                </Link>
+                <BackButton label="Back to Discovery" className="p-0" />
             )}
 
             {/* Main Layout: Left content + Right ranking sidebar */}
@@ -212,15 +232,18 @@ export const InfluencerProfileDetail = ({
                                         </div>
 
                                         <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-muted-foreground">
-                                            {profile?.location && (
+                                            {displayLocation && (
                                                 <div className="flex items-center gap-2">
                                                     <MapPin size={16} className="text-primary" />
-                                                    <span className="text-sm truncate">{profile.location}</span>
+                                                    <span className="text-sm truncate">{displayLocation}</span>
                                                 </div>
                                             )}
                                             <div className="flex items-center gap-2">
-                                                <Briefcase size={16} className="text-primary" />
-                                                <span className="text-sm truncate">{niche}</span>
+                                                <LayoutGrid size={16} className="text-primary" />
+                                                <span className="text-sm truncate">
+                                                    {(categories || []).slice(0, 2).join(', ')}
+                                                    {(categories || []).length > 2 ? '...' : ''}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -350,6 +373,22 @@ export const InfluencerProfileDetail = ({
                                                 <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Reviews</p>
                                             </div>
                                         </div>
+
+                                        {/* New Metrics */}
+                                        <div className="grid grid-cols-2 gap-3 pt-2">
+                                            <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10 text-center">
+                                                <p className="text-xl font-black tabular-nums text-primary">
+                                                    {totalFollowers ? Intl.NumberFormat('en', { notation: 'compact' }).format(totalFollowers) : 'N/A'}
+                                                </p>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Total Reach</p>
+                                            </div>
+                                            <div className="bg-green-500/5 p-4 rounded-2xl border border-green-500/10 text-center">
+                                                <p className="text-xl font-black tabular-nums text-green-600">
+                                                    {avgEngagementRate ? `${avgEngagementRate}%` : 'N/A'}
+                                                </p>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg. Eng.</p>
+                                            </div>
+                                        </div>
                                     </CardContent>
                                 </Card>
                             )}
@@ -423,7 +462,6 @@ export const InfluencerProfileDetail = ({
                                                 )}
                                             </div>
                                         </div>
-
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-2 text-primary">
                                                 <Star size={20} />
@@ -435,13 +473,65 @@ export const InfluencerProfileDetail = ({
                                         </div>
                                     </div>
 
+                                    {/* Pricing & Demographics Section */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-8 border-t border-border/50">
+                                        <div className="space-y-4">
+                                            <h4 className="font-bold flex items-center gap-2 text-primary">
+                                                <Globe size={18} />
+                                                Audience & Languages
+                                            </h4>
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Languages</p>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {languages?.map(lang => (
+                                                            <Badge key={lang} variant="secondary" className="rounded-lg text-[10px] px-2 py-0.5">{lang}</Badge>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                {audienceTopCountries && audienceTopCountries.length > 0 && (
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Top Countries</p>
+                                                        <p className="text-sm text-foreground">{audienceTopCountries.join(', ')}</p>
+                                                    </div>
+                                                )}
+                                                {gender && (
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Gender</p>
+                                                        <p className="text-sm text-foreground">{gender}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <h4 className="font-bold flex items-center gap-2 text-primary">
+                                                <Briefcase size={18} />
+                                                Standard Rates
+                                            </h4>
+                                            <div className="bg-muted/30 p-4 rounded-2xl border border-border/50">
+                                                <div className="flex justify-between items-center mb-2">
+                                                    <span className="text-sm text-muted-foreground font-medium">Starting from</span>
+                                                    <span className="text-xl font-black text-primary">${minPrice || 0}</span>
+                                                </div>
+                                                {(maxPrice || 0) > (minPrice || 0) && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-sm text-muted-foreground font-medium">Up to</span>
+                                                        <span className="text-lg font-bold text-foreground">${maxPrice}</span>
+                                                    </div>
+                                                )}
+                                                <p className="text-[10px] text-muted-foreground mt-3 italic">* Rates may vary based on specific campaign requirements.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="pt-8 border-t border-border/50 w-full">
                                         {(user?.role === UserRole.USER || user?.role === UserRole.ADMIN) && user?.id !== influencer.user.id && (
                                             <CollaborationRequestDialog
                                                 influencerId={influencer.id}
                                                 influencerName={profile?.fullName || 'Creator'}
                                             >
-                                                <Button className="flex-1 w-full! h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                                                <Button className="flex-1 w-full h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                                                     Start Collaboration
                                                 </Button>
                                             </CollaborationRequestDialog>

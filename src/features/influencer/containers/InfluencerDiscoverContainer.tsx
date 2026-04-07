@@ -53,7 +53,7 @@ export const InfluencerDiscoverContainer = () => {
         setFilters({
             limit: 10,
             search: '',
-            niche: '',
+            categories: [],
             platform: '',
             minFollowers: undefined,
             rankingTier: '',

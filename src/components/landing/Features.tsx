@@ -11,99 +11,214 @@ import {
     Layers
 } from 'lucide-react';
 
-const features = [
+const brandFeatures = [
+    {
+        title: 'Discover Top Creators',
+        description: 'Access a vetted pool of high-performing influencers across all niches.',
+        icon: Users,
+        color: 'bg-[#f05166]/10 text-[#f05166]',
+    },
     {
         title: 'Advanced Analytics',
-        description: 'Track real-time performance metrics and ROI for every collaboration campaign.',
+        description: 'Deep dive into campaign ROI with real-time conversion tracking.',
         icon: BarChart3,
         color: 'bg-blue-500/10 text-blue-600',
     },
     {
-        title: 'Smart Matching',
-        description: 'Find the perfect influencers for your brand using our AI-driven discovery engine.',
-        icon: Users,
-        color: 'bg-purple-500/10 text-purple-600',
-    },
-    {
-        title: 'Fast Payments',
-        description: 'Automated, secure payment processing that keeps your partners happy.',
+        title: 'Automated CRM',
+        description: 'Manage 100+ collaborations effortlessly with our built-in campaign manager.',
         icon: Zap,
         color: 'bg-amber-500/10 text-amber-600',
     },
+];
+
+const influencerFeatures = [
     {
-        title: 'Brand Safety',
-        description: 'Rigorous verification processes to ensure authentic and safe partnerships.',
-        icon: Shield,
+        title: 'Monetize Your Craft',
+        description: 'Get paid fairly and on-time for your creative value.',
+        icon: Zap,
+        color: 'bg-[#52368c]/10 text-[#52368c]',
+    },
+    {
+        title: 'Premium Brand Network',
+        description: 'Partner with world-class brands that align with your authentic voice.',
+        icon: Globe,
         color: 'bg-emerald-500/10 text-emerald-600',
     },
     {
-        title: 'Global Reach',
-        description: 'Connect with creators across borders and access diverse international markets.',
-        icon: Globe,
-        color: 'bg-cyan-500/10 text-cyan-600',
-    },
-    {
-        title: 'Infinite Scalability',
-        description: 'Built on enterprise architecture to support growth from startup to global giant.',
-        icon: Layers,
+        title: 'Growth Analytics',
+        description: 'Professional insights to help you scale your audience and influence.',
+        icon: BarChart3,
         color: 'bg-rose-500/10 text-rose-600',
     },
 ];
 
+const steps = [
+    { number: '01', title: 'Join the Network', description: 'Create your profile and verify your social accounts.' },
+    { number: '02', title: 'Discover Matches', description: 'Our AI finds the perfect partners based on your goals.' },
+    { number: '03', title: 'Collaborate', description: 'Plan, execute, and communicate through our secure dashboard.' },
+    { number: '04', title: 'Grow Together', description: 'Analyze results and scale your impact seamlessly.' },
+];
+
 /**
- * Features section with grid layout and premium card design
+ * Features section with partitioned Brand/Influencer sections and How It Works
  */
 export const Features = () => {
     return (
-        <section id="features" className="py-24 bg-zinc-50/50 dark:bg-zinc-900/10">
-            <div className="container mx-auto px-6">
-                <div className="text-center max-w-3xl mx-auto mb-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="text-3xl md:text-5xl font-bold mb-6"
-                    >
-                        Everything you need for <br />
-                        <span className="text-primary italic font-serif">elite collaborations</span>
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-lg text-muted-foreground"
-                    >
-                        Experience a comprehensive suite of tools designed to elevate your brand presence through authentic human connections.
-                    </motion.p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {features.map((feature, index) => (
-                        <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="group p-8 rounded-3xl border border-border bg-card hover:bg-card/80 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 relative overflow-hidden"
-                        >
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
-                                <feature.icon size={28} />
-                            </div>
-                            <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors">{feature.title}</h3>
-                            <p className="text-muted-foreground leading-relaxed">
-                                {feature.description}
+        <>
+            {/* For Brands Section */}
+            <section id="brands" className="py-32 bg-background relative overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col lg:flex-row items-center gap-20">
+                        <div className="lg:w-1/2">
+                            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight text-foreground">
+                                Empowering <span className="text-primary">Brands</span> <br />
+                                to Scale Authenticity.
+                            </h2>
+                            <p className="text-lg text-muted-foreground mb-12 max-w-xl leading-relaxed font-medium">
+                                We provide the enterprise-grade tools necessary to discover, manage, and optimize your influencer marketing at any scale.
                             </p>
-
-                            {/* Subtle radial-gradient hover effect */}
-                            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                                style={{ maskImage: 'radial-gradient(circle at center, black, transparent 70%)' }} />
-                        </motion.div>
-                    ))}
+                            <div className="space-y-8">
+                                {brandFeatures.map((feature, index) => (
+                                    <motion.div
+                                        key={feature.title}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="flex items-start gap-6 p-6 rounded-3xl hover:bg-muted/50 transition-colors"
+                                    >
+                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color} glass`}>
+                                            <feature.icon size={28} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                                            <p className="text-muted-foreground font-medium">{feature.description}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="lg:w-1/2 relative">
+                            <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-[4rem] flex items-center justify-center p-12">
+                                <div className="w-full h-full bg-white/60 backdrop-blur-3xl rounded-[3rem] border border-white/40 shadow-2xl overflow-hidden shadow-primary/10">
+                                    <div className="p-8 border-b border-gray-100 flex items-center justify-between">
+                                        <div className="space-y-1.5">
+                                            <div className="h-4 w-32 bg-gray-100 rounded-full" />
+                                            <div className="h-3 w-48 bg-gray-50 rounded-full" />
+                                        </div>
+                                        <div className="w-10 h-10 rounded-full bg-primary/20 animate-pulse" />
+                                    </div>
+                                    <div className="p-8 space-y-6">
+                                        <div className="h-20 bg-gray-50 rounded-2xl shimmer" />
+                                        <div className="h-20 bg-gray-50 rounded-2xl shimmer" />
+                                        <div className="h-20 bg-gray-50 rounded-2xl shimmer" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            {/* For Influencers Section */}
+            <section id="influencers" className="py-32 bg-secondary text-secondary-foreground relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="flex flex-col lg:flex-row-reverse items-center gap-20">
+                        <div className="lg:w-1/2">
+                            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                                Built for <span className="text-primary">Creators</span> <br />
+                                to Thrive Professionally.
+                            </h2>
+                            <p className="text-lg text-secondary-foreground/70 mb-12 max-w-xl leading-relaxed font-medium">
+                                Turn your creative passion into a sustainable career with direct access to top-tier brand partnerships and professional growth tools.
+                            </p>
+                            <div className="space-y-8">
+                                {influencerFeatures.map((feature, index) => (
+                                    <motion.div
+                                        key={feature.title}
+                                        initial={{ opacity: 0, x: 20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="flex items-start gap-6 p-6 rounded-3xl hover:bg-white/5 transition-colors"
+                                    >
+                                        <div className={`w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center ${feature.color} border border-white/10 glass`}>
+                                            <feature.icon size={28} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                                            <p className="text-secondary-foreground/60 font-medium">{feature.description}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="lg:w-1/2 relative">
+                            <div className="aspect-square bg-[#52368c]/30 rounded-[4rem] p-12 overflow-hidden flex items-center justify-center">
+                                <div className="grid grid-cols-2 gap-4 w-full">
+                                    <div className="h-48 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10" />
+                                    <div className="h-48 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/5 translate-y-8" />
+                                    <div className="h-48 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/5 -translate-y-8" />
+                                    <div className="h-48 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/10 " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* How It Works Section */}
+            <section id="how-it-works" className="py-32 bg-muted/30">
+                <div className="container mx-auto px-6">
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">How Kollabary Works</h2>
+                        <p className="text-lg text-muted-foreground font-medium">Simple steps to build lasting, impactful partnerships.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {steps.map((step, index) => (
+                            <motion.div
+                                key={step.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="relative p-10 bg-card rounded-[3rem] shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-shadow group overflow-hidden border border-border/50"
+                            >
+                                <div className="absolute top-0 right-0 p-8 text-6xl font-black text-primary/5 group-hover:text-primary/10 transition-colors uppercase italic">
+                                    {step.number}
+                                </div>
+                                <h3 className="text-2xl font-black mb-4 text-primary">{step.title}</h3>
+                                <p className="text-muted-foreground font-medium leading-relaxed">{step.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Stats Section */}
+            <section className="py-20 border-y border-border bg-background">
+                <div className="container mx-auto px-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                        {[
+                            { label: 'Verified Brands', value: '5,000+' },
+                            { label: 'Active Creators', value: '50,000+' },
+                            { label: 'Campaigns Ran', value: '1M+' },
+                            { label: 'In Payouts', value: '$100M+' },
+                        ].map((stat) => (
+                            <div key={stat.label} className="text-center group">
+                                <div className="text-4xl md:text-5xl font-black text-primary mb-2 group-hover:scale-110 transition-transform">
+                                    {stat.value}
+                                </div>
+                                <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">
+                                    {stat.label}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        </>
     );
 };

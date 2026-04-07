@@ -117,7 +117,7 @@ export const useDeleteCollaboration = () => {
 /**
  * Hook to fetch influencers the user has collaborated with
  */
-export const useMyInfluencers = (filters?: Omit<{ page?: number; limit?: number; search?: string; niche?: string }, 'page'>) => {
+export const useMyInfluencers = (filters?: Omit<{ page?: number; limit?: number; search?: string; category?: string }, 'page'>) => {
     return useInfiniteQuery({
         queryKey: ['my-influencers', filters],
         queryFn: ({ pageParam = 1 }) =>

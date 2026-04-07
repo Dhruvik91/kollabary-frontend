@@ -32,7 +32,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
     const changePasswordMutation = useChangePasswordMutation();
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pb-20">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
             {/* Header / Hero Section */}
             <div className="relative">
                 {/* Banner - Premium Gradient */}

@@ -12,55 +12,55 @@ import { ArrowRight, Sparkles } from 'lucide-react';
  */
 export const Hero = () => {
     return (
-        <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-background">
-            {/* Background Orbs */}
-            <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <section className="relative pt-32 pb-20 md:pt-56 md:pb-32 overflow-hidden bg-background">
+            {/* Background Orbs with Brand Colors */}
+            <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 w-[600px] h-[600px] bg-secondary/8 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container mx-auto px-6 relative">
-                <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+                <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
+                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass border border-border text-foreground text-xs md:text-sm font-bold mb-10 tracking-widest uppercase shadow-sm"
                     >
-                        <Sparkles size={14} />
-                        <span>Empowering Influencer-Brand Partnerships</span>
+                        <Sparkles size={14} className="text-primary" />
+                        <span>The Radiant Pulse of Collaboration</span>
                     </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]"
+                        transition={{ duration: 0.7, delay: 0.1 }}
+                        className="text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] text-foreground"
                     >
-                        The Next Generation <br />
-                        <span className="text-primary italic">Collaboration</span> Platform
+                        Bridge the Gap Between <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Passion</span> & Partnership
                     </motion.h1>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl leading-relaxed"
+                        transition={{ duration: 0.7, delay: 0.2 }}
+                        className="text-xl md:text-2xl text-muted-foreground/80 mb-14 max-w-3xl leading-relaxed font-medium"
                     >
-                        Streamline your campaign workflow, find high-quality partners, and track meaningful results with our enterprise-grade management system.
+                        Kollabary connects premium brands with authentic creators to build impactful human-centric campaigns that resonate across the digital horizon.
                     </motion.p>
 
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+                        className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
                     >
                         <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
-                            <Button size="lg" className="rounded-full px-8 h-14 text-base shadow-xl shadow-primary/20 w-full sm:w-auto">
-                                Start Your Journey <ArrowRight className="ml-2" size={18} />
+                            <Button size="lg" className="rounded-full px-10 h-16 text-lg font-bold bg-primary text-white hover:opacity-90 shadow-2xl shadow-primary/30 w-full sm:w-auto border-none">
+                                Get Started Now <ArrowRight className="ml-2" size={20} />
                             </Button>
                         </Link>
-                        <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-base w-full sm:w-auto border-border">
-                            Contact Sales
+                        <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all">
+                            Book a Demo
                         </Button>
                     </motion.div>
 

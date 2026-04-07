@@ -8,8 +8,7 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { BackButton } from '@/components/shared/BackButton';
 
 export const InfluencerEditContainer = () => {
     const router = useRouter();
@@ -23,16 +22,40 @@ export const InfluencerEditContainer = () => {
         const platformsArray = Object.entries(profileData.platforms || {}).map(([name, data]) => ({
             name,
             handle: (data as any).handle,
-            followers: (data as any).followers,
-            engagementRate: (data as any).engagementRate,
+            followers: Number((data as any).followers) || 0,
+            engagementRate: (data as any).engagementRate !== undefined ? Number((data as any).engagementRate) : undefined,
         }));
+
+        const genderRatio = profileData.audienceGenderRatio || { male: 0, female: 0, other: 0 };
+        const ageBrackets = profileData.audienceAgeBrackets || { '13-17': 0, '18-24': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55-64': 0, '65+': 0 };
 
         return {
             fullName: profileData.fullName || '',
-            niche: profileData.niche || '',
+            categories: Array.isArray(profileData.categories) ? profileData.categories.join(', ') : '',
             avatarUrl: profileData.avatarUrl || '',
             bio: profileData.bio || '',
             address: profileData.address || '',
+            locationCountry: profileData.locationCountry || '',
+            locationCity: profileData.locationCity || '',
+            gender: profileData.gender || '',
+            languages: Array.isArray(profileData.languages) ? profileData.languages.join(', ') : '',
+            audienceTopCountries: Array.isArray(profileData.audienceTopCountries) ? profileData.audienceTopCountries.join(', ') : '',
+            audienceGenderRatio: {
+                male: Number(genderRatio.male) || 0,
+                female: Number(genderRatio.female) || 0,
+                other: Number(genderRatio.other) || 0,
+            },
+            audienceAgeBrackets: {
+                '13-17': Number(ageBrackets['13-17']) || 0,
+                '18-24': Number(ageBrackets['18-24']) || 0,
+                '25-34': Number(ageBrackets['25-34']) || 0,
+                '35-44': Number(ageBrackets['35-44']) || 0,
+                '45-54': Number(ageBrackets['45-54']) || 0,
+                '55-64': Number(ageBrackets['55-64']) || 0,
+                '65+': Number(ageBrackets['65+']) || 0,
+            },
+            minPrice: profileData.minPrice ? Number(profileData.minPrice) : 0,
+            maxPrice: profileData.maxPrice ? Number(profileData.maxPrice) : 0,
             platforms: platformsArray as any,
             collaborationTypes: profileData.collaborationTypes as any,
             availability: profileData.availability as any,
@@ -78,14 +101,9 @@ export const InfluencerEditContainer = () => {
     }
 
     return (
-        <div className="min-h-full py-12 px-4 sm:px-6 lg:px-8 bg-zinc-50/50 dark:bg-black/50">
+        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0 bg-zinc-50/50 dark:bg-black/50 pt-8 sm:pt-12">
             <div className="max-w-2xl mx-auto mb-8">
-                <Button variant="ghost" asChild className="mb-8 rounded-xl">
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE} className="flex items-center gap-2">
-                        <ArrowLeft size={18} />
-                        Back to Profile
-                    </Link>
-                </Button>
+                <BackButton label="Back to Profile" className="mb-8" />
 
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

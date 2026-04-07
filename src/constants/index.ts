@@ -9,6 +9,8 @@ export const API_CONFIG = {
             forgotPassword: '/user-auth/forgot-password',
             resetPassword: '/user-auth/reset-password',
             changePassword: '/user-auth/change-password',
+            verifyEmail: '/user-auth/verify-email',
+            resendVerifyEmail: '/user-auth/resend-verify-email',
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
             createInfluencer: '/user-auth/admin/create-influencer',
@@ -73,6 +75,15 @@ export const API_CONFIG = {
         },
         subscription: {
             plans: '/subscription/plans',
+        },
+        auction: {
+            base: '/auctions',
+            my: '/auctions/my',
+            detail: (id: string) => `/auctions/${id}`,
+            bids: (id: string) => `/auctions/${id}/bids`,
+            acceptBid: (id: string) => `/auctions/bids/${id}/accept`,
+            rejectBid: (id: string) => `/auctions/bids/${id}/reject`,
+            myBids: '/auctions/my/bids',
         }
     }
 }
@@ -83,6 +94,7 @@ export const FRONTEND_ROUTES = {
         SIGNUP: '/auth/signup',
         FORGOT_PASSWORD: '/auth/forgot-password',
         RESET_PASSWORD: '/auth/reset-password',
+        VERIFY_EMAIL: '/auth/verify-email',
         CALLBACK: '/auth/callback',
     },
     DASHBOARD: {
@@ -105,6 +117,10 @@ export const FRONTEND_ROUTES = {
         INFLUENCER_DETAIL: (id: string) => `/influencers/${id}`,
         PROFILE: '/profile',
         PROFILE_SETUP: '/profile/setup',
+        AUCTIONS: '/auctions',
+        AUCTION_DETAIL: (id: string) => `/auctions/${id}`,
+        AUCTION_CREATE: '/auctions/create',
+        AUCTION_EDIT: (id: string) => `/auctions/${id}/edit`,
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',

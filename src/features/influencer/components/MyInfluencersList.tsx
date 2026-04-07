@@ -117,7 +117,7 @@ export const MyInfluencersList = ({
                                             <h3 className="text-xl font-black tracking-tight line-clamp-1">
                                                 {influencer.fullName || profile?.fullName || 'Unknown Creator'}
                                             </h3>
-                                            <p className="text-sm text-muted-foreground">{influencer.niche}</p>
+                                            <p className="text-sm text-muted-foreground">{(influencer.categories && influencer.categories[0]) || 'Creator'}</p>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-3 p-3 bg-muted/30 rounded-2xl border border-border/40">

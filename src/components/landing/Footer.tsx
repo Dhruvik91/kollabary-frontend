@@ -4,21 +4,22 @@ import React from 'react';
 import Link from 'next/link';
 import { Rocket, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
 import { FRONTEND_ROUTES } from '@/constants';
+import { Logo } from '../shared/Logo';
 
 /**
- * Premium Footer component
+ * Premium Footer component with glassmorphism and modern branding
  */
 export const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     const sections = [
         {
-            title: 'Platform',
+            title: 'Solutions',
             links: [
-                { name: 'Discover', href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS },
+                { name: 'For Brands', href: '#brands' },
+                { name: 'For Creators', href: '#influencers' },
                 { name: 'Campaigns', href: FRONTEND_ROUTES.DASHBOARD.CAMPAIGNS },
                 { name: 'Analytics', href: FRONTEND_ROUTES.DASHBOARD.ANALYTICS },
-                { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
             ],
         },
         {
@@ -33,9 +34,9 @@ export const Footer = () => {
         {
             title: 'Resources',
             links: [
+                { name: 'How It Works', href: '#how-it-works' },
+                { name: 'Pricing', href: FRONTEND_ROUTES.PRICING },
                 { name: 'Blog', href: FRONTEND_ROUTES.BLOG },
-                { name: 'Docs', href: FRONTEND_ROUTES.DOCS },
-                { name: 'Guides', href: FRONTEND_ROUTES.GUIDES },
                 { name: 'Help Center', href: FRONTEND_ROUTES.HELP_CENTER },
             ],
         },
@@ -50,42 +51,35 @@ export const Footer = () => {
     ];
 
     return (
-        <footer className="bg-card border-t border-border pt-20 pb-10">
-            <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
-                    <div className="lg:col-span-2 space-y-6">
-                        <Link href="/" className="flex items-center gap-2 group">
-                            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground group-hover:rotate-12 transition-transform duration-300">
-                                <Rocket size={20} />
-                            </div>
-                            <span className="text-xl font-bold tracking-tight">Kollabary</span>
-                        </Link>
-                        <p className="text-muted-foreground max-w-xs leading-relaxed">
+        <footer className="bg-card text-card-foreground pt-32 pb-12 border-t border-border relative overflow-hidden">
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-16 mb-24">
+                    <div className="lg:col-span-2 space-y-8">
+                        <div className="flex items-center">
+                            <Link href="/" className="active:scale-95 transition-transform">
+                                <Logo className="w-32 sm:w-40 md:w-44" />
+                            </Link>
+                        </div>
+                        <p className="text-muted-foreground max-w-sm leading-relaxed text-lg font-medium">
                             The premium destination for authentic collaborations between visionary brands and creative minds.
                         </p>
-                        <div className="flex items-center gap-4">
-                            <Link href="#" className="p-2 bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors">
-                                <Twitter size={18} />
-                            </Link>
-                            <Link href="#" className="p-2 bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors">
-                                <Instagram size={18} />
-                            </Link>
-                            <Link href="#" className="p-2 bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors">
-                                <Linkedin size={18} />
-                            </Link>
-                            <Link href="#" className="p-2 bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors">
-                                <Github size={18} />
-                            </Link>
+                        <div className="flex items-center gap-5">
+                            {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
+                                <Link key={i} href="#" className="w-10 h-10 glass border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-muted transition-all">
+                                    <Icon size={20} />
+                                </Link>
+                            ))}
                         </div>
                     </div>
 
-                    {sections.map((section) => (
-                        <div key={section.title} className="space-y-4">
-                            <h4 className="font-bold text-sm uppercase tracking-wider text-muted-foreground/80">{section.title}</h4>
-                            <ul className="space-y-3">
+                    {sections.map((section) => (section &&
+                        <div key={section.title} className="space-y-6">
+                            <h4 className="font-bold text-xs uppercase tracking-[0.2em]">{section.title}</h4>
+                            <ul className="space-y-4">
                                 {section.links.map((link) => (
                                     <li key={link.name}>
-                                        <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors block py-0.5">
+                                        <Link href={link.href} className="text-muted-foreground hover:text-primary font-bold transition-colors block py-0.5">
                                             {link.name}
                                         </Link>
                                     </li>
@@ -95,13 +89,19 @@ export const Footer = () => {
                     ))}
                 </div>
 
-                <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-sm text-muted-foreground">
-                        © {currentYear} Kollabary. All rights reserved. Made for the creators.
+                <div className="border-t border-border pt-12 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <p className="text-sm font-bold text-muted-foreground/40">
+                        © {currentYear} Kollabary. Crafted with Passion.
                     </p>
-                    <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        Status: <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" /> All systems operational
-                    </p>
+                    <div className="flex items-center gap-6">
+                        <p className="text-sm font-bold text-muted-foreground/40 flex items-center gap-2">
+                            Status <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+                        </p>
+                        <div className="h-4 w-px bg-border" />
+                        <p className="text-sm font-bold text-muted-foreground/40 hover:text-foreground transition-colors cursor-pointer">
+                            English (US)
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>

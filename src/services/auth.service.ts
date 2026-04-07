@@ -7,6 +7,8 @@ import {
     SignupCredentials,
     ForgotPasswordData,
     ResetPasswordData,
+    VerifyEmailData,
+    ResendOtpData,
     SuccessResponse,
     MessageResponse,
 } from '@/types/auth.types';
@@ -19,8 +21,8 @@ export const authService = {
     /**
      * Sign up a new user
      */
-    async signup(credentials: SignupCredentials): Promise<AuthResponse> {
-        const response = await httpService.post<AuthResponse>(API_CONFIG.path.auth.signup, credentials);
+    async signup(credentials: SignupCredentials): Promise<MessageResponse> {
+        const response = await httpService.post<MessageResponse>(API_CONFIG.path.auth.signup, credentials);
         return response.data;
     },
 
@@ -61,6 +63,22 @@ export const authService = {
      */
     async resetPassword(data: ResetPasswordData): Promise<MessageResponse> {
         const response = await httpService.post<MessageResponse>(API_CONFIG.path.auth.resetPassword, data);
+        return response.data;
+    },
+    
+    /**
+     * Verify email with OTP
+     */
+    async verifyEmail(data: VerifyEmailData): Promise<AuthResponse> {
+        const response = await httpService.post<AuthResponse>(API_CONFIG.path.auth.verifyEmail, data);
+        return response.data;
+    },
+
+    /**
+     * Resend verification OTP
+     */
+    async resendOtp(data: ResendOtpData): Promise<MessageResponse> {
+        const response = await httpService.post<MessageResponse>(API_CONFIG.path.auth.resendVerifyEmail, data);
         return response.data;
     },
 

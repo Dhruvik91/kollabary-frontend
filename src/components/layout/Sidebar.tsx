@@ -20,7 +20,8 @@ import {
     CreditCard,
     TrendingUp,
     User,
-    UserPlus
+    UserPlus,
+    Gavel
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Logo } from '@/components/shared/Logo';
@@ -103,6 +104,7 @@ export const Sidebar = ({
 
     const commonLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
     ];

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
@@ -8,10 +8,7 @@ import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 
 import { ThemeProvider } from "@/lib/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -51,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
+        className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
           <AuthProvider>

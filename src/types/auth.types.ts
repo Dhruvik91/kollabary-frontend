@@ -30,7 +30,7 @@ export interface User {
     createdAt: string;
     updatedAt: string;
     profile?: Profile;
-    influencerProfile?: { id: string };
+    influencerProfile?: { id: string, fullName: string, avatarUrl?: string };
 }
 
 export interface AuthResponse {
@@ -47,6 +47,7 @@ export interface SignupCredentials {
     email: string;
     password: string;
     confirmPassword: string;
+    role: UserRole;
 }
 
 export interface ForgotPasswordData {
@@ -61,6 +62,15 @@ export interface ResetPasswordData {
 export interface ChangePasswordData {
     currentPassword: string;
     newPassword: string;
+}
+
+export interface VerifyEmailData {
+    email: string;
+    otp: string;
+}
+
+export interface ResendOtpData {
+    email: string;
 }
 
 export interface AuthError {
