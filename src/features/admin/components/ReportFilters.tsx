@@ -62,7 +62,7 @@ export function ReportFilters({
                                 key={status}
                                 onClick={() => onStatusFilterChange(status as any)}
                                 className={cn(
-                                    "relative px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap shrink-0",
+                                    "relative px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 whitespace-nowrap shrink-0 cursor-pointer",
                                     statusFilter === status
                                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 translate-y-[-1px]"
                                         : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -79,7 +79,7 @@ export function ReportFilters({
                         variant="ghost"
                         size="sm"
                         onClick={onClearFilters}
-                        className="h-11 px-4 rounded-2xl text-xs font-semibold gap-2 border border-border/40 bg-card/40 glass-card hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 group animate-in fade-in slide-in-from-bottom-2 sm:slide-in-from-right-2 shrink-0"
+                        className="h-11 px-4 rounded-2xl text-xs font-semibold gap-2 border border-border/40 bg-card/40 glass-card hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all duration-300 group animate-in fade-in slide-in-from-bottom-2 sm:slide-in-from-right-2 shrink-0 cursor-pointer"
                     >
                         <X size={14} className="group-hover:rotate-90 transition-transform duration-300" />
                         <span>Clear Filters</span>

@@ -26,6 +26,8 @@ export const API_CONFIG = {
             breakdown: (id: string) => `/ranking/breakdown/${id}`,
             weights: '/ranking/weights',
             tierGuide: '/ranking/tier-guide',
+            recalculate: (id: string) => `/ranking/recalculate/${id}`,
+            recalculateAll: '/ranking/recalculate-all',
         },
         influencer: {
             base: '/influencer',
@@ -65,7 +67,7 @@ export const API_CONFIG = {
             conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
         },
         verification: {
-            base: '/verification',
+            base: '/verification/request',
             myRequests: '/verification/my-requests',
             approve: (id: string) => `/verification/approve/${id}`,
             reject: (id: string) => `/verification/reject/${id}`,

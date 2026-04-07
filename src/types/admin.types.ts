@@ -46,10 +46,14 @@ export enum VerificationStatus {
 
 export interface VerificationRequest {
     id: string;
-    user: User;
-    documents: string[];
+    influencerProfile?: {
+        id: string;
+        user: User;
+    };
+    documents: Record<string, any>;
     status: VerificationStatus;
-    submittedAt: string;
+    createdAt: string;
+    updatedAt: string;
     reviewedAt?: string;
     notes?: string;
 }

@@ -48,7 +48,7 @@ export const adminService = {
     /**
      * List all reports
      */
-    getAllReports: async (params?: { search?: string; status?: string }): Promise<Report[]> => {
+    getReports: async (params?: { search?: string; status?: string }): Promise<Report[]> => {
         const response = await httpService.get<Report[]>(API_CONFIG.path.admin.reports, { params });
         return response.data;
     },
@@ -56,15 +56,15 @@ export const adminService = {
     /**
      * Update report status
      */
-    updateReportStatus: async (id: string, status: string): Promise<Report> => {
-        const response = await httpService.patch<Report>(API_CONFIG.path.admin.reportUpdate(id), { status });
+    updateReportStatus: async (reportId: string, data: { status: string }): Promise<Report> => {
+        const response = await httpService.patch<Report>(API_CONFIG.path.admin.reportUpdate(reportId), data);
         return response.data;
     },
 
     /**
      * List all verification requests
      */
-    getAllVerifications: async (): Promise<any[]> => {
+    getVerifications: async (): Promise<any[]> => {
         const response = await httpService.get<any[]>(API_CONFIG.path.admin.verifications);
         return response.data;
     },
@@ -72,8 +72,64 @@ export const adminService = {
     /**
      * Update verification status
      */
-    updateVerificationStatus: async (id: string, status: string): Promise<any> => {
-        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status });
+    processVerification: async (id: string, status: string, notes?: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
+        return response.data;
+    },
+
+    /**
+     * Get ranking weights
+     */
+    getRankingWeights: async (): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.ranking.weights);
+        return response.data;
+    },
+
+    /**
+     * Update ranking weights
+     */
+    updateRankingWeights: async (data: any): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.ranking.weights, data);
+        return response.data;
+    },
+
+    /**
+     * Recalculate all scores
+     */
+    recalculateAllScores: async (): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.ranking.recalculateAll);
+        return response.data;
+    },
+
+    /**
+     * Recalculate single influencer score
+     */
+    recalculateInfluencerScore: async (influencerId: string): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.ranking.recalculate(influencerId));
+        return response.data;
+    },
+
+    /**
+     * Create influencer account
+     */
+    createInfluencer: async (data: any): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.auth.createInfluencer, data);
+        return response.data;
+    },
+
+    /**
+     * Create subscription plan
+     */
+    createSubscriptionPlan: async (data: any): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.admin.subscription, data);
+        return response.data;
+    },
+
+    /**
+     * Delete subscription plan
+     */
+    deleteSubscriptionPlan: async (id: string): Promise<any> => {
+        const response = await httpService.delete(`${API_CONFIG.path.admin.subscription}/${id}`);
         return response.data;
     }
 };
