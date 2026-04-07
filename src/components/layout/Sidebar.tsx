@@ -111,6 +111,9 @@ export const Sidebar = ({
 
     const adminLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Admin Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.AUCTIONS, icon: Gavel, label: 'Auctions' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.BIDS, icon: BarChart3, label: 'Bids' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.CONVERSATIONS, icon: MessageSquare, label: 'Conversations' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },

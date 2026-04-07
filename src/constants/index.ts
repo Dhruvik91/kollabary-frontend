@@ -59,6 +59,10 @@ export const API_CONFIG = {
             verifications: '/admin/verifications',
             verificationUpdate: (id: string) => `/admin/verifications/${id}/status`,
             subscription: '/admin/subscription/plan',
+            auctions: '/admin/auctions',
+            bids: '/admin/bids',
+            conversations: '/admin/conversations',
+            conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
         },
         verification: {
             base: '/verification',
@@ -131,6 +135,9 @@ export const FRONTEND_ROUTES = {
             SUBSCRIPTIONS: '/admin/subscriptions',
             RANKING: '/admin/ranking',
             INFLUENCERS: '/admin/influencers',
+            AUCTIONS: '/admin/auctions',
+            BIDS: '/admin/bids',
+            CONVERSATIONS: '/admin/conversations',
         }
     },
     HOME: '/',

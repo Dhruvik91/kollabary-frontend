@@ -45,7 +45,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
             {bids.map((bid, index) => {
                 const profile = bid.influencer.profile;
                 const influencerProfile = bid.influencer.influencerProfile;
-                
+
                 const influencerName = influencerProfile?.fullName || profile?.fullName || profile?.username || 'Anonymous Influencer';
                 const avatarUrl = influencerProfile?.avatarUrl || profile?.avatarUrl;
                 const influencerId = influencerProfile?.id;
@@ -57,31 +57,30 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05, ease: "easeOut" }}
                         className={`group relative p-4 sm:p-5 rounded-[1.5rem] border-2 transition-all duration-500 overflow-hidden ${bid.status === BidStatus.ACCEPTED
-                                ? 'border-primary/40 bg-primary/5 shadow-xl shadow-primary/5'
-                                : 'border-border/30 bg-background/40 hover:border-primary/40 hover:bg-card hover:shadow-2xl hover:shadow-black/5 hover:-translate-y-1'
+                            ? 'border-primary/40 bg-primary/5 shadow-xl shadow-primary/5'
+                            : 'border-border/30 bg-background/40'
                             }`}
                     >
                         {/* Status Accent Glow */}
-                        <div className={`absolute -right-12 -top-12 h-24 w-24 rounded-full blur-3xl opacity-20 transition-all duration-500 group-hover:opacity-40 ${
-                            bid.status === BidStatus.ACCEPTED ? 'bg-green-500' : 'bg-primary'
-                        }`} />
+                        <div className={`absolute -right-12 -top-12 h-24 w-24 rounded-full blur-3xl opacity-20 transition-all duration-500 ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500' : 'bg-primary'
+                            }`} />
 
                         <div className="flex flex-col gap-5 relative z-10">
                             {/* Header: Avatar, Info, Status */}
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div 
-                                        className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0 overflow-hidden cursor-pointer ring-1 ring-border/50 group-hover:ring-primary/40 transition-all duration-300 shadow-inner group-hover:scale-105"
+                                    <div
+                                        className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0 overflow-hidden cursor-pointer ring-1 ring-border/50 transition-all duration-300 shadow-inner"
                                         onClick={() => influencerId && handleInfluencerClick(influencerId)}
                                     >
                                         {avatarUrl ? (
-                                            <img src={avatarUrl} alt={influencerName} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                            <img src={avatarUrl} alt={influencerName} className="w-full h-full object-cover transition-transform duration-500" />
                                         ) : (
                                             <User className="text-primary/60" size={22} />
                                         )}
                                     </div>
                                     <div className="min-w-0">
-                                        <h4 
+                                        <h4
                                             className="font-black text-sm uppercase tracking-[0.05em] text-foreground truncate cursor-pointer hover:text-primary transition-colors duration-300"
                                             onClick={() => influencerId && handleInfluencerClick(influencerId)}
                                         >
@@ -92,17 +91,13 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                                 <DollarSign size={10} className="text-primary" />
                                                 <span className="text-xs font-black text-primary tracking-tighter italic">{bid.amount}</span>
                                             </div>
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                Sent Recently
-                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] border-2 backdrop-blur-md transition-all duration-300 overflow-hidden ${
-                                    bid.status === BidStatus.ACCEPTED ? 'bg-green-500/10 text-green-600 border-green-500/10' :
+                                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] border-2 backdrop-blur-md transition-all duration-300 overflow-hidden ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500/10 text-green-600 border-green-500/10' :
                                     bid.status === BidStatus.REJECTED ? 'bg-red-500/10 text-red-600 border-red-500/10' :
-                                    'bg-zinc-100/50 dark:bg-zinc-800/50 text-muted-foreground/80 border-border/10'
-                                }`}>
+                                        'bg-zinc-100/50 dark:bg-zinc-800/50 text-muted-foreground/80 border-border/10'
+                                    }`}>
                                     <div className={`h-1.5 w-1.5 rounded-full ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500 animate-pulse' : bid.status === BidStatus.PENDING ? 'bg-primary/50' : 'bg-muted-foreground/30'}`} />
                                     {bid.status}
                                 </div>
@@ -165,15 +160,15 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                 description="Are you sure you want to reject this proposal? This action cannot be undone, and the influencer will be notified."
                 footer={
                     <div className="flex flex-col sm:flex-row justify-end gap-3 w-full">
-                        <Button 
-                            variant="ghost" 
+                        <Button
+                            variant="ghost"
                             onClick={() => setRejectingBidId(null)}
                             className="rounded-xl font-bold uppercase text-[10px] tracking-widest w-full sm:w-auto"
                         >
                             Cancel
                         </Button>
-                        <Button 
-                            variant="destructive" 
+                        <Button
+                            variant="destructive"
                             onClick={confirmReject}
                             className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20 w-full sm:w-auto"
                         >
