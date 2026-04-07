@@ -68,7 +68,7 @@ export const MessageBubble = ({
 
     const initials = message.sender.profile?.fullName
         ? message.sender.profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase()
-        : message.sender.email[0].toUpperCase();
+        : message.sender.email?.[0]?.toUpperCase() || '?';
 
     const messageType = getMessageType(message.message);
 
@@ -82,31 +82,40 @@ export const MessageBubble = ({
     const renderContent = () => {
         if (isEditing) {
             return (
-                <div className="flex flex-col gap-2 min-w-[200px]">
+                <div className="flex flex-col gap-2 min-w-[200px]" onClick={(e) => e.stopPropagation()}>
                     <Input
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
                         className="bg-white/10 border-white/20 text-white focus-visible:ring-white/20 h-9"
                         autoFocus
                         onKeyDown={(e) => {
+                            e.stopPropagation();
                             if (e.key === 'Enter') handleUpdate();
                             if (e.key === 'Escape') setIsEditing(false);
                         }}
                     />
                     <div className="flex justify-end gap-1">
                         <Button
+                            type="button"
                             size="icon"
                             variant="ghost"
                             className="h-7 w-7 rounded-lg hover:bg-white/10 text-white"
-                            onClick={() => setIsEditing(false)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEditing(false);
+                            }}
                         >
                             <X size={14} />
                         </Button>
                         <Button
+                            type="button"
                             size="icon"
                             variant="ghost"
                             className="h-7 w-7 rounded-lg bg-white/20 hover:bg-white/30 text-white"
-                            onClick={handleUpdate}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleUpdate();
+                            }}
                         >
                             <Check size={14} />
                         </Button>
@@ -184,6 +193,19 @@ export const MessageBubble = ({
         return <p className="whitespace-pre-wrap">{message.message}</p>;
     };
 
+    const bubbleContent = (
+        <div className={cn(
+            "relative rounded-[1.25rem] text-[14px] leading-relaxed transition-all shadow-sm break-words min-w-0 pointer-events-auto",
+            messageType === 'image' ? "p-1.5" : "px-4 py-3",
+            isOwn
+                ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-br-none shadow-primary/10"
+                : "bg-muted/40 text-foreground rounded-bl-none border border-border/20 backdrop-blur-md",
+            !isEditing && "cursor-pointer sm:cursor-default"
+        )}>
+            {renderContent()}
+        </div>
+    );
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -211,39 +233,35 @@ export const MessageBubble = ({
                     "flex items-center gap-2 group/bubble",
                     isOwn && "flex-row"
                 )}>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild className="sm:pointer-events-none">
-                            <div className={cn(
-                                "relative rounded-[1.25rem] text-[14px] leading-relaxed transition-all shadow-sm break-words min-w-0 cursor-pointer sm:cursor-default pointer-events-auto",
-                                messageType === 'image' ? "p-1.5" : "px-4 py-3",
-                                isOwn
-                                    ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-br-none shadow-primary/10"
-                                    : "bg-muted/40 text-foreground rounded-bl-none border border-border/20 backdrop-blur-md"
-                            )}>
-                                {renderContent()}
-                            </div>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align={isOwn ? "end" : "start"} className="rounded-xl border-border/50 shadow-xl p-1 min-w-[120px]">
-                            {messageType === 'text' && (
+                    {isEditing ? (
+                        bubbleContent
+                    ) : (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild className="sm:pointer-events-none">
+                                {bubbleContent}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align={isOwn ? "end" : "start"} className="rounded-xl border-border/50 shadow-xl p-1 min-w-[120px]">
+                                {messageType === 'text' && (
+                                    <DropdownMenuItem
+                                        className="gap-2 rounded-lg py-2 cursor-pointer"
+                                        onClick={() => setIsEditing(true)}
+                                    >
+                                        <Pencil size={14} />
+                                        <span className="text-xs font-bold">Edit</span>
+                                    </DropdownMenuItem>
+                                )}
                                 <DropdownMenuItem
-                                    className="gap-2 rounded-lg py-2 cursor-pointer"
-                                    onClick={() => setIsEditing(true)}
+                                    className="gap-2 rounded-lg py-2 text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                                    onClick={() => onDelete?.(message.id)}
                                 >
-                                    <Pencil size={14} />
-                                    <span className="text-xs font-bold">Edit</span>
+                                    <Trash2 size={14} />
+                                    <span className="text-xs font-bold">Delete</span>
                                 </DropdownMenuItem>
-                            )}
-                            <DropdownMenuItem
-                                className="gap-2 rounded-lg py-2 text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
-                                onClick={() => onDelete?.(message.id)}
-                            >
-                                <Trash2 size={14} />
-                                <span className="text-xs font-bold">Delete</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
 
-                    {isOwn && (
+                    {isOwn && !isEditing && (
                         <div className={cn(
                             "transition-all duration-200 shrink-0 hidden sm:block",
                             "opacity-0 group-hover/bubble:opacity-100"

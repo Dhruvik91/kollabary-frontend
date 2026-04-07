@@ -1,5 +1,6 @@
 export const API_CONFIG = {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    socketUrl: process.env.NEXT_PUBLIC_WS_URL || process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api$/, ''),
     path: {
         auth: {
             signup: '/user-auth/signup',

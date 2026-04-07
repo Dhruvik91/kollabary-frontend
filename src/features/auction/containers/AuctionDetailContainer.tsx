@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CheckCircle, Clock, MessageCircle, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { CheckCircle, Clock, MessageCircle, PackageSearch, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BidForm } from '@/features/auction/components/BidForm';
 import { BidList } from '@/features/auction/components/BidList';
@@ -192,24 +191,24 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="relative -mx-4 sm:-mx-6 px-4 sm:px-6">
-                                        <CarouselContent className="-ml-4 sm:-ml-6">
-                                            {(auction.bids || []).map((bid: any) => (
-                                                <CarouselItem key={bid.id} className="pl-4 sm:pl-6 basis-[88%] sm:basis-[420px]">
-                                                    <div className="pb-4">
-                                                        <BidList
-                                                            bids={[bid]}
-                                                            onAccept={handleAcceptBid}
-                                                            onReject={handleRejectBid}
-                                                            showActions={true}
-                                                            isProcessing={acceptBidMutation.isPending}
-                                                        />
-                                                    </div>
-                                                </CarouselItem>
-                                            ))}
-                                        </CarouselContent>
-                                        
+                                    <CarouselContent className="-ml-4 sm:-ml-6">
+                                        {(auction.bids || []).map((bid: any) => (
+                                            <CarouselItem key={bid.id} className="pl-4 sm:pl-6 basis-[88%] sm:basis-[420px]">
+                                                <div className="pb-4">
+                                                    <BidList
+                                                        bids={[bid]}
+                                                        onAccept={handleAcceptBid}
+                                                        onReject={handleRejectBid}
+                                                        showActions={true}
+                                                        isProcessing={acceptBidMutation.isPending}
+                                                    />
+                                                </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+
                                     {(auction?.bids?.length ?? 0) === 0 && (
                                         <div className="w-full text-center py-16 bg-card/40 rounded-[2.5rem] border-2 border-dashed border-border/30 backdrop-blur-sm">
                                             <div className="mx-auto w-16 h-16 rounded-3xl bg-primary/5 flex items-center justify-center mb-6 ring-1 ring-primary/10">
@@ -219,18 +218,17 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                                             <p className="text-xs text-muted-foreground mt-2 font-medium italic">Proposals will appear here once submitted.</p>
                                         </div>
                                     )}
-                                    
+
                                     {/* Pagination / Scroll Indicators */}
                                     {count > 1 && (
                                         <div className="flex justify-center gap-2.5 mt-2">
                                             {Array.from({ length: Math.min(count, 8) }).map((_, i) => (
-                                                <div 
-                                                    key={i} 
-                                                    className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
-                                                        i === current 
-                                                            ? 'w-10 bg-primary shadow-lg shadow-primary/20' 
-                                                            : 'w-2.5 bg-border/40 hover:bg-border/60'
-                                                    }`}
+                                                <div
+                                                    key={i}
+                                                    className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${i === current
+                                                        ? 'w-10 bg-primary shadow-lg shadow-primary/20'
+                                                        : 'w-2.5 bg-border/40 hover:bg-border/60'
+                                                        }`}
                                                     onClick={() => api?.scrollTo(i)}
                                                 />
                                             ))}
@@ -260,7 +258,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                                 )}
                             </div>
                         )}
-                        
+
                         {!isOwner && isCompleted && (
                             <AuctionCompletedDisplay />
                         )}
@@ -388,9 +386,20 @@ const AuctionDetailSkeleton = () => (
 );
 
 const AuctionNotFound = ({ onBack }: { onBack: () => void }) => (
-    <div className="max-w-2xl mx-auto py-20 text-center">
-        <h2 className="text-2xl font-bold text-foreground">Auction not found</h2>
-        <p className="text-muted-foreground mt-2">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <BackButton label="Back to Auctions" className="mt-6 px-6 h-10 border border-border/50" />
+    <div className="max-w-2xl mx-auto py-32 flex flex-col items-center text-center px-6">
+        <div className="w-24 h-24 rounded-[2.5rem] bg-zinc-50 dark:bg-white/5 border border-border/50 flex items-center justify-center mb-8 shadow-inner relative overflow-hidden group">
+            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <PackageSearch size={40} className="text-muted-foreground/30 relative z-10 group-hover:text-primary/50 transition-colors duration-500" />
+        </div>
+        <h2 className="text-3xl font-black uppercase tracking-tight text-foreground text-gradient">Auction Not Found</h2>
+        <p className="text-muted-foreground mt-3 max-w-sm font-medium italic">
+            The opportunity you&apos;re looking for doesn&apos;t exist, has been removed, or moved to a different coordinate.
+        </p>
+        <div className="mt-10">
+            <BackButton
+                label="Return to Auctions Library"
+                className="px-10 h-14 rounded-2xl border-2 border-primary/20 bg-background text-primary font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-primary/20 active:scale-95"
+            />
+        </div>
     </div>
 );

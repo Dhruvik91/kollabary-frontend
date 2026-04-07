@@ -1,15 +1,44 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { messagingService } from '@/services/messaging.service';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
+import { useSocket } from '@/contexts/socket-context';
 
 /**
  * Hook to fetch all conversations for the current user
  */
 export const useConversations = () => {
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleConversationDeleted = () => {
+            queryClient.invalidateQueries({ queryKey: ['conversations'] });
+        };
+
+        const handleNewMessage = () => {
+            // Update conversation list order/preview
+            queryClient.invalidateQueries({ queryKey: ['conversations'] });
+        };
+
+        socket.on('conversation_deleted', handleConversationDeleted);
+        socket.on('new_message', handleNewMessage);
+        socket.on('message_updated', handleNewMessage);
+        socket.on('new_conversation', handleNewMessage);
+
+        return () => {
+            socket.off('conversation_deleted', handleConversationDeleted);
+            socket.off('new_message', handleNewMessage);
+            socket.off('message_updated', handleNewMessage);
+            socket.off('new_conversation', handleNewMessage);
+        };
+    }, [socket, queryClient]);
+
     return useQuery({
         queryKey: ['conversations'],
         queryFn: messagingService.getConversations,
-        refetchInterval: 5000, // Poll every 5 seconds
     });
 };
 
@@ -17,11 +46,54 @@ export const useConversations = () => {
  * Hook to fetch message history for a conversation
  */
 export const useMessageHistory = (conversationId: string) => {
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
+
+    useEffect(() => {
+        if (!socket || !conversationId) return;
+
+        // Join the conversation room
+        socket.emit('join_conversation', conversationId);
+
+        const handleNewMessage = (newMessage: any) => {
+            queryClient.setQueryData(['messages', conversationId], (oldData: any) => {
+                if (!oldData) return [newMessage];
+                // Check if message already exists to avoid duplicates
+                if (oldData.some((m: any) => m.id === newMessage.id)) return oldData;
+                return [...oldData, newMessage];
+            });
+        };
+
+        const handleMessageUpdated = (updatedMessage: any) => {
+            queryClient.setQueryData(['messages', conversationId], (oldData: any) => {
+                if (!oldData) return oldData;
+                return oldData.map((m: any) => m.id === updatedMessage.id ? updatedMessage : m);
+            });
+        };
+
+        const handleMessageDeleted = ({ messageId }: { messageId: string }) => {
+            queryClient.setQueryData(['messages', conversationId], (oldData: any) => {
+                if (!oldData) return oldData;
+                return oldData.filter((m: any) => m.id !== messageId);
+            });
+        };
+
+        socket.on('new_message', handleNewMessage);
+        socket.on('message_updated', handleMessageUpdated);
+        socket.on('message_deleted', handleMessageDeleted);
+
+        return () => {
+            socket.emit('leave_conversation', conversationId);
+            socket.off('new_message', handleNewMessage);
+            socket.off('message_updated', handleMessageUpdated);
+            socket.off('message_deleted', handleMessageDeleted);
+        };
+    }, [socket, conversationId, queryClient]);
+
     return useQuery({
         queryKey: ['messages', conversationId],
         queryFn: () => messagingService.getMessageHistory(conversationId),
         enabled: !!conversationId,
-        refetchInterval: 3000, // Poll every 3 seconds for active chat
     });
 };
 

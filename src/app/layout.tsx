@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
+import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 
@@ -52,11 +53,13 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
-              <Toaster position="top-right" richColors closeButton />
-              <PWAInstaller />
-            </ThemeProvider>
+            <SocketProvider>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                {children}
+                <Toaster position="top-right" richColors closeButton />
+                <PWAInstaller />
+              </ThemeProvider>
+            </SocketProvider>
           </AuthProvider>
         </QueryProvider>
       </body>
