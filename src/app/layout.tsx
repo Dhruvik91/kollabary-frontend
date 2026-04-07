@@ -17,9 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kollabary - Enterprise Influencer Collaboration Platform",
+  title: {
+    template: "%s | Kollabary",
+    default: "Kollabary - Enterprise Influencer Collaboration Platform",
+  },
   description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
   manifest: "/manifest.json",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -33,11 +37,13 @@ export const metadata: Metadata = {
     siteName: "Kollabary",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    images: ["/twitter-image.png"],
   },
 };
 

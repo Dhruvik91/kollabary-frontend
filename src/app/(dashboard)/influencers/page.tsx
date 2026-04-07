@@ -2,7 +2,7 @@ import { InfluencerDiscoverContainer } from '@/features/influencer/containers/In
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Discover Influencers | Kollabary',
+    title: 'Discover',
     description: 'Find the perfect influencers for your next brand collaboration.',
 };
 

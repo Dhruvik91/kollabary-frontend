@@ -1,7 +1,8 @@
 import { AdminOverviewContainer } from '@/features/admin/containers/AdminOverviewContainer';
+import { Metadata } from 'next';
 
-export const metadata = {
-    title: 'Admin Overview | Kollabary',
+export const metadata: Metadata = {
+    title: 'Admin Overview',
     description: 'Monitor platform health and growth.',
 };
 
