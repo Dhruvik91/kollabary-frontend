@@ -19,33 +19,33 @@ export const AuctionInfoGrid = ({
     bidsCount 
 }: AuctionInfoGridProps) => {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-6 border-b border-border">
             <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Budget Range</p>
-                <p className="text-lg font-bold text-foreground flex items-center">
-                    <DollarSign className="h-4 w-4 text-primary mr-1" />
-                    {minBudget || 0} - ${maxBudget || 'Open'}
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Budget Range</p>
+                <p className="text-base sm:text-lg font-black text-foreground flex items-center">
+                    <DollarSign className="h-4 w-4 text-primary mr-1 flex-shrink-0" />
+                    <span className="truncate">{minBudget || 0} - ${maxBudget || 'Open'}</span>
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Deadline</p>
-                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    {format(new Date(deadline), 'MMM dd, yyyy')}
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Deadline</p>
+                <p className="text-base sm:text-lg font-black text-foreground flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="truncate">{format(new Date(deadline), 'MMM dd, yyyy')}</span>
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Category</p>
-                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
-                    <Tag className="h-4 w-4 text-primary" />
-                    {category || 'General'}
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Category</p>
+                <p className="text-base sm:text-lg font-black text-foreground flex items-center gap-1.5">
+                    <Tag className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="truncate">{category || 'General'}</span>
                 </p>
             </div>
             <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Bids Count</p>
-                <p className="text-lg font-bold text-foreground flex items-center gap-1.5">
-                    <Gavel className="h-4 w-4 text-primary" />
-                    {bidsCount || 0} Bids
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Bids Count</p>
+                <p className="text-base sm:text-lg font-black text-foreground flex items-center gap-1.5">
+                    <Gavel className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="truncate">{bidsCount || 0} Bids</span>
                 </p>
             </div>
         </div>

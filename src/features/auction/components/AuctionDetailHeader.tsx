@@ -61,12 +61,12 @@ export const AuctionDetailHeader = ({ auction, isCompleted, onEdit, onDelete }: 
                                     </div>
                                 }
                                 description="Are you sure you want to delete this auction? This action is permanent and will remove all associated bids and data."
-                                footer={
-                                    <div className="flex justify-end gap-3">
+                                 footer={
+                                    <div className="flex flex-col sm:flex-row justify-end gap-3 w-full">
                                         <Button
                                             variant="ghost"
                                             onClick={() => setShowDeleteModal(false)}
-                                            className="rounded-xl font-bold uppercase text-[10px] tracking-widest"
+                                            className="rounded-xl font-bold uppercase text-[10px] tracking-widest w-full sm:w-auto"
                                         >
                                             Cancel
                                         </Button>
@@ -76,7 +76,7 @@ export const AuctionDetailHeader = ({ auction, isCompleted, onEdit, onDelete }: 
                                                 onDelete();
                                                 setShowDeleteModal(false);
                                             }}
-                                            className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20"
+                                            className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20 w-full sm:w-auto"
                                         >
                                             Delete Forever
                                         </Button>
