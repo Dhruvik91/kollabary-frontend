@@ -8,11 +8,22 @@ export interface UserProfile {
     fullName: string;
     bio?: string;
     location?: string;
-    profileImage?: string; // Kept for backward compatibility if needed, but primary is avatarUrl
+    profileImage?: string;
     avatarUrl?: string;
     socialLinks?: Record<string, string>;
     createdAt: string;
     updatedAt: string;
+    stats?: {
+        totalAuctions: number;
+        activeAuctionsCount: number;
+        completedCollaborations: number;
+    };
+    activeAuctions?: any[];
+    user?: {
+        id: string;
+        email: string;
+        role: string;
+    };
 }
 
 export interface SaveProfileDto {
@@ -72,6 +83,14 @@ export const profileService = {
      */
     searchProfiles: async (params: SearchProfilesParams): Promise<UserProfile[]> => {
         const response = await httpService.get<UserProfile[]>(API_CONFIG.path.profile.search, { params });
+        return response.data;
+    },
+
+    /**
+     * Get professional brand profile with stats
+     */
+    getBrandProfile: async (id: string): Promise<UserProfile> => {
+        const response = await httpService.get<UserProfile>(API_CONFIG.path.profile.brand(id));
         return response.data;
     },
 

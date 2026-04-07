@@ -155,6 +155,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
                     {/* Brand Information moved here */}
                     <BrandCard
+                        brandId={auction.creator.profile?.id || ''}
                         brandName={auction.creator.profile?.fullName || 'Brand'}
                         avatarLetter={auction.creator.profile?.fullName?.charAt(0) || 'B'}
                         avatarUrl={auction.creator.profile?.avatarUrl}

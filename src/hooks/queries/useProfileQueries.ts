@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 export const profileKeys = {
     all: ['profile'] as const,
     me: () => [...profileKeys.all, 'me'] as const,
+    brand: (id: string) => [...profileKeys.all, 'brand', id] as const,
 };
 
 /**
@@ -80,5 +81,17 @@ export function useChangePasswordMutation() {
                 description: error.response?.data?.message || 'Current password might be incorrect or something went wrong',
             });
         },
+    });
+}
+
+/**
+ * Hook to fetch a brand's professional profile with stats
+ */
+export function useBrandProfile(id: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: profileKeys.brand(id),
+        queryFn: () => profileService.getBrandProfile(id),
+        enabled: !!id && enabled,
+        staleTime: 5 * 60 * 1000,
     });
 }

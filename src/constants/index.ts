@@ -70,6 +70,7 @@ export const API_CONFIG = {
             base: '/profile',
             me: '/profile',
             search: '/profile/search',
+            brand: (id: string) => `/profile/brand/${id}`,
         },
         uploads: {
             base: '/uploads',
@@ -116,6 +117,7 @@ export const FRONTEND_ROUTES = {
         INFLUENCER_PROFILE: '/influencer/profile',
         INFLUENCER_EDIT: '/influencer/profile/edit',
         INFLUENCER_DETAIL: (id: string) => `/influencers/${id}`,
+        BRAND_DETAIL: (id: string) => `/brands/${id}`,
         PROFILE: '/profile',
         PROFILE_SETUP: '/profile/setup',
         AUCTIONS: '/auctions',

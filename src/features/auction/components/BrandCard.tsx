@@ -3,8 +3,11 @@
 import { MessageSquare, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { FRONTEND_ROUTES } from '@/constants';
 
 interface BrandCardProps {
+    brandId: string;
     brandName: string;
     avatarLetter: string;
     avatarUrl?: string;
@@ -12,7 +15,7 @@ interface BrandCardProps {
     className?: string;
 }
 
-export const BrandCard = ({ brandName, avatarLetter, avatarUrl, onContactClick, className }: BrandCardProps) => {
+export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onContactClick, className }: BrandCardProps) => {
     return (
         <div className={cn("bg-card border border-border rounded-[2rem] p-6 backdrop-blur-xl transition-all duration-300", className)}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -35,14 +38,23 @@ export const BrandCard = ({ brandName, avatarLetter, avatarUrl, onContactClick, 
                     </div>
                 </div>
                 
-                <Button 
-                    variant="outline" 
-                    className="sm:w-auto border-2 border-primary/20 text-foreground hover:bg-primary/5 dark:hover:bg-primary/5 flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-sm bg-background"
-                    onClick={onContactClick}
-                >
-                    <MessageSquare className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
-                    Contact Brand
-                </Button>
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(brandId)} className="w-full sm:w-auto">
+                        <Button 
+                            variant="outline" 
+                            className="w-full sm:w-auto border-2 border-border text-foreground hover:bg-muted flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-sm bg-background"
+                        >
+                            View Profile
+                        </Button>
+                    </Link>
+                    <Button 
+                        className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-xl shadow-primary/10"
+                        onClick={onContactClick}
+                    >
+                        <MessageSquare className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                        Contact Brand
+                    </Button>
+                </div>
             </div>
         </div>
     );
