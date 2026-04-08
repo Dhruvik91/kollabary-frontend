@@ -5,21 +5,14 @@ import { useAdminVerifications, useProcessVerification } from '@/hooks/use-admin
 import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 import { format, isValid } from 'date-fns';
-import { FileText, Eye, Clock, Calendar as CalendarIcon, User as UserIcon } from 'lucide-react';
+import { FileText, Eye, Clock, Calendar as CalendarIcon, User as UserIcon, MoreHorizontal } from 'lucide-react';
 import { VerificationRequest, VerificationStatus } from '@/types/admin.types';
 import { VerifiedStatusBadge } from '../components/VerifiedStatusBadge';
-import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export function AdminVerificationsContainer() {
     const { data: requests = [], isLoading } = useAdminVerifications();
@@ -95,20 +88,18 @@ export function AdminVerificationsContainer() {
                 return (
                     <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground bg-muted/20 px-2.5 py-1 rounded-full border border-border/30 uppercase tracking-tight">
-                            <FileText size={10} className="opacity-70" />
-                            <span>{count} Files</span>
-                        </div>
-                        {count > 0 && (
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 title="Open Document"
+                                disabled={count === 0}
                                 className="h-8 w-8 rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
                                 onClick={() => window.open(firstDoc as string, '_blank')}
                             >
-                                <Eye size={14} />
+                                <FileText size={10} className="opacity-70" />
+                                <span>{count} Files</span>
                             </Button>
-                        )}
+                        </div>
                     </div>
                 );
             },
@@ -123,73 +114,84 @@ export function AdminVerificationsContainer() {
 
                 return (
                     <div className="flex justify-start items-center gap-2">
-                        <Dialog
-                            open={activeRequestId === request.id}
-                            onOpenChange={(open) => setActiveRequestId(open ? request.id : null)}
-                        >
-                            <DialogTrigger asChild>
-                                {request.status === VerificationStatus.PENDING ? (
-                                    <Button size="sm" className="h-8 rounded-xl text-xs px-4 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
-                                        Process
+                        {request.status === VerificationStatus.PENDING ? (
+                            <Button
+                                size="sm"
+                                className="h-8 rounded-xl text-xs px-4 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+                                onClick={() => setActiveRequestId(request.id)}
+                            >
+                                Process
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled
+                                className="h-8 w-8 rounded-lg opacity-40 cursor-not-allowed"
+                            >
+                                <MoreHorizontal size={14} />
+                            </Button>
+                        )}
+
+                        <AnimatedModal
+                            isOpen={activeRequestId === request.id}
+                            onClose={() => setActiveRequestId(null)}
+                            title={request.status === VerificationStatus.PENDING ? 'Process Verification' : 'Verification Details'}
+                            description={request.status === VerificationStatus.PENDING
+                                ? `Provide feedback and decide on this verification request for ${userEmail}.`
+                                : `Review the processed verification for ${userEmail}.`}
+                            footer={request.status === VerificationStatus.PENDING && (
+                                <div className="flex gap-3 justify-end w-full">
+                                    <Button
+                                        variant="outline"
+                                        className="rounded-xl border-rose-500/20 text-rose-600 hover:bg-rose-50 px-6"
+                                        onClick={() => handleProcess(request.id, 'REJECTED')}
+                                    >
+                                        Reject Request
                                     </Button>
-                                ) : (
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary">
-                                        <Eye size={14} />
+                                    <Button
+                                        className="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 shadow-lg shadow-emerald-600/20"
+                                        onClick={() => handleProcess(request.id, 'APPROVED')}
+                                    >
+                                        Approve Verification
                                     </Button>
-                                )}
-                            </DialogTrigger>
-                            <DialogContent className="rounded-2xl sm:max-w-[425px]">
-                                <DialogHeader>
-                                    <DialogTitle>
-                                        {request.status === VerificationStatus.PENDING ? 'Process Verification' : 'Verification Details'}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                        {request.status === VerificationStatus.PENDING
-                                            ? `Provide feedback and decide on this verification request for ${userEmail}.`
-                                            : `Review the processed verification for ${userEmail}.`}
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="py-4 space-y-4">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium">Internal Notes</label>
-                                        <Textarea
-                                            placeholder={request.status === VerificationStatus.PENDING ? "Add feedback for the influencer or reason for rejection..." : "No notes provided."}
-                                            value={request.status === VerificationStatus.PENDING ? notes : (request as any).adminNotes || ''}
-                                            onChange={(e) => setNotes(e.target.value)}
-                                            readOnly={request.status !== VerificationStatus.PENDING}
-                                            className="rounded-xl min-h-[100px] bg-muted/20"
-                                        />
-                                    </div>
-                                    {request.status !== VerificationStatus.PENDING && (
-                                        <div className="p-3 rounded-xl bg-muted/20 border border-border/50 text-xs space-y-2">
-                                            <div className="flex justify-between">
-                                                <span className="text-muted-foreground">Decision:</span>
-                                                <span className={request.status === VerificationStatus.APPROVED ? 'text-emerald-500 font-bold' : 'text-rose-500 font-bold'}>
-                                                    {request.status}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
-                                {request.status === VerificationStatus.PENDING && (
-                                    <DialogFooter className="gap-2 sm:gap-0">
-                                        <Button
-                                            variant="outline"
-                                            className="rounded-xl border-rose-500/20 text-rose-600 hover:bg-rose-50"
-                                            onClick={() => handleProcess(request.id, 'REJECTED')}
-                                        >
-                                            Reject Request
-                                        </Button>
-                                        <Button
-                                            className="rounded-xl bg-emerald-600 hover:bg-emerald-700"
-                                            onClick={() => handleProcess(request.id, 'APPROVED')}
-                                        >
-                                            Approve Verification
-                                        </Button>
-                                    </DialogFooter>
+                            )}
+                        >
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-foreground">Internal Notes</label>
+                                    <Textarea
+                                        placeholder={request.status === VerificationStatus.PENDING ? "Add feedback for the influencer or reason for rejection..." : "No notes provided."}
+                                        value={request.status === VerificationStatus.PENDING ? notes : (request as any).adminNotes || ''}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        readOnly={request.status !== VerificationStatus.PENDING}
+                                        className="rounded-xl min-h-[120px] bg-muted/20 border-border/40 focus:border-primary/50 transition-all resize-none p-4"
+                                    />
+                                </div>
+                                {request.status !== VerificationStatus.PENDING && (
+                                    <div className="p-4 rounded-2xl bg-muted/20 border border-border/50 text-sm space-y-3">
+                                        <div className="flex justify-between items-center pb-2 border-b border-border/5">
+                                            <span className="text-muted-foreground font-medium">Decision Status</span>
+                                            <span className={cn(
+                                                "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
+                                                request.status === VerificationStatus.APPROVED
+                                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                                    : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
+                                            )}>
+                                                {request.status}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-xs">
+                                            <span className="text-muted-foreground">Processed On</span>
+                                            <span className="font-bold text-foreground">
+                                                {formatDate(request.updatedAt)}
+                                            </span>
+                                        </div>
+                                    </div>
                                 )}
-                            </DialogContent>
-                        </Dialog>
+                            </div>
+                        </AnimatedModal>
                     </div>
                 );
             },
