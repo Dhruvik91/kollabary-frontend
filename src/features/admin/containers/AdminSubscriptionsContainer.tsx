@@ -7,17 +7,32 @@ import {
     Settings2,
     Plus,
     CreditCard,
-    AlertCircle
+    AlertCircle,
+    Check,
+    Trash2,
+    Edit2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { SubscriptionPlanList } from '../components/SubscriptionPlanList';
+import { DataTable } from '@/components/shared/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 import {
     useAdminSubscriptionPlans,
     useCreateSubscriptionPlan,
     useDeleteSubscriptionPlan
 } from '@/hooks/use-admin.hooks';
+import { cn } from '@/lib/utils';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 const getIconForPlan = (name: string, index: number) => {
     const icons = [Zap, ShieldCheck, Settings2];
@@ -39,9 +54,7 @@ export function AdminSubscriptionsContainer() {
     const [newPlan, setNewPlan] = useState({ name: '', price: '' });
 
     const handleAddPlan = () => {
-        if (!newPlan.name || !newPlan.price) {
-            return;
-        }
+        if (!newPlan.name || !newPlan.price) return;
 
         createPlan.mutate(
             {
@@ -62,30 +75,77 @@ export function AdminSubscriptionsContainer() {
         deletePlan.mutate(id);
     };
 
-    const transformedPlans = plans.map((plan, index) => ({
-        ...plan,
-        icon: getIconForPlan(plan.name, index),
-        color: getColorForPlan(index, plan.popular),
-    }));
-
-    if (isLoading) {
-        return (
-            <div className="space-y-8 pb-10">
-                <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <Skeleton className="h-9 w-64 mb-2" />
-                        <Skeleton className="h-5 w-96" />
+    const columns: ColumnDef<any>[] = [
+        {
+            id: 'plan',
+            header: 'Plan Name',
+            accessorKey: 'name',
+            cell: ({ row }) => {
+                const plan = row.original;
+                return (
+                    <div className="flex items-center gap-3">
+                        <div className={cn(
+                            "h-9 w-9 rounded-xl flex items-center justify-center ring-1 ring-border/50",
+                            plan.popular ? "bg-blue-500/10 text-blue-600" : "bg-primary/10 text-primary"
+                        )}>
+                            <Zap size={18} />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="font-bold text-sm text-foreground">{plan.name}</span>
+                            {plan.popular && (
+                                <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">Popular</span>
+                            )}
+                        </div>
                     </div>
-                    <Skeleton className="h-10 w-32" />
+                );
+            },
+        },
+        {
+            id: 'price',
+            header: 'Price',
+            accessorKey: 'price',
+            cell: ({ row }) => (
+                <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-black text-foreground tabular-nums">${row.original.price}</span>
+                    <span className="text-[10px] text-muted-foreground uppercase font-bold">/mo</span>
                 </div>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {[1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-80 rounded-3xl" />
-                    ))}
+            ),
+        },
+        {
+            id: 'features',
+            header: 'Features',
+            cell: ({ row }) => {
+                const features = row.original.features || [];
+                return (
+                    <div className="flex items-center gap-1.5">
+                        <Badge variant="outline" className="h-6 rounded-lg text-[10px] font-black uppercase tracking-wider bg-muted/30 border-border/30">
+                            {features.length} Features
+                        </Badge>
+                    </div>
+                );
+            },
+        },
+        {
+            id: 'actions',
+            header: 'Actions',
+            meta: { headerAlign: 'right' },
+            cell: ({ row }) => (
+                <div className="flex items-center justify-end gap-2">
+                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary">
+                        <Edit2 size={16} />
+                    </Button>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-9 w-9 rounded-xl text-rose-500 hover:bg-rose-500/10 hover:text-rose-600"
+                        onClick={() => handleDelete(row.original.id)}
+                    >
+                        <Trash2 size={16} />
+                    </Button>
                 </div>
-            </div>
-        );
-    }
+            ),
+        },
+    ];
 
     if (isError) {
         return (
@@ -102,75 +162,107 @@ export function AdminSubscriptionsContainer() {
             {/* Header */}
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Subscription Management</h1>
-                    <p className="text-muted-foreground">Define and manage pricing tiers and feature limits for the platform.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Subscription Tiers</h1>
+                    <p className="text-muted-foreground font-medium mt-1">Define pricing and feature limits for the platform.</p>
                 </div>
 
-                <Button
-                    onClick={() => setIsAdding(true)}
-                    className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all"
-                    disabled={createPlan.isPending}
-                >
-                    <Plus size={18} />
-                    New Plan
-                </Button>
+                <Dialog open={isAdding} onOpenChange={setIsAdding}>
+                    <DialogTrigger asChild>
+                        <Button className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all">
+                            <Plus size={18} />
+                            New Plan
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="rounded-2xl sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Create New Plan</DialogTitle>
+                            <DialogDescription>
+                                Add a new subscription tier to the platform.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4 space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Plan Name</label>
+                                <Input
+                                    placeholder="e.g. Pro, Professional, Enterprise"
+                                    value={newPlan.name}
+                                    onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
+                                    className="rounded-xl"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Monthly Price ($)</label>
+                                <Input
+                                    type="number"
+                                    placeholder="29"
+                                    value={newPlan.price}
+                                    onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
+                                    className="rounded-xl"
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsAdding(false)}
+                                className="rounded-xl"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={handleAddPlan}
+                                className="rounded-xl"
+                                disabled={createPlan.isPending}
+                            >
+                                Create Plan
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
 
-            {/* Plans List */}
-            <SubscriptionPlanList
-                plans={transformedPlans}
-                isAdding={isAdding}
-                newPlan={newPlan}
-                onNameChange={(val) => setNewPlan({ ...newPlan, name: val })}
-                onPriceChange={(val) => setNewPlan({ ...newPlan, price: val })}
-                onCancelAdd={() => setIsAdding(false)}
-                onSubmitAdd={handleAddPlan}
-                onDeletePlan={handleDelete}
+            {/* Plans DataTable */}
+            <DataTable
+                data={plans}
+                columns={columns}
+                isLoading={isLoading}
+                showSearch={true}
+                searchPosition="end"
+                className="w-full"
+                emptyState={
+                    <div className="flex flex-col items-center justify-center py-20 bg-muted/20 rounded-2xl border border-dashed border-border/50">
+                        <CreditCard size={48} className="text-muted-foreground/30" />
+                        <p className="mt-4 text-lg font-medium text-muted-foreground">No subscription plans found.</p>
+                    </div>
+                }
             />
-
-            {/* Empty State */}
-            {transformedPlans.length === 0 && !isAdding && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="rounded-3xl border border-dashed border-border/50 bg-muted/20 p-12 text-center"
-                >
-                    <CreditCard size={48} className="mx-auto text-muted-foreground/50 mb-4" />
-                    <h3 className="text-lg font-bold mb-2">No subscription plans yet</h3>
-                    <p className="text-muted-foreground mb-6">Create your first subscription plan to get started.</p>
-                    <Button onClick={() => setIsAdding(true)} className="rounded-xl gap-2">
-                        <Plus size={18} />
-                        Create First Plan
-                    </Button>
-                </motion.div>
-            )}
 
             {/* Quick Stats section */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8"
+                className="rounded-3xl border border-border/50 bg-card/40 glass-card backdrop-blur-xl p-8 shadow-2xl shadow-black/5 flex flex-col md:flex-row items-center justify-between gap-8 mt-12"
             >
                 <div>
-                    <h3 className="text-lg font-bold flex items-center gap-2">
+                    <h3 className="text-lg font-black uppercase tracking-tight flex items-center gap-2">
                         <CreditCard size={20} className="text-primary" />
                         Subscription Health
                     </h3>
-                    <p className="mt-1 text-sm text-muted-foreground max-w-md">
+                    <p className="mt-1 text-sm text-muted-foreground font-medium max-w-md">
                         Monitoring global revenue and renewal rates across all defined tiers.
                     </p>
                 </div>
 
                 <div className="flex gap-8">
                     <div className="text-center">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase">Retention Rate</p>
-                        <p className="text-2xl font-bold mt-1 text-emerald-600">94.2%</p>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Retention Rate</p>
+                        <p className="text-2xl font-black mt-1 text-emerald-600 tabular-nums italic">94.2%</p>
                     </div>
                     <div className="h-10 w-px bg-border shrink-0 self-center" />
                     <div className="text-center">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase">Avg. Revenue/User</p>
-                        <p className="text-2xl font-bold mt-1 text-blue-600">$42.10</p>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Avg. Revenue/User</p>
+                        <p className="text-2xl font-black mt-1 text-blue-600 tabular-nums italic">$42.10</p>
                     </div>
                 </div>
             </motion.div>

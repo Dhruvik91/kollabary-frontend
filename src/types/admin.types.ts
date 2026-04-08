@@ -48,6 +48,8 @@ export interface VerificationRequest {
     id: string;
     influencerProfile?: {
         id: string;
+        fullName?: string;
+        avatarUrl?: string;
         user: User;
     };
     documents: Record<string, any>;
