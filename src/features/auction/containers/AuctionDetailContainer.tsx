@@ -118,14 +118,14 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const isCompleted = auction.status === 'COMPLETED';
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6">
+        <div className="space-y-6 sm:space-y-8 pb-20">
             <div className="flex items-center justify-between">
                 <BackButton label="Back to Auctions" className="p-0" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* Left Column: Auction Details & Brand Information */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="xl:col-span-2 space-y-8">
                     {/* Auction Details Section */}
                     <div className="bg-card border border-border rounded-[2rem] p-5 sm:p-8 backdrop-blur-xl relative overflow-hidden shadow-sm">
                         <AuctionDetailHeader
@@ -163,8 +163,8 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                         className="rounded-[2rem] p-5 sm:p-8 border border-border bg-card shadow-sm"
                     />
 
-                    {/* On Mobile: Bids List / Bid Form follows here */}
-                    <div className="lg:hidden space-y-8">
+                    {/* On Mobile & Small Desktop: Bids List / Bid Form follows here */}
+                    <div className="xl:hidden space-y-8">
                         {isOwner && (
                             <Carousel
                                 setApi={setApi}
@@ -266,10 +266,10 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     </div>
                 </div>
 
-                {/* Right Column: Bids & Actions (Desktop only) */}
-                <div className="hidden lg:block space-y-8">
+                {/* Right Column: Bids & Actions (Large Desktop only) */}
+                <div className="hidden xl:block space-y-8">
                     {isOwner && (
-                        <div className="bg-card border border-border rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-sm sticky top-8 flex flex-col max-h-[calc(100vh-120px)] transition-all duration-500">
+                        <div className="bg-card border border-border rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-sm sticky top-8 flex flex-col max-h-[calc(100vh-120px)] transition-all duration-500 xl:block">
                             <div className="p-6 border-b border-border space-y-2 bg-card/80 backdrop-blur-md z-10">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">

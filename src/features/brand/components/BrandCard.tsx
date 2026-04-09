@@ -123,7 +123,7 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                         <div className="grid grid-cols-2 gap-3 pt-2">
                             <Button
                                 onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(id))}
-                                className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-zinc-900 transition-all"
+                                className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 transition-all"
                             >
                                 <Eye size={16} />
                                 Profile

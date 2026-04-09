@@ -31,9 +31,9 @@ export const AuctionList = ({
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
             isLoading={isLoading}
-            gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            gridClassName="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8"
             loader={
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 w-full">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="h-[380px] rounded-[2rem] bg-muted/50 animate-pulse border border-border/50" />
                     ))}
