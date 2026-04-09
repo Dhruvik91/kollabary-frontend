@@ -21,7 +21,8 @@ import {
     TrendingUp,
     User,
     UserPlus,
-    Gavel
+    Gavel,
+    Award
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Logo } from '@/components/shared/Logo';
@@ -104,7 +105,15 @@ export const Sidebar = ({
 
     const commonLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
-        { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Discover Brands' },
+        { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+        { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+        { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
+    ];
+
+    const influencerLinks = [
+
+        { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
         { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
@@ -117,21 +126,26 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.CONVERSATIONS, icon: MessageSquare, label: 'Conversations' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.RANKING, icon: Award, label: 'Ranking' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
     ];
 
 
     const brandLinks = [
+        { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
         { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Discover' },
+        { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+        { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+        { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
         { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
     ];
 
     const getLinksByRole = () => {
         switch (user?.role) {
             case UserRole.ADMIN: return [...adminLinks];
-            case UserRole.INFLUENCER: return [...commonLinks];
-            case UserRole.USER: return [...commonLinks, ...brandLinks];
+            case UserRole.INFLUENCER: return [...influencerLinks];
+            case UserRole.USER: return [...brandLinks];
             default: return commonLinks;
         }
     };
@@ -221,7 +235,7 @@ export const Sidebar = ({
                                     </div>
                                 </Link>
                                 {
-                                    user.role === UserRole.INFLUENCER && (
+                                    (user.role === UserRole.INFLUENCER) && (
                                         <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
                                             <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                                                 <Settings size={18} className="text-muted-foreground" />

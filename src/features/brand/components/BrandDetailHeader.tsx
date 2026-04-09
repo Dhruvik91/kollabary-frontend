@@ -3,11 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { 
-    MapPin, 
-    CheckCircle2, 
-    MessageCircle, 
-    Flag, 
+import {
+    MapPin,
+    CheckCircle2,
+    MessageCircle,
+    Flag,
     Globe,
     Award,
     TrendingUp
@@ -49,7 +49,7 @@ export const BrandDetailHeader = ({
                 <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[100px] rounded-full animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 blur-[80px] rounded-full animate-pulse [animation-delay:2s]" />
                 <div className="absolute inset-0 opacity-10 dark:opacity-30 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                
+
                 {/* Geometric Decorative Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20 dark:opacity-20">
                     <div className="absolute top-10 left-1/4 w-px h-64 bg-linear-to-b from-transparent via-primary/50 to-transparent rotate-12" />
@@ -62,7 +62,7 @@ export const BrandDetailHeader = ({
 
             {/* Profile Info Overlay */}
             <div className="px-4 sm:px-6 lg:px-10 -mt-12 sm:-mt-16 md:-mt-24 lg:-mt-28 relative z-10">
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "circOut" }}
@@ -70,7 +70,7 @@ export const BrandDetailHeader = ({
                 >
                     {/* Inner glow effect */}
                     <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-700" />
-                    
+
                     <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10 relative z-10">
                         {/* Avatar Section */}
                         <div className="relative shrink-0 mx-auto lg:mx-0">
@@ -94,7 +94,7 @@ export const BrandDetailHeader = ({
                                     )}
                                 </div>
                             </motion.div>
-                            
+
                             {/* Verification Badge */}
                             <div className="absolute bottom-1 -right-1 sm:bottom-2 sm:-right-2 z-20">
                                 <div className="bg-primary shadow-lg shadow-primary/25 text-primary-foreground px-3 py-1 rounded-xl flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest border border-white/10">
@@ -108,7 +108,7 @@ export const BrandDetailHeader = ({
                         <div className="flex-1 min-w-0 space-y-4 text-center lg:text-left">
                             <div className="space-y-3">
                                 <div className="space-y-1">
-                                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight text-gradient">
+                                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
                                         {brand.fullName}
                                     </h1>
                                     <p className="text-muted-foreground font-bold tracking-[0.2em] uppercase text-[9px] sm:text-[10px] lg:text-xs flex items-center justify-center lg:justify-start gap-2 opacity-80">

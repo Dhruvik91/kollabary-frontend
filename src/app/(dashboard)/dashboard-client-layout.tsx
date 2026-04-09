@@ -46,7 +46,7 @@ export default function DashboardClientLayout({
                         <DashboardHeader />
                         <main className={cn(
                             "flex-1 min-h-0",
-                            !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-8 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
+                            !isMessagesPage ? 'px-4 pt-4 pb-20 md:pt-8 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                         )}>
                             <div className={cn(
                                 "h-full w-full mx-auto",

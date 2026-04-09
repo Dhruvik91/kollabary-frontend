@@ -66,32 +66,33 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
     };
 
     return (
-        <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/40 bg-card/40 glass-card overflow-hidden", className)}>
-            <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-border/50 glass-section bg-muted/30">
+        <Card className={cn("rounded-[2.5rem] border-border/40 bg-card/30 backdrop-blur-2xl glass-card overflow-hidden shadow-2xl shadow-black/5", className)}>
+            <CardHeader className="p-5 sm:p-6 md:p-7 border-b border-border/50 glass-section bg-primary/5">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Trophy size={16} className="text-primary sm:w-[18px] sm:h-[18px]" />
-                        <h3 className="font-bold tracking-tight text-sm sm:text-base">Ranking Breakdown</h3>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/10 rounded-xl text-primary">
+                            <Trophy size={18} />
+                        </div>
+                        <h3 className="font-bold tracking-tight text-sm sm:text-lg">Ranking Breakdown</h3>
                     </div>
-                    <div className={cn("px-3 py-1 rounded-full text-xs font-bold border", getScoreBg(totalScore))}>
+                    <div className={cn("px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm", getScoreBg(totalScore))}>
                         {rankingTier}
                     </div>
                 </div>
             </CardHeader>
 
             <CardContent className="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 md:space-y-8">
-                {/* Main Score Display */}
-                <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4">
-                    <div className="relative">
-                        <svg viewBox="0 0 160 160" className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 transform -rotate-90">
+                <div className="flex flex-col items-center justify-center space-y-4 py-4">
+                    <div className="relative group">
+                        <svg viewBox="0 0 160 160" className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 transform -rotate-90">
                             <circle
                                 cx="80"
                                 cy="80"
                                 r="70"
                                 stroke="currentColor"
-                                strokeWidth="12"
+                                strokeWidth="8"
                                 fill="transparent"
-                                className="text-zinc-100 dark:text-white/[0.10]"
+                                className="text-zinc-100 dark:text-white/[0.05]"
                             />
                             <motion.circle
                                 cx="80"
@@ -99,24 +100,25 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
                                 r="70"
                                 stroke="currentColor"
                                 strokeWidth="12"
+                                strokeLinecap="round"
                                 fill="transparent"
                                 strokeDasharray={440}
                                 initial={{ strokeDashoffset: 440 }}
                                 animate={{ strokeDashoffset: 440 - (440 * totalScore) / 100 }}
-                                transition={{ duration: 1.5, ease: "easeOut" }}
-                                className={cn(getScoreColor(totalScore))}
+                                transition={{ duration: 2, ease: "circOut" }}
+                                className={cn(getScoreColor(totalScore), "drop-shadow-[0_0_8px_currentColor]")}
                             />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
                             <motion.span
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={cn("text-4xl sm:text-5xl font-black tabular-nums", getScoreColor(totalScore))}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className={cn("text-5xl sm:text-6xl font-black tabular-nums tracking-tighter", getScoreColor(totalScore))}
                             >
                                 {totalScore}
                             </motion.span>
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                                / 100
+                            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] -mt-1">
+                                Score
                             </span>
                         </div>
                     </div>
@@ -159,20 +161,20 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
 
                 {/* Tier Progress */}
                 {nextTier && (
-                    <div className="space-y-3 p-4 glass-section bg-muted/30 rounded-2xl border border-border/30">
+                    <div className="space-y-4 p-5 glass-section bg-primary/5 rounded-[1.5rem] border border-primary/10">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <TrendingUp size={16} className="text-primary" />
-                                <span className="text-sm font-bold">Progress to {nextTier}</span>
+                                <span className="text-sm font-black tracking-tight uppercase">Next: {nextTier}</span>
                             </div>
-                            <span className="text-sm font-bold text-primary">{tierProgress}%</span>
+                            <span className="text-sm font-black text-primary">{tierProgress}%</span>
                         </div>
-                        <div className="w-full bg-zinc-200 glass-chip rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-primary/10 rounded-full h-2.5 overflow-hidden">
                             <motion.div
-                                className="h-full bg-primary rounded-full"
+                                className="h-full bg-linear-to-r from-primary to-primary/60 rounded-full"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${tierProgress}%` }}
-                                transition={{ duration: 1, ease: "easeOut" }}
+                                transition={{ duration: 1.2, ease: "circOut" }}
                             />
                         </div>
                     </div>
