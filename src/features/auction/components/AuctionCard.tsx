@@ -64,8 +64,8 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                 <CardContent className="p-6 flex flex-col gap-4 h-full relative">
                     {/* Header: Title and Creator */}
                     <div className="space-y-3">
-                        <div className="flex justify-between items-start gap-4">
-                            <div className="space-y-1">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
+                            <div className="space-y-2 flex-1 min-w-0">
                                 <h3 className="text-xl font-black tracking-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
                                     {title}
                                 </h3>
@@ -76,7 +76,7 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 self-end sm:self-start">
                                 <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'
                                     }`}>
                                     {status}
@@ -179,11 +179,11 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                 }
                 description="Are you sure you want to delete this auction? This action cannot be undone."
                 footer={
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-col sm:flex-row justify-end gap-3 w-full">
                         <Button
                             variant="ghost"
                             onClick={() => setShowDeleteModal(false)}
-                            className="rounded-xl font-bold uppercase text-[10px] tracking-widest"
+                            className="rounded-xl font-bold uppercase text-[10px] tracking-widest w-full sm:w-auto"
                         >
                             Cancel
                         </Button>
@@ -194,7 +194,7 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                                 await deleteAuction(id);
                                 setShowDeleteModal(false);
                             }}
-                            className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20"
+                            className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20 w-full sm:w-auto"
                         >
                             {isDeleting ? 'Deleting...' : 'Delete Forever'}
                         </Button>

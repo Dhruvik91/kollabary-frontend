@@ -1,33 +1,38 @@
-import { Metadata } from 'next';
-import { use } from 'react';
-import { auctionService } from '@/services/auction.service';
 import { AuctionDetailContainer } from '@/features/auction/containers/AuctionDetailContainer';
+import { Metadata } from 'next';
+import { auctionService } from '@/services/auction.service';
 
-interface Props {
-    params: Promise<{ id: string }>;
+interface AuctionDetailPageProps {
+    params: Promise<{
+        id: string;
+    }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: AuctionDetailPageProps): Promise<Metadata> {
+    const { id } = await params;
+    
     try {
-        const { id } = await params;
         const auction = await auctionService.getAuctionDetail(id);
+        const title = auction.title || 'Auction Detail';
+        const description = auction.description || 'Browse and bid on exclusive collaboration opportunities.';
+        
         return {
-            title: `${auction.title} | Auctions | Kollabary`,
-            description: auction.description.substring(0, 160),
+            title: `${title} - Opportunity`,
+            description: description,
             openGraph: {
-                title: auction.title,
-                description: auction.description.substring(0, 160),
-                type: 'article',
-            }
+                title: `${title} | Kollabary`,
+                description: description,
+            },
         };
-    } catch {
+    } catch (error) {
         return {
-            title: 'Auction Details | Kollabary',
+            title: 'Auction Detail',
+            description: 'View detailed collaboration opportunity.',
         };
     }
 }
 
-export default function AuctionDetailPage({ params }: Props) {
-    const { id } = use(params);
+export default async function AuctionDetailPage({ params }: AuctionDetailPageProps) {
+    const { id } = await params;
     return <AuctionDetailContainer id={id} />;
 }

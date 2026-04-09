@@ -3,12 +3,11 @@ import { AuthLayout } from '@/components/auth/AuthLayout';
 import { LoginContainer } from '@/features/auth/LoginContainer';
 
 export const metadata: Metadata = {
-    title: 'Sign In | Kollabary',
+    title: 'Sign In',
     description: 'Sign in to your Kollabary account to access your dashboard and manage collaborations.',
     openGraph: {
-        title: 'Sign In | Kollabary',
+        title: 'Sign In',
         description: 'Sign in to your Kollabary account',
-        type: 'website',
     },
 };
 

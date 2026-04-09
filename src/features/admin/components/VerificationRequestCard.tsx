@@ -5,10 +5,9 @@ import { motion } from 'framer-motion';
 import {
     FileText,
     Eye,
-    Clock,
     Calendar as CalendarIcon
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { VerificationRequest, VerificationStatus } from '@/types/admin.types';
 import { VerifiedStatusBadge } from './VerifiedStatusBadge';
 import { Button } from '@/components/ui/button';
@@ -39,6 +38,22 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
         setIsDialogOpen(false);
     };
 
+    // Safe date formatting
+    const formatDate = (dateString?: string) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return isValid(date) ? format(date, 'MMMM d, yyyy') : 'Invalid Date';
+    };
+
+    const userEmail = request.influencerProfile?.user?.email || 'Unknown User';
+
+    // Handle documents object
+    const docEntries = Object.entries(request.documents || {}).filter(
+        ([key, value]) => typeof value === 'string' && value.startsWith('http')
+    );
+    const docCount = docEntries.length;
+    const firstDocUrl = docEntries[0]?.[1];
+
     return (
         <motion.div
             layout
@@ -52,10 +67,10 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                            {request.user?.email?.[0]?.toUpperCase() || '?'}
+                            {userEmail[0]?.toUpperCase() || '?'}
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold truncate max-w-[150px]">{request.user?.email || 'Unknown User'}</h3>
+                            <h3 className="text-sm font-semibold truncate max-w-[150px]">{userEmail}</h3>
                             <p className="text-[10px] text-muted-foreground">ID: {request.id.slice(0, 8)}...</p>
                         </div>
                     </div>
@@ -65,11 +80,11 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                 <div className="space-y-3 mb-6">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <CalendarIcon size={14} />
-                        Submitted: {format(new Date(request.submittedAt), 'MMMM d, yyyy')}
+                        Submitted: {formatDate(request.createdAt)}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <FileText size={14} />
-                        Documents: {request.documents.length} attached
+                        Documents: {docCount} attached
                     </div>
                 </div>
 
@@ -77,8 +92,8 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                     <Button
                         variant="outline"
                         className="flex-1 rounded-xl h-9 text-xs gap-2"
-                        onClick={() => request.documents[0] && window.open(request.documents[0], '_blank')}
-                        disabled={!request.documents.length}
+                        onClick={() => firstDocUrl && window.open(firstDocUrl, '_blank')}
+                        disabled={!docCount}
                     >
                         <Eye size={14} /> View Docs
                     </Button>
@@ -94,7 +109,7 @@ export function VerificationRequestCard({ request, index, onProcess }: Verificat
                                 <DialogHeader>
                                     <DialogTitle>Process Verification</DialogTitle>
                                     <DialogDescription>
-                                        Provide feedback and decide on this verification request for {request.user?.email || 'this user'}.
+                                        Provide feedback and decide on this verification request for {userEmail}.
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="py-4 space-y-4">

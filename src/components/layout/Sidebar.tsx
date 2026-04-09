@@ -104,6 +104,7 @@ export const Sidebar = ({
 
     const commonLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Discover Brands' },
         { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
@@ -111,6 +112,9 @@ export const Sidebar = ({
 
     const adminLinks = [
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Admin Overview' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.AUCTIONS, icon: Gavel, label: 'Auctions' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.BIDS, icon: BarChart3, label: 'Bids' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.CONVERSATIONS, icon: MessageSquare, label: 'Conversations' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },

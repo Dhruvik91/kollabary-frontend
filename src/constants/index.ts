@@ -1,5 +1,6 @@
 export const API_CONFIG = {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    socketUrl: process.env.NEXT_PUBLIC_WS_URL || process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api$/, ''),
     path: {
         auth: {
             signup: '/user-auth/signup',
@@ -25,6 +26,8 @@ export const API_CONFIG = {
             breakdown: (id: string) => `/ranking/breakdown/${id}`,
             weights: '/ranking/weights',
             tierGuide: '/ranking/tier-guide',
+            recalculate: (id: string) => `/ranking/recalculate/${id}`,
+            recalculateAll: '/ranking/recalculate-all',
         },
         influencer: {
             base: '/influencer',
@@ -58,9 +61,13 @@ export const API_CONFIG = {
             verifications: '/admin/verifications',
             verificationUpdate: (id: string) => `/admin/verifications/${id}/status`,
             subscription: '/admin/subscription/plan',
+            auctions: '/admin/auctions',
+            bids: '/admin/bids',
+            conversations: '/admin/conversations',
+            conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
         },
         verification: {
-            base: '/verification',
+            base: '/verification/request',
             myRequests: '/verification/my-requests',
             approve: (id: string) => `/verification/approve/${id}`,
             reject: (id: string) => `/verification/reject/${id}`,
@@ -69,6 +76,7 @@ export const API_CONFIG = {
             base: '/profile',
             me: '/profile',
             search: '/profile/search',
+            brand: (id: string) => `/profile/brand/${id}`,
         },
         uploads: {
             base: '/uploads',
@@ -108,6 +116,7 @@ export const FRONTEND_ROUTES = {
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
         INFLUENCERS: '/influencers',
+        BRANDS: '/brands',
         MY_INFLUENCERS: '/my-influencers',
         PROJECTS: '/projects',
         OVERVIEW: '/overview',
@@ -115,6 +124,7 @@ export const FRONTEND_ROUTES = {
         INFLUENCER_PROFILE: '/influencer/profile',
         INFLUENCER_EDIT: '/influencer/profile/edit',
         INFLUENCER_DETAIL: (id: string) => `/influencers/${id}`,
+        BRAND_DETAIL: (id: string) => `/brands/${id}`,
         PROFILE: '/profile',
         PROFILE_SETUP: '/profile/setup',
         AUCTIONS: '/auctions',
@@ -128,6 +138,9 @@ export const FRONTEND_ROUTES = {
             SUBSCRIPTIONS: '/admin/subscriptions',
             RANKING: '/admin/ranking',
             INFLUENCERS: '/admin/influencers',
+            AUCTIONS: '/admin/auctions',
+            BIDS: '/admin/bids',
+            CONVERSATIONS: '/admin/conversations',
         }
     },
     HOME: '/',

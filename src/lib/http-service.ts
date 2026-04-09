@@ -17,7 +17,23 @@ class HttpService {
 
     // Request interceptor
     this.axiosInstance.interceptors.request.use(
-      (config) => {
+      async (config) => {
+        // Handle server-side cookies for Next.js Server Components
+        if (typeof window === 'undefined') {
+          try {
+            // Dynamic import to avoid issues on the client side
+            const { cookies } = await import('next/headers');
+            const cookieStore = await cookies();
+            const cookieString = cookieStore.toString();
+            
+            if (cookieString) {
+              config.headers.Cookie = cookieString;
+            }
+          } catch (error) {
+            // Silent fail if not in a request context (e.g. build time)
+          }
+        }
+        
         // With cookie-based JWT auth, the browser will attach cookies automatically.
         return config;
       },

@@ -4,60 +4,58 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
     BarChart3,
-    Users,
     Zap,
     Shield,
-    Globe,
     Layers
 } from 'lucide-react';
 
 const brandFeatures = [
     {
-        title: 'Discover Top Creators',
-        description: 'Access a vetted pool of high-performing influencers across all niches.',
-        icon: Users,
+        title: 'Dynamic Auction Library',
+        description: 'Launch high-impact campaigns and receive competitive proposals from elite creators in real-time.',
+        icon: Layers,
         color: 'bg-[#f05166]/10 text-[#f05166]',
     },
     {
-        title: 'Advanced Analytics',
-        description: 'Deep dive into campaign ROI with real-time conversion tracking.',
-        icon: BarChart3,
-        color: 'bg-blue-500/10 text-blue-600',
-    },
-    {
-        title: 'Automated CRM',
-        description: 'Manage 100+ collaborations effortlessly with our built-in campaign manager.',
+        title: 'Context-Aware Synergy',
+        description: 'Manage conversations and campaign milestones through a unified, moderated messaging hub.',
         icon: Zap,
         color: 'bg-amber-500/10 text-amber-600',
+    },
+    {
+        title: 'Elite Ranking Engine',
+        description: 'Identify top-tier partners through our proprietary influence and trust scoring system.',
+        icon: Shield,
+        color: 'bg-blue-500/10 text-blue-600',
     },
 ];
 
 const influencerFeatures = [
     {
-        title: 'Monetize Your Craft',
-        description: 'Get paid fairly and on-time for your creative value.',
+        title: 'Direct Bidding Power',
+        description: 'Navigate the auction floor and place strategic bids on exclusive brand opportunities.',
         icon: Zap,
         color: 'bg-[#52368c]/10 text-[#52368c]',
     },
     {
-        title: 'Premium Brand Network',
-        description: 'Partner with world-class brands that align with your authentic voice.',
-        icon: Globe,
+        title: 'Verified Sovereignty',
+        description: 'Build authority with verified badges and tier-based reputation and rewards.',
+        icon: Shield,
         color: 'bg-emerald-500/10 text-emerald-600',
     },
     {
-        title: 'Growth Analytics',
-        description: 'Professional insights to help you scale your audience and influence.',
+        title: 'Growth Synergy Hub',
+        description: 'Scale your professional footprint with deep engagement analytics and direct brand access.',
         icon: BarChart3,
         color: 'bg-rose-500/10 text-rose-600',
     },
 ];
 
 const steps = [
-    { number: '01', title: 'Join the Network', description: 'Create your profile and verify your social accounts.' },
-    { number: '02', title: 'Discover Matches', description: 'Our AI finds the perfect partners based on your goals.' },
-    { number: '03', title: 'Collaborate', description: 'Plan, execute, and communicate through our secure dashboard.' },
-    { number: '04', title: 'Grow Together', description: 'Analyze results and scale your impact seamlessly.' },
+    { number: '01', title: 'Professional Onboarding', description: 'Create a high-fidelity profile and verify your social footprint to join the elite network.' },
+    { number: '02', title: 'Dynamic Discovery', description: 'Explore the auction library or discover perfect partners through our AI-driven matching engine.' },
+    { number: '03', title: 'Strategic Bidding', description: 'Submit custom proposals or review diverse bids to find the perfect collaborative fit.' },
+    { number: '04', title: 'Omni-Channel Success', description: 'Communicate securely and track impact through your centralized collaboration dashboard.' },
 ];
 
 /**

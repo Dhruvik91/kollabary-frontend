@@ -2,6 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { auctionService } from '@/services/auction.service';
 import { CreateAuctionDto, CreateBidDto } from '@/types/auction.types';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
+import { useSocket } from '@/contexts/socket-context';
 
 export const auctionKeys = {
   all: ['auctions'] as const,
@@ -14,6 +16,29 @@ export const auctionKeys = {
 };
 
 export const useAuctions = (filters?: any) => {
+  const queryClient = useQueryClient();
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleAuctionCreated = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+    };
+
+    const handleAuctionDeleted = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+    };
+
+    socket.on('auction_created', handleAuctionCreated);
+    socket.on('auction_deleted', handleAuctionDeleted);
+
+    return () => {
+      socket.off('auction_created', handleAuctionCreated);
+      socket.off('auction_deleted', handleAuctionDeleted);
+    };
+  }, [socket, queryClient]);
+
   return useQuery({
     queryKey: auctionKeys.list(filters),
     queryFn: () => auctionService.getAuctions(filters),
@@ -21,6 +46,29 @@ export const useAuctions = (filters?: any) => {
 };
 
 export const useInfiniteAuctions = (filters?: any) => {
+  const queryClient = useQueryClient();
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleAuctionCreated = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+    };
+
+    const handleAuctionDeleted = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+    };
+
+    socket.on('auction_created', handleAuctionCreated);
+    socket.on('auction_deleted', handleAuctionDeleted);
+
+    return () => {
+      socket.off('auction_created', handleAuctionCreated);
+      socket.off('auction_deleted', handleAuctionDeleted);
+    };
+  }, [socket, queryClient]);
+
   return useInfiniteQuery({
     queryKey: [...auctionKeys.list(filters), 'infinite'],
     queryFn: ({ pageParam = 1 }) => 
@@ -43,6 +91,27 @@ export const useMyAuctions = () => {
 };
 
 export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
+
+    useEffect(() => {
+      if (!socket || !options?.enabled) return;
+
+      const handleAuctionEvents = () => {
+        queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
+      };
+
+      socket.on('auction_created', handleAuctionEvents);
+      socket.on('auction_updated', handleAuctionEvents);
+      socket.on('auction_deleted', handleAuctionEvents);
+
+      return () => {
+        socket.off('auction_created', handleAuctionEvents);
+        socket.off('auction_updated', handleAuctionEvents);
+        socket.off('auction_deleted', handleAuctionEvents);
+      };
+    }, [socket, queryClient, options?.enabled]);
+
     return useInfiniteQuery({
       queryKey: [...auctionKeys.myAuctions(), 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
@@ -66,6 +135,27 @@ export const useMyBids = () => {
 };
 
 export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
+    const queryClient = useQueryClient();
+    const { socket } = useSocket();
+
+    useEffect(() => {
+      if (!socket || !options?.enabled) return;
+
+      const handleBidEvents = () => {
+        queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
+      };
+
+      socket.on('new_bid', handleBidEvents);
+      socket.on('bid_accepted', handleBidEvents);
+      socket.on('bid_rejected', handleBidEvents);
+
+      return () => {
+        socket.off('new_bid', handleBidEvents);
+        socket.off('bid_accepted', handleBidEvents);
+        socket.off('bid_rejected', handleBidEvents);
+      };
+    }, [socket, queryClient, options?.enabled]);
+
     return useInfiniteQuery({
       queryKey: [...auctionKeys.myBids(), 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
@@ -82,6 +172,53 @@ export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
 };
 
 export const useAuctionDetail = (id: string) => {
+  const queryClient = useQueryClient();
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (!socket || !id) return;
+
+    // Join the auction room
+    socket.emit('join_auction', id);
+
+    const handleNewBid = (newBid: any) => {
+      // Update auction detail with new bid
+      queryClient.setQueryData(auctionKeys.detail(id), (oldData: any) => {
+        if (!oldData) return oldData;
+        const updatedBids = [newBid, ...(oldData.bids || [])];
+        return { ...oldData, bids: updatedBids };
+      });
+      toast.info(`New bid placed: $${newBid.amount}`);
+    };
+
+    const handleAuctionUpdated = (updatedAuction: any) => {
+      queryClient.setQueryData(auctionKeys.detail(id), updatedAuction);
+    };
+
+    const handleAuctionDeleted = () => {
+      toast.error('This auction has been deleted');
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+    };
+
+    const handleBidAccepted = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(id) });
+      toast.success('A bid has been accepted!');
+    };
+
+    socket.on('new_bid', handleNewBid);
+    socket.on('auction_updated', handleAuctionUpdated);
+    socket.on('auction_deleted', handleAuctionDeleted);
+    socket.on('bid_accepted', handleBidAccepted);
+
+    return () => {
+      socket.emit('leave_auction', id);
+      socket.off('new_bid', handleNewBid);
+      socket.off('auction_updated', handleAuctionUpdated);
+      socket.off('auction_deleted', handleAuctionDeleted);
+      socket.off('bid_accepted', handleBidAccepted);
+    };
+  }, [socket, id, queryClient]);
+
   return useQuery({
     queryKey: auctionKeys.detail(id),
     queryFn: () => auctionService.getAuctionDetail(id),

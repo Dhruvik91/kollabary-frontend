@@ -1,104 +1,135 @@
-import { API_CONFIG } from '@/constants';
 import httpService from '@/lib/http-service';
-import { AdminStats, VerificationRequest, UpdateReportStatusDto } from '@/types/admin.types';
+import { API_CONFIG } from '@/constants';
+import { Auction, Bid } from '@/types/auction.types';
+import { Conversation, Message } from '@/types/messaging.types';
 import { Report } from '@/types/report.types';
 
 export const adminService = {
     /**
-     * Fetch global platform statistics
+     * Get platform statistics
      */
-    getStats: async (): Promise<AdminStats> => {
-        const response = await httpService.get<AdminStats>(API_CONFIG.path.admin.stats);
+    getStats: async (): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.stats);
         return response.data;
     },
 
     /**
-     * Fetch all user reports with optional filters
+     * List all auctions
      */
-    getReports: async (filters?: { search?: string; status?: string }): Promise<Report[]> => {
-        const response = await httpService.get<Report[]>(API_CONFIG.path.admin.reports, {
-            params: filters
-        });
+    getAllAuctions: async (params?: { search?: string; status?: string }): Promise<Auction[]> => {
+        const response = await httpService.get<Auction[]>(API_CONFIG.path.admin.auctions, { params });
         return response.data;
     },
 
     /**
-     * Update a report's status
+     * List all bids
      */
-    updateReportStatus: async (reportId: string, data: UpdateReportStatusDto): Promise<Report> => {
+    getAllBids: async (params?: { search?: string }): Promise<Bid[]> => {
+        const response = await httpService.get<Bid[]>(API_CONFIG.path.admin.bids, { params });
+        return response.data;
+    },
+
+    /**
+     * List all conversations
+     */
+    getAllConversations: async (): Promise<Conversation[]> => {
+        const response = await httpService.get<Conversation[]>(API_CONFIG.path.admin.conversations);
+        return response.data;
+    },
+
+    /**
+     * Get conversation messages
+     */
+    getConversationMessages: async (id: string): Promise<Message[]> => {
+        const response = await httpService.get<Message[]>(API_CONFIG.path.admin.conversationMessages(id));
+        return response.data;
+    },
+
+    /**
+     * List all reports
+     */
+    getReports: async (params?: { search?: string; status?: string }): Promise<Report[]> => {
+        const response = await httpService.get<Report[]>(API_CONFIG.path.admin.reports, { params });
+        return response.data;
+    },
+
+    /**
+     * Update report status
+     */
+    updateReportStatus: async (reportId: string, data: { status: string }): Promise<Report> => {
         const response = await httpService.patch<Report>(API_CONFIG.path.admin.reportUpdate(reportId), data);
         return response.data;
     },
 
     /**
-     * Fetch all verification requests
+     * List all verification requests
      */
-    getVerifications: async (): Promise<VerificationRequest[]> => {
+    getVerifications: async (): Promise<any[]> => {
         const response = await httpService.get<any[]>(API_CONFIG.path.admin.verifications);
-
-        // Transform backend data to frontend type
-        return (response.data || []).map(req => ({
-            id: req.id,
-            user: req.influencerProfile?.user,
-            status: req.status,
-            documents: req.documents ? Object.values(req.documents).filter(Boolean) as string[] : [],
-            submittedAt: req.createdAt,
-            notes: req.documents?.notes || req.notes
-        }));
+        return response.data;
     },
 
     /**
-     * Process a verification request
+     * Update verification status
      */
-    processVerification: async (id: string, status: 'APPROVED' | 'REJECTED', notes?: string): Promise<VerificationRequest> => {
-        const response = await httpService.patch<VerificationRequest>(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
+    processVerification: async (id: string, status: string, notes?: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
         return response.data;
     },
 
     /**
-     * Manage subscription tiers
-     */
-    createSubscriptionPlan: async (data: any): Promise<any> => {
-        const response = await httpService.post<any>(API_CONFIG.path.admin.subscription, data);
-        return response.data;
-    },
-
-    deleteSubscriptionPlan: async (id: string): Promise<any> => {
-        const response = await httpService.delete<any>(`${API_CONFIG.path.admin.subscription}/${id}`);
-        return response.data;
-    },
-
-    /**
-     * Ranking & Scoring Control
+     * Get ranking weights
      */
     getRankingWeights: async (): Promise<any> => {
-        const response = await httpService.get<any>(API_CONFIG.path.ranking.weights);
-        return response.data;
-    },
-
-    updateRankingWeights: async (data: any): Promise<any> => {
-        const response = await httpService.patch<any>(API_CONFIG.path.ranking.weights, data);
-        return response.data;
-    },
-
-    recalculateAllScores: async (): Promise<any> => {
-        const response = await httpService.post<any>('/ranking/recalculate-all');
+        const response = await httpService.get(API_CONFIG.path.ranking.weights);
         return response.data;
     },
 
     /**
-     * Recalculate ranking for a specific influencer
+     * Update ranking weights
+     */
+    updateRankingWeights: async (data: any): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.ranking.weights, data);
+        return response.data;
+    },
+
+    /**
+     * Recalculate all scores
+     */
+    recalculateAllScores: async (): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.ranking.recalculateAll);
+        return response.data;
+    },
+
+    /**
+     * Recalculate single influencer score
      */
     recalculateInfluencerScore: async (influencerId: string): Promise<any> => {
-        const response = await httpService.post<any>(`/ranking/recalculate/${influencerId}`);
+        const response = await httpService.post(API_CONFIG.path.ranking.recalculate(influencerId));
         return response.data;
     },
 
     /**
-     * Admin: Create an influencer account
+     * Create influencer account
      */
     createInfluencer: async (data: any): Promise<any> => {
-        const response = await httpService.post<any>(API_CONFIG.path.auth.createInfluencer, data);
+        const response = await httpService.post(API_CONFIG.path.auth.createInfluencer, data);
         return response.data;
     },
+
+    /**
+     * Create subscription plan
+     */
+    createSubscriptionPlan: async (data: any): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.admin.subscription, data);
+        return response.data;
+    },
+
+    /**
+     * Delete subscription plan
+     */
+    deleteSubscriptionPlan: async (id: string): Promise<any> => {
+        const response = await httpService.delete(`${API_CONFIG.path.admin.subscription}/${id}`);
+        return response.data;
+    }
 };

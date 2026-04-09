@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
+import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 
@@ -16,9 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kollabary - Enterprise Influencer Collaboration Platform",
+  title: {
+    template: "%s | Kollabary",
+    default: "Kollabary - Enterprise Influencer Collaboration Platform",
+  },
   description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
   manifest: "/manifest.json",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -32,11 +37,13 @@ export const metadata: Metadata = {
     siteName: "Kollabary",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    images: ["/twitter-image.png"],
   },
 };
 
@@ -46,17 +53,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
           <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
-              <Toaster position="top-right" richColors closeButton />
-              <PWAInstaller />
-            </ThemeProvider>
+            <SocketProvider>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                {children}
+                <Toaster position="top-right" richColors closeButton />
+                <PWAInstaller />
+              </ThemeProvider>
+            </SocketProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

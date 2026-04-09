@@ -2,7 +2,7 @@ import { InfluencerSettingsContainer } from '@/features/influencer/containers/In
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Settings | Kollabary',
+    title: 'Settings',
     description: 'Manage your availability, security, collaboration types, and account verification.',
 };
 
