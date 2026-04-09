@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { rankingService } from '@/services/ranking.service';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 export const rankingKeys = {
     all: ['ranking'] as const,
@@ -23,9 +25,11 @@ export function useRankingBreakdown(influencerId: string, enabled = true) {
  * Hook for getting current ranking weights (Admin)
  */
 export function useRankingWeights() {
+    const { user } = useAuth();
     return useQuery({
         queryKey: rankingKeys.weights(),
         queryFn: () => rankingService.getWeights(),
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 

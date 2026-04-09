@@ -9,10 +9,14 @@ import { motion } from 'framer-motion';
 import { Sparkles, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { BackButton } from '@/components/shared/BackButton';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 export const InfluencerEditContainer = () => {
     const router = useRouter();
-    const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile();
+    const { user } = useAuth();
+    const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile(isInfluencer);
     const { mutate: updateProfile, isPending: isUpdating } = useUpdateInfluencerProfile();
 
     const initialData = useMemo(() => {

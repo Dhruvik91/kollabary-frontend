@@ -42,7 +42,7 @@ export const AuctionListContainer = () => {
         fetchNextPage: fetchNextBids,
         hasNextPage: hasNextBids,
         isFetchingNextPage: isFetchingNextBids
-    } = useInfiniteMyBids({ enabled: isInfluencer });
+    } = useInfiniteMyBids(filters, { enabled: isInfluencer });
 
     const { 
         data: myAuctionsData, 
@@ -50,7 +50,7 @@ export const AuctionListContainer = () => {
         fetchNextPage: fetchNextMyAuctions,
         hasNextPage: hasNextMyAuctions,
         isFetchingNextPage: isFetchingNextMyAuctions
-    } = useInfiniteMyAuctions({ enabled: isBrand });
+    } = useInfiniteMyAuctions(filters, { enabled: isBrand });
 
 
 
@@ -67,28 +67,13 @@ export const AuctionListContainer = () => {
         myAuctionsData?.pages.flatMap(page => page.items) || [], 
     [myAuctionsData]);
 
-    // Map bids to their auctions for display
+    // Bid auctions mapping
     const bidAuctions = useMemo(() => 
         myBids.map(bid => ({
             ...bid.auction,
             myBidStatus: bid.status
         })),
     [myBids]);
-
-    // Local filtering for bids and my history (as search might not be backend-integrated for these specific "my" endpoints yet)
-    const filteredMyBids = useMemo(() => 
-        bidAuctions.filter(auction =>
-            auction.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-            auction.description.toLowerCase().includes(debouncedSearch.toLowerCase())
-        ),
-    [bidAuctions, debouncedSearch]);
-
-    const filteredMyAuctions = useMemo(() => 
-        myAuctions.filter(auction =>
-            auction.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-            auction.description.toLowerCase().includes(debouncedSearch.toLowerCase())
-        ),
-    [myAuctions, debouncedSearch]);
 
     const handleCreateClick = () => {
         router.push(FRONTEND_ROUTES.DASHBOARD.AUCTION_CREATE);
@@ -157,7 +142,7 @@ export const AuctionListContainer = () => {
 
                     <TabsContent value="my-bids" className="mt-0 outline-none">
                         <AuctionList
-                            auctions={filteredMyBids as any}
+                            auctions={bidAuctions as any}
                             isLoading={isLoadingMyBids}
                             hasNextPage={hasNextBids}
                             isFetchingNextPage={isFetchingNextBids}
@@ -168,7 +153,7 @@ export const AuctionListContainer = () => {
 
                     <TabsContent value="my-auctions" className="mt-0 outline-none">
                         <AuctionList
-                            auctions={filteredMyAuctions}
+                            auctions={myAuctions}
                             isLoading={isLoadingMyAuctions}
                             hasNextPage={hasNextMyAuctions}
                             isFetchingNextPage={isFetchingNextMyAuctions}

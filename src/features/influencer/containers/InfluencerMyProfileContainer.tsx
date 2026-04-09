@@ -10,14 +10,20 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
 
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
+
 /**
  * InfluencerMyProfileContainer
  * Smart container for the logged-in influencer's own profile view.
  */
 export const InfluencerMyProfileContainer = () => {
     const router = useRouter();
-    const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile();
-    const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user?.id || '');
+    const { user } = useAuth();
+    const isInfluencer = user?.role === UserRole.INFLUENCER;
+
+    const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile(isInfluencer);
+    const { data: ranking, isLoading: isRankingLoading } = useRankingBreakdown(influencer?.user?.id || '', isInfluencer);
 
     // Handle redirection to setup if profile doesn't exist (e.g., 404 from myProfile)
     useEffect(() => {

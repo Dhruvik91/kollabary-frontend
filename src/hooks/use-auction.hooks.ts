@@ -90,7 +90,7 @@ export const useMyAuctions = () => {
   });
 };
 
-export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
+export const useInfiniteMyAuctions = (filters?: any, options?: { enabled?: boolean }) => {
     const queryClient = useQueryClient();
     const { socket } = useSocket();
 
@@ -113,9 +113,9 @@ export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
     }, [socket, queryClient, options?.enabled]);
 
     return useInfiniteQuery({
-      queryKey: [...auctionKeys.myAuctions(), 'infinite'],
+      queryKey: [...auctionKeys.myAuctions(), filters, 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyAuctions({ page: pageParam }),
+        auctionService.getMyAuctions({ ...filters, page: pageParam }),
       getNextPageParam: (lastPage) => {
         if (lastPage.meta.page < lastPage.meta.totalPages) {
           return lastPage.meta.page + 1;
@@ -134,7 +134,7 @@ export const useMyBids = () => {
   });
 };
 
-export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
+export const useInfiniteMyBids = (filters?: any, options?: { enabled?: boolean }) => {
     const queryClient = useQueryClient();
     const { socket } = useSocket();
 
@@ -157,9 +157,9 @@ export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
     }, [socket, queryClient, options?.enabled]);
 
     return useInfiniteQuery({
-      queryKey: [...auctionKeys.myBids(), 'infinite'],
+      queryKey: [...auctionKeys.myBids(), filters, 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyBids({ page: pageParam }),
+        auctionService.getMyBids({ ...filters, page: pageParam }),
       getNextPageParam: (lastPage) => {
         if (lastPage.meta.page < lastPage.meta.totalPages) {
           return lastPage.meta.page + 1;

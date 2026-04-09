@@ -9,6 +9,8 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 /**
  * InfluencerSettingsContainer
@@ -16,8 +18,11 @@ import { FRONTEND_ROUTES } from '@/constants';
  */
 export const InfluencerSettingsContainer = () => {
     const router = useRouter();
-    const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile();
-    const { data: verificationRequests } = useMyVerificationStatus();
+    const { user } = useAuth();
+    const isInfluencer = user?.role === UserRole.INFLUENCER;
+
+    const { data: influencer, isLoading: isInfluencerLoading, isError, error } = useMyInfluencerProfile(isInfluencer);
+    const { data: verificationRequests } = useMyVerificationStatus(isInfluencer);
 
     useEffect(() => {
         if (isError && (error as any)?.statusCode === 404) {
