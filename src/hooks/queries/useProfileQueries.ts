@@ -6,6 +6,7 @@ export const profileKeys = {
     all: ['profile'] as const,
     me: () => [...profileKeys.all, 'me'] as const,
     brand: (id: string) => [...profileKeys.all, 'brand', id] as const,
+    search: (params: Record<string, any>) => [...profileKeys.all, 'search', params] as const,
 };
 
 /**
@@ -93,5 +94,16 @@ export function useBrandProfile(id: string, enabled: boolean = true) {
         queryFn: () => profileService.getBrandProfile(id),
         enabled: !!id && enabled,
         staleTime: 5 * 60 * 1000,
+    });
+}
+
+/**
+ * Hook to search for brands (profiles with role USER)
+ */
+export function useBrandSearch(params: { name?: string, location?: string, page?: number, limit?: number }) {
+    return useQuery({
+        queryKey: profileKeys.search({ ...params, role: 'USER' }),
+        queryFn: () => profileService.searchProfiles({ ...params, role: 'USER' }),
+        staleTime: 2 * 60 * 1000, // 2 minutes
     });
 }

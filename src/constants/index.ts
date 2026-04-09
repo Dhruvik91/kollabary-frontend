@@ -116,6 +116,7 @@ export const FRONTEND_ROUTES = {
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
         INFLUENCERS: '/influencers',
+        BRANDS: '/brands',
         MY_INFLUENCERS: '/my-influencers',
         PROJECTS: '/projects',
         OVERVIEW: '/overview',

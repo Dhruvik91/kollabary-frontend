@@ -70,6 +70,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                             src={displayAvatar}
                                             alt={fullName || profile?.fullName || 'Influencer'}
                                             fill
+                                            sizes="80px"
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                     ) : (

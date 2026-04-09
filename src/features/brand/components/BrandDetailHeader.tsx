@@ -71,6 +71,7 @@ export const BrandDetailHeader = ({
                                     src={brand.avatarUrl}
                                     alt={brand.fullName}
                                     fill
+                                    sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"
                                     className="object-cover"
                                 />
                             ) : (

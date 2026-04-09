@@ -15,6 +15,7 @@ import {
     Search,
     MessageSquare,
     FolderOpen,
+    Rocket,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MetricCard } from '../components/MetricCard';
@@ -106,7 +107,14 @@ export const DashboardOverviewContainer = () => {
                     : "Discover creators, manage collaborations, and grow your brand."}
                 icon={Trophy}
                 action={
-                    !isInfluencer && (
+                    isInfluencer ? (
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.BRANDS}>
+                            <Button className="h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
+                                <span className="uppercase tracking-widest text-xs">Explore Brands</span>
+                                <Rocket size={20} className="stroke-[3]" />
+                            </Button>
+                        </Link>
+                    ) : (
                         <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
                             <Button className="h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
                                 <span className="uppercase tracking-widest text-xs">Explore Creators</span>

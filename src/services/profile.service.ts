@@ -37,9 +37,22 @@ export interface SaveProfileDto {
 }
 
 export interface SearchProfilesParams {
-    query?: string;
+    name?: string;
+    username?: string;
+    location?: string;
+    role?: string;
     page?: number;
     limit?: number;
+}
+
+export interface SearchProfilesResponse {
+    items: UserProfile[];
+    meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
 }
 
 export const profileService = {
@@ -81,8 +94,8 @@ export const profileService = {
     /**
      * Search profiles
      */
-    searchProfiles: async (params: SearchProfilesParams): Promise<UserProfile[]> => {
-        const response = await httpService.get<UserProfile[]>(API_CONFIG.path.profile.search, { params });
+    searchProfiles: async (params: SearchProfilesParams): Promise<SearchProfilesResponse> => {
+        const response = await httpService.get<SearchProfilesResponse>(API_CONFIG.path.profile.search, { params });
         return response.data;
     },
 
