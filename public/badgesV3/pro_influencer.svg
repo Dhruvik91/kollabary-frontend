@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-pro" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E91E8C" />
+      <stop offset="100%" stop-color="#6B1B6F" />
+    </linearGradient>
+  </defs>
+  <rect x="30" y="30" width="140" height="140" rx="20" fill="url(#grad-pro)" opacity="0.9" />
+  <rect x="45" y="45" width="110" height="110" rx="15" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.3" />
+  <path d="M70 70L100 130L130 70" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

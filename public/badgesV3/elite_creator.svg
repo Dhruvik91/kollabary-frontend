@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-elite" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E91E8C" />
+      <stop offset="100%" stop-color="#6B1B6F" />
+    </linearGradient>
+  </defs>
+  <path d="M100 20L125 75L180 75L135 110L155 165L100 135L45 165L65 110L20 75L75 75L100 20Z" fill="url(#grad-elite)" opacity="0.9" />
+  <path d="M100 45L115 85L155 85L125 110L140 145L100 125L60 145L75 110L45 85L85 85L100 45Z" fill="white" fill-opacity="0.2" stroke="white" stroke-opacity="0.3" />
+  <circle cx="100" cy="100" r="15" fill="white" />
+</svg>
