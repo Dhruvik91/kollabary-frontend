@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Filter, Search, Handshake } from 'lucide-react';
 import { BrandFilters } from '../components/BrandFilters';
 import { BrandList } from '../components/BrandList';
-import { useBrandSearch } from '@/hooks/queries/useProfileQueries';
+import { useInfiniteBrandSearch } from '@/hooks/queries/useProfileQueries';
 import { useDebounce } from 'use-debounce';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { useAuth } from '@/contexts/auth-context';
@@ -27,11 +27,18 @@ export const BrandDiscoverContainer = () => {
     });
 
     const [debouncedFilters] = useDebounce(filters, 500);
-    const { data: searchResults, isLoading, isError, refetch } = useBrandSearch({
+    const { 
+        data: searchResults, 
+        isLoading, 
+        isError, 
+        refetch,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
+    } = useInfiniteBrandSearch({
         name: debouncedFilters.query,
         location: debouncedFilters.location,
-        page: 1,
-        limit: 20, // Initial limit for discovery
+        limit: 12,
     });
 
     // Permission check: Only INFLUENCERS and ADMIN can discover brands
@@ -45,8 +52,8 @@ export const BrandDiscoverContainer = () => {
         setFilters({ query: '', location: '' });
     };
 
-    const brands = searchResults?.items || [];
-    const totalCount = searchResults?.meta?.total || 0;
+    const brands = searchResults?.pages.flatMap((page) => page.items) || [];
+    const totalCount = searchResults?.pages[0]?.meta?.total || 0;
 
     if (!isAuthorized) {
         return <DiscoverUnauthorizedState />;
@@ -165,6 +172,9 @@ export const BrandDiscoverContainer = () => {
                         <BrandList
                             brands={brands}
                             isLoading={isLoading}
+                            hasNextPage={hasNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            fetchNextPage={fetchNextPage}
                         />
                     )}
                 </div>

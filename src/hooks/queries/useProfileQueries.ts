@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { profileService } from '@/services/profile.service';
 import { toast } from 'sonner';
 
@@ -105,5 +105,22 @@ export function useBrandSearch(params: { name?: string, location?: string, page?
         queryKey: profileKeys.search({ ...params, role: 'USER' }),
         queryFn: () => profileService.searchProfiles({ ...params, role: 'USER' }),
         staleTime: 2 * 60 * 1000, // 2 minutes
+    });
+}
+
+/**
+ * Hook to search for brands with infinite scrolling support
+ */
+export function useInfiniteBrandSearch(params: { name?: string, location?: string, limit?: number }) {
+    return useInfiniteQuery({
+        queryKey: profileKeys.search({ ...params, role: 'USER', type: 'infinite' }),
+        queryFn: ({ pageParam = 1 }) => 
+            profileService.searchProfiles({ ...params, role: 'USER', page: pageParam, limit: params.limit || 12 }),
+        getNextPageParam: (lastPage) => {
+            const { page, totalPages } = lastPage.meta;
+            return page < totalPages ? page + 1 : undefined;
+        },
+        initialPageParam: 1,
+        staleTime: 2 * 60 * 1000,
     });
 }
