@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { FRONTEND_ROUTES } from './constants';
+import { FRONTEND_ROUTES, AUTH_STORAGE_KEYS } from './constants';
 
 /**
  * Middleware for handling role-based redirection and route protection.
@@ -8,12 +8,9 @@ import { FRONTEND_ROUTES } from './constants';
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Get the access token and user role from cookies
-    const accessToken = request.cookies.get('access_token')?.value;
-    const userRole = request.cookies.get('user_role')?.value;
-    // Authenticated only if we have both. This allows us to clear user_role client-side
-    // to break infinite loops when the token is actually invalid.
-    const isAuthenticated = !!accessToken && !!userRole;
+    // Get the user role from cookies (JWT is stored client-side and sent via Authorization header)
+    const userRole = request.cookies.get(AUTH_STORAGE_KEYS.USER_ROLE)?.value;
+    const isAuthenticated = !!userRole;
 
     const ADMIN_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW;
     const USER_DASHBOARD = FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
@@ -39,14 +36,6 @@ export function middleware(request: NextRequest) {
 
     // Check if the current route is an auth route
     const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
-
-    // STALE SESSION PROTECTION:
-    // If we are at an auth route (like login) and have an access token but NO user role,
-    // it means the user was likely kicked back here by a 401 error.
-    // We MUST let them stay here so they can re-authenticate.
-    if (isAuthRoute && accessToken && !userRole) {
-        return NextResponse.next();
-    }
 
     // Redirect authenticated users trying to access auth routes to their respective dashboard
     if (isAuthenticated && isAuthRoute) {

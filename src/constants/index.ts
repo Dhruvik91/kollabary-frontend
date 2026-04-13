@@ -171,3 +171,8 @@ export const FRONTEND_ROUTES = {
         BRAND_PREFIX: '/b/',
     },
 }
+
+export const AUTH_STORAGE_KEYS = {
+    ACCESS_TOKEN: 'access_token',
+    USER_ROLE: 'user_role',
+} as const;

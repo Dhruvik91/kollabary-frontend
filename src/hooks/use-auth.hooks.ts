@@ -13,6 +13,7 @@ import {
     AuthResponse,
     MessageResponse,
 } from '@/types/auth.types';
+import { AUTH_STORAGE_KEYS } from '@/constants';
 import axios from 'axios';
 import { FRONTEND_ROUTES } from '@/constants';
 
@@ -80,7 +81,16 @@ export function useLogin() {
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
 
             // Set role cookie for middleware (accessible by JS)
-            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+            document.cookie = `${AUTH_STORAGE_KEYS.USER_ROLE}=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
+            // Persist JWT for header-based auth
+            if (typeof window !== 'undefined') {
+                try {
+                    window.localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, data.access_token);
+                } catch {
+                    // Ignore storage errors
+                }
+            }
 
             toast.success('Login successful!', {
                 description: `Welcome back, ${data.user.email}`,
@@ -125,7 +135,16 @@ export function useLogout() {
             queryClient.clear();
 
             // Clear role cookie
-            document.cookie = 'user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax';
+            document.cookie = `${AUTH_STORAGE_KEYS.USER_ROLE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax`;
+
+            // Clear stored JWT
+            if (typeof window !== 'undefined') {
+                try {
+                    window.localStorage.removeItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN);
+                } catch {
+                    // Ignore storage errors
+                }
+            }
 
             toast.success('Logged out successfully');
 
@@ -212,7 +231,16 @@ export function useVerifyEmail() {
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
 
             // Set role cookie for middleware
-            document.cookie = `user_role=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+            document.cookie = `${AUTH_STORAGE_KEYS.USER_ROLE}=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
+            // Persist JWT for header-based auth
+            if (typeof window !== 'undefined') {
+                try {
+                    window.localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, data.access_token);
+                } catch {
+                    // Ignore storage errors
+                }
+            }
 
             toast.success('Email verified successfully!', {
                 description: 'Welcome to Kollabary',
