@@ -51,6 +51,7 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import { BackButton } from '@/components/shared/BackButton';
+import { ShareButton } from '@/components/shared/ShareButton';
 
 
 interface InfluencerProfileDetailProps {
@@ -235,6 +236,14 @@ export const InfluencerProfileDetail = ({
                                                     <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
                                                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
                                                 </div>
+
+                                                <ShareButton 
+                                                    type="influencer" 
+                                                    id={influencer.id} 
+                                                    variant="ghost" 
+                                                    size="icon-xs" 
+                                                    className="hover:bg-primary/10 hover:text-primary"
+                                                />
                                             </div>
                                         </div>
 

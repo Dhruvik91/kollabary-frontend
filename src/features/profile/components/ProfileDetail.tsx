@@ -21,6 +21,7 @@ import { UserProfile } from '@/services/profile.service';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FRONTEND_ROUTES } from '@/constants';
+import { ShareButton } from '@/components/shared/ShareButton';
 import { PasswordUpdateForm } from './PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 
@@ -87,13 +88,20 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                     </div>
 
                     {isOwner && (
-                        <div className="md:pb-4">
+                        <div className="md:pb-4 flex items-center gap-3">
                             <Link href="/profile/edit">
                                 <Button className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all gap-2">
                                     <PencilLine size={18} />
                                     Edit Profile
                                 </Button>
                             </Link>
+                            <ShareButton 
+                                type="brand" 
+                                id={profile.id} 
+                                variant="outline" 
+                                size="default"
+                                className="h-12 w-12 rounded-xl border-2"
+                            />
                         </div>
                     )}
                 </div>

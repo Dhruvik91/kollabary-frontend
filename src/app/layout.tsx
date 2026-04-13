@@ -58,15 +58,15 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
-          <AuthProvider>
-            <SocketProvider>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <AuthProvider>
+              <SocketProvider>
                 {children}
                 <Toaster position="top-right" richColors closeButton />
                 <PWAInstaller />
-              </ThemeProvider>
-            </SocketProvider>
-          </AuthProvider>
+              </SocketProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

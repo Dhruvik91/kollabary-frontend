@@ -11,6 +11,14 @@ export const PWAInstaller = () => {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
+    // Check if we're on localhost
+    const isLocalhost = Boolean(process.env.NEXT_PUBLIC_MODE === "dev");
+
+    if (isLocalhost) {
+      console.log('PWA features are disabled on localhost.');
+      return;
+    }
+
     // Register service worker
     registerServiceWorker();
     listenForSWUpdates();
@@ -34,11 +42,11 @@ export const PWAInstaller = () => {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
     }
-    
+
     setDeferredPrompt(null);
     setShowInstallPrompt(false);
   };

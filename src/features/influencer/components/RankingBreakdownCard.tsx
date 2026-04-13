@@ -145,7 +145,7 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
                                 <div className="flex items-center justify-center text-yellow-500 mb-1">
                                     <Star size={12} className="fill-yellow-500" />
                                 </div>
-                                <p className="text-lg font-black tabular-nums">{stats.avgRating}</p>
+                                <p className="text-lg font-black tabular-nums">{Number(stats.avgRating || 0).toFixed(1)}</p>
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase">Rating</p>
                             </div>
                             <div className="bg-zinc-100 dark:bg-white/[0.06] p-3 rounded-xl border border-border/30 dark:border-white/[0.08] text-center">

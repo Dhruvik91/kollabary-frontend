@@ -119,7 +119,12 @@ class HttpService {
               FRONTEND_ROUTES.AUTH.CALLBACK,
             ];
 
-            if (!publicRoutes.includes(currentPath)) {
+            const isPublicRoute = 
+              publicRoutes.includes(currentPath) || 
+              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER_PREFIX) || 
+              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.BRAND_PREFIX);
+
+            if (!isPublicRoute) {
               // Clear user_role cookie to signal unauthenticated status to middleware
               document.cookie = "user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax";
               window.location.href = FRONTEND_ROUTES.AUTH.LOGIN;
