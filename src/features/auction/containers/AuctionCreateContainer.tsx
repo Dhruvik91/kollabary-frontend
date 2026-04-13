@@ -24,7 +24,7 @@ export const AuctionCreateContainer = () => {
     };
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             <div className="flex items-center justify-between">
                 <BackButton label="Back to Auctions" className="p-0" />
             </div>

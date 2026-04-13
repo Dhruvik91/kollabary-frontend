@@ -166,7 +166,7 @@ export const InfluencerProfileDetail = ({
     };
 
     return (
-        <div className="space-y-6 sm:space-y-10 pb-24 px-4 sm:px-6 md:px-0 max-w-[1600px] mx-auto">
+        <div className="space-y-6 sm:space-y-10 pb-24 md:px-0 max-w-[1600px] mx-auto">
             {/* Back Button */}
             {!isOwner && (
                 <BackButton label="Back to Discovery" className="p-0 hover:text-primary transition-colors" />

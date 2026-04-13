@@ -179,7 +179,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0"
+            className="space-y-6 sm:space-y-8 pb-20 md:px-0"
         >
             {/* Header with Navigation & Actions */}
             <CollaborationHeader

@@ -71,7 +71,7 @@ export const InfluencerDiscoverContainer = () => {
     }
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             {/* Header Section */}
             <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 sm:gap-6">
                 <div className="space-y-3 sm:space-y-4">

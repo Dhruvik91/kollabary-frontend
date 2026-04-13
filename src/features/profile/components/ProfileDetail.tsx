@@ -10,8 +10,11 @@ import {
     AlignLeft,
     ExternalLink,
     PencilLine,
-    Lock
+    Lock,
+    LogOut,
 } from 'lucide-react';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import { useLogout } from '@/hooks/use-auth.hooks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { UserProfile } from '@/services/profile.service';
@@ -30,9 +33,11 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
     const { fullName, username, bio, location, socialLinks, profileImage, avatarUrl } = profile;
     const displayImage = avatarUrl || profileImage;
     const changePasswordMutation = useChangePasswordMutation();
+    const logoutMutation = useLogout();
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             {/* Header / Hero Section */}
             <div className="relative">
                 {/* Banner - Premium Gradient */}
@@ -174,6 +179,67 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                     </Card>
                 </div>
             )}
+
+            {/* Logout (Mobile Only) */}
+            {isOwner && (
+                <div className="lg:hidden">
+                    <Card className="rounded-[2.5rem] border-red-500/20 bg-red-500/5 dark:bg-red-500/10 p-8 md:p-10 border-none shadow-none ring-1 ring-red-500/20">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-3 text-red-500">
+                                    <div className="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center">
+                                        <LogOut size={20} />
+                                    </div>
+                                    <h3 className="text-xl font-black tracking-tight">Account Session</h3>
+                                </div>
+                                <p className="text-muted-foreground font-medium">
+                                    Log out of your account on this device.
+                                </p>
+                            </div>
+                            <Button
+                                variant="destructive"
+                                onClick={() => setIsLogoutModalOpen(true)}
+                                className="h-12 px-8 rounded-xl bg-red-500 text-white font-bold shadow-xl shadow-red-500/20 hover:scale-105 active:scale-95 transition-all gap-2"
+                            >
+                                <LogOut size={18} />
+                                Log Out
+                            </Button>
+                        </div>
+                    </Card>
+                </div>
+            )}
+
+            {/* Logout Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                title="End Session?"
+                description="Are you sure you want to log out? You'll need to sign in again to access your dashboard."
+                size="sm"
+            >
+                <div className="flex flex-col gap-3">
+                    <Button
+                        variant="destructive"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12 shadow-lg shadow-red-500/20"
+                        onClick={() => {
+                            logoutMutation.mutate();
+                            setIsLogoutModalOpen(false);
+                        }}
+                        disabled={logoutMutation.isPending}
+                    >
+                        {logoutMutation.isPending ? "Logging out..." : "Log me out"}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12"
+                        onClick={() => setIsLogoutModalOpen(false)}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </AnimatedModal>
         </div>
     );
 };
