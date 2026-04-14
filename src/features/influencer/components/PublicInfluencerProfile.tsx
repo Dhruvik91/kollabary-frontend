@@ -66,9 +66,8 @@ export const PublicInfluencerProfile = ({
 
             {/* Main Content Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Column: About & Tabs */}
-                <div className="lg:col-span-2 space-y-8">
-                    {/* Bio Card (Dumb component candidate if needed elsewhere, but fine here for now) */}
+                {/* Left Column Part 1: Bio (Always first in content) */}
+                <div className="lg:col-span-2 order-1">
                     <Card className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card p-8 md:p-10">
                         <div className="space-y-6">
                             <div className="flex items-center gap-4 text-primary">
@@ -85,8 +84,22 @@ export const PublicInfluencerProfile = ({
                             </div>
                         </div>
                     </Card>
+                </div>
 
-                    {/* Modular Tabs Section */}
+                {/* Right Column: Sidebar (Rankings/Status) - 2nd on mobile, 3rd on desktop */}
+                <div className="lg:col-span-1 order-2 lg:order-3 lg:row-span-2">
+                    <PublicInfluencerSidebar
+                        influencer={influencer}
+                        ranking={ranking}
+                        minPrice={minPrice ?? 0}
+                        maxPrice={maxPrice ?? 0}
+                        collaborationTypes={collaborationTypes}
+                        availability={availability}
+                    />
+                </div>
+
+                {/* Left Column Part 2: Tabs - 3rd on mobile, 2nd on desktop */}
+                <div className="lg:col-span-2 order-3 lg:order-2">
                     <PublicInfluencerTabs
                         platforms={platforms}
                         activeCollaborations={(influencer as any).activeCollaborations || []}
@@ -99,16 +112,6 @@ export const PublicInfluencerProfile = ({
                         topCountries={influencer.audienceTopCountries}
                     />
                 </div>
-
-                {/* Right Column: Sidebar */}
-                <PublicInfluencerSidebar
-                    influencer={influencer}
-                    ranking={ranking}
-                    minPrice={minPrice ?? 0}
-                    maxPrice={maxPrice ?? 0}
-                    collaborationTypes={collaborationTypes}
-                    availability={availability}
-                />
             </div>
         </div>
     );
