@@ -3,9 +3,9 @@ import type { NextRequest } from 'next/server';
 import { FRONTEND_ROUTES, AUTH_STORAGE_KEYS } from './constants';
 
 /**
- * Middleware for handling role-based redirection and route protection.
+ * Proxy for handling role-based redirection and route protection.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Get the user role from cookies (JWT is stored client-side and sent via Authorization header)
