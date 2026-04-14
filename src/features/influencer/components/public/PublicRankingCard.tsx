@@ -37,8 +37,8 @@ export const PublicRankingCard = ({ score, tier, stats, className }: PublicRanki
     };
 
     // Calculate collaboration count safely
-    const collabCount = Array.isArray(stats.completedCollaborations) 
-        ? stats.completedCollaborations.length 
+    const collabCount = Array.isArray(stats.completedCollaborations)
+        ? stats.completedCollaborations.length
         : Number(stats.completedCollaborations || 0);
 
     return (
@@ -121,7 +121,7 @@ export const PublicRankingCard = ({ score, tier, stats, className }: PublicRanki
                         <p className="text-xl font-black tabular-nums tracking-tight">{collabCount}</p>
                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Collabs</p>
                     </div>
-                    
+
                     <div className="bg-zinc-100 dark:bg-white/[0.06] p-4 rounded-2xl border border-border/30 text-center transition-all hover:bg-amber-500/5">
                         <div className="flex items-center justify-center text-amber-500 mb-2">
                             <Star size={16} className="fill-amber-500" />

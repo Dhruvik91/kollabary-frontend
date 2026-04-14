@@ -115,7 +115,7 @@ export const PublicInfluencerTabs = ({
                 </div>
 
                 {/* Audience Insights */}
-                <AudienceInsights 
+                <AudienceInsights
                     genderRatio={genderRatio}
                     ageBrackets={ageBrackets}
                     topCountries={topCountries}

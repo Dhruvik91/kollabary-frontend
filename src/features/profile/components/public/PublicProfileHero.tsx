@@ -82,10 +82,10 @@ export const PublicProfileHero = ({
                                 Join Kollabary
                             </Button>
                         </Link>
-                        <ShareButton 
-                            type="brand" 
-                            id={profileId} 
-                            variant="outline" 
+                        <ShareButton
+                            type="brand"
+                            id={profileId}
+                            variant="outline"
                             size="lg"
                             className="h-14 w-14 rounded-2xl border-2 hover:bg-primary/5 hover:text-primary transition-all shadow-xl"
                         />

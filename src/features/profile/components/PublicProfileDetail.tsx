@@ -13,12 +13,12 @@ interface PublicProfileDetailProps {
 }
 
 export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
-    const { 
-        fullName = 'Brand', 
-        username = 'brand', 
-        bio, 
-        location, 
-        socialLinks, 
+    const {
+        fullName = 'Brand',
+        username = 'brand',
+        bio,
+        location,
+        socialLinks,
         avatarUrl,
         auctionsDone = [],
         collaborationsDone = []

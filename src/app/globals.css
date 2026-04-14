@@ -126,9 +126,9 @@
   --chart-5: oklch(0.32 0.12 290);
   /* Brand Gradient */
   --brand-gradient-degrees: 90deg;
- --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
-    #E91E8C 0%,
-    #6B1B6F 100%);
+  --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
+      #E91E8C 0%,
+      #6B1B6F 100%);
 
   /* Sidebar */
   --sidebar: oklch(1 0 0);
@@ -174,8 +174,8 @@
   --chart-5: oklch(0.38 0.14 290);
   /* Brand Gradient */
   --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
-    #E91E8C 0%,
-    #6B1B6F 100%);
+      #E91E8C 0%,
+      #6B1B6F 100%);
 
   /* Sidebar */
   --sidebar: oklch(0.17 0.03 310);
@@ -314,8 +314,10 @@
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* ─── Utility Classes ─── */
