@@ -41,7 +41,7 @@ export const BrandDetailHeader = ({
     };
 
     return (
-        <div className="relative group mx-4 sm:mx-6 lg:mx-8">
+        <div className="relative group">
             {/* Premium Animated Banner - Theme Aware */}
             <div className="h-44 sm:h-56 md:h-72 rounded-[2rem] sm:rounded-[3rem] bg-card overflow-hidden relative border border-border/50 shadow-sm">
                 {/* Dynamic Brand Gradient Background */}
@@ -61,7 +61,7 @@ export const BrandDetailHeader = ({
             </div>
 
             {/* Profile Info Overlay */}
-            <div className="px-4 sm:px-6 lg:px-10 -mt-12 sm:-mt-16 md:-mt-24 lg:-mt-28 relative z-10">
+            <div className="px-4 sm:px-8 md:px-0 -mt-20 sm:-mt-24 md:-mt-32 lg:-mt-36 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

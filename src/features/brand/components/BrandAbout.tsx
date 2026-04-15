@@ -1,19 +1,15 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { UserProfile } from '@/services/profile.service';
-import { 
-    Instagram, 
-    Youtube, 
-    Twitter, 
+import {
+    Instagram,
+    Youtube,
+    Twitter,
     Linkedin,
-    Globe, 
+    Globe,
     Search,
-    Info,
     Share2,
-    Calendar,
-    Target,
     Award,
     Sparkles
 } from 'lucide-react';
@@ -52,38 +48,13 @@ export const BrandAbout = ({ brand }: BrandAboutProps) => {
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">Our Story</span>
                         </div>
-                        
+
                         <div className="space-y-4">
                             <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-foreground leading-tight italic">
                                 About {brand.fullName}
                             </h2>
                             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
                                 {brand.bio || `${brand.fullName} is a forward-thinking brand looking to collaborate with creative influencers. They focus on delivering high-quality products and meaningful engagement through authentic partnerships.`}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
-                        <div className="glass-section rounded-2xl p-4 sm:p-5 border border-border/50">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="p-2 rounded-xl bg-secondary/10 text-secondary">
-                                    <Target size={18} />
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Our Mission</span>
-                            </div>
-                            <p className="text-[11px] font-bold text-foreground/80 leading-relaxed uppercase tracking-wider">
-                                Strategic Excellence & Brand Innovation
-                            </p>
-                        </div>
-                        <div className="glass-section rounded-2xl p-4 sm:p-5 border border-border/50">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                                    <Calendar size={18} />
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Partner Since</span>
-                            </div>
-                            <p className="text-[11px] font-bold text-foreground/80 leading-relaxed uppercase tracking-wider">
-                                {new Date(brand.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                             </p>
                         </div>
                     </div>
@@ -102,7 +73,7 @@ export const BrandAbout = ({ brand }: BrandAboutProps) => {
                     <div className="absolute top-0 right-0 p-4 opacity-10">
                         <Award size={64} className="text-primary" />
                     </div>
-                    
+
                     <div className="flex flex-col justify-between gap-6 relative z-10">
                         <div className="space-y-3">
                             <Badge className="bg-primary/20 text-primary hover:bg-primary/30 font-black text-[9px] uppercase tracking-widest px-3 py-1 rounded-lg border-none">
@@ -113,7 +84,7 @@ export const BrandAbout = ({ brand }: BrandAboutProps) => {
                                 Recognized for exceptional collaboration history and verified reliability.
                             </p>
                         </div>
-                        
+
                         <div className="flex items-center gap-2 text-primary pt-2">
                             <Sparkles size={14} />
                             <span className="text-[10px] font-black uppercase tracking-widest italic opacity-80">Tier 1 Partner</span>
@@ -137,11 +108,11 @@ export const BrandAbout = ({ brand }: BrandAboutProps) => {
                     {hasSocialLinks ? (
                         <div className="flex flex-wrap items-center justify-center gap-3">
                             {Object.entries(brand.socialLinks!).map(([name, url]) => (
-                                <SocialLink 
+                                <SocialLink
                                     key={name}
-                                    icon={getPlatformIcon(name)} 
-                                    label={name} 
-                                    href={url as string} 
+                                    icon={getPlatformIcon(name)}
+                                    label={name}
+                                    href={url as string}
                                 />
                             ))}
                         </div>
@@ -150,7 +121,7 @@ export const BrandAbout = ({ brand }: BrandAboutProps) => {
                             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest italic">Presence Private</p>
                         </div>
                     )}
-                    
+
                     <div className="pt-4 border-t border-border/30">
                         <div className="glass-section rounded-xl p-3 flex items-center justify-between group/link cursor-pointer">
                             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover/link:text-foreground transition-colors uppercase">Media Kit</span>

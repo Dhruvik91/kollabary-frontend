@@ -14,17 +14,19 @@ export const CollaborationProgressTracker = ({ status }: CollaborationProgressTr
     const getProgressWidth = () => {
         switch (status) {
             case CollaborationStatus.COMPLETED: return '100%';
-            case CollaborationStatus.IN_PROGRESS: return '60%';
-            case CollaborationStatus.ACCEPTED: return '30%';
+            case CollaborationStatus.WORK_SUBMITTED: return '75%';
+            case CollaborationStatus.IN_PROGRESS: return '50%';
+            case CollaborationStatus.ACCEPTED: return '25%';
             default: return '5%';
         }
     };
 
     const steps = [
         { label: 'Request Sent', icon: 1, completed: status !== CollaborationStatus.REQUESTED },
-        { label: 'Accepted', icon: 2, completed: [CollaborationStatus.ACCEPTED, CollaborationStatus.IN_PROGRESS, CollaborationStatus.COMPLETED].includes(status) },
-        { label: 'In Progress', icon: 3, completed: [CollaborationStatus.IN_PROGRESS, CollaborationStatus.COMPLETED].includes(status) },
-        { label: 'Completed', icon: 4, completed: status === CollaborationStatus.COMPLETED },
+        { label: 'Accepted', icon: 2, completed: [CollaborationStatus.ACCEPTED, CollaborationStatus.IN_PROGRESS, CollaborationStatus.WORK_SUBMITTED, CollaborationStatus.COMPLETED].includes(status) },
+        { label: 'In Progress', icon: 3, completed: [CollaborationStatus.IN_PROGRESS, CollaborationStatus.WORK_SUBMITTED, CollaborationStatus.COMPLETED].includes(status) },
+        { label: 'Work Done', icon: 4, completed: [CollaborationStatus.WORK_SUBMITTED, CollaborationStatus.COMPLETED].includes(status) },
+        { label: 'Completed', icon: 5, completed: status === CollaborationStatus.COMPLETED },
     ];
 
     return (

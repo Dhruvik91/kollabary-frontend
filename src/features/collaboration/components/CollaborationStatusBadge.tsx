@@ -28,6 +28,10 @@ export const CollaborationStatusBadge = ({ status, className }: CollaborationSta
             label: 'Completed',
             classes: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
         },
+        [CollaborationStatus.WORK_SUBMITTED]: {
+            label: 'Work Submitted',
+            classes: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400 border-cyan-200 dark:border-cyan-800',
+        },
         [CollaborationStatus.CANCELLED]: {
             label: 'Cancelled',
             classes: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800',

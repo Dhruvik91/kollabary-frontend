@@ -70,18 +70,18 @@ export const InfluencerProfileDetail = ({
     const { user } = useAuth();
     const router = useRouter();
 
-    const { 
-        user: influencerUser, 
-        categories = [], 
-        platforms, 
-        avatarUrl, 
-        bio, 
-        address, 
-        avgRating, 
-        totalReviews, 
-        verified, 
-        availability, 
-        fullName, 
+    const {
+        user: influencerUser,
+        categories = [],
+        platforms,
+        avatarUrl,
+        bio,
+        address,
+        avgRating,
+        totalReviews,
+        verified,
+        availability,
+        fullName,
         completedCollaborations,
         totalFollowers,
         avgEngagementRate,
@@ -99,8 +99,8 @@ export const InfluencerProfileDetail = ({
     const profile = influencerUser?.profile;
     const displayBio = bio || profile?.bio;
     const displayAvatar = avatarUrl || profile?.avatarUrl;
-    const displayLocation = locationCity && locationCountry 
-        ? `${locationCity}, ${locationCountry}` 
+    const displayLocation = locationCity && locationCountry
+        ? `${locationCity}, ${locationCountry}`
         : profile?.location || address;
 
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
@@ -170,7 +170,7 @@ export const InfluencerProfileDetail = ({
         <div className="space-y-6 sm:space-y-10 pb-24 md:px-0 max-w-[1600px] mx-auto">
             {/* Back Button */}
             {!isOwner && (
-                <BackButton label="Back to Discovery" className="p-0 hover:text-primary transition-colors" />
+                <BackButton label="Back to Discovery" className="p-0" />
             )}
 
             {/* Main Layout: Left content + Right ranking sidebar */}
@@ -184,11 +184,11 @@ export const InfluencerProfileDetail = ({
                         <div className="h-48 sm:h-64 md:h-72 rounded-[2.5rem] sm:rounded-[4rem] bg-linear-to-br from-primary/20 via-primary/5 to-transparent border border-primary/10 overflow-hidden relative shadow-2xl shadow-primary/5">
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,hsl(var(--primary)/0.25),transparent_60%),radial-gradient(circle_at_70%_20%,hsl(var(--primary)/0.15),transparent_50%)]" />
                             <div className="absolute inset-0 opacity-10 mask-[radial-gradient(circle_at_center,black,transparent_80%)] bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-size-[60px_60px]" />
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 1 }}
-                                className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" 
+                                className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent"
                             />
                         </div>
 
@@ -237,11 +237,11 @@ export const InfluencerProfileDetail = ({
                                                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
                                                 </div>
 
-                                                <ShareButton 
-                                                    type="influencer" 
-                                                    id={influencer.id} 
-                                                    variant="ghost" 
-                                                    size="icon-xs" 
+                                                <ShareButton
+                                                    type="influencer"
+                                                    id={influencer.id}
+                                                    variant="ghost"
+                                                    size="icon-xs"
                                                     className="hover:bg-primary/10 hover:text-primary"
                                                 />
                                             </div>
@@ -514,7 +514,7 @@ export const InfluencerProfileDetail = ({
                                                                 const gender = influencer.audienceGenderRatio || {};
                                                                 const total = (gender.male || 0) + (gender.female || 0) + (gender.other || 0);
                                                                 if (total === 0) return <div className="w-full bg-muted flex items-center justify-center text-[10px] text-muted-foreground italic">No data</div>;
-                                                                
+
                                                                 const malePercent = (gender.male || 0) / total * 100;
                                                                 const femalePercent = (gender.female || 0) / total * 100;
                                                                 const otherPercent = (gender.other || 0) / total * 100;
@@ -554,9 +554,9 @@ export const InfluencerProfileDetail = ({
                                                                     return (
                                                                         <div key={label} className="flex flex-col items-center gap-2 group h-full justify-end">
                                                                             <div className="flex-1 w-full bg-muted/30 rounded-t-lg relative overflow-hidden flex flex-col justify-end">
-                                                                                <motion.div 
-                                                                                    initial={{ height: 0 }} 
-                                                                                    animate={{ height: `${percent}%` }} 
+                                                                                <motion.div
+                                                                                    initial={{ height: 0 }}
+                                                                                    animate={{ height: `${percent}%` }}
                                                                                     transition={{ duration: 0.8, delay: idx * 0.1 }}
                                                                                     className="w-full bg-linear-to-t from-primary/80 to-primary/40 rounded-t-lg"
                                                                                 />
@@ -617,32 +617,32 @@ export const InfluencerProfileDetail = ({
                                                             </div>
                                                             <div className="text-[10px] font-black text-primary uppercase bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">USD</div>
                                                         </div>
-                                                    
-                                                    <div className="space-y-4">
-                                                        <div className="flex justify-between items-end">
-                                                            <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Starting from</span>
-                                                            <div className="text-right">
-                                                                <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
-                                                            </div>
-                                                        </div>
-                                                        {(maxPrice || 0) > (minPrice || 0) && (
-                                                            <>
-                                                                <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent" />
-                                                                <div className="flex justify-between items-end">
-                                                                    <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Project Max</span>
-                                                                    <span className="text-xl font-bold text-foreground/80">${maxPrice}</span>
+
+                                                        <div className="space-y-4">
+                                                            <div className="flex justify-between items-end">
+                                                                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Starting from</span>
+                                                                <div className="text-right">
+                                                                    <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
                                                                 </div>
-                                                            </>
-                                                        )}
-                                                        <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
-                                                            * Final pricing varies based on usage rights, content complexity, and timeline.
-                                                        </p>
+                                                            </div>
+                                                            {(maxPrice || 0) > (minPrice || 0) && (
+                                                                <>
+                                                                    <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent" />
+                                                                    <div className="flex justify-between items-end">
+                                                                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Project Max</span>
+                                                                        <span className="text-xl font-bold text-foreground/80">${maxPrice}</span>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
+                                                                * Final pricing varies based on usage rights, content complexity, and timeline.
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
                                     <div className="pt-8 border-t border-border/50 w-full">
                                         {(user?.role === UserRole.USER || user?.role === UserRole.ADMIN) && user?.id !== influencer.user.id && (

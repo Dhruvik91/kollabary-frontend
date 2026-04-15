@@ -79,12 +79,12 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="relative z-10 max-w-7xl mx-auto space-y-8 sm:space-y-12 pb-20"
+                className="relative z-10 max-w-[1600px] mx-auto space-y-6 sm:space-y-10 pb-24 md:px-0"
             >
-                <div className="px-4 sm:px-6 md:px-12 pt-6 sm:pt-8 flex items-center justify-between">
+                <div className="flex items-center justify-between">
                     <BackButton
-                        label="Back to Dashboard"
-                        className="px-4 py-2 rounded-xl border border-border/50 bg-card/50 hover:bg-card text-muted-foreground hover:text-foreground transition-all font-bold text-xs uppercase tracking-widest shadow-sm"
+                        label="Back to Discovery"
+                        className="p-0"
                     />
                 </div>
 
@@ -95,7 +95,7 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
                     onReport={() => setIsReportModalOpen(true)}
                 />
 
-                <div className="px-4 sm:px-6 md:px-12">
+                <div className="space-y-8 lg:space-y-12">
                     <Tabs defaultValue="about" className="space-y-8 lg:space-y-12">
                         <div className="flex justify-center sm:justify-start">
                             <TabsList variant="pill">

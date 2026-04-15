@@ -11,12 +11,14 @@ interface CollaborationProgressActionsProps {
     status: CollaborationStatus;
     onUpdateStatus: (status: CollaborationStatus) => void;
     isUpdating: boolean;
+    isInfluencer: boolean;
 }
 
 export const CollaborationProgressActions = ({
     status,
     onUpdateStatus,
-    isUpdating
+    isUpdating,
+    isInfluencer
 }: CollaborationProgressActionsProps) => {
 
     if (status === CollaborationStatus.COMPLETED || status === CollaborationStatus.CANCELLED || status === CollaborationStatus.REJECTED) {
@@ -39,13 +41,15 @@ export const CollaborationProgressActions = ({
                             <div className="space-y-1">
                                 <h3 className="text-xl font-bold tracking-tight">Manage Progress</h3>
                                 <p className="text-muted-foreground text-sm max-w-sm">
-                                    Update the collaboration status as you reach milestones.
+                                    {isInfluencer 
+                                        ? "Update the status as you progress with the work." 
+                                        : "Review the submitted work and finalize the collaboration."}
                                 </p>
                             </div>
                         </div>
 
                         <div className="flex flex-wrap gap-4 w-full md:w-auto justify-center md:justify-end">
-                            {status === CollaborationStatus.ACCEPTED && (
+                            {isInfluencer && status === CollaborationStatus.ACCEPTED && (
                                 <Button
                                     variant="default"
                                     className="px-8 h-14 rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all gap-2"
@@ -57,15 +61,27 @@ export const CollaborationProgressActions = ({
                                 </Button>
                             )}
 
-                            {(status === CollaborationStatus.IN_PROGRESS || status === CollaborationStatus.ACCEPTED) && (
+                            {isInfluencer && (status === CollaborationStatus.IN_PROGRESS || status === CollaborationStatus.ACCEPTED) && (
                                 <Button
                                     variant="outline"
-                                    className="px-8 h-14 rounded-2xl font-bold bg-background shadow-lg hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all gap-2"
+                                    className="px-8 h-14 rounded-2xl font-bold bg-background shadow-lg hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all gap-2"
+                                    onClick={() => onUpdateStatus(CollaborationStatus.WORK_SUBMITTED)}
+                                    disabled={isUpdating}
+                                >
+                                    {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle2 size={20} />}
+                                    Mark Work as Done
+                                </Button>
+                            )}
+
+                            {!isInfluencer && status === CollaborationStatus.WORK_SUBMITTED && (
+                                <Button
+                                    variant="default"
+                                    className="px-8 h-14 rounded-2xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-200/50 hover:scale-105 transition-all gap-2"
                                     onClick={() => onUpdateStatus(CollaborationStatus.COMPLETED)}
                                     disabled={isUpdating}
                                 >
                                     {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle2 size={20} />}
-                                    Mark as Completed
+                                    Approve & Complete
                                 </Button>
                             )}
                         </div>
