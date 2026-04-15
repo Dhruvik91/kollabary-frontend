@@ -55,6 +55,7 @@ export interface ForgotPasswordData {
 }
 
 export interface ResetPasswordData {
+    userId: string;
     token: string;
     newPassword: string;
 }

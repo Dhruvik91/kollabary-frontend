@@ -6,17 +6,19 @@ import { ResetPasswordFormData } from '@/lib/validations/auth.validation';
 
 interface ResetPasswordContainerProps {
     token: string;
+    userId: string;
 }
 
 /**
  * Reset Password Container (Smart Component)
  * Handles password reset business logic and state management
  */
-export function ResetPasswordContainer({ token }: ResetPasswordContainerProps) {
+export function ResetPasswordContainer({ token, userId }: ResetPasswordContainerProps) {
     const resetPasswordMutation = useResetPassword();
 
     const handleSubmit = (data: ResetPasswordFormData) => {
         resetPasswordMutation.mutate({
+            userId,
             token,
             newPassword: data.newPassword,
         });
