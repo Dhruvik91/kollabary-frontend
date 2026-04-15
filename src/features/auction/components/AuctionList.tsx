@@ -11,6 +11,8 @@ interface AuctionListProps {
     isFetchingNextPage?: boolean;
     fetchNextPage?: () => void;
     emptyMessage?: string;
+    /** When true, removes owner action menus from cards (used for history / read-only views) */
+    readOnly?: boolean;
 }
 
 export const AuctionList = ({
@@ -19,13 +21,14 @@ export const AuctionList = ({
     hasNextPage,
     isFetchingNextPage = false,
     fetchNextPage = () => {},
-    emptyMessage = "No active auctions found"
+    emptyMessage = "No active auctions found",
+    readOnly = false,
 }: AuctionListProps) => {
     return (
         <InfiniteScrollContainer
             items={auctions}
             renderItem={(auction) => (
-                <AuctionCard key={auction.id} auction={auction} />
+                <AuctionCard key={auction.id} auction={auction} readOnly={readOnly} />
             )}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}

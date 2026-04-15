@@ -159,6 +159,7 @@ export const AuctionListContainer = () => {
                             isFetchingNextPage={isFetchingNextMyAuctions}
                             fetchNextPage={fetchNextMyAuctions}
                             emptyMessage="You haven't created any auctions yet."
+                            readOnly
                         />
                     </TabsContent>
                 </Tabs>

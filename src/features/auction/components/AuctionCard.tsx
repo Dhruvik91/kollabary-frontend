@@ -23,14 +23,17 @@ import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 interface AuctionCardProps {
     auction: Auction & { myBidStatus?: BidStatus };
+    /** Pass true to hide owner actions (edit/delete) — used for history views */
+    readOnly?: boolean;
 }
 
-export const AuctionCard = ({ auction }: AuctionCardProps) => {
+export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => {
     const { id, title, description, minBudget, maxBudget, deadline, status, category, creator, myBidStatus } = auction;
     const router = useRouter();
     const { user } = useAuth();
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const isOwner = user?.id === creator.id;
+    const isEditable = status === AuctionStatus.OPEN;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const { mutateAsync: deleteAuction, isPending: isDeleting } = useDeleteAuction();
 
@@ -39,8 +42,8 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
         ? `$${minBudget} - $${maxBudget}`
         : minBudget ? `From $${minBudget}` : maxBudget ? `Up to $${maxBudget}` : 'Competitive';
 
-    const getStatusStyles = (status: BidStatus) => {
-        switch (status) {
+    const getMyBidStyles = (bidStatus: BidStatus) => {
+        switch (bidStatus) {
             case BidStatus.ACCEPTED:
                 return { color: 'text-green-500 bg-green-500/10', icon: CheckCircle };
             case BidStatus.REJECTED:
@@ -50,46 +53,64 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
         }
     };
 
-    const StatusIcon = myBidStatus ? getStatusStyles(myBidStatus).icon : null;
+    const getAuctionStatusStyles = (s: AuctionStatus) => {
+        switch (s) {
+            case AuctionStatus.OPEN:
+                return 'bg-green-500/15 text-green-500 border border-green-500/20';
+            case AuctionStatus.COMPLETED:
+                return 'bg-blue-500/15 text-blue-400 border border-blue-500/20';
+            case AuctionStatus.CANCELLED:
+                return 'bg-red-500/10 text-red-400 border border-red-500/15';
+            default:
+                return 'bg-muted text-muted-foreground border border-border/40';
+        }
+    };
+
+    const StatusIcon = myBidStatus ? getMyBidStyles(myBidStatus).icon : null;
+    const showOwnerMenu = isOwner && !readOnly;
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -5 }}
+            whileHover={{ y: -4 }}
             transition={{ duration: 0.3 }}
             className="h-full"
         >
             <Card className="border-border bg-card shadow-sm hover:border-primary/20 transition-all duration-500 ease-out rounded-[2rem] h-full flex flex-col border p-0 overflow-hidden">
-                <CardContent className="p-6 flex flex-col gap-4 h-full relative">
-                    {/* Header: Title and Creator */}
-                    <div className="space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
-                            <div className="space-y-2 flex-1 min-w-0">
-                                <h3 className="text-xl font-black tracking-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
-                                    {title}
-                                </h3>
-                                {myBidStatus && (
-                                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getStatusStyles(myBidStatus).color}`}>
-                                        {StatusIcon && <StatusIcon size={12} />}
-                                        My Bid: {myBidStatus}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex items-center gap-2 self-end sm:self-start">
-                                <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${status === AuctionStatus.OPEN ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'
-                                    }`}>
-                                    {status}
-                                </div>
+                <CardContent className="p-6 flex flex-col gap-4 h-full">
 
-                                {isOwner && (
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg hover:bg-muted">
-                                                <MoreVertical size={14} className="text-muted-foreground" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="rounded-xl border-border/50">
+                    {/* ── Top bar: status badge left │ 3-dot menu right ── */}
+                    <div className="flex items-center justify-between gap-2">
+                        {/* Status badge — always top-left */}
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest leading-none ${getAuctionStatusStyles(status)}`}>
+                            {status}
+                        </span>
+
+                        <div className="flex items-center gap-1.5">
+                            {/* My-bid indicator (influencer view) */}
+                            {myBidStatus && (
+                                <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getMyBidStyles(myBidStatus).color}`}>
+                                    {StatusIcon && <StatusIcon size={11} />}
+                                    {myBidStatus}
+                                </div>
+                            )}
+
+                            {/* Owner 3-dot menu — top-right, hidden when readOnly or non-editable */}
+                            {showOwnerMenu && (
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-7 w-7 rounded-lg hover:bg-muted shrink-0"
+                                        >
+                                            <MoreVertical size={14} className="text-muted-foreground" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="rounded-xl border-border/50">
+                                        {/* Edit only available for OPEN auctions */}
+                                        {isEditable && (
                                             <DropdownMenuItem
                                                 onClick={() => router.push(`${FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id)}/edit`)}
                                                 className="gap-2 font-bold text-xs uppercase tracking-widest cursor-pointer"
@@ -97,21 +118,29 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                                                 <Edit2 size={14} />
                                                 Edit
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                onClick={() => setShowDeleteModal(true)}
-                                                className="gap-2 font-bold text-xs uppercase tracking-widest text-destructive focus:text-destructive cursor-pointer"
-                                            >
-                                                <Trash2 size={14} />
-                                                Delete
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                )}
-                            </div>
+                                        )}
+                                        <DropdownMenuItem
+                                            onClick={() => setShowDeleteModal(true)}
+                                            className="gap-2 font-bold text-xs uppercase tracking-widest text-destructive focus:text-destructive cursor-pointer"
+                                        >
+                                            <Trash2 size={14} />
+                                            Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            )}
                         </div>
+                    </div>
 
+                    {/* ── Title ── */}
+                    <div className="space-y-2">
+                        <h3 className="text-xl font-black tracking-tight line-clamp-2 leading-snug">
+                            {title}
+                        </h3>
+
+                        {/* Creator row */}
                         <div className="flex items-center gap-2 text-muted-foreground">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
                                 {creator.profile?.avatarUrl ? (
                                     <img src={creator.profile.avatarUrl} alt={creator.profile.fullName} className="w-full h-full object-cover" />
                                 ) : (
@@ -119,12 +148,12 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                                 )}
                             </div>
                             <span className="text-xs font-bold uppercase tracking-wider truncate">
-                                {creator.profile?.fullName || 'Brand Name'}
+                                {creator.profile?.fullName || 'Brand'}
                             </span>
                         </div>
                     </div>
 
-                    {/* Category Tag */}
+                    {/* ── Category Tag ── */}
                     {category && (
                         <div className="flex flex-wrap gap-1.5">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-primary/5 text-primary border border-primary/10">
@@ -134,13 +163,13 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                         </div>
                     )}
 
-                    {/* Description excerpt */}
-                    <p className="text-sm text-muted-foreground line-clamp-3">
+                    {/* ── Description excerpt ── */}
+                    <p className="text-sm text-muted-foreground line-clamp-3 flex-1">
                         {description}
                     </p>
 
-                    {/* Stats/Info Grid */}
-                    <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 dark:bg-white/2 rounded-2xl border border-border mt-auto">
+                    {/* ── Stats / Info grid ── */}
+                    <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 dark:bg-white/[0.03] rounded-2xl border border-border mt-auto">
                         <div className="flex flex-col gap-1">
                             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
                                 <DollarSign size={10} /> Budget
@@ -155,8 +184,8 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
                         </div>
                     </div>
 
-                    {/* Action Button */}
-                    <div className="pt-2">
+                    {/* ── Action Button ── */}
+                    <div className="pt-1">
                         <Button
                             onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id))}
                             className="w-full h-11 rounded-xl font-black text-xs uppercase tracking-widest gap-2 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 active:scale-95 transition-all text-white"

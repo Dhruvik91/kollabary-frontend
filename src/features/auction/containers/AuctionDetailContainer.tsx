@@ -11,7 +11,6 @@ import {
     useAuctionDetail,
     usePlaceBid,
     useAcceptBid,
-    useDeleteAuction,
     useRejectBid
 } from '@/hooks/use-auction.hooks';
 import {
@@ -57,7 +56,6 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const placeBidMutation = usePlaceBid(id);
     const acceptBidMutation = useAcceptBid(id);
     const rejectBidMutation = useRejectBid(id);
-    const { mutateAsync: deleteAuction } = useDeleteAuction();
 
     const handlePlaceBid = async (data: CreateBidDto) => {
         await placeBidMutation.mutateAsync(data);
@@ -91,25 +89,12 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         }
     };
 
-    const handleEdit = () => {
-        router.push(`${FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id)}/edit`);
-    };
-
-    const handleRemove = async () => {
-        try {
-            await deleteAuction(id);
-            router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
-        } catch (error) {
-            // Error managed by hook
-        }
-    };
-
     if (isLoading) {
         return <AuctionDetailSkeleton />;
     }
 
     if (isError || !auction) {
-        return <AuctionNotFound onBack={() => router.back()} />;
+        return <AuctionNotFound />;
     }
 
     const isOwner = user?.id === auction.creator.id;
@@ -130,9 +115,6 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     <div className="bg-card border border-border rounded-[2rem] p-5 sm:p-8 backdrop-blur-xl relative overflow-hidden shadow-sm">
                         <AuctionDetailHeader
                             auction={auction}
-                            isCompleted={isCompleted}
-                            onEdit={isOwner && !isCompleted ? handleEdit : undefined}
-                            onDelete={isOwner ? handleRemove : undefined}
                         />
 
                         <div className="mt-8 space-y-8">
@@ -386,7 +368,7 @@ const AuctionDetailSkeleton = () => (
     </div>
 );
 
-const AuctionNotFound = ({ onBack }: { onBack: () => void }) => (
+const AuctionNotFound = () => (
     <div className="max-w-2xl mx-auto py-32 flex flex-col items-center text-center px-6">
         <div className="w-24 h-24 rounded-[2.5rem] bg-zinc-50 dark:bg-white/5 border border-border/50 flex items-center justify-center mb-8 shadow-inner relative overflow-hidden group">
             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

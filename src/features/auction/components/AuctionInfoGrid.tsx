@@ -2,6 +2,7 @@
 
 import { DollarSign, Calendar, Tag, Gavel } from 'lucide-react';
 import { format } from 'date-fns';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 interface AuctionInfoGridProps {
     minBudget: number;
@@ -38,7 +39,7 @@ export const AuctionInfoGrid = ({
                 <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Category</p>
                 <p className="text-base sm:text-lg font-black text-foreground flex items-center gap-1.5">
                     <Tag className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="truncate">{category || 'General'}</span>
+                    <span className="truncate">{category ? formatCollaborationType(category) : 'General'}</span>
                 </p>
             </div>
             <div className="space-y-1">
