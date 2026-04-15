@@ -48,7 +48,7 @@ export default async function BrandPublicPage({ params }: Props) {
             notFound();
         }
 
-        return <PublicProfileDetailContainer id={id} />;
+        return <PublicProfileDetailContainer id={id} initialData={brand} />;
     } catch (error) {
         console.error('Error loading public brand profile:', error);
         notFound();

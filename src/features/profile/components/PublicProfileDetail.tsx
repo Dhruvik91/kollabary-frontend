@@ -20,8 +20,8 @@ export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
         location,
         socialLinks,
         avatarUrl,
-        auctionsDone = [],
-        collaborationsDone = []
+        stats = { totalAuctions: 0, completedCollaborations: 0 },
+        collaborators = []
     } = (profile as any);
 
     return (
@@ -40,15 +40,14 @@ export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
                 {/* Modular Sidebar: Stats & Links */}
                 <PublicProfileSidebar
                     socialLinks={socialLinks}
-                    auctionsCount={auctionsDone.length}
-                    collaborationsCount={collaborationsDone.length}
+                    auctionsCount={stats.totalAuctions}
+                    collaborationsCount={stats.completedCollaborations}
                 />
 
-                {/* Modular Main Content: About, Auctions, Collaborations */}
+                {/* Modular Main Content: About and Collaborators */}
                 <PublicProfileContent
                     bio={bio}
-                    auctionsDone={auctionsDone}
-                    collaborationsDone={collaborationsDone}
+                    collaborators={collaborators}
                 />
             </div>
         </div>

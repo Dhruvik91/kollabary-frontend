@@ -16,5 +16,5 @@ export const publicService = {
     async getBrandPublicData(id: string): Promise<any> {
         const response = await httpService.get(API_CONFIG.path.public.brand(id));
         return response.data;
-    }
+    },
 };

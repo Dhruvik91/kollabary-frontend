@@ -9,10 +9,11 @@ import { Button } from '@/components/ui/button';
 
 interface PublicProfileDetailContainerProps {
     id: string;
+    initialData?: any;
 }
 
-export const PublicProfileDetailContainer = ({ id }: PublicProfileDetailContainerProps) => {
-    const { data, isLoading, isError } = usePublicBrand(id);
+export const PublicProfileDetailContainer = ({ id, initialData }: PublicProfileDetailContainerProps) => {
+    const { data, isLoading, isError } = usePublicBrand(id, initialData);
 
     if (isLoading) {
         return (

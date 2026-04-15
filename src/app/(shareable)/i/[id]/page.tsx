@@ -44,13 +44,13 @@ export default async function InfluencerPublicPage({ params }: Props) {
     const { id } = await params;
 
     try {
-        const data = await publicService.getInfluencerPublicData(id);
+        const influencer = await publicService.getInfluencerPublicData(id);
 
-        if (!data) {
+        if (!influencer) {
             notFound();
         }
 
-        return <PublicInfluencerProfileContainer id={id} />;
+        return <PublicInfluencerProfileContainer id={id} initialData={influencer} />;
     } catch (error) {
         console.error('Error loading public influencer profile:', error);
         notFound();

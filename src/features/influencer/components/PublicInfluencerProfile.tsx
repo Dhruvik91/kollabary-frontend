@@ -101,9 +101,9 @@ export const PublicInfluencerProfile = ({
                 {/* Left Column Part 2: Tabs - 3rd on mobile, 2nd on desktop */}
                 <div className="lg:col-span-2 order-3 lg:order-2">
                     <PublicInfluencerTabs
+                        influencerId={influencer.id}
                         platforms={platforms}
-                        activeCollaborations={(influencer as any).activeCollaborations || []}
-                        completedCollaborations={(influencer as any).completedCollaborations || []}
+                        brandPartners={(influencer as any).brandPartners || []}
                         reviews={reviews}
                         reviewsLoading={reviewsLoading}
                         bio={bio}

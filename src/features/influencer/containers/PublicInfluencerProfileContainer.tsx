@@ -9,10 +9,11 @@ import { Button } from '@/components/ui/button';
 
 interface PublicInfluencerProfileContainerProps {
     id: string;
+    initialData?: any;
 }
 
-export const PublicInfluencerProfileContainer = ({ id }: PublicInfluencerProfileContainerProps) => {
-    const { data, isLoading, isError } = usePublicInfluencer(id);
+export const PublicInfluencerProfileContainer = ({ id, initialData }: PublicInfluencerProfileContainerProps) => {
+    const { data, isLoading, isError } = usePublicInfluencer(id, initialData);
 
     if (isLoading) {
         return (

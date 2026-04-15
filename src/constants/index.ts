@@ -97,6 +97,7 @@ export const API_CONFIG = {
             influencer: (id: string) => `/public/influencer/${id}`,
             brand: (id: string) => `/public/brand/${id}`,
         }
+
     }
 }
 

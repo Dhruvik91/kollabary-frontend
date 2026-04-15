@@ -354,41 +354,32 @@
 
   /* ── Standard Card ── */
   .glass-card {
-    backdrop-filter: blur(12px);
     transform: translateZ(0);
     backface-visibility: hidden;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .dark .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  }
-
-  .dark .glass-card:hover {
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(18, 18, 18, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   }
 
   /* ── Elevated Card (hero / profile overlays) ── */
   .glass-card-elevated {
-    backdrop-filter: blur(16px);
     transform: translateZ(0);
     backface-visibility: hidden;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .dark .glass-card-elevated {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(24, 24, 24, 0.9);
     border-color: rgba(255, 255, 255, 0.15);
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
-      0 4px 24px rgba(0, 0, 0, 0.3);
+      0 4px 24px rgba(0, 0, 0, 0.4);
   }
 
-  .dark .glass-card-elevated:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-  }
 
   /* ── Inner Section (card headers, stat rows) — NO blur layer ── */
   .glass-section {
