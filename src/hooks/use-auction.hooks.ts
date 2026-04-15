@@ -178,8 +178,12 @@ export const useAuctionDetail = (id: string) => {
   useEffect(() => {
     if (!socket || !id) return;
 
-    // Join the auction room
-    socket.emit('join_auction', id);
+    // Function to join or re-join the room
+    const joinRoom = () => {
+        socket.emit('join_auction', id);
+    };
+
+    joinRoom();
 
     const handleNewBid = (newBid: any) => {
       // Update auction detail with new bid
@@ -205,6 +209,7 @@ export const useAuctionDetail = (id: string) => {
       toast.success('A bid has been accepted!');
     };
 
+    socket.on('connect', joinRoom);
     socket.on('new_bid', handleNewBid);
     socket.on('auction_updated', handleAuctionUpdated);
     socket.on('auction_deleted', handleAuctionDeleted);
@@ -212,6 +217,7 @@ export const useAuctionDetail = (id: string) => {
 
     return () => {
       socket.emit('leave_auction', id);
+      socket.off('connect', joinRoom);
       socket.off('new_bid', handleNewBid);
       socket.off('auction_updated', handleAuctionUpdated);
       socket.off('auction_deleted', handleAuctionDeleted);

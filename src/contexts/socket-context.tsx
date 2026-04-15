@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './auth-context';
-import { API_CONFIG } from '@/constants';
+import { API_CONFIG, AUTH_STORAGE_KEYS } from '@/constants';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -24,9 +24,12 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     if (isAuthenticated) {
+      const token = typeof window !== 'undefined' ? window.localStorage.getItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN) : null;
+
       const socketInstance = io(API_CONFIG.socketUrl || '', {
         withCredentials: true,
         transports: ['websocket', 'polling'],
+        auth: { token }
       });
 
       socketInstance.on('connect', () => {
