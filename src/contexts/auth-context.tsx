@@ -21,9 +21,9 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
  * Manages global authentication state
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const isAuthRoute = typeof window !== 'undefined' && 
+    const isAuthRoute = typeof window !== 'undefined' &&
         Object.values(FRONTEND_ROUTES.AUTH).some(route => window.location.pathname.startsWith(route));
-    
+
     const { data: user, isLoading: isAuthLoading, isError: isAuthError } = useMe(!isAuthRoute);
 
     // Regular users fetch from /profile
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // synthesize a fallback profile using user info.
             const fallbackProfile = {
                 id: influencerProfile.id,
-                fullName: user.email.split('@')[0], // Fallback name
+                fullName: influencerProfile?.fullName || user.email.split('@')[0], // Fallback name
                 username: user.email.split('@')[0],
                 avatarUrl: influencerProfile.avatarUrl,
                 ...nestedProfile
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return {
                 ...user,
                 profile: fallbackProfile,
-                influencerProfile: { 
+                influencerProfile: {
                     id: influencerProfile.id,
                     fullName: fallbackProfile.fullName,
                     avatarUrl: fallbackProfile.avatarUrl
