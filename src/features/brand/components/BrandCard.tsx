@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { UserProfile } from '@/services/profile.service';
+import { ShareButton } from '@/components/shared/ShareButton';
 
 interface BrandCardProps {
     brand: UserProfile;
@@ -57,6 +58,8 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                     <div className="relative h-24 w-full overflow-hidden">
                         <div className="absolute inset-0 bg-linear-to-br from-secondary/20 via-secondary/5 to-transparent dark:from-secondary/10 dark:via-transparent dark:to-transparent" />
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(var(--secondary-rgb),0.1),transparent_50%)]" />
+
+
                     </div>
 
                     {/* Profile Section with Overlapping Avatar */}
@@ -123,7 +126,7 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                         <div className="grid grid-cols-2 gap-3 pt-2">
                             <Button
                                 onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(id))}
-                                className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-zinc-900 transition-all"
+                                className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 transition-all"
                             >
                                 <Eye size={16} />
                                 Profile

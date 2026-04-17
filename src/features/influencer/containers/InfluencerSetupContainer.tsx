@@ -40,7 +40,7 @@ export const InfluencerSetupContainer = () => {
     }, [createProfile, router]);
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0 flex flex-col items-center justify-center pt-8 sm:pt-12">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0 flex flex-col items-center justify-center pt-8 sm:pt-12">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -40,9 +40,18 @@ export const Navbar = () => {
     return (
         <nav
             className={cn(
-                'fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[95%] max-w-7xl rounded-full border',
+                'fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out w-[95%] max-w-7xl rounded-full border',
                 isScrolled
-                    ? 'glass-card-elevated py-3 border-primary/20 shadow-2xl shadow-primary/10'
+                    ? [
+                          'py-3',
+                          'border-white/10 dark:border-white/8',
+                          /* dense frosted glass */
+                          'backdrop-blur-2xl backdrop-saturate-150',
+                          'bg-white/60 dark:bg-zinc-950/70',
+                          /* layered glow + depth */
+                          'shadow-[0_4px_24px_-4px_rgba(0,0,0,0.14),0_1px_0_0_rgba(255,255,255,0.5)_inset]',
+                          'dark:shadow-[0_4px_32px_-4px_rgba(0,0,0,0.6),0_1px_0_0_rgba(255,255,255,0.06)_inset,0_0_0_1px_rgba(255,255,255,0.04)_inset]',
+                      ].join(' ')
                     : 'bg-transparent py-5 border-transparent'
             )}
         >
@@ -98,7 +107,7 @@ export const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-background border-b border-border overflow-hidden"
+                        className="md:hidden backdrop-blur-2xl backdrop-saturate-150 bg-white/70 dark:bg-zinc-950/80 border-t border-white/20 dark:border-white/10 overflow-hidden rounded-b-3xl"
                     >
                         <div className="flex flex-col gap-4 p-6">
                             {navLinks.map((link) => (

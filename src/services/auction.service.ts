@@ -6,7 +6,7 @@ export const auctionService = {
     /**
      * Fetch all collaboration auctions with optional filters and pagination
      */
-    getAuctions: async (filters?: { status?: string; category?: string; page?: number; limit?: number }): Promise<PaginatedResponse<Auction>> => {
+    getAuctions: async (filters?: { status?: string; category?: string; search?: string; page?: number; limit?: number }): Promise<PaginatedResponse<Auction>> => {
         const response = await httpService.get<PaginatedResponse<Auction>>(API_CONFIG.path.auction.base, { 
             params: filters 
         });
@@ -16,7 +16,7 @@ export const auctionService = {
     /**
      * Fetch auctions created by the current user with pagination
      */
-    getMyAuctions: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Auction>> => {
+    getMyAuctions: async (params?: { page?: number; limit?: number; search?: string }): Promise<PaginatedResponse<Auction>> => {
         const response = await httpService.get<PaginatedResponse<Auction>>(API_CONFIG.path.auction.my, {
             params
         });
@@ -66,7 +66,7 @@ export const auctionService = {
     /**
      * Fetch bids placed by the current influencer with pagination
      */
-    getMyBids: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Bid>> => {
+    getMyBids: async (params?: { page?: number; limit?: number; search?: string }): Promise<PaginatedResponse<Bid>> => {
         const response = await httpService.get<PaginatedResponse<Bid>>(API_CONFIG.path.auction.myBids, {
             params
         });

@@ -1,19 +1,19 @@
 'use client';
 
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { UserProfile } from '@/services/profile.service';
-import { 
-    Instagram, 
-    Youtube, 
-    Twitter, 
-    Globe, 
-    Info,
+import {
+    Instagram,
+    Youtube,
+    Twitter,
+    Linkedin,
+    Globe,
+    Search,
     Share2,
-    Calendar,
-    Target,
-    Award
+    Award,
+    Sparkles
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface BrandAboutProps {
     brand: UserProfile;
@@ -21,105 +21,131 @@ interface BrandAboutProps {
 
 export const BrandAbout = ({ brand }: BrandAboutProps) => {
     const getPlatformIcon = (platform: string) => {
-        switch (platform.toLowerCase()) {
-            case 'instagram': return <Instagram size={20} />;
-            case 'youtube': return <Youtube size={20} />;
-            case 'twitter':
-            case 'x': return <Twitter size={20} />;
-            default: return <Globe size={20} />;
-        }
+        const p = platform.toLowerCase();
+        if (p.includes('instagram')) return <Instagram size={20} />;
+        if (p.includes('twitter') || p === 'x') return <Twitter size={20} />;
+        if (p.includes('linkedin')) return <Linkedin size={20} />;
+        if (p.includes('youtube')) return <Youtube size={20} />;
+        return <Globe size={20} />;
     };
 
+    const hasSocialLinks = brand.socialLinks && Object.keys(brand.socialLinks).length > 0;
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
-            {/* Main Info */}
-            <div className="lg:col-span-2 space-y-6 lg:space-y-8">
-                <Card className="rounded-[2.5rem] border-border/50 bg-card/40 glass-card p-6 sm:p-8 md:p-10">
-                    <div className="space-y-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
+            {/* Main Info Section */}
+            <div className="xl:col-span-2 space-y-6 sm:space-y-8">
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="glass-card rounded-[2rem] p-6 sm:p-10 relative overflow-hidden flex flex-col justify-between"
+                >
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+                                <Search size={20} />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">Our Story</span>
+                        </div>
+
                         <div className="space-y-4">
-                            <h3 className="text-2xl lg:text-3xl font-black tracking-tight flex items-center gap-3">
-                                <Info className="text-primary" size={28} />
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-foreground leading-tight italic">
                                 About {brand.fullName}
-                            </h3>
-                            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed">
+                            </h2>
+                            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
                                 {brand.bio || `${brand.fullName} is a forward-thinking brand looking to collaborate with creative influencers. They focus on delivering high-quality products and meaningful engagement through authentic partnerships.`}
                             </p>
                         </div>
+                    </div>
+                </motion.div>
+            </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border/50">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3 text-primary">
-                                    <Target size={22} />
-                                    <h4 className="font-bold text-lg">Our Mission</h4>
-                                </div>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    To create lasting impact through strategic influencer partnerships and community-driven storytelling.
-                                </p>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3 text-primary">
-                                    <Calendar size={22} />
-                                    <h4 className="font-bold text-lg">Partner Since</h4>
-                                </div>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Active since {new Date(brand.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
-                                </p>
+            {/* Sidebar Section */}
+            <div className="space-y-6 sm:space-y-8">
+                {/* Preferred Status */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="glass-card rounded-[2rem] p-6 sm:p-8 border border-primary/20 relative overflow-hidden group/preferred"
+                >
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Award size={64} className="text-primary" />
+                    </div>
+
+                    <div className="flex flex-col justify-between gap-6 relative z-10">
+                        <div className="space-y-3">
+                            <Badge className="bg-primary/20 text-primary hover:bg-primary/30 font-black text-[9px] uppercase tracking-widest px-3 py-1 rounded-lg border-none">
+                                Preferred Brand
+                            </Badge>
+                            <h3 className="text-base font-black tracking-tight text-foreground uppercase">Kollabary Trusted</h3>
+                            <p className="text-xs text-muted-foreground font-medium leading-relaxed">
+                                Recognized for exceptional collaboration history and verified reliability.
+                            </p>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-primary pt-2">
+                            <Sparkles size={14} />
+                            <span className="text-[10px] font-black uppercase tracking-widest italic opacity-80">Tier 1 Partner</span>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Digital Footprint / Social Links */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="glass-card rounded-[2rem] p-6 sm:p-8 space-y-6 relative"
+                >
+                    <div className="flex items-center gap-2">
+                        <Share2 size={16} className="text-secondary" />
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80">Digital Footprint</h3>
+                    </div>
+
+                    {hasSocialLinks ? (
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            {Object.entries(brand.socialLinks!).map(([name, url]) => (
+                                <SocialLink
+                                    key={name}
+                                    icon={getPlatformIcon(name)}
+                                    label={name}
+                                    href={url as string}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="py-4 text-center glass-section rounded-xl border border-dashed border-border/50">
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest italic">Presence Private</p>
+                        </div>
+                    )}
+
+                    <div className="pt-4 border-t border-border/30">
+                        <div className="glass-section rounded-xl p-3 flex items-center justify-between group/link cursor-pointer">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover/link:text-foreground transition-colors uppercase">Media Kit</span>
+                            <div className="p-1.5 rounded-lg bg-muted/60 text-muted-foreground group-hover/link:bg-primary group-hover/link:text-primary-foreground transition-all">
+                                <Share2 size={12} />
                             </div>
                         </div>
                     </div>
-                </Card>
-            </div>
-
-            {/* Sidebar: Socials */}
-            <div className="lg:col-span-1 space-y-6 lg:space-y-8">
-                <Card className="rounded-[2.5rem] border-border/50 bg-card/40 glass-card overflow-hidden">
-                    <div className="p-6 lg:p-8 border-b border-border/50 glass-section bg-muted/20">
-                        <h3 className="font-bold tracking-tight text-lg flex items-center gap-2">
-                            <Share2 size={20} className="text-primary" />
-                            Connected Platforms
-                        </h3>
-                    </div>
-                    <CardContent className="p-6 lg:p-8 space-y-4">
-                        {brand.socialLinks && Object.keys(brand.socialLinks).length > 0 ? (
-                            Object.entries(brand.socialLinks).map(([name, url]) => (
-                                <a
-                                    key={name}
-                                    href={url as string}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center justify-between p-4 bg-background/50 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-all group"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-muted/50 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                            {getPlatformIcon(name)}
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold capitalize">{name}</p>
-                                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Official Page</p>
-                                        </div>
-                                    </div>
-                                    <Globe size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                                </a>
-                            ))
-                        ) : (
-                            <div className="text-center py-6">
-                                <p className="text-sm text-muted-foreground italic">No public social links provided</p>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Additional Quick Stats or Trust Badges can go here */}
-                <div className="rounded-[2rem] p-6 bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10">
-                    <h4 className="font-bold text-primary mb-2 flex items-center gap-2 text-sm uppercase tracking-widest">
-                        <Award size={14} />
-                        Kollabary Verified
-                    </h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                        This brand has been manually verified by our team and has a history of timely payments and professional communication.
-                    </p>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
 };
+
+const SocialLink = ({ icon, label, href }: { icon: React.ReactNode, label: string, href: string }) => (
+    <motion.a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ y: -3, scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="flex items-center justify-center w-12 h-12 rounded-2xl bg-muted/40 border border-border/50 text-muted-foreground hover:text-primary hover:bg-card hover:border-primary/30 transition-all"
+        title={label}
+    >
+        {icon}
+    </motion.a>
+);

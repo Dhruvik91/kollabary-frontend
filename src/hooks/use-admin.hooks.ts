@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminService } from '@/services/admin.service';
 import { subscriptionService } from '@/services/subscription.service';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 /**
  * Query key factory for admin data
@@ -19,10 +21,12 @@ export const adminKeys = {
  * Hook to fetch platform statistics
  */
 export function useAdminStats() {
+    const { user } = useAuth();
     return useQuery({
         queryKey: adminKeys.stats(),
         queryFn: adminService.getStats,
         staleTime: 2 * 60 * 1000, // 2 minutes
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 
@@ -30,9 +34,11 @@ export function useAdminStats() {
  * Hook to fetch all user reports with optional filters
  */
 export function useAdminReports(filters?: { search?: string; status?: string }) {
+    const { user } = useAuth();
     return useQuery({
         queryKey: [...adminKeys.reports(), filters],
         queryFn: () => adminService.getReports(filters),
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 
@@ -61,9 +67,11 @@ export function useUpdateReportStatus() {
  * Hook to fetch verification requests
  */
 export function useAdminVerifications() {
+    const { user } = useAuth();
     return useQuery({
         queryKey: adminKeys.verifications(),
         queryFn: adminService.getVerifications,
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 
@@ -93,9 +101,11 @@ export function useProcessVerification() {
  * Hook to fetch ranking weights
  */
 export function useRankingWeights() {
+    const { user } = useAuth();
     return useQuery({
         queryKey: adminKeys.ranking(),
         queryFn: adminService.getRankingWeights,
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 
@@ -180,10 +190,12 @@ export function useCreateInfluencer() {
  * Hook to fetch subscription plans
  */
 export function useAdminSubscriptionPlans() {
+    const { user } = useAuth();
     return useQuery({
         queryKey: adminKeys.subscriptions(),
         queryFn: () => subscriptionService.getPlans(),
         staleTime: 5 * 60 * 1000,
+        enabled: user?.role === UserRole.ADMIN,
     });
 }
 

@@ -16,7 +16,10 @@ import {
     CreditCard,
     UserPlus,
     Bookmark,
-    Gavel
+    Gavel,
+    Award,
+    MessageSquare,
+    BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -69,8 +72,12 @@ export const BottomNav = () => {
         // Fallback (ADMIN or unknown) – only overview
         return [
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.OVERVIEW, icon: TrendingUp, label: 'Home' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.AUCTIONS, icon: Gavel, label: 'Auctions' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.BIDS, icon: BarChart3, label: 'Bids' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.CONVERSATIONS, icon: MessageSquare, label: 'Messages' },
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REPORTS, icon: ShieldAlert, label: 'Reports' },
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verify' },
+            { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.RANKING, icon: Award, label: 'Ranking' },
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subs' },
             { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Explore' },
         ];

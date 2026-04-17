@@ -28,9 +28,10 @@ export function useSubmitVerification() {
 /**
  * Hook to get current verification status
  */
-export function useMyVerificationStatus() {
+export function useMyVerificationStatus(enabled = true) {
     return useQuery({
         queryKey: verificationKeys.status(),
         queryFn: () => verificationService.getMyVerificationStatus(),
+        enabled: enabled,
     });
 }

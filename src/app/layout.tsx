@@ -23,12 +23,22 @@ export const metadata: Metadata = {
   },
   description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "Kollabary",
   },
+  themeColor: "#ff5722",
   formatDetection: {
     telephone: false,
   },
@@ -58,15 +68,15 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
-          <AuthProvider>
-            <SocketProvider>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <AuthProvider>
+              <SocketProvider>
                 {children}
                 <Toaster position="top-right" richColors closeButton />
                 <PWAInstaller />
-              </ThemeProvider>
-            </SocketProvider>
-          </AuthProvider>
+              </SocketProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

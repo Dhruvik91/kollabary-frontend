@@ -52,8 +52,12 @@ export const useMessageHistory = (conversationId: string) => {
     useEffect(() => {
         if (!socket || !conversationId) return;
 
-        // Join the conversation room
-        socket.emit('join_conversation', conversationId);
+        // Function to join or re-join the room
+        const joinRoom = () => {
+            socket.emit('join_conversation', conversationId);
+        };
+
+        joinRoom();
 
         const handleNewMessage = (newMessage: any) => {
             queryClient.setQueryData(['messages', conversationId], (oldData: any) => {
@@ -78,12 +82,14 @@ export const useMessageHistory = (conversationId: string) => {
             });
         };
 
+        socket.on('connect', joinRoom);
         socket.on('new_message', handleNewMessage);
         socket.on('message_updated', handleMessageUpdated);
         socket.on('message_deleted', handleMessageDeleted);
 
         return () => {
             socket.emit('leave_conversation', conversationId);
+            socket.off('connect', joinRoom);
             socket.off('new_message', handleNewMessage);
             socket.off('message_updated', handleMessageUpdated);
             socket.off('message_deleted', handleMessageDeleted);

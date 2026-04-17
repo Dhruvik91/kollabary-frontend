@@ -90,7 +90,7 @@ export const useMyAuctions = () => {
   });
 };
 
-export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
+export const useInfiniteMyAuctions = (filters?: any, options?: { enabled?: boolean }) => {
     const queryClient = useQueryClient();
     const { socket } = useSocket();
 
@@ -113,9 +113,9 @@ export const useInfiniteMyAuctions = (options?: { enabled?: boolean }) => {
     }, [socket, queryClient, options?.enabled]);
 
     return useInfiniteQuery({
-      queryKey: [...auctionKeys.myAuctions(), 'infinite'],
+      queryKey: [...auctionKeys.myAuctions(), filters, 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyAuctions({ page: pageParam }),
+        auctionService.getMyAuctions({ ...filters, page: pageParam }),
       getNextPageParam: (lastPage) => {
         if (lastPage.meta.page < lastPage.meta.totalPages) {
           return lastPage.meta.page + 1;
@@ -134,7 +134,7 @@ export const useMyBids = () => {
   });
 };
 
-export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
+export const useInfiniteMyBids = (filters?: any, options?: { enabled?: boolean }) => {
     const queryClient = useQueryClient();
     const { socket } = useSocket();
 
@@ -157,9 +157,9 @@ export const useInfiniteMyBids = (options?: { enabled?: boolean }) => {
     }, [socket, queryClient, options?.enabled]);
 
     return useInfiniteQuery({
-      queryKey: [...auctionKeys.myBids(), 'infinite'],
+      queryKey: [...auctionKeys.myBids(), filters, 'infinite'],
       queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyBids({ page: pageParam }),
+        auctionService.getMyBids({ ...filters, page: pageParam }),
       getNextPageParam: (lastPage) => {
         if (lastPage.meta.page < lastPage.meta.totalPages) {
           return lastPage.meta.page + 1;
@@ -178,8 +178,12 @@ export const useAuctionDetail = (id: string) => {
   useEffect(() => {
     if (!socket || !id) return;
 
-    // Join the auction room
-    socket.emit('join_auction', id);
+    // Function to join or re-join the room
+    const joinRoom = () => {
+        socket.emit('join_auction', id);
+    };
+
+    joinRoom();
 
     const handleNewBid = (newBid: any) => {
       // Update auction detail with new bid
@@ -205,6 +209,7 @@ export const useAuctionDetail = (id: string) => {
       toast.success('A bid has been accepted!');
     };
 
+    socket.on('connect', joinRoom);
     socket.on('new_bid', handleNewBid);
     socket.on('auction_updated', handleAuctionUpdated);
     socket.on('auction_deleted', handleAuctionDeleted);
@@ -212,6 +217,7 @@ export const useAuctionDetail = (id: string) => {
 
     return () => {
       socket.emit('leave_auction', id);
+      socket.off('connect', joinRoom);
       socket.off('new_bid', handleNewBid);
       socket.off('auction_updated', handleAuctionUpdated);
       socket.off('auction_deleted', handleAuctionDeleted);

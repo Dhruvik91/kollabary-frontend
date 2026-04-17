@@ -9,10 +9,14 @@ import { motion } from 'framer-motion';
 import { Sparkles, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { BackButton } from '@/components/shared/BackButton';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
 
 export const InfluencerEditContainer = () => {
     const router = useRouter();
-    const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile();
+    const { user } = useAuth();
+    const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const { data: profileData, isLoading: isFetchingProfile } = useMyInfluencerProfile(isInfluencer);
     const { mutate: updateProfile, isPending: isUpdating } = useUpdateInfluencerProfile();
 
     const initialData = useMemo(() => {
@@ -101,7 +105,7 @@ export const InfluencerEditContainer = () => {
     }
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0 bg-zinc-50/50 dark:bg-black/50 pt-8 sm:pt-12">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0 bg-zinc-50/50 dark:bg-black/50 pt-8 sm:pt-12">
             <div className="max-w-2xl mx-auto mb-8">
                 <BackButton label="Back to Profile" className="mb-8" />
 

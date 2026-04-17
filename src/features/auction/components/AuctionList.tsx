@@ -11,6 +11,8 @@ interface AuctionListProps {
     isFetchingNextPage?: boolean;
     fetchNextPage?: () => void;
     emptyMessage?: string;
+    /** When true, removes owner action menus from cards (used for history / read-only views) */
+    readOnly?: boolean;
 }
 
 export const AuctionList = ({
@@ -19,21 +21,22 @@ export const AuctionList = ({
     hasNextPage,
     isFetchingNextPage = false,
     fetchNextPage = () => {},
-    emptyMessage = "No active auctions found"
+    emptyMessage = "No active auctions found",
+    readOnly = false,
 }: AuctionListProps) => {
     return (
         <InfiniteScrollContainer
             items={auctions}
             renderItem={(auction) => (
-                <AuctionCard key={auction.id} auction={auction} />
+                <AuctionCard key={auction.id} auction={auction} readOnly={readOnly} />
             )}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
             isLoading={isLoading}
-            gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            gridClassName="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8"
             loader={
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 w-full">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="h-[380px] rounded-[2rem] bg-muted/50 animate-pulse border border-border/50" />
                     ))}

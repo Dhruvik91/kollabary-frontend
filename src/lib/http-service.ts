@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { API_CONFIG, FRONTEND_ROUTES } from "@/constants";
+import { API_CONFIG, FRONTEND_ROUTES, AUTH_STORAGE_KEYS } from "@/constants";
 import { ApiResponse } from "@/types/generic.types";
 
 class HttpService {
@@ -9,7 +9,7 @@ class HttpService {
   private constructor() {
     this.axiosInstance = axios.create({
       baseURL: API_CONFIG.baseUrl,
-      withCredentials: true,
+      withCredentials: false,
       headers: {
         "Content-Type": "application/json",
       },
@@ -18,23 +18,19 @@ class HttpService {
     // Request interceptor
     this.axiosInstance.interceptors.request.use(
       async (config) => {
-        // Handle server-side cookies for Next.js Server Components
-        if (typeof window === 'undefined') {
+        // Attach JWT from client-side storage in Authorization header (Bearer token)
+        if (typeof window !== 'undefined') {
           try {
-            // Dynamic import to avoid issues on the client side
-            const { cookies } = await import('next/headers');
-            const cookieStore = await cookies();
-            const cookieString = cookieStore.toString();
-            
-            if (cookieString) {
-              config.headers.Cookie = cookieString;
+            const token = window.localStorage.getItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN);
+            if (token) {
+              config.headers = config.headers || {};
+              (config.headers as any).Authorization = `Bearer ${token}`;
             }
-          } catch (error) {
-            // Silent fail if not in a request context (e.g. build time)
+          } catch {
+            // Ignore storage errors
           }
         }
-        
-        // With cookie-based JWT auth, the browser will attach cookies automatically.
+
         return config;
       },
       (error) => {
@@ -119,7 +115,12 @@ class HttpService {
               FRONTEND_ROUTES.AUTH.CALLBACK,
             ];
 
-            if (!publicRoutes.includes(currentPath)) {
+            const isPublicRoute = 
+              publicRoutes.includes(currentPath) || 
+              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER_PREFIX) || 
+              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.BRAND_PREFIX);
+
+            if (!isPublicRoute) {
               // Clear user_role cookie to signal unauthenticated status to middleware
               document.cookie = "user_role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax";
               window.location.href = FRONTEND_ROUTES.AUTH.LOGIN;

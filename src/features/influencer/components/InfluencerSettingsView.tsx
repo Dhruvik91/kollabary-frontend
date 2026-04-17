@@ -13,6 +13,7 @@ import {
     Flag,
     Plus,
     X,
+    LogOut,
 } from 'lucide-react';
 import { BackButton } from '@/components/shared/BackButton';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
@@ -31,6 +32,7 @@ import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries
 import { FRONTEND_ROUTES } from '@/constants';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
+import { useLogout } from '@/hooks/use-auth.hooks';
 import {
     Select,
     SelectContent,
@@ -64,6 +66,8 @@ export const InfluencerSettingsView = ({
     const updateInfluencer = useUpdateInfluencerProfile();
     const verificationMutation = useSubmitVerification();
     const changePasswordMutation = useChangePasswordMutation();
+    const logoutMutation = useLogout();
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const currentVerification = (verificationRequests as any[])?.[0];
     const { availability, verified } = influencer;
@@ -110,7 +114,7 @@ export const InfluencerSettingsView = ({
     };
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             <BackButton label="Back to Profile" className="p-0" />
 
             {/* Page Header */}
@@ -349,6 +353,33 @@ export const InfluencerSettingsView = ({
                         </CardContent>
                     </Card>
                 </motion.div>
+
+                {/* 5. Logout (Mobile Only) */}
+                <motion.div variants={item} className="lg:hidden">
+                    <Card className="rounded-[2rem] border-red-500/20 bg-red-500/5 dark:bg-red-500/10 overflow-hidden">
+                        <div className="p-6 border-b border-red-500/20 bg-red-500/10">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center text-red-500">
+                                    <LogOut size={20} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold tracking-tight text-red-600 dark:text-red-400">Account Session</h3>
+                                    <p className="text-sm text-red-500/70 font-medium">Log out of your account on this device</p>
+                                </div>
+                            </div>
+                        </div>
+                        <CardContent className="p-6">
+                            <Button
+                                variant="destructive"
+                                onClick={() => setIsLogoutModalOpen(true)}
+                                className="w-full h-12 rounded-2xl font-bold gap-2 shadow-lg shadow-red-500/20"
+                            >
+                                <LogOut size={18} />
+                                Log Out
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </motion.div>
             </motion.div>
 
             {/* Verification Modal */}
@@ -408,6 +439,38 @@ export const InfluencerSettingsView = ({
                             {verificationMutation.isPending ? "Submitting..." : "Submit Request"}
                         </Button>
                     </div>
+                </div>
+            </AnimatedModal>
+
+            {/* Logout Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                title="End Session?"
+                description="Are you sure you want to log out? You'll need to sign in again to access your dashboard."
+                size="sm"
+            >
+                <div className="flex flex-col gap-3">
+                    <Button
+                        variant="destructive"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12 shadow-lg shadow-red-500/20"
+                        onClick={() => {
+                            logoutMutation.mutate();
+                            setIsLogoutModalOpen(false);
+                        }}
+                        disabled={logoutMutation.isPending}
+                    >
+                        {logoutMutation.isPending ? "Logging out..." : "Log me out"}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12"
+                        onClick={() => setIsLogoutModalOpen(false)}
+                    >
+                        Cancel
+                    </Button>
                 </div>
             </AnimatedModal>
         </div>

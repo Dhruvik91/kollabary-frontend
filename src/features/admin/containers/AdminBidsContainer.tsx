@@ -8,9 +8,15 @@ import { Badge } from '@/components/ui/badge';
 import { BidStatus, Bid } from '@/types/auction.types';
 import { useAdminQueries } from '@/hooks/queries/useAdminQueries';
 
+import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
+
 export const AdminBidsContainer = () => {
     const { useBids } = useAdminQueries();
-    const { data: bids = [], isLoading } = useBids({});
+    const [search, setSearch] = useState('');
+    const [debouncedSearch] = useDebounce(search, 500);
+
+    const { data: bids = [], isLoading } = useBids({ search: debouncedSearch });
 
     const columns: ColumnDef<Bid>[] = [
         {
@@ -107,6 +113,8 @@ export const AdminBidsContainer = () => {
                 columns={columns}
                 isLoading={isLoading}
                 showSearch={true}
+                manualSearching={true}
+                onSearch={setSearch}
                 searchPosition="end"
                 className="w-full"
                 emptyState={

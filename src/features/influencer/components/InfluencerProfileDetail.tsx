@@ -22,6 +22,7 @@ import {
     Settings,
     Award,
     LayoutGrid,
+    TrendingUp,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -50,6 +51,7 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import { BackButton } from '@/components/shared/BackButton';
+import { ShareButton } from '@/components/shared/ShareButton';
 
 
 interface InfluencerProfileDetailProps {
@@ -68,18 +70,18 @@ export const InfluencerProfileDetail = ({
     const { user } = useAuth();
     const router = useRouter();
 
-    const { 
-        user: influencerUser, 
-        categories = [], 
-        platforms, 
-        avatarUrl, 
-        bio, 
-        address, 
-        avgRating, 
-        totalReviews, 
-        verified, 
-        availability, 
-        fullName, 
+    const {
+        user: influencerUser,
+        categories = [],
+        platforms,
+        avatarUrl,
+        bio,
+        address,
+        avgRating,
+        totalReviews,
+        verified,
+        availability,
+        fullName,
         completedCollaborations,
         totalFollowers,
         avgEngagementRate,
@@ -97,8 +99,8 @@ export const InfluencerProfileDetail = ({
     const profile = influencerUser?.profile;
     const displayBio = bio || profile?.bio;
     const displayAvatar = avatarUrl || profile?.avatarUrl;
-    const displayLocation = locationCity && locationCountry 
-        ? `${locationCity}, ${locationCountry}` 
+    const displayLocation = locationCity && locationCountry
+        ? `${locationCity}, ${locationCountry}`
         : profile?.location || address;
 
     const { data: reviews = [], isLoading: isReviewsLoading } = useInfluencerReviews(influencer.id);
@@ -165,7 +167,7 @@ export const InfluencerProfileDetail = ({
     };
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-10 pb-24 md:px-0 max-w-[1600px] mx-auto">
             {/* Back Button */}
             {!isOwner && (
                 <BackButton label="Back to Discovery" className="p-0" />
@@ -177,11 +179,17 @@ export const InfluencerProfileDetail = ({
                 <div className="flex-1 min-w-0 space-y-6 md:space-y-8">
 
                     {/* Profile Header */}
-                    <div className="relative">
+                    <div className="relative group">
                         {/* Banner */}
-                        <div className="h-44 sm:h-56 md:h-64 rounded-[2rem] sm:rounded-[3rem] bg-linear-to-r from-primary/12 via-primary/6 to-transparent border border-border/50 overflow-hidden relative">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary)/0.18),transparent_55%),radial-gradient(circle_at_80%_10%,hsl(var(--primary)/0.12),transparent_45%)]" />
-                            <div className="absolute inset-0 opacity-15 mask-[radial-gradient(circle_at_center,black,transparent_70%)] bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-size-[44px_44px]" />
+                        <div className="h-48 sm:h-64 md:h-72 rounded-[2.5rem] sm:rounded-[4rem] bg-linear-to-br from-primary/20 via-primary/5 to-transparent border border-primary/10 overflow-hidden relative shadow-2xl shadow-primary/5">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,hsl(var(--primary)/0.25),transparent_60%),radial-gradient(circle_at_70%_20%,hsl(var(--primary)/0.15),transparent_50%)]" />
+                            <div className="absolute inset-0 opacity-10 mask-[radial-gradient(circle_at_center,black,transparent_80%)] bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-size-[60px_60px]" />
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 1 }}
+                                className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent"
+                            />
                         </div>
 
                         {/* Profile Info Overlay */}
@@ -211,7 +219,7 @@ export const InfluencerProfileDetail = ({
                                     <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-3">
-                                                <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight truncate min-w-0">
+                                                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter truncate min-w-0 bg-linear-to-b from-foreground to-foreground/70 bg-clip-text leading-[1.1]">
                                                     {profile?.fullName || fullName || 'Creator'}
                                                 </h1>
                                             </div>
@@ -228,31 +236,33 @@ export const InfluencerProfileDetail = ({
                                                     <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
                                                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
                                                 </div>
+
+
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-muted-foreground">
+                                        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-muted-foreground/80">
                                             {displayLocation && (
-                                                <div className="flex items-center gap-2">
-                                                    <MapPin size={16} className="text-primary" />
-                                                    <span className="text-sm truncate">{displayLocation}</span>
+                                                <div className="flex items-center gap-2 group/loc">
+                                                    <MapPin size={16} className="text-primary group-hover/loc:scale-110 transition-transform" />
+                                                    <span className="text-sm font-medium">{displayLocation}</span>
                                                 </div>
                                             )}
-                                            <div className="flex items-center gap-2">
-                                                <LayoutGrid size={16} className="text-primary" />
-                                                <span className="text-sm truncate">
-                                                    {(categories || []).slice(0, 2).join(', ')}
-                                                    {(categories || []).length > 2 ? '...' : ''}
+                                            <div className="flex items-center gap-2 group/cat">
+                                                <LayoutGrid size={16} className="text-primary group-hover/cat:scale-110 transition-transform" />
+                                                <span className="text-sm font-medium">
+                                                    {(categories || []).slice(0, 3).join(', ')}
+                                                    {(categories || []).length > 3 ? '...' : ''}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="w-full md:w-auto flex items-center gap-3 sm:gap-4">
+                                    <div className="w-full md:w-auto flex items-center gap-3 sm:gap-4 self-end md:self-auto">
                                         {isOwner ? (
                                             <>
                                                 <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT} className="flex-1 md:flex-none">
-                                                    <Button className="w-full md:w-auto px-5 sm:px-6 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                                                    <Button className="w-full md:w-auto px-6 sm:px-8 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
                                                         <AlignLeft size={18} />
                                                         Edit Profile
                                                     </Button>
@@ -260,24 +270,38 @@ export const InfluencerProfileDetail = ({
                                                 <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
                                                     <Button
                                                         variant="outline"
-                                                        className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-muted transition-colors flex items-center justify-center"
+                                                        className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30 transition-all flex items-center justify-center"
                                                     >
                                                         <Settings size={18} />
                                                     </Button>
                                                 </Link>
+                                                <ShareButton
+                                                    type="influencer"
+                                                    id={influencer.id}
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30"
+                                                />
                                             </>
                                         ) : (
                                             <>
                                                 <Button
                                                     variant="outline"
                                                     onClick={() => setIsReportModalOpen(true)}
-                                                    className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/50 rounded-2xl border-border/50 hover:bg-destructive/10 hover:text-destructive transition-colors flex items-center justify-center"
+                                                    className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/20 rounded-2xl border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all flex items-center justify-center"
                                                     title="Report Influencer"
                                                 >
                                                     <Flag size={18} />
                                                 </Button>
+                                                <ShareButton
+                                                    type="influencer"
+                                                    id={influencer.id}
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30"
+                                                />
                                                 <Button
-                                                    className="flex-1 md:flex-none px-5 sm:px-6 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/10 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                                                    className="flex-1 md:flex-none px-6 sm:px-8 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
                                                     disabled={isStartingChat}
                                                     onClick={() => {
                                                         startConversation(influencerUser.id, {
@@ -321,10 +345,9 @@ export const InfluencerProfileDetail = ({
 
                     {/* Content Grid: Stats/Socials + About/Reviews */}
                     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
-                        {/* Left Column: Stats & Socials */}
-                        <div className="xl:col-span-1 space-y-6 md:space-y-8">
-                            {/* Creator Stats Card (non-owner only, owners see stats in Ranking sidebar) */}
-                            {!isOwner && (
+                        {/* Left Column: Stats */}
+                        {!isOwner && (
+                            <div className="xl:col-span-1 space-y-6 md:space-y-8">
                                 <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
                                     <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                                         <h3 className="font-bold tracking-tight">Creator Stats</h3>
@@ -348,41 +371,40 @@ export const InfluencerProfileDetail = ({
                                             </div>
                                         ) : null}
 
-                                        <div className="grid grid-cols-3 gap-3">
-                                            <div className="bg-zinc-100 glass-chip p-4 rounded-2xl border border-border/50 text-center">
-                                                <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                                            <div className="bg-primary/5 p-3 sm:p-4 rounded-2xl border border-primary/10 text-center hover:bg-primary/[0.08] transition-all group/stat">
+                                                <div className="flex items-center justify-center gap-1.5 text-primary mb-2 group-hover/stat:scale-110 transition-transform">
                                                     <Award size={14} />
                                                 </div>
-                                                <p className="text-xl sm:text-2xl font-black tabular-nums">
+                                                <p className="text-lg sm:text-2xl font-black tabular-nums text-primary">
                                                     {completedCollaborations ?? 0}
                                                 </p>
-                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Collabs</p>
+                                                <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-tight">Collabs</p>
                                             </div>
-                                            <div className="bg-zinc-100 dark:bg-white/10 p-4 rounded-2xl border border-border/50 dark:border-white/12 text-center">
-                                                <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2">
+                                            <div className="bg-yellow-500/5 p-3 sm:p-4 rounded-2xl border border-yellow-500/10 text-center hover:bg-yellow-500/[0.08] transition-all group/stat">
+                                                <div className="flex items-center justify-center gap-1.5 text-yellow-500 mb-2 group-hover/stat:scale-110 transition-transform">
                                                     <Star size={14} className="fill-yellow-500" />
                                                 </div>
-                                                <p className="text-xl sm:text-2xl font-black tabular-nums">{avgRating}</p>
-                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Avg Rating</p>
+                                                <p className="text-lg sm:text-2xl font-black tabular-nums text-yellow-600">{avgRating}</p>
+                                                <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-tight">Rating</p>
                                             </div>
-                                            <div className="bg-zinc-100 dark:bg-white/10 p-4 rounded-2xl border border-border/50 dark:border-white/12 text-center">
-                                                <div className="flex items-center justify-center gap-1.5 text-primary mb-2">
+                                            <div className="bg-indigo-500/5 p-3 sm:p-4 rounded-2xl border border-indigo-500/10 text-center hover:bg-indigo-500/[0.08] transition-all group/stat">
+                                                <div className="flex items-center justify-center gap-1.5 text-indigo-500 mb-2 group-hover/stat:scale-110 transition-transform">
                                                     <MessageCircle size={14} />
                                                 </div>
-                                                <p className="text-xl sm:text-2xl font-black tabular-nums">{totalReviews}</p>
-                                                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Reviews</p>
+                                                <p className="text-lg sm:text-2xl font-black tabular-nums text-indigo-600">{totalReviews}</p>
+                                                <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-tight">Reviews</p>
                                             </div>
                                         </div>
 
-                                        {/* New Metrics */}
                                         <div className="grid grid-cols-2 gap-3 pt-2">
-                                            <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10 text-center">
-                                                <p className="text-xl font-black tabular-nums text-primary">
+                                            <div className="bg-muted/30 p-4 rounded-2xl border border-border/50 text-center hover:bg-muted/40 transition-colors">
+                                                <p className="text-xl font-black tabular-nums text-foreground">
                                                     {totalFollowers ? Intl.NumberFormat('en', { notation: 'compact' }).format(totalFollowers) : 'N/A'}
                                                 </p>
                                                 <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Total Reach</p>
                                             </div>
-                                            <div className="bg-green-500/5 p-4 rounded-2xl border border-green-500/10 text-center">
+                                            <div className="bg-green-500/5 p-4 rounded-2xl border border-green-500/10 text-center hover:bg-green-500/[0.08] transition-colors">
                                                 <p className="text-xl font-black tabular-nums text-green-600">
                                                     {avgEngagementRate ? `${avgEngagementRate}%` : 'N/A'}
                                                 </p>
@@ -391,46 +413,11 @@ export const InfluencerProfileDetail = ({
                                         </div>
                                     </CardContent>
                                 </Card>
-                            )}
-
-                            {/* Socials Card */}
-                            <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
-                                <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
-                                    <h3 className="font-bold tracking-tight">Connected Platforms</h3>
-                                </div>
-                                <CardContent className="p-6 space-y-4">
-                                    {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
-                                        <a
-                                            key={name}
-                                            href={data.handle}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center justify-between p-4 bg-background/50 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 bg-zinc-100 glass-chip rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                                    {getPlatformIcon(name)}
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm font-bold capitalize">{name}</p>
-                                                    <p className="text-xs text-muted-foreground">{data.handle}</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-right space-y-1">
-                                                <p className="text-sm font-bold">{Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}</p>
-                                                <p className="text-[10px] font-bold text-muted-foreground uppercase">Followers</p>
-                                                {data.engagementRate && (
-                                                    <p className="text-xs font-bold text-green-500">{data.engagementRate}% Eng.</p>
-                                                )}
-                                            </div>
-                                        </a>
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        </div>
+                            </div>
+                        )}
 
                         {/* Right Column: About & Reviews */}
-                        <div className="xl:col-span-2 space-y-6 md:space-y-8">
+                        <div className={cn(isOwner ? "xl:col-span-3" : "xl:col-span-2", "space-y-6 md:space-y-8")}>
                             <Card className="rounded-[2rem] md:rounded-[3rem] border-border/50 bg-card/50 glass-card p-6 sm:p-8 md:p-10 lg:p-12">
                                 <div className="space-y-6 md:space-y-8">
                                     <div className="space-y-4">
@@ -440,8 +427,38 @@ export const InfluencerProfileDetail = ({
                                         </p>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                                        <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {/* Connected Platforms */}
+                                        <div className="space-y-4 lg:col-span-1">
+                                            <div className="flex items-center gap-2 text-primary">
+                                                <Globe size={20} />
+                                                <h4 className="font-bold">Connected Platforms</h4>
+                                            </div>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                                                {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
+                                                    <a
+                                                        key={name}
+                                                        href={data.handle}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-3 p-3 bg-muted/30 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
+                                                    >
+                                                        <div className="w-8 h-8 bg-zinc-100 glass-chip rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+                                                            {getPlatformIcon(name)}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-xs font-bold capitalize truncate">{name}</p>
+                                                            <p className="text-[10px] font-black text-primary truncate leading-none">
+                                                                {Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}
+                                                            </p>
+                                                        </div>
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Collaboration Types */}
+                                        <div className="space-y-4 lg:col-span-1">
                                             <div className="flex items-center gap-2 text-primary">
                                                 <Calendar size={20} />
                                                 <h4 className="font-bold">Collaboration Types</h4>
@@ -462,7 +479,9 @@ export const InfluencerProfileDetail = ({
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="space-y-4">
+
+                                        {/* Reviews & Sentiment */}
+                                        <div className="space-y-4 lg:col-span-1">
                                             <div className="flex items-center gap-2 text-primary">
                                                 <Star size={20} />
                                                 <h4 className="font-bold">Reviews & Sentiment</h4>
@@ -473,54 +492,162 @@ export const InfluencerProfileDetail = ({
                                         </div>
                                     </div>
 
-                                    {/* Pricing & Demographics Section */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-8 border-t border-border/50">
-                                        <div className="space-y-4">
-                                            <h4 className="font-bold flex items-center gap-2 text-primary">
-                                                <Globe size={18} />
-                                                Audience & Languages
-                                            </h4>
-                                            <div className="space-y-3">
-                                                <div>
-                                                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Languages</p>
-                                                    <div className="flex flex-wrap gap-1.5">
-                                                        {languages?.map(lang => (
-                                                            <Badge key={lang} variant="secondary" className="rounded-lg text-[10px] px-2 py-0.5">{lang}</Badge>
-                                                        ))}
-                                                    </div>
+                                    {/* Audience Insights Section */}
+                                    <div className="pt-10 space-y-8 border-t border-border/50">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-2xl font-black tracking-tight flex items-center gap-3">
+                                                <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
+                                                    <TrendingUp size={22} />
                                                 </div>
-                                                {audienceTopCountries && audienceTopCountries.length > 0 && (
-                                                    <div>
-                                                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Top Countries</p>
-                                                        <p className="text-sm text-foreground">{audienceTopCountries.join(', ')}</p>
+                                                Audience Insights
+                                            </h3>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                            {/* Audience Demographics & Languages */}
+                                            <div className="space-y-8">
+                                                {/* Gender Ratio */}
+                                                {(influencer.audienceGenderRatio) && (
+                                                    <div className="space-y-4">
+                                                        <div className="flex items-center justify-between font-bold text-sm tracking-tight">
+                                                            <span>Audience Gender</span>
+                                                            <div className="flex gap-4 text-[10px] uppercase">
+                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Male</span>
+                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-pink-500" /> Female</span>
+                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-indigo-400" /> Other</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="h-4 w-full flex rounded-full overflow-hidden bg-muted/50 border border-border/30">
+                                                            {(() => {
+                                                                const gender = influencer.audienceGenderRatio || {};
+                                                                const total = (gender.male || 0) + (gender.female || 0) + (gender.other || 0);
+                                                                if (total === 0) return <div className="w-full bg-muted flex items-center justify-center text-[10px] text-muted-foreground italic">No data</div>;
+
+                                                                const malePercent = (gender.male || 0) / total * 100;
+                                                                const femalePercent = (gender.female || 0) / total * 100;
+                                                                const otherPercent = (gender.other || 0) / total * 100;
+
+                                                                return (
+                                                                    <>
+                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${malePercent}%` }} transition={{ duration: 1 }} className="h-full bg-blue-500 relative group">
+                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(malePercent)}%</span>
+                                                                        </motion.div>
+                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${femalePercent}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-pink-500 relative group">
+                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(femalePercent)}%</span>
+                                                                        </motion.div>
+                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${otherPercent}%` }} transition={{ duration: 1, delay: 0.4 }} className="h-full bg-indigo-400 relative group">
+                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(otherPercent)}%</span>
+                                                                        </motion.div>
+                                                                    </>
+                                                                );
+                                                            })()}
+                                                        </div>
                                                     </div>
                                                 )}
-                                                {gender && (
-                                                    <div>
-                                                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Gender</p>
-                                                        <p className="text-sm text-foreground">{gender}</p>
+
+                                                {/* Age Brackets */}
+                                                {(influencer.audienceAgeBrackets) && (
+                                                    <div className="space-y-4">
+                                                        <p className="font-bold text-sm tracking-tight">Age Distribution</p>
+                                                        <div className="grid grid-cols-7 gap-1.5 h-32 items-end">
+                                                            {(() => {
+                                                                const brackets = influencer.audienceAgeBrackets || {};
+                                                                const labels = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
+                                                                const values = labels.map(l => brackets[l] || 0);
+                                                                const maxVal = Math.max(...values, 1);
+
+                                                                return labels.map((label, idx) => {
+                                                                    const val = brackets[label] || 0;
+                                                                    const percent = (val / maxVal) * 100;
+                                                                    return (
+                                                                        <div key={label} className="flex flex-col items-center gap-2 group h-full justify-end">
+                                                                            <div className="flex-1 w-full bg-muted/30 rounded-t-lg relative overflow-hidden flex flex-col justify-end">
+                                                                                <motion.div
+                                                                                    initial={{ height: 0 }}
+                                                                                    animate={{ height: `${percent}%` }}
+                                                                                    transition={{ duration: 0.8, delay: idx * 0.1 }}
+                                                                                    className="w-full bg-linear-to-t from-primary/80 to-primary/40 rounded-t-lg"
+                                                                                />
+                                                                                <span className="absolute top-1 left-0 right-0 text-center text-[8px] font-black tabular-nums opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                                                                    {val}%
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-[7px] font-bold text-muted-foreground text-center truncate w-full">{label}</span>
+                                                                        </div>
+                                                                    );
+                                                                });
+                                                            })()}
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
 
-                                        <div className="space-y-4">
-                                            <h4 className="font-bold flex items-center gap-2 text-primary">
-                                                <Briefcase size={18} />
-                                                Standard Rates
-                                            </h4>
-                                            <div className="bg-muted/30 p-4 rounded-2xl border border-border/50">
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <span className="text-sm text-muted-foreground font-medium">Starting from</span>
-                                                    <span className="text-xl font-black text-primary">${minPrice || 0}</span>
-                                                </div>
-                                                {(maxPrice || 0) > (minPrice || 0) && (
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-sm text-muted-foreground font-medium">Up to</span>
-                                                        <span className="text-lg font-bold text-foreground">${maxPrice}</span>
+                                            {/* Top Countries & Pricing */}
+                                            <div className="space-y-8">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                            <Globe size={16} />
+                                                            <span>Top Regions</span>
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {(audienceTopCountries || []).map(country => (
+                                                                <Badge key={country} className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/10 rounded-lg px-2.5 py-1 text-[10px] font-bold">
+                                                                    {country}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                )}
-                                                <p className="text-[10px] text-muted-foreground mt-3 italic">* Rates may vary based on specific campaign requirements.</p>
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                            <MessageCircle size={16} />
+                                                            <span>Languages</span>
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {(languages || []).map(lang => (
+                                                                <Badge key={lang} variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold">
+                                                                    {lang}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="p-6 sm:p-8 rounded-[2rem] bg-linear-to-br from-primary/10 via-background to-background border border-primary/20 shadow-2xl shadow-primary/5 group/price relative overflow-hidden">
+                                                    <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50" />
+                                                    <div className="relative z-10">
+                                                        <div className="flex items-center justify-between mb-8">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="p-2.5 bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/20">
+                                                                    <Briefcase size={20} />
+                                                                </div>
+                                                                <h4 className="text-xl font-black tracking-tight">Standard Rates</h4>
+                                                            </div>
+                                                            <div className="text-[10px] font-black text-primary uppercase bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">USD</div>
+                                                        </div>
+
+                                                        <div className="space-y-4">
+                                                            <div className="flex justify-between items-end">
+                                                                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Starting from</span>
+                                                                <div className="text-right">
+                                                                    <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
+                                                                </div>
+                                                            </div>
+                                                            {(maxPrice || 0) > (minPrice || 0) && (
+                                                                <>
+                                                                    <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent" />
+                                                                    <div className="flex justify-between items-end">
+                                                                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Project Max</span>
+                                                                        <span className="text-xl font-bold text-foreground/80">${maxPrice}</span>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
+                                                                * Final pricing varies based on usage rights, content complexity, and timeline.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

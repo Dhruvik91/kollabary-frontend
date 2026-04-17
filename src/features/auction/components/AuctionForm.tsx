@@ -97,7 +97,12 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                             <FormItem>
                                 <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Min Budget ($)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
+                                    <Input 
+                                        type="number" 
+                                        {...field} 
+                                        value={field.value ?? ''}
+                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" 
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -110,7 +115,12 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                             <FormItem>
                                 <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Max Budget ($)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" />
+                                    <Input 
+                                        type="number" 
+                                        {...field} 
+                                        value={field.value ?? ''}
+                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" 
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

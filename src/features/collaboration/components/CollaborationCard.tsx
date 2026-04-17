@@ -2,7 +2,7 @@ import { Collaboration } from '@/types/collaboration.types';
 import { CollaborationStatusBadge } from './CollaborationStatusBadge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
-import { Calendar, User as UserIcon, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -86,13 +86,6 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                     </p>
 
                     <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm">
-                            <UserIcon size={14} className="text-primary" />
-                            <span className="font-medium text-foreground">{partner.email.split('@')[0]}</span>
-                            <span className="text-muted-foreground text-xs uppercase tracking-wider font-semibold ml-auto">
-                                {isInfluencer ? 'Brand' : 'Influencer'}
-                            </span>
-                        </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Calendar size={14} />
                             <span>{dateRange}</span>

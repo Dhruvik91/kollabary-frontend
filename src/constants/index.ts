@@ -92,7 +92,12 @@ export const API_CONFIG = {
             acceptBid: (id: string) => `/auctions/bids/${id}/accept`,
             rejectBid: (id: string) => `/auctions/bids/${id}/reject`,
             myBids: '/auctions/my/bids',
+        },
+        public: {
+            influencer: (id: string) => `/public/influencer/${id}`,
+            brand: (id: string) => `/public/brand/${id}`,
         }
+
     }
 }
 
@@ -160,4 +165,15 @@ export const FRONTEND_ROUTES = {
     MARKETING_DISCOVER: '/discover',
     MARKETING_CAMPAIGNS: '/marketing-campaigns',
     MARKETING_ANALYTICS: '/marketing-analytics',
+    PUBLIC_SHAREABLE: {
+        INFLUENCER: (id: string) => `/i/${id}`,
+        BRAND: (id: string) => `/b/${id}`,
+        INFLUENCER_PREFIX: '/i/',
+        BRAND_PREFIX: '/b/',
+    },
 }
+
+export const AUTH_STORAGE_KEYS = {
+    ACCESS_TOKEN: 'access_token',
+    USER_ROLE: 'user_role',
+} as const;

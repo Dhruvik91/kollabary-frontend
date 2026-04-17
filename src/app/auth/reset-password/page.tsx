@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 };
 
 interface ResetPasswordPageProps {
-    searchParams: Promise<{ token?: string }>;
+    searchParams: Promise<{ token?: string; id?: string }>;
 }
 
 export default function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
-    const { token } = use(searchParams);
+    const { token, id } = use(searchParams);
 
     // Redirect if no token provided
-    if (!token) {
+    if (!token || !id) {
         redirect('/auth/forgot-password');
     }
 
@@ -30,7 +30,7 @@ export default function ResetPasswordPage({ searchParams }: ResetPasswordPagePro
             title="Reset password"
             description="Enter your new password below"
         >
-            <ResetPasswordContainer token={token} />
+            <ResetPasswordContainer token={token} userId={id} />
         </AuthLayout>
     );
 }

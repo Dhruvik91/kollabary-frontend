@@ -37,9 +37,5 @@ export async function generateMetadata({ params }: BrandDetailPageProps): Promis
 export default async function BrandDetailPage({ params }: BrandDetailPageProps) {
     const { id } = await params;
     
-    return (
-        <div className="py-8 sm:py-12">
-            <BrandDetailContainer brandId={id} />
-        </div>
-    );
+    return <BrandDetailContainer brandId={id} />;
 }

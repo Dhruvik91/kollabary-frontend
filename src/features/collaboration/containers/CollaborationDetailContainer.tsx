@@ -141,14 +141,14 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     };
 
     const isRequester = user?.id === collaboration.requester.id;
-    const canShowProgressActions = isInfluencer && [
+    const canShowProgressActions = (isInfluencer && [
         CollaborationStatus.ACCEPTED,
         CollaborationStatus.IN_PROGRESS
-    ].includes(collaboration.status);
+    ].includes(collaboration.status)) || (isRequester && collaboration.status === CollaborationStatus.WORK_SUBMITTED);
 
-    const canSubmitProof = isRequester && [
+    const canSubmitProof = isInfluencer && [
         CollaborationStatus.IN_PROGRESS,
-        CollaborationStatus.COMPLETED
+        CollaborationStatus.WORK_SUBMITTED
     ].includes(collaboration.status);
 
     const canReview = isRequester && collaboration.status === CollaborationStatus.COMPLETED && !hasReviewForThisCollaboration;
@@ -179,7 +179,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0"
+            className="space-y-6 sm:space-y-8 pb-20 md:px-0"
         >
             {/* Header with Navigation & Actions */}
             <CollaborationHeader
@@ -219,12 +219,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
                         />
                     )}
 
-                    {/* Progress Actions (Start/Complete) */}
+                    {/* Progress Actions (Start/Work Submitted/Complete) */}
                     {canShowProgressActions && (
                         <CollaborationProgressActions
                             status={collaboration.status}
                             onUpdateStatus={handleUpdateStatus}
                             isUpdating={isUpdating}
+                            isInfluencer={isInfluencer}
                         />
                     )}
 

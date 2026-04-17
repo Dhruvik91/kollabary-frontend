@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useBrandProfile } from '@/hooks/queries/useProfileQueries';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -13,6 +13,7 @@ import { BrandAuctionList } from '../components/BrandAuctionList';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ReportModal } from '@/features/report/components/ReportModal';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface BrandDetailContainerProps {
     brandId: string;
@@ -67,31 +68,73 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-10 md:space-y-12 pb-20 px-4 sm:px-6">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4 }}
-            >
-                <BackButton label="Back to Dashboard" className="p-0 font-bold opacity-70 hover:opacity-100 transition-opacity" />
-            </motion.div>
+        <div className="relative min-h-screen bg-background transition-colors duration-500">
+            {/* Ambient Background Decorative Elements - Subtle & Theme Aware */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40 dark:opacity-20">
+                <div className="absolute top-[10%] left-[-5%] w-[40rem] h-[40rem] bg-primary/5 blur-[120px] rounded-full animate-pulse" />
+                <div className="absolute bottom-[20%] right-[-10%] w-[35rem] h-[35rem] bg-secondary/5 blur-[100px] rounded-full animate-pulse [animation-delay:3s]" />
+                <div className="absolute top-[40%] right-[10%] w-[25rem] h-[25rem] bg-primary/5 blur-[80px] rounded-full animate-pulse [animation-delay:5s]" />
+            </div>
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="space-y-10 sm:space-y-14 lg:space-y-16"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="relative z-10 max-w-[1600px] mx-auto space-y-6 sm:space-y-10 pb-24 md:px-0"
             >
-                <BrandDetailHeader 
-                    brand={brand} 
+                <div className="flex items-center justify-between">
+                    <BackButton
+                        label="Back to Discovery"
+                        className="p-0"
+                    />
+                </div>
+
+                <BrandDetailHeader
+                    brand={brand}
                     isStartingChat={isStartingChat}
                     onContact={handleContact}
                     onReport={() => setIsReportModalOpen(true)}
                 />
 
-                <BrandAbout brand={brand} />
+                <div className="space-y-8 lg:space-y-12">
+                    <Tabs defaultValue="about" className="space-y-8 lg:space-y-12">
+                        <div className="flex justify-center sm:justify-start">
+                            <TabsList variant="pill">
+                                <TabsTrigger value="about">
+                                    About
+                                </TabsTrigger>
+                                <TabsTrigger value="auctions">
+                                    Auctions
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
 
-                <BrandAuctionList auctions={brand.activeAuctions || []} />
+                        <AnimatePresence mode="wait">
+                            <TabsContent value="about" key="about" className="m-0 focus-visible:outline-none ring-offset-background">
+                                <motion.div
+                                    key="about-tab"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <BrandAbout brand={brand} />
+                                </motion.div>
+                            </TabsContent>
+
+                            <TabsContent value="auctions" key="auctions" className="m-0 focus-visible:outline-none ring-offset-background">
+                                <motion.div
+                                    key="auctions-tab"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <BrandAuctionList auctions={brand.activeAuctions || []} />
+                                </motion.div>
+                            </TabsContent>
+                        </AnimatePresence>
+                    </Tabs>
+                </div>
             </motion.div>
 
             <ReportModal

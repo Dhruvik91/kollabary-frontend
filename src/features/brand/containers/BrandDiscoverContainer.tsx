@@ -60,7 +60,7 @@ export const BrandDiscoverContainer = () => {
     }
 
     return (
-        <div className="space-y-6 sm:space-y-8 pb-20 px-4 sm:px-6 md:px-0">
+        <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             {/* Header Section */}
             <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 sm:gap-6">
                 <div className="space-y-3 sm:space-y-4">
@@ -148,7 +148,7 @@ export const BrandDiscoverContainer = () => {
                 {/* Main Content Grid */}
                 <div className="xl:col-span-3">
                     {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                             {[...Array(6)].map((_, i) => (
                                 <div key={i} className="h-[400px] rounded-[2rem] bg-zinc-100 dark:bg-white/5 animate-pulse" />
                             ))}
