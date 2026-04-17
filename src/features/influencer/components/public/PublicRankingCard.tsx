@@ -89,7 +89,7 @@ export const PublicRankingCard = ({ score, tier, stats, className }: PublicRanki
                                 initial={{ strokeDashoffset: 440 }}
                                 animate={{ strokeDashoffset: 440 - (440 * score) / 100 }}
                                 transition={{ duration: 2, ease: "circOut" }}
-                                className={cn(getScoreColor(score), "drop-shadow-[0_0_8px_currentColor]")}
+                                className={getScoreColor(score)}
                             />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">

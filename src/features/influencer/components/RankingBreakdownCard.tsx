@@ -106,7 +106,7 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
                                 initial={{ strokeDashoffset: 440 }}
                                 animate={{ strokeDashoffset: 440 - (440 * totalScore) / 100 }}
                                 transition={{ duration: 2, ease: "circOut" }}
-                                className={cn(getScoreColor(totalScore), "drop-shadow-[0_0_8px_currentColor]")}
+                                className={getScoreColor(totalScore)}
                             />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
