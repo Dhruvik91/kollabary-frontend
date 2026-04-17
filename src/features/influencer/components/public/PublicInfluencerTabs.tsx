@@ -1,14 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Instagram, Twitter, Linkedin, Youtube, ExternalLink, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Globe, Instagram, Twitter, Linkedin, Youtube, ExternalLink, CheckCircle2, ArrowRight, MessageSquareOff, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ReviewList } from '@/features/review/components/ReviewList';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ReviewCard } from '@/features/review/components/ReviewCard';
 import { AudienceInsights } from './AudienceInsights';
 import {
     Carousel,
@@ -16,7 +17,9 @@ import {
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
+    type CarouselApi,
 } from "@/components/ui/carousel";
+
 interface PublicInfluencerTabsProps {
     influencerId: string;
     platforms: Record<string, any>;
@@ -40,6 +43,33 @@ export const PublicInfluencerTabs = ({
     ageBrackets,
     topCountries,
 }: PublicInfluencerTabsProps) => {
+    const [portfolioApi, setPortfolioApi] = useState<CarouselApi>();
+    const [reviewsApi, setReviewsApi] = useState<CarouselApi>();
+    
+    const [portfolioCurrent, setPortfolioCurrent] = useState(0);
+    const [portfolioCount, setPortfolioCount] = useState(0);
+    const [reviewsCurrent, setReviewsCurrent] = useState(0);
+    const [reviewsCount, setReviewsCount] = useState(0);
+
+    // Sync Portfolio stats
+    useEffect(() => {
+        if (!portfolioApi) return;
+        setPortfolioCount(portfolioApi.scrollSnapList().length);
+        setPortfolioCurrent(portfolioApi.selectedScrollSnap() + 1);
+        portfolioApi.on("select", () => {
+            setPortfolioCurrent(portfolioApi.selectedScrollSnap() + 1);
+        });
+    }, [portfolioApi]);
+
+    // Sync Reviews stats
+    useEffect(() => {
+        if (!reviewsApi) return;
+        setReviewsCount(reviewsApi.scrollSnapList().length);
+        setReviewsCurrent(reviewsApi.selectedScrollSnap() + 1);
+        reviewsApi.on("select", () => {
+            setReviewsCurrent(reviewsApi.selectedScrollSnap() + 1);
+        });
+    }, [reviewsApi]);
 
     const formatNumber = (num: number) => {
         if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
@@ -131,22 +161,37 @@ export const PublicInfluencerTabs = ({
             <TabsContent value="collaborations" className="space-y-16 animate-in fade-in duration-700 slide-in-from-bottom-4">
                 {/* Brand Partners Carousel */}
                 <div className="space-y-8">
-                    <div className="flex items-center gap-3 px-2">
-                        <div className="h-8 w-1.5 bg-primary rounded-full" />
-                        <h3 className="text-2xl font-black tracking-tight uppercase">Trusted by Following Brands</h3>
-                    </div>
-                    {brandPartners?.length > 0 ? (
-                        <div className="relative px-12">
-                            <Carousel
-                                opts={{ align: "start", loop: false }}
-                                className="w-full"
-                            >
+                    <Carousel
+                        setApi={setPortfolioApi}
+                        opts={{ align: "start", loop: false }}
+                        className="w-full group"
+                    >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 px-2 mb-8">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                <h3 className="text-2xl font-black tracking-tight uppercase">Trusted by Following Brands</h3>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                {portfolioCount > 1 && (
+                                    <div className="px-4 py-2 rounded-xl bg-muted/30 border border-border/50 text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                                        {portfolioCurrent} <span className="mx-1 text-muted-foreground/30">/</span> {portfolioCount}
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-2">
+                                    <CarouselPrevious className="static translate-y-0 bg-background border-border/50 text-foreground hover:bg-primary hover:text-white transition-all shadow-sm size-10 rounded-xl" />
+                                    <CarouselNext className="static translate-y-0 bg-background border-border/50 text-foreground hover:bg-primary hover:text-white transition-all shadow-sm size-10 rounded-xl" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {brandPartners?.length > 0 ? (
+                            <div className="relative">
                                 <CarouselContent className="-ml-4">
                                     {brandPartners.map((brand: any) => (
-                                        <CarouselItem key={brand.id} className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
-                                            <Link href={`/b/${brand.id}`} className="block h-full group">
-                                                <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.05]">
-                                                    <div className="w-14 h-14 rounded-2xl bg-zinc-100 overflow-hidden relative border-2 border-border/50 group-hover:border-primary/50 transition-all">
+                                        <CarouselItem key={brand.id} className="pl-4 basis-full sm:basis-1/2 md:basis-1/3">
+                                            <Link href={`/b/${brand.id}`} className="block h-full group/card">
+                                                <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
+                                                    <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 overflow-hidden relative border-border/50 group-hover/card:border-primary/50 transition-all">
                                                         {brand.avatarUrl ? (
                                                             <Image src={brand.avatarUrl} alt="" fill className="object-cover" />
                                                         ) : (
@@ -156,30 +201,88 @@ export const PublicInfluencerTabs = ({
                                                         )}
                                                     </div>
                                                     <div className="grow">
-                                                        <p className="text-sm font-black tracking-tight group-hover:text-primary transition-colors line-clamp-1">{brand.fullName || 'Brand'}</p>
+                                                        <p className="text-sm font-black tracking-tight group-hover/card:text-primary transition-colors line-clamp-1">{brand.fullName || 'Brand'}</p>
                                                         <div className="flex items-center gap-1.5">
                                                             <p className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">View Brand</p>
-                                                            <ArrowRight size={10} className="text-primary opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                                                            <ArrowRight size={10} className="text-primary opacity-0 group-hover/card:opacity-100 -translate-x-2 group-hover/card:translate-x-0 transition-all" />
                                                         </div>
                                                     </div>
-                                                    <CheckCircle2 size={16} className="text-primary/40 group-hover:text-primary transition-colors" />
+                                                    <CheckCircle2 size={16} className="text-primary/40 group-hover/card:text-primary transition-colors" />
                                                 </div>
                                             </Link>
                                         </CarouselItem>
                                     ))}
                                 </CarouselContent>
-                                <CarouselPrevious className="hidden md:flex -left-6 bg-background/80 hover:bg-primary hover:text-white transition-all border-border/50" />
-                                <CarouselNext className="hidden md:flex -right-6 bg-background/80 hover:bg-primary hover:text-white transition-all border-border/50" />
-                            </Carousel>
-                        </div>
-                    ) : (
-                        <p className="text-sm text-muted-foreground italic px-2 font-medium">This creator is ready for their first major brand partnership!</p>
-                    )}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground italic px-2 font-medium">This creator is ready for their first major brand partnership!</p>
+                        )}
+                    </Carousel>
                 </div>
             </TabsContent>
 
             <TabsContent value="reviews" className="animate-in fade-in duration-700 slide-in-from-bottom-4">
-                <ReviewList reviews={reviews} isLoading={reviewsLoading} showHeader={true} />
+                <div className="space-y-8">
+                    <Carousel
+                        setApi={setReviewsApi}
+                        opts={{ align: "start", loop: false }}
+                        className="w-full group"
+                    >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 px-2 mb-8">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-1.5 bg-primary rounded-full" />
+                                <h3 className="text-2xl font-black tracking-tight uppercase">Recent Feedback</h3>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                {reviewsCount > 1 && (
+                                    <div className="px-4 py-2 rounded-xl bg-muted/30 border border-border/50 text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                                        {reviewsCurrent} <span className="mx-1 text-muted-foreground/30">/</span> {reviewsCount}
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-2">
+                                    <CarouselPrevious className="static translate-y-0 bg-background border-border/50 text-foreground hover:bg-primary hover:text-white transition-all shadow-sm size-10 rounded-xl" />
+                                    <CarouselNext className="static translate-y-0 bg-background border-border/50 text-foreground hover:bg-primary hover:text-white transition-all shadow-sm size-10 rounded-xl" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {!reviewsLoading && reviews?.length > 0 ? (
+                            <div className="relative">
+                                <CarouselContent className="-ml-4 sm:-ml-6">
+                                    {(reviews || []).map((review) => (
+                                        <CarouselItem key={review.id} className="pl-4 sm:pl-6 basis-full sm:basis-1/2">
+                                            <div className="pb-4">
+                                                <ReviewCard review={review} className="h-full bg-card/40 border-border/40 hover:border-primary/20 transition-all duration-500" />
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                            </div>
+                        ) : reviewsLoading ? (
+                            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                                <Loader2 className="h-10 w-10 animate-spin text-primary/40" />
+                                <p className="text-muted-foreground text-xs font-black uppercase tracking-widest animate-pulse">
+                                    Fetching reviews...
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-20 text-center space-y-6 bg-muted/5 rounded-[3rem] border-2 border-dashed border-border/50">
+                                <div className="relative">
+                                    <div className="absolute -inset-4 bg-primary/5 rounded-full blur-xl animate-pulse" />
+                                    <div className="relative w-20 h-20 rounded-[2.5rem] bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary/40 rotate-6 border border-primary/10">
+                                        <MessageSquareOff size={40} />
+                                    </div>
+                                </div>
+                                <div className="space-y-2 max-w-xs">
+                                    <h3 className="font-bold text-xl tracking-tight">No reviews yet</h3>
+                                    <p className="text-sm text-muted-foreground leading-relaxed">
+                                        This influencer hasn't received any feedback from brand partners yet.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </Carousel>
+                </div>
             </TabsContent>
         </Tabs>
     );

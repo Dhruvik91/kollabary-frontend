@@ -23,7 +23,21 @@ import {
     Award,
     LayoutGrid,
     TrendingUp,
+    PieChart as PieChartIcon,
+    BarChart3,
 } from 'lucide-react';
+import {
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid
+} from 'recharts';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
@@ -69,6 +83,11 @@ export const InfluencerProfileDetail = ({
 }: InfluencerProfileDetailProps) => {
     const { user } = useAuth();
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const {
         user: influencerUser,
@@ -511,38 +530,70 @@ export const InfluencerProfileDetail = ({
                                                 {/* Gender Ratio */}
                                                 {(influencer.audienceGenderRatio) && (
                                                     <div className="space-y-4">
-                                                        <div className="flex items-center justify-between font-bold text-sm tracking-tight">
+                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
+                                                            <PieChartIcon size={16} />
                                                             <span>Audience Gender</span>
-                                                            <div className="flex gap-4 text-[10px] uppercase">
-                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Male</span>
-                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-pink-500" /> Female</span>
-                                                                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-indigo-400" /> Other</span>
-                                                            </div>
                                                         </div>
-                                                        <div className="h-4 w-full flex rounded-full overflow-hidden bg-muted/50 border border-border/30">
-                                                            {(() => {
+                                                        <div className="h-[180px] w-full relative">
+                                                            {isMounted ? (() => {
                                                                 const gender = influencer.audienceGenderRatio || {};
-                                                                const total = (gender.male || 0) + (gender.female || 0) + (gender.other || 0);
-                                                                if (total === 0) return <div className="w-full bg-muted flex items-center justify-center text-[10px] text-muted-foreground italic">No data</div>;
+                                                                const genderData = [
+                                                                    { name: 'Male', value: gender.male || 0 },
+                                                                    { name: 'Female', value: gender.female || 0 },
+                                                                    { name: 'Other', value: gender.other || 0 }
+                                                                ].filter(d => d.value > 0);
 
-                                                                const malePercent = (gender.male || 0) / total * 100;
-                                                                const femalePercent = (gender.female || 0) / total * 100;
-                                                                const otherPercent = (gender.other || 0) / total * 100;
+                                                                const COLORS = ['#3b82f6', '#ec4899', '#818cf8'];
+
+                                                                if (genderData.length === 0) return (
+                                                                    <div className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground italic bg-muted/20 rounded-2xl border border-dashed border-border/50">
+                                                                        No data available
+                                                                    </div>
+                                                                );
 
                                                                 return (
-                                                                    <>
-                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${malePercent}%` }} transition={{ duration: 1 }} className="h-full bg-blue-500 relative group">
-                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(malePercent)}%</span>
-                                                                        </motion.div>
-                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${femalePercent}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-pink-500 relative group">
-                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(femalePercent)}%</span>
-                                                                        </motion.div>
-                                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${otherPercent}%` }} transition={{ duration: 1, delay: 0.4 }} className="h-full bg-indigo-400 relative group">
-                                                                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">{Math.round(otherPercent)}%</span>
-                                                                        </motion.div>
-                                                                    </>
+                                                                    <ResponsiveContainer width="100%" height="100%" aspect={3}>
+                                                                        <PieChart>
+                                                                            <Pie
+                                                                                data={genderData}
+                                                                                cx="50%"
+                                                                                cy="50%"
+                                                                                innerRadius={60}
+                                                                                outerRadius={80}
+                                                                                paddingAngle={5}
+                                                                                dataKey="value"
+                                                                            >
+                                                                                {genderData.map((entry, index) => (
+                                                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
+                                                                                ))}
+                                                                            </Pie>
+                                                                            <Tooltip
+                                                                                contentStyle={{
+                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
+                                                                                    backdropFilter: 'blur(12px)',
+                                                                                    borderRadius: '1.25rem',
+                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                                                                    padding: '12px 16px'
+                                                                                }}
+                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
+                                                                                labelStyle={{ display: 'none' }}
+                                                                            />
+                                                                        </PieChart>
+                                                                    </ResponsiveContainer>
                                                                 );
-                                                            })()}
+                                                            })() : (
+                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
+                                                            )}
+
+                                                            <div className="flex justify-center gap-4 mt-2">
+                                                                {['Male', 'Female', 'Other'].map((label, idx) => (
+                                                                    <div key={label} className="flex items-center gap-1.5">
+                                                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ['#3b82f6', '#ec4899', '#818cf8'][idx] }} />
+                                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase">{label}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )}
@@ -550,35 +601,49 @@ export const InfluencerProfileDetail = ({
                                                 {/* Age Brackets */}
                                                 {(influencer.audienceAgeBrackets) && (
                                                     <div className="space-y-4">
-                                                        <p className="font-bold text-sm tracking-tight">Age Distribution</p>
-                                                        <div className="grid grid-cols-7 gap-1.5 h-32 items-end">
-                                                            {(() => {
+                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
+                                                            <BarChart3 size={16} />
+                                                            <span>Age Distribution</span>
+                                                        </div>
+                                                        <div className="h-[180px] w-full">
+                                                            {isMounted ? (() => {
                                                                 const brackets = influencer.audienceAgeBrackets || {};
                                                                 const labels = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
-                                                                const values = labels.map(l => brackets[l] || 0);
-                                                                const maxVal = Math.max(...values, 1);
+                                                                const ageData = labels.map(label => ({
+                                                                    name: label,
+                                                                    value: brackets[label] || 0
+                                                                }));
 
-                                                                return labels.map((label, idx) => {
-                                                                    const val = brackets[label] || 0;
-                                                                    const percent = (val / maxVal) * 100;
-                                                                    return (
-                                                                        <div key={label} className="flex flex-col items-center gap-2 group h-full justify-end">
-                                                                            <div className="flex-1 w-full bg-muted/30 rounded-t-lg relative overflow-hidden flex flex-col justify-end">
-                                                                                <motion.div
-                                                                                    initial={{ height: 0 }}
-                                                                                    animate={{ height: `${percent}%` }}
-                                                                                    transition={{ duration: 0.8, delay: idx * 0.1 }}
-                                                                                    className="w-full bg-linear-to-t from-primary/80 to-primary/40 rounded-t-lg"
-                                                                                />
-                                                                                <span className="absolute top-1 left-0 right-0 text-center text-[8px] font-black tabular-nums opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-                                                                                    {val}%
-                                                                                </span>
-                                                                            </div>
-                                                                            <span className="text-[7px] font-bold text-muted-foreground text-center truncate w-full">{label}</span>
-                                                                        </div>
-                                                                    );
-                                                                });
-                                                            })()}
+                                                                return (
+                                                                    <ResponsiveContainer width="100%" height="100%" aspect={2}>
+                                                                        <BarChart data={ageData}>
+                                                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
+                                                                            <XAxis
+                                                                                dataKey="name"
+                                                                                axisLine={false}
+                                                                                tickLine={false}
+                                                                                tick={{ fontSize: 9, fontWeight: 700, fill: 'currentColor', opacity: 0.5 }}
+                                                                            />
+                                                                            <Tooltip
+                                                                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                                                                                contentStyle={{
+                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
+                                                                                    backdropFilter: 'blur(12px)',
+                                                                                    borderRadius: '1.25rem',
+                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                                                                    padding: '12px 16px'
+                                                                                }}
+                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
+                                                                                labelStyle={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}
+                                                                            />
+                                                                            <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={20} />
+                                                                        </BarChart>
+                                                                    </ResponsiveContainer>
+                                                                );
+                                                            })() : (
+                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
+                                                            )}
                                                         </div>
                                                     </div>
                                                 )}

@@ -66,7 +66,7 @@ export const AudienceInsights = ({
 
                     <div className="h-[250px] w-full">
                         {isMounted && genderData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={250} debounce={100}>
+                            <ResponsiveContainer width="100%" height="100%" aspect={2} debounce={100}>
                                 <PieChart>
                                     <Pie
                                         data={genderData}
@@ -80,8 +80,16 @@ export const AudienceInsights = ({
                                         ))}
                                     </Pie>
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)' }}
-                                        itemStyle={{ color: 'white', fontWeight: 'bold' }}
+                                        contentStyle={{ 
+                                            backgroundColor: 'rgba(23, 23, 23, 0.9)', 
+                                            backdropFilter: 'blur(12px)', 
+                                            borderRadius: '1.25rem', 
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                            padding: '12px 16px'
+                                        }}
+                                        itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
+                                        labelStyle={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
@@ -111,7 +119,7 @@ export const AudienceInsights = ({
 
                     <div className="h-[250px] w-full">
                         {isMounted && ageData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250} debounce={100}>
+                            <ResponsiveContainer width="100%" height="100%" aspect={2} debounce={100}>
                                 <BarChart data={ageData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
                                     <XAxis
@@ -122,8 +130,16 @@ export const AudienceInsights = ({
                                     />
                                     <Tooltip
                                         cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                                        contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)' }}
-                                        itemStyle={{ color: 'white', fontWeight: 'bold' }}
+                                        contentStyle={{ 
+                                            backgroundColor: 'rgba(23, 23, 23, 0.9)', 
+                                            backdropFilter: 'blur(12px)', 
+                                            borderRadius: '1.25rem', 
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                            padding: '12px 16px'
+                                        }}
+                                        itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
+                                        labelStyle={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}
                                     />
                                     <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={30} />
                                 </BarChart>
