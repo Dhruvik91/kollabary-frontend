@@ -24,8 +24,6 @@ export const PublicInfluencerStats = ({
         return num.toString();
     };
 
-    console.log(totalFollowers)
-
     const stats = [
         { label: 'Total Reach', value: formatNumber(totalFollowers), icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
         { label: 'Avg Engagement', value: `${Number(avgEngagementRate).toFixed(1)}%`, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },

@@ -207,6 +207,8 @@ export const InfluencerProfileDetail = ({
                                                 src={displayAvatar}
                                                 alt={profile?.fullName || fullName || 'Influencer'}
                                                 fill
+                                                priority
+                                                sizes="(max-width: 768px) 112px, (max-width: 1024px) 144px, 176px"
                                                 className="object-cover"
                                             />
                                         ) : (

@@ -1,17 +1,17 @@
 'use client';
 
-import React from 'react';
-import { 
-    ResponsiveContainer, 
-    PieChart, 
-    Pie, 
-    Cell, 
-    BarChart, 
-    Bar, 
-    XAxis, 
-    YAxis, 
-    Tooltip, 
-    CartesianGrid 
+import React, { useEffect, useState } from 'react';
+import {
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid
 } from 'recharts';
 import { Card } from '@/components/ui/card';
 import { Users, Globe, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
@@ -27,6 +27,12 @@ export const AudienceInsights = ({
     ageBrackets,
     topCountries,
 }: AudienceInsightsProps) => {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     // Transform gender ratio for Pie Chart
     const genderData = genderRatio ? Object.entries(genderRatio).map(([name, value]) => ({
         name: name.charAt(0).toUpperCase() + name.slice(1),
@@ -57,10 +63,10 @@ export const AudienceInsights = ({
                         <PieChartIcon size={20} className="text-primary" />
                         <h4 className="text-sm font-black uppercase tracking-widest text-muted-foreground/70">Gender Split</h4>
                     </div>
-                    
+
                     <div className="h-[250px] w-full">
-                        {genderData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
+                        {isMounted && genderData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={250} debounce={100}>
                                 <PieChart>
                                     <Pie
                                         data={genderData}
@@ -73,7 +79,7 @@ export const AudienceInsights = ({
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
                                         ))}
                                     </Pie>
-                                    <Tooltip 
+                                    <Tooltip
                                         contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                                         itemStyle={{ color: 'white', fontWeight: 'bold' }}
                                     />
@@ -85,7 +91,7 @@ export const AudienceInsights = ({
                             </div>
                         )}
                     </div>
-                    
+
                     <div className="flex justify-center gap-6 mt-4">
                         {genderData.map((entry, index) => (
                             <div key={entry.name} className="flex items-center gap-2">
@@ -104,17 +110,17 @@ export const AudienceInsights = ({
                     </div>
 
                     <div className="h-[250px] w-full">
-                        {ageData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
+                        {isMounted && ageData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250} debounce={100}>
                                 <BarChart data={ageData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
-                                    <XAxis 
-                                        dataKey="name" 
-                                        axisLine={false} 
-                                        tickLine={false} 
-                                        tick={{ fontSize: 10, fontWeight: 700, fill: 'currentColor', opacity: 0.5 }} 
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fontWeight: 700, fill: 'currentColor', opacity: 0.5 }}
                                     />
-                                    <Tooltip 
+                                    <Tooltip
                                         cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
                                         contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                                         itemStyle={{ color: 'white', fontWeight: 'bold' }}
