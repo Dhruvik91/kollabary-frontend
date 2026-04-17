@@ -59,15 +59,7 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                         <div className="absolute inset-0 bg-linear-to-br from-secondary/20 via-secondary/5 to-transparent dark:from-secondary/10 dark:via-transparent dark:to-transparent" />
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(var(--secondary-rgb),0.1),transparent_50%)]" />
 
-                        {/* Share Button */}
-                        <div className="absolute top-4 right-4 z-20">
-                            <ShareButton 
-                                type="brand" 
-                                id={id} 
-                                variant="glass" 
-                                size="icon-sm" 
-                            />
-                        </div>
+
                     </div>
 
                     {/* Profile Section with Overlapping Avatar */}

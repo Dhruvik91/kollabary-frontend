@@ -237,13 +237,7 @@ export const InfluencerProfileDetail = ({
                                                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
                                                 </div>
 
-                                                <ShareButton
-                                                    type="influencer"
-                                                    id={influencer.id}
-                                                    variant="ghost"
-                                                    size="icon-xs"
-                                                    className="hover:bg-primary/10 hover:text-primary"
-                                                />
+
                                             </div>
                                         </div>
 
@@ -281,6 +275,13 @@ export const InfluencerProfileDetail = ({
                                                         <Settings size={18} />
                                                     </Button>
                                                 </Link>
+                                                <ShareButton
+                                                    type="influencer"
+                                                    id={influencer.id}
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30"
+                                                />
                                             </>
                                         ) : (
                                             <>
@@ -292,6 +293,13 @@ export const InfluencerProfileDetail = ({
                                                 >
                                                     <Flag size={18} />
                                                 </Button>
+                                                <ShareButton
+                                                    type="influencer"
+                                                    id={influencer.id}
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30"
+                                                />
                                                 <Button
                                                     className="flex-1 md:flex-none px-6 sm:px-8 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
                                                     disabled={isStartingChat}

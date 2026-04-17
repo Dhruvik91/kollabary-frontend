@@ -59,15 +59,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         {/* Subtle Pattern */}
                         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
 
-                        {/* Share Button */}
-                        <div className="absolute top-4 right-4 z-20">
-                            <ShareButton 
-                                type="influencer" 
-                                id={id} 
-                                variant="glass" 
-                                size="icon-sm" 
-                            />
-                        </div>
+
                     </div>
 
 
