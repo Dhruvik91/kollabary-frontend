@@ -96,6 +96,18 @@ export const API_CONFIG = {
         public: {
             influencer: (id: string) => `/public/influencer/${id}`,
             brand: (id: string) => `/public/brand/${id}`,
+        },
+        wallet: {
+            base: '/kc-wallet',
+            my: '/kc-wallet/my',
+        },
+        transaction: {
+            base: '/kc-transactions',
+            my: '/kc-transactions/my',
+        },
+        referral: {
+            base: '/referrals',
+            stats: '/referrals/stats',
         }
 
     }
@@ -120,6 +132,7 @@ export const FRONTEND_ROUTES = {
         ANALYTICS: '/analytics',
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
+        REFERRALS: '/referrals',
         INFLUENCERS: '/influencers',
         BRANDS: '/brands',
         MY_INFLUENCERS: '/my-influencers',
@@ -146,7 +159,7 @@ export const FRONTEND_ROUTES = {
             AUCTIONS: '/admin/auctions',
             BIDS: '/admin/bids',
             CONVERSATIONS: '/admin/conversations',
-        }
+        },
     },
     HOME: '/',
     TERMS: '/terms',

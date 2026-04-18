@@ -29,6 +29,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { useWallet } from '@/hooks/queries/useWalletQueries';
+import { useReferralStats } from '@/hooks/queries/useReferralQueries';
+import { WalletCard } from '@/components/shared/WalletCard';
+import { ReferralCard } from '@/components/shared/ReferralCard';
 import Link from 'next/link';
 
 export const DashboardOverviewContainer = () => {
@@ -57,8 +61,11 @@ export const DashboardOverviewContainer = () => {
     const completedCount = completedCollabs?.pages?.[0]?.meta?.total ?? 0;
     const pendingCount = pendingCollabs?.pages?.[0]?.meta?.total ?? 0;
 
+    const { data: wallet, isLoading: isWalletLoading } = useWallet();
+    const { data: referralStats, isLoading: isReferralLoading } = useReferralStats();
+
     const isUserCollabsLoading = isUser && (isAllCollabsLoading || isActiveCollabsLoading || isCompletedCollabsLoading || isPendingCollabsLoading);
-    const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading;
+    const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading || isWalletLoading || isReferralLoading;
 
     if (isLoading) {
         return (
@@ -164,6 +171,23 @@ export const DashboardOverviewContainer = () => {
                             />
                         </div>
 
+                        {/* Wallet & Referral Cards Row */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS}>
+                                <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
+                            </Link>
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                                <ReferralCard 
+                                    referralCode={referralStats?.referralCode || ''}
+                                    totalReferrals={referralStats?.totalReferrals || 0}
+                                    successfulReferrals={referralStats?.successfulReferrals || 0}
+                                    totalEarned={referralStats?.totalEarned || 0}
+                                    loading={isReferralLoading}
+                                    className="h-full"
+                                />
+                            </Link>
+                        </div>
+
                         {/* Recent Activity Placeholder or Quick Stats */}
                         <Card className="rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden">
                             <div className="p-6 border-b border-border/50 bg-muted/30 flex items-center justify-between">
@@ -218,6 +242,23 @@ export const DashboardOverviewContainer = () => {
                             color="text-amber-500"
                             subtitle="Awaiting creator response"
                         />
+                    </div>
+
+                    {/* Wallet & Referral Cards Row for USER */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS}>
+                            <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
+                        </Link>
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                            <ReferralCard 
+                                referralCode={referralStats?.referralCode || ''}
+                                totalReferrals={referralStats?.totalReferrals || 0}
+                                successfulReferrals={referralStats?.successfulReferrals || 0}
+                                totalEarned={referralStats?.totalEarned || 0}
+                                loading={isReferralLoading}
+                                className="h-full"
+                            />
+                        </Link>
                     </div>
 
                     {/* Quick Actions Card */}

@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "medbridge-portal.s3.ap-south-1.amazonaws.com",
+        hostname: "kollabary.s3.ap-south-1.amazonaws.com",
       },
     ],
   },
