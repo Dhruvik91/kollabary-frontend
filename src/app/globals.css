@@ -134,8 +134,8 @@
   /* Brand Gradient (converted to oklch) */
   --brand-gradient-degrees: 90deg;
   --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
-      oklch(0.6 0.2 340) 0%,
-      oklch(0.3 0.15 310) 100%);
+      oklch(0.60 0.24 354) 0%,
+      oklch(0.32 0.15 318) 100%);
 
   /* Sidebar */
   --sidebar: oklch(1 0 0);
@@ -188,8 +188,8 @@
 
   /* Brand Gradient (converted to oklch) */
   --brand-gradient-muted: linear-gradient(var(--brand-gradient-degrees),
-      oklch(0.65 0.22 340) 0%,
-      oklch(0.35 0.18 310) 100%);
+      oklch(0.65 0.25 354) 0%,
+      oklch(0.38 0.18 318) 100%);
 
   /* Sidebar */
   --sidebar: oklch(0.17 0.03 310);
