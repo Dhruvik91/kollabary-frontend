@@ -67,7 +67,7 @@ export const ReferralCard = ({
 
                 <div className="space-y-4">
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">50 KC Coins</span> for every successful referral!
+                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">2000 KC Coins</span> for every successful referral! And your friends will get <span className="text-primary font-bold">500 KC Coins</span> for joining with your referral code.
                     </p>
                     
                     <div className="flex items-center gap-3 p-2 pl-4 rounded-[1.25rem] bg-muted/30 border border-border/50 group-hover:border-primary/20 transition-colors duration-300">
