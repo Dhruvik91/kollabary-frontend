@@ -35,6 +35,7 @@ export const signupSchema = z
             .min(1, 'Please confirm your password')
             .min(6, 'Confirm password must be at least 6 characters long'),
         role: z.nativeEnum(UserRole),
+        referralCode: z.string().optional(),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',
