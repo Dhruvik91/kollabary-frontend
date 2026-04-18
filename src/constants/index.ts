@@ -190,3 +190,8 @@ export const AUTH_STORAGE_KEYS = {
     ACCESS_TOKEN: 'access_token',
     USER_ROLE: 'user_role',
 } as const;
+
+export const PWA_STORAGE_KEYS = {
+    INSTALL_DISMISSED: 'pwa-install-dismissed',
+    INSTALLED: 'pwa-installed',
+} as const;
