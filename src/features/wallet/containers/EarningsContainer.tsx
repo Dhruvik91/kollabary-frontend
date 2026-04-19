@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useWallet, useTransactions } from '@/hooks/queries/useWalletQueries';
+import { useWallet, useInfiniteTransactions } from '@/hooks/queries/useWalletQueries';
 import { WalletCard } from '@/components/shared/WalletCard';
 import { TransactionList } from '../components/TransactionList';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -13,7 +13,15 @@ import { FRONTEND_ROUTES } from '@/constants';
 
 export const EarningsContainer = () => {
     const { data: wallet, isLoading: isWalletLoading } = useWallet();
-    const { data: transactions, isLoading: isTransactionsLoading } = useTransactions({ limit: 10 });
+    const { 
+        data: transactionPages,
+        isLoading: isTransactionsLoading,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
+    } = useInfiniteTransactions({ limit: 15 });
+
+    const transactions = transactionPages?.pages.flatMap(page => page.items) || [];
 
     const isLoading = isWalletLoading || isTransactionsLoading;
 
@@ -69,10 +77,13 @@ export const EarningsContainer = () => {
                                 <p className="text-xs text-muted-foreground mt-1">Detailed log of all your KC coin movements</p>
                             </div>
                         </div>
-                        <CardContent className="p-8">
+                        <CardContent className="p-4 sm:p-6">
                             <TransactionList 
-                                transactions={transactions?.items || []} 
+                                transactions={transactions} 
                                 loading={isTransactionsLoading} 
+                                hasNextPage={hasNextPage}
+                                isFetchingNextPage={isFetchingNextPage}
+                                fetchNextPage={fetchNextPage}
                             />
                         </CardContent>
                     </Card>

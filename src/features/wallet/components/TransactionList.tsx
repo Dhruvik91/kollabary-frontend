@@ -1,19 +1,24 @@
-import React from 'react';
-import { KCTransaction } from '@/types/wallet.types';
+import { InfiniteScrollContainer } from '@/components/shared/InfiniteScrollContainer';
 import { TransactionItem } from './TransactionItem';
 import { Loader2, History } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { KCTransaction } from '@/types/wallet.types';
 
 interface TransactionListProps {
     transactions: KCTransaction[];
     loading?: boolean;
+    hasNextPage?: boolean;
+    isFetchingNextPage?: boolean;
+    fetchNextPage?: () => void;
 }
 
 export const TransactionList = ({
     transactions,
-    loading = false
+    loading = false,
+    hasNextPage,
+    isFetchingNextPage = false,
+    fetchNextPage = () => {},
 }: TransactionListProps) => {
-    if (loading) {
+    if (loading && transactions.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -22,7 +27,7 @@ export const TransactionList = ({
         );
     }
 
-    if (transactions.length === 0) {
+    if (!loading && transactions.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
                 <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
@@ -37,10 +42,18 @@ export const TransactionList = ({
     }
 
     return (
-        <div className="space-y-4">
-            {transactions.map((transaction) => (
-                <TransactionItem key={transaction.id} transaction={transaction} />
-            ))}
+        <div className="max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-primary/10 hover:scrollbar-thumb-primary/20 transition-colors">
+            <InfiniteScrollContainer
+                items={transactions}
+                renderItem={(transaction) => (
+                    <TransactionItem key={transaction.id} transaction={transaction} />
+                )}
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                isLoading={loading}
+                gridClassName="space-y-3"
+            />
         </div>
     );
 };

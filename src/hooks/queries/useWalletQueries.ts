@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { walletService } from '@/services/wallet.service';
 import { transactionService } from '@/services/transaction.service';
 import { TransactionType, TransactionPurpose } from '@/types/wallet.types';
@@ -30,6 +30,26 @@ export const useTransactions = (params: {
     return useQuery({
         queryKey: TRANSACTION_QUERY_KEYS.my(params),
         queryFn: () => transactionService.getMyHistory(params),
+        staleTime: 1000 * 60 * 2, // 2 minutes
+    });
+};
+
+export const useInfiniteTransactions = (params: {
+    limit?: number;
+    type?: TransactionType;
+    purpose?: TransactionPurpose;
+} = {}) => {
+    return useInfiniteQuery({
+        queryKey: TRANSACTION_QUERY_KEYS.my({ ...params, infinite: true }),
+        queryFn: ({ pageParam = 1 }) => 
+            transactionService.getMyHistory({ ...params, page: pageParam }),
+        getNextPageParam: (lastPage) => {
+            if (lastPage.meta.page < lastPage.meta.totalPages) {
+                return lastPage.meta.page + 1;
+            }
+            return undefined;
+        },
+        initialPageParam: 1,
         staleTime: 1000 * 60 * 2, // 2 minutes
     });
 };
