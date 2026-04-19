@@ -59,13 +59,15 @@ export const Hero = () => {
                                 Get Started Now <ArrowRight className="ml-2" size={20} />
                             </Button>
                         </Link>
-                        <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all">
-                            Book a Demo
+                        <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all" asChild>
+                            <a href="mailto:support@kollabary.com">
+                                Book a Demo
+                            </a>
                         </Button>
                     </motion.div>
 
                     {/* User Feedback/Stats Mockup */}
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
@@ -94,7 +96,6 @@ export const Hero = () => {
                                 </div>
                                 <div className="h-[300px] w-full bg-muted/20 border border-border rounded-3xl relative overflow-hidden">
                                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/10 to-transparent" />
-                                    {/* Fake Chart Lines */}
                                     <svg className="absolute inset-0 w-full h-full p-8" viewBox="0 0 400 200" preserveAspectRatio="none">
                                         <path d="M0,180 Q50,160 100,140 T200,80 T300,40 T400,20" fill="none" stroke="currentColor" strokeWidth="3" className="text-primary opacity-50" />
                                         <path d="M0,150 Q100,130 200,100 T400,40" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" strokeDasharray="5,5" />
@@ -102,7 +103,7 @@ export const Hero = () => {
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div> */}
                 </div>
             </div>
         </section>
