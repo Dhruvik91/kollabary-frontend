@@ -6,10 +6,13 @@ import {
     Search,
     MessageSquare,
     Trophy,
+    Coins,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useWallet } from '@/hooks/queries/useWalletQueries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { RankingGuideCard } from '@/features/influencer/components/RankingGuideCard';
 import { useTierGuide } from '@/hooks/queries/useRanking';
@@ -24,6 +27,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
  */
 export const DashboardHeader = () => {
     const { user } = useAuth();
+    const { data: wallet, isLoading: isWalletLoading } = useWallet();
     const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
     const { data: tierGuide } = useTierGuide();
 
@@ -59,6 +63,24 @@ export const DashboardHeader = () => {
                     </Button>
                 )}
 
+                <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} className="flex-shrink-0">
+                    <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all cursor-pointer group">
+                        <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                            <Coins size={16} />
+                        </div>
+                        {isWalletLoading ? (
+                            <Skeleton className="h-5 w-10 rounded-md bg-primary/10" />
+                        ) : (
+                            <div className="flex items-center gap-1">
+                                <span className="text-sm font-bold tracking-tight text-foreground/90 tabular-nums">
+                                    {(wallet?.balance ?? 0).toLocaleString()}
+                                </span>
+                                <span className="text-[10px] font-black text-primary uppercase tracking-tighter">KC</span>
+                            </div>
+                        )}
+                    </div>
+                </Link>
+
                 <ThemeToggle />
 
                 {/* Ranking Guide Modal */}
@@ -80,7 +102,7 @@ export const DashboardHeader = () => {
 
                 <Link
                     href={FRONTEND_ROUTES.DASHBOARD.MESSAGES}
-                    className="relative inline-flex items-center justify-center h-10 w-10 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors group"
+                    className="relative inline-flex items-center justify-center h-10 w-10 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors group block lg:hidden"
                     aria-label="Messages"
                 >
                     <MessageSquare size={20} />
