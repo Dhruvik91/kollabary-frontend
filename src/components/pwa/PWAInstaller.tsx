@@ -5,12 +5,21 @@ import { registerServiceWorker, listenForSWUpdates } from '@/lib/pwa-register';
 import { Button } from '@/components/ui/button';
 import { Download, X, Share2, PlusSquare, ArrowUp, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PWA_STORAGE_KEYS } from '@/constants';
 
 export const PWAInstaller = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+
+  const isDismissedRecently = () => {
+    const dismissed = localStorage.getItem(PWA_STORAGE_KEYS.INSTALL_DISMISSED);
+    if (!dismissed) return false;
+    const dismissedTime = parseInt(dismissed);
+    const fifteenDays = 15 * 24 * 60 * 60 * 1000;
+    return (Date.now() - dismissedTime < fifteenDays);
+  };
 
   useEffect(() => {
     // Check if running in standalone mode
@@ -28,11 +37,10 @@ export const PWAInstaller = () => {
       return isIOSDevice;
     };
 
-    const isLocalhost = Boolean(process.env.NEXT_PUBLIC_MODE === "dev");
     const standalone = checkStandalone();
     const ios = checkIOS();
 
-    if (isLocalhost || standalone) {
+    if (standalone || isDismissedRecently()) {
       return;
     }
 
@@ -42,18 +50,18 @@ export const PWAInstaller = () => {
 
     // Show prompt for iOS users after a short delay
     if (ios && !standalone) {
-      const dismissed = localStorage.getItem('pwa-install-dismissed');
-      if (!dismissed) {
-        const timer = setTimeout(() => setShowInstallPrompt(true), 3000);
-        return () => clearTimeout(timer);
-      }
+      const timer = setTimeout(() => setShowInstallPrompt(true), 3000);
+      return () => clearTimeout(timer);
     }
 
     // Listen for install prompt (Android/Chrome)
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallPrompt(true);
+      // Double check dismissal just in case it was dismissed while the app was open
+      if (!isDismissedRecently()) {
+        setDeferredPrompt(e);
+        setShowInstallPrompt(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -71,6 +79,7 @@ export const PWAInstaller = () => {
 
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
+      localStorage.setItem(PWA_STORAGE_KEYS.INSTALLED, 'true');
     }
 
     setDeferredPrompt(null);
@@ -79,21 +88,9 @@ export const PWAInstaller = () => {
 
   const handleDismiss = () => {
     setShowInstallPrompt(false);
-    // Store dismissal in localStorage to not show again for 7 days
-    localStorage.setItem('pwa-install-dismissed', Date.now().toString());
+    // Store dismissal in localStorage to not show again for 15 days
+    localStorage.setItem(PWA_STORAGE_KEYS.INSTALL_DISMISSED, Date.now().toString());
   };
-
-  // Check if user dismissed recently
-  useEffect(() => {
-    const dismissed = localStorage.getItem('pwa-install-dismissed');
-    if (dismissed) {
-      const dismissedTime = parseInt(dismissed);
-      const sevenDays = 7 * 24 * 60 * 60 * 1000;
-      if (Date.now() - dismissedTime < sevenDays) {
-        setShowInstallPrompt(false);
-      }
-    }
-  }, []);
 
   if (isStandalone) return null;
 

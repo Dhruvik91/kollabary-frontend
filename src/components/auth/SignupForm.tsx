@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Loader2, Building2, User } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Building2, User, Gift } from 'lucide-react';
 import { useState } from 'react';
 import { UserRole } from '@/types/auth.types';
 import { cn } from '@/lib/utils';
@@ -19,13 +19,14 @@ interface SignupFormProps {
     isLoading: boolean;
     error?: string;
     onGoogleAuth?: () => void;
+    referralCode?: string;
 }
 
 /**
  * Signup Form Component (Dumb Component)
  * Pure presentational component for user registration
  */
-export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth }: SignupFormProps) {
+export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralCode }: SignupFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const {
@@ -225,6 +226,19 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth }: SignupF
                         </p>
                     )}
                 </div>
+
+                {/* Referral Code (Optional, shown if provided in URL) */}
+                {referralCode && (
+                    <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-between group">
+                        <div className="space-y-1">
+                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Referral Link Applied</p>
+                            <p className="text-sm font-medium text-muted-foreground">You are joining with code <span className="text-foreground font-bold">{referralCode}</span></p>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <Gift size={16} />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Error Alert */}

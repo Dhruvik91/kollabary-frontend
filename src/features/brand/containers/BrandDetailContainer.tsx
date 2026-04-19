@@ -68,7 +68,7 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
     };
 
     return (
-        <div className="relative min-h-screen bg-background transition-colors duration-500">
+        <div className="relative min-h-screen transition-colors duration-500">
             {/* Ambient Background Decorative Elements - Subtle & Theme Aware */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40 dark:opacity-20">
                 <div className="absolute top-[10%] left-[-5%] w-[40rem] h-[40rem] bg-primary/5 blur-[120px] rounded-full animate-pulse" />

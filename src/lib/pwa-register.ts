@@ -1,6 +1,17 @@
-'use client';
+const isDev = process.env.NEXT_PUBLIC_NODE === 'dev';
 
 export function registerServiceWorker() {
+  if (isDev) {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+          console.log('Existing Service Worker unregistered in development');
+        }
+      });
+    }
+    return;
+  }
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
@@ -22,6 +33,7 @@ export function registerServiceWorker() {
 
 // Listen for service worker updates
 export function listenForSWUpdates() {
+  if (isDev) return;
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       // Reload the page when a new service worker takes control

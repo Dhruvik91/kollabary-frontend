@@ -65,6 +65,8 @@ export const API_CONFIG = {
             bids: '/admin/bids',
             conversations: '/admin/conversations',
             conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
+            kcSettings: '/admin/kc-settings',
+            kcSettingUpdate: (key: string) => `/admin/kc-settings/${key}`,
         },
         verification: {
             base: '/verification/request',
@@ -96,6 +98,18 @@ export const API_CONFIG = {
         public: {
             influencer: (id: string) => `/public/influencer/${id}`,
             brand: (id: string) => `/public/brand/${id}`,
+        },
+        wallet: {
+            base: '/kc-wallet',
+            my: '/kc-wallet/my',
+        },
+        transaction: {
+            base: '/kc-transactions',
+            my: '/kc-transactions/my',
+        },
+        referral: {
+            base: '/referrals',
+            stats: '/referrals/stats',
         }
 
     }
@@ -120,6 +134,7 @@ export const FRONTEND_ROUTES = {
         ANALYTICS: '/analytics',
         CAMPAIGNS: '/campaigns',
         EARNINGS: '/earnings',
+        REFERRALS: '/referrals',
         INFLUENCERS: '/influencers',
         BRANDS: '/brands',
         MY_INFLUENCERS: '/my-influencers',
@@ -146,7 +161,9 @@ export const FRONTEND_ROUTES = {
             AUCTIONS: '/admin/auctions',
             BIDS: '/admin/bids',
             CONVERSATIONS: '/admin/conversations',
-        }
+            REWARDS: '/admin/rewards',
+            REFERRALS: '/admin/referrals',
+        },
     },
     HOME: '/',
     TERMS: '/terms',
@@ -176,4 +193,9 @@ export const FRONTEND_ROUTES = {
 export const AUTH_STORAGE_KEYS = {
     ACCESS_TOKEN: 'access_token',
     USER_ROLE: 'user_role',
+} as const;
+
+export const PWA_STORAGE_KEYS = {
+    INSTALL_DISMISSED: 'pwa-install-dismissed',
+    INSTALLED: 'pwa-installed',
 } as const;

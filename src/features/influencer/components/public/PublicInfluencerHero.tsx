@@ -57,7 +57,14 @@ export const PublicInfluencerHero = ({
                     className="w-32 h-32 md:w-52 md:h-52 rounded-[2.5rem] bg-zinc-100 glass-chip border-4 md:border-[10px] border-background shadow-2xl overflow-hidden flex items-center justify-center relative group shrink-0"
                 >
                     {avatarUrl ? (
-                        <Image src={avatarUrl} alt={fullName} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image 
+                            src={avatarUrl} 
+                            alt={fullName} 
+                            fill 
+                            priority
+                            sizes="(max-width: 768px) 128px, 208px"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                        />
                     ) : (
                         <div className="text-5xl md:text-7xl font-black text-primary/30">{fullName?.charAt(0)}</div>
                     )}

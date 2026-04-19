@@ -38,7 +38,6 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Kollabary",
   },
-  themeColor: "#ff5722",
   formatDetection: {
     telephone: false,
   },
