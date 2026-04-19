@@ -65,6 +65,8 @@ export const API_CONFIG = {
             bids: '/admin/bids',
             conversations: '/admin/conversations',
             conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
+            kcSettings: '/admin/kc-settings',
+            kcSettingUpdate: (key: string) => `/admin/kc-settings/${key}`,
         },
         verification: {
             base: '/verification/request',
@@ -159,6 +161,8 @@ export const FRONTEND_ROUTES = {
             AUCTIONS: '/admin/auctions',
             BIDS: '/admin/bids',
             CONVERSATIONS: '/admin/conversations',
+            REWARDS: '/admin/rewards',
+            REFERRALS: '/admin/referrals',
         },
     },
     HOME: '/',
