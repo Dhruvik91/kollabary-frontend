@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import { AnimatedModal } from './AnimatedModal';
 import { Button } from '@/components/ui/button';
-import { Coins, Info, Loader2 } from 'lucide-react';
+import { Info, Loader2 } from 'lucide-react';
+import { COIN_URL } from '@/constants';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ActionConsentModalProps {
     isOpen: boolean;
@@ -37,16 +39,15 @@ export const ActionConsentModal = ({
             <div className="space-y-8 py-2">
                 <div className="flex flex-col items-center text-center gap-6">
                     <div className="relative">
-                        <div className="h-24 w-24 rounded-[2.5rem] bg-primary/10 flex items-center justify-center text-primary animate-pulse">
-                            <Coins size={48} />
+                        <div className="h-24 w-24 rounded-[2.5rem] bg-primary/10 flex items-center justify-center text-primary group overflow-hidden border-2 border-primary/20">
+                            <Image 
+                                src={COIN_URL} 
+                                alt="KC Coin" 
+                                width={64}
+                                height={64}
+                                className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-xl" 
+                            />
                         </div>
-                        <motion.div 
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute -top-2 -right-2 h-10 w-10 rounded-2xl bg-background border-2 border-primary/20 flex items-center justify-center text-primary shadow-lg"
-                        >
-                            <Info size={20} />
-                        </motion.div>
                     </div>
 
                     <div className="space-y-3">
@@ -54,7 +55,18 @@ export const ActionConsentModal = ({
                             Confirm {actionName}
                         </h3>
                         <p className="text-muted-foreground font-medium italic text-balance leading-relaxed">
-                            Proceeding with this action will consume <span className="text-primary font-black not-italic">{coinCost ?? '...'} KC Coins</span> from your wallet.
+                            Proceeding with this action will consume{' '}
+                            <span className="text-primary font-black not-italic inline-flex items-center gap-1 translate-y-[3px]">
+                                {coinCost ?? '...'}
+                                <Image 
+                                    src={COIN_URL} 
+                                    alt="KC Coin" 
+                                    width={20}
+                                    height={20}
+                                    className="w-5 h-5 object-contain" 
+                                />
+                            </span>{' '}
+                            from your wallet.
                         </p>
                     </div>
                 </div>
@@ -83,7 +95,7 @@ export const ActionConsentModal = ({
                             </motion.div>
                         )}
                     </div>
-                    <span className="text-sm font-bold text-foreground/80">Don't ask me again for this action</span>
+                    <span className="text-sm font-bold text-foreground/80">Don&apos;t ask me again for this action</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
