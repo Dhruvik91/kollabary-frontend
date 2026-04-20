@@ -297,7 +297,7 @@ export const InfluencerProfileDetail = ({
                                                     </Button>
                                                 </Link>
                                                 <ShareButton
-                                                    type="influencer"
+                                                    type={UserRole.INFLUENCER}
                                                     id={influencer.id}
                                                     variant="outline"
                                                     size="icon"
@@ -315,7 +315,7 @@ export const InfluencerProfileDetail = ({
                                                     <Flag size={18} />
                                                 </Button>
                                                 <ShareButton
-                                                    type="influencer"
+                                                    type={UserRole.INFLUENCER}
                                                     id={influencer.id}
                                                     variant="outline"
                                                     size="icon"
