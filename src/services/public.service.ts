@@ -11,6 +11,14 @@ export const publicService = {
     },
 
     /**
+     * Get aggregate public data for an influencer by slug
+     */
+    async getInfluencerPublicDataBySlug(slug: string): Promise<any> {
+        const response = await httpService.get(API_CONFIG.path.public.influencerBySlug(slug));
+        return response.data;
+    },
+
+    /**
      * Get aggregate public data for a brand
      */
     async getBrandPublicData(id: string): Promise<any> {

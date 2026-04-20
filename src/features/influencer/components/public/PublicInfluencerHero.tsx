@@ -10,6 +10,7 @@ import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { FRONTEND_ROUTES } from '@/constants';
 import Link from 'next/link';
 import Image from 'next/image';
+import { UserRole } from '@/types/auth.types';
 
 interface PublicInfluencerHeroProps {
     influencerId: string;
@@ -21,6 +22,7 @@ interface PublicInfluencerHeroProps {
     location?: string;
     categories?: string[];
     languages?: string[];
+    slug?: string;
 }
 
 export const PublicInfluencerHero = ({
@@ -33,6 +35,7 @@ export const PublicInfluencerHero = ({
     location,
     categories,
     languages,
+    slug,
 }: PublicInfluencerHeroProps) => {
     const joinedLanguages = languages?.length ? languages.join(', ') : 'English';
 
@@ -57,13 +60,13 @@ export const PublicInfluencerHero = ({
                     className="w-32 h-32 md:w-52 md:h-52 rounded-[2.5rem] bg-zinc-100 glass-chip border-4 md:border-[10px] border-background shadow-2xl overflow-hidden flex items-center justify-center relative group shrink-0"
                 >
                     {avatarUrl ? (
-                        <Image 
-                            src={avatarUrl} 
-                            alt={fullName} 
-                            fill 
+                        <Image
+                            src={avatarUrl}
+                            alt={fullName}
+                            fill
                             priority
                             sizes="(max-width: 768px) 128px, 208px"
-                            className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                     ) : (
                         <div className="text-5xl md:text-7xl font-black text-primary/30">{fullName?.charAt(0)}</div>
@@ -123,8 +126,9 @@ export const PublicInfluencerHero = ({
                             </Button>
                         </Link>
                         <ShareButton
-                            type="influencer"
+                            type={UserRole.INFLUENCER}
                             id={influencerId}
+                            slug={slug}
                             variant="outline"
                             size="lg"
                             className="h-14 w-14 rounded-2xl border-2 hover:bg-primary/5 hover:text-primary transition-all shadow-xl"
