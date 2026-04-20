@@ -83,6 +83,12 @@ export const AuctionListContainer = () => {
         toast.info('Advanced filters for auctions are coming soon!');
     };
 
+    const handleResetFilters = () => {
+        setSearch('');
+    };
+
+    const hasActiveFilters = debouncedSearch.length > 0;
+
     return (
         <div className="space-y-6 sm:space-y-8 pb-20">
             <AuctionListHeader
@@ -137,6 +143,8 @@ export const AuctionListContainer = () => {
                             hasNextPage={hasNextAll}
                             isFetchingNextPage={isFetchingNextAll}
                             fetchNextPage={fetchNextAll}
+                            hasActiveFilters={hasActiveFilters}
+                            onResetFilters={handleResetFilters}
                         />
                     </TabsContent>
 
@@ -148,6 +156,8 @@ export const AuctionListContainer = () => {
                             isFetchingNextPage={isFetchingNextBids}
                             fetchNextPage={fetchNextBids}
                             emptyMessage="You haven't placed any bids yet."
+                            hasActiveFilters={hasActiveFilters}
+                            onResetFilters={handleResetFilters}
                         />
                     </TabsContent>
 
@@ -160,6 +170,8 @@ export const AuctionListContainer = () => {
                             fetchNextPage={fetchNextMyAuctions}
                             emptyMessage="You haven't created any auctions yet."
                             readOnly
+                            hasActiveFilters={hasActiveFilters}
+                            onResetFilters={handleResetFilters}
                         />
                     </TabsContent>
                 </Tabs>

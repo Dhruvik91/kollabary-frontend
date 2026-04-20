@@ -10,13 +10,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { UserRole } from '@/types/auth.types';
 import { CollaborationFilters, Collaboration } from '@/types/collaboration.types';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { Handshake, Package2, Plus, ArrowUpRight } from 'lucide-react';
+import { EmptyState } from '@/components/shared/EmptyState';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { Handshake, Package2, Plus, ArrowUpRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { InfiniteScrollContainer } from '@/components/shared/InfiniteScrollContainer';
 import { FRONTEND_ROUTES } from '@/constants';
 import { useDebounce } from '@/hooks/use-debounce';
-import { CollaborationEmptyState } from '../components/CollaborationEmptyState';
-import { CollaborationErrorState } from '../components/CollaborationErrorState';
 import Link from 'next/link';
 import { useCallback } from 'react';
 
@@ -94,12 +94,24 @@ export const CollaborationListContainer = () => {
                     }
                     emptyState={
                         error ? (
-                            <CollaborationErrorState onRetry={() => router.refresh()} />
+                            <ErrorState onRetry={() => router.refresh()} />
                         ) : (
-                            <CollaborationEmptyState 
-                                hasActiveFilters={hasActiveFilters}
-                                isInfluencer={isInfluencer}
-                                onReset={handleResetFilters}
+                            <EmptyState
+                                title={hasActiveFilters ? 'No matches found' : 'No collaborations yet'}
+                                description={hasActiveFilters
+                                    ? 'Try adjusting your filters or clearing them to see all collaborations.'
+                                    : 'Start your first partnership by reaching out to influencers or responding to requests.'}
+                                icon={Package2}
+                                action={!hasActiveFilters && !isInfluencer ? {
+                                    label: 'Find Partners',
+                                    onClick: () => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCERS),
+                                    icon: Plus
+                                } : undefined}
+                                secondaryAction={hasActiveFilters ? {
+                                    label: 'Clear All Filters',
+                                    onClick: handleResetFilters,
+                                    icon: RotateCcw
+                                } : undefined}
                             />
                         )
                     }

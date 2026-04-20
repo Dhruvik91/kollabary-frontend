@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, Clock, MessageCircle, PackageSearch, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorState } from '@/components/shared/ErrorState';
 import { BidForm } from '@/features/auction/components/BidForm';
 import { BidList } from '@/features/auction/components/BidList';
 import { CreateBidDto } from '@/types/auction.types';
@@ -93,7 +94,19 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         return <AuctionDetailSkeleton />;
     }
 
-    if (isError || !auction) {
+    if (isError) {
+        return (
+            <div className="py-20">
+                <ErrorState 
+                    title="Edge case in the system" 
+                    description="We couldn't retrieve this auction detail. It might be archived or temporarily unavailable." 
+                    onRetry={() => window.location.reload()} 
+                />
+            </div>
+        );
+    }
+
+    if (!auction) {
         return <AuctionNotFound />;
     }
 
