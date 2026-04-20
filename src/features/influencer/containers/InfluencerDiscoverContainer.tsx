@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -45,11 +45,11 @@ export const InfluencerDiscoverContainer = () => {
     // Permission check: Only USER and ADMIN can discover influencers
     const isAuthorized = user?.role === UserRole.USER || user?.role === UserRole.ADMIN;
 
-    const handleFilterChange = (newFilters: Partial<SearchInfluencersDto>) => {
+    const handleFilterChange = useCallback((newFilters: Partial<SearchInfluencersDto>) => {
         setFilters((prev) => ({ ...prev, ...newFilters }));
-    };
+    }, []);
 
-    const handleResetFilters = () => {
+    const handleResetFilters = useCallback(() => {
         setFilters({
             limit: 10,
             search: '',
@@ -61,10 +61,15 @@ export const InfluencerDiscoverContainer = () => {
             maxRating: undefined,
             verified: undefined,
         });
-    };
+    }, []);
 
-    const allInfluencers = data?.pages.flatMap((page: any) => page.items) || [];
-    const totalCount = data?.pages[0]?.meta?.total || 0;
+    const allInfluencers = useMemo(() => 
+        data?.pages.flatMap((page: any) => page.items) || [],
+    [data]);
+
+    const totalCount = useMemo(() => 
+        data?.pages[0]?.meta?.total || 0,
+    [data]);
 
     if (!isAuthorized) {
         return <DiscoverUnauthorizedState />;

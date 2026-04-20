@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useAuth } from '@/contexts/auth-context';
 import {
     Loader2,
@@ -67,16 +68,16 @@ export const DashboardOverviewContainer = () => {
     const isUserCollabsLoading = isUser && (isAllCollabsLoading || isActiveCollabsLoading || isCompletedCollabsLoading || isPendingCollabsLoading);
     const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading || isWalletLoading || isReferralLoading;
 
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center py-32 space-y-4">
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                <p className="text-muted-foreground font-bold uppercase tracking-widest animate-pulse">Loading your dashboard...</p>
-            </div>
-        );
-    }
+    const totalReach = useMemo(() => {
+        if (!profile?.platforms) return 0;
+        return Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0);
+    }, [profile?.platforms]);
 
-    const quickActions = [
+    const formattedTotalReach = useMemo(() =>
+        Intl.NumberFormat('en', { notation: 'compact' }).format(totalReach),
+        [totalReach]);
+
+    const quickActions = useMemo(() => [
         {
             label: 'Explore Creators',
             description: 'Discover talented influencers to collaborate with',
@@ -101,7 +102,16 @@ export const DashboardOverviewContainer = () => {
             color: 'text-emerald-500',
             bgColor: 'bg-emerald-500/10',
         },
-    ];
+    ], []);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-32 space-y-4">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <p className="text-muted-foreground font-bold uppercase tracking-widest animate-pulse">Loading your dashboard...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
@@ -160,11 +170,7 @@ export const DashboardOverviewContainer = () => {
                             />
                             <MetricCard
                                 label="Total Reach"
-                                value={Intl.NumberFormat('en', { notation: 'compact' }).format(
-                                    profile?.platforms
-                                        ? Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0)
-                                        : 0
-                                )}
+                                value={formattedTotalReach}
                                 icon={TrendingUp}
                                 color="text-purple-500"
                                 subtitle="Combined platform followers"
@@ -177,7 +183,7 @@ export const DashboardOverviewContainer = () => {
                                 <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                             </Link>
                             <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                                <ReferralCard 
+                                <ReferralCard
                                     referralCode={referralStats?.referralCode || ''}
                                     totalReferrals={referralStats?.totalReferrals || 0}
                                     successfulReferrals={referralStats?.successfulReferrals || 0}
@@ -250,7 +256,7 @@ export const DashboardOverviewContainer = () => {
                             <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                         </Link>
                         <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                            <ReferralCard 
+                            <ReferralCard
                                 referralCode={referralStats?.referralCode || ''}
                                 totalReferrals={referralStats?.totalReferrals || 0}
                                 successfulReferrals={referralStats?.successfulReferrals || 0}
