@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { Users, Info, Rocket, Gift, ShieldCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { COIN_URL } from '@/constants';
 
 export const ReferralContainer = () => {
@@ -70,7 +71,13 @@ export const ReferralContainer = () => {
                                     <div key={idx} className="space-y-4 relative">
                                         <div className={`w-12 h-12 rounded-2xl ${step.bgColor} ${step.color} flex items-center justify-center p-2.5`}>
                                             {step.iconUrl ? (
-                                                <img src={step.iconUrl} alt="" className="w-full h-full object-contain" />
+                                                <Image 
+                                                    src={step.iconUrl} 
+                                                    alt="" 
+                                                    width={48}
+                                                    height={48}
+                                                    className="w-full h-full object-contain" 
+                                                />
                                             ) : (
                                                 <step.icon size={24} />
                                             )}

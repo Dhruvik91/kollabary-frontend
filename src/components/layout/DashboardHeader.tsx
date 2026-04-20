@@ -19,6 +19,7 @@ import { useTierGuide } from '@/hooks/queries/useRanking';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES, COIN_URL } from '@/constants';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import Image from 'next/image';
 
 /**
  * Header component for the authenticated dashboard.
@@ -66,9 +67,12 @@ export const DashboardHeader = () => {
                 <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} className="flex-shrink-0">
                     <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all cursor-pointer group">
                         <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center p-1 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                            <img 
+                            <Image 
                                 src={COIN_URL} 
                                 alt="KC" 
+                                width={28}
+                                height={28}
+                                priority={true}
                                 className="w-full h-full object-contain"
                             />
                         </div>

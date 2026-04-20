@@ -9,6 +9,7 @@ import { Coins, Loader2, ArrowUpRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FRONTEND_ROUTES, COIN_URL } from '@/constants';
 
 export const EarningsContainer = () => {
@@ -56,9 +57,11 @@ export const EarningsContainer = () => {
                             <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
                                 <div className="flex items-center gap-2 mb-1">
                                     <p className="text-xs font-bold text-primary uppercase">What are K Coins?</p>
-                                    <img
+                                    <Image
                                         src={COIN_URL}
                                         alt=""
+                                        width={12}
+                                        height={12}
                                         className="w-3 h-3 object-contain"
                                     />
                                 </div>

@@ -1,11 +1,10 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Users, Copy, Check, Share2 } from 'lucide-react';
+import { Users, Copy, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import Image from 'next/image';
 import { COIN_URL } from '@/constants';
 
 interface ReferralCardProps {
@@ -64,9 +63,12 @@ export const ReferralCard = ({
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Earned</p>
                         <div className="flex items-center gap-1.5">
                             <p className="text-xl font-black text-primary">{loading ? "-" : totalEarned}</p>
-                            <img
+                            <Image
                                 src={COIN_URL}
                                 alt="KC"
+                                width={16}
+                                height={16}
+                                quality={90}
                                 className="w-4 h-4 object-contain"
                             />
                         </div>

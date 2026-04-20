@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface PageHeaderProps {
@@ -38,9 +39,12 @@ export const PageHeader = ({
                     className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[10px] sm:text-xs"
                 >
                     {iconUrl ? (
-                        <img 
+                        <Image 
                             src={iconUrl} 
                             alt={label} 
+                            width={20}
+                            height={20}
+                            priority={true}
                             className={cn("w-4 h-4 sm:w-5 sm:h-5 object-contain", iconClassName)} 
                         />
                     ) : Icon && (

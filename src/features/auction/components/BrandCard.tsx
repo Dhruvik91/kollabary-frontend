@@ -2,6 +2,7 @@
 
 import { MessageSquare, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { FRONTEND_ROUTES } from '@/constants';
@@ -22,7 +23,14 @@ export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onConta
                 <div className="flex items-center gap-5">
                     <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black text-2xl border-2 border-primary/20 overflow-hidden shadow-inner">
                         {avatarUrl ? (
-                            <img src={avatarUrl} alt={brandName} className="w-full h-full object-cover" />
+                            <Image 
+                                src={avatarUrl} 
+                                alt={brandName} 
+                                width={64}
+                                height={64}
+                                loading="lazy"
+                                className="w-full h-full object-cover" 
+                            />
                         ) : (
                             avatarLetter
                         )}

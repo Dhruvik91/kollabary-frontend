@@ -33,6 +33,7 @@ import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import {
     Popover,
     PopoverContent,
@@ -205,9 +206,12 @@ export const Sidebar = ({
                                 <div className="relative shrink-0">
                                     <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
                                         {user.profile?.avatarUrl ? (
-                                            <img
+                                            <Image
                                                 src={user.profile.avatarUrl}
                                                 alt={user.email}
+                                                width={36}
+                                                height={36}
+                                                priority={true}
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (

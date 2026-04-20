@@ -3,6 +3,7 @@
 import { Gavel, Calendar, DollarSign, Tag, User, Edit2, Trash2, MoreVertical, CheckCircle, Clock, XCircle, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -142,7 +143,14 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
                                 {creator.profile?.avatarUrl ? (
-                                    <img src={creator.profile.avatarUrl} alt={creator.profile.fullName} className="w-full h-full object-cover" />
+                                    <Image 
+                                        src={creator.profile.avatarUrl} 
+                                        alt={creator.profile.fullName || 'Avatar'} 
+                                        width={24}
+                                        height={24}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover" 
+                                    />
                                 ) : (
                                     <User size={12} className="text-primary" />
                                 )}

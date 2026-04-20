@@ -1,8 +1,9 @@
 import React from 'react';
 import { KCTransaction, TransactionType, TransactionPurpose } from '@/types/wallet.types';
 import { cn } from '@/lib/utils';
-import { ArrowDownLeft, ArrowUpRight, Coins, Gift, ShoppingBag, Target, Settings } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, ShoppingBag, Target, Settings } from 'lucide-react';
 import { format } from 'date-fns';
+import Image from 'next/image';
 import { COIN_URL } from '@/constants';
 
 interface TransactionItemProps {
@@ -11,9 +12,12 @@ interface TransactionItemProps {
 
 const getPurposeIcon = (purpose: TransactionPurpose) => {
     const coinImg = (
-        <img 
-            src={COIN_URL} 
-            alt="KC" 
+        <Image
+            src={COIN_URL}
+            alt="KC"
+            width={14}
+            height={14}
+            loading="lazy"
             className="w-3.5 h-3.5 object-contain"
         />
     );
@@ -36,7 +40,7 @@ const getPurposeLabel = (purpose: TransactionPurpose) => {
 
 export const TransactionItem = ({ transaction }: TransactionItemProps) => {
     const isCredit = transaction.type === TransactionType.CREDIT;
-    
+
     return (
         <div className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-border/40 hover:border-primary/20 hover:bg-primary/5 transition-all duration-300 group">
             <div className="flex items-center gap-3">
@@ -46,7 +50,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
                 )}>
                     {isCredit ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
                 </div>
-                
+
                 <div className="space-y-0.5">
                     <h5 className="text-[13px] sm:text-sm font-bold capitalize tracking-tight leading-none">
                         {getPurposeLabel(transaction.purpose)}
@@ -56,16 +60,19 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
                     </p>
                 </div>
             </div>
-            
+
             <div className="flex flex-col items-end gap-1">
                 <div className={cn(
                     "flex items-center gap-1 text-sm sm:text-base font-black tracking-tight",
                     isCredit ? "text-emerald-500" : "text-foreground"
                 )}>
                     <span>{isCredit ? "+" : "-"}{transaction.amount}</span>
-                    <img 
-                        src={COIN_URL} 
-                        alt="K" 
+                    <Image
+                        src={COIN_URL}
+                        alt="K"
+                        width={16}
+                        height={16}
+                        loading="lazy"
                         className="w-4 h-4 object-contain"
                     />
                 </div>
