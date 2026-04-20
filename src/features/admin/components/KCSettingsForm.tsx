@@ -8,10 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { KCSetting, KCSettingKey } from '@/services/kc-setting.service';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
 
 interface KCSettingsFormProps {
@@ -26,23 +26,23 @@ interface KCSettingsFormProps {
 const SETTING_LABELS: Record<KCSettingKey, { label: string; description: string }> = {
     [KCSettingKey.AUCTION_CREATION_PRICE]: {
         label: 'Auction Creation Price',
-        description: 'Amount of KC Coins deducted when a brand creates a new auction.'
+        description: 'Amount of K Coins deducted when a brand creates a new auction.'
     },
     [KCSettingKey.COLLABORATION_CREATION_PRICE]: {
         label: 'Collaboration Creation Price',
-        description: 'Amount of KC Coins deducted when a collaboration is initiated.'
+        description: 'Amount of K Coins deducted when a collaboration is initiated.'
     },
     [KCSettingKey.BID_PLACEMENT_PRICE]: {
         label: 'Bid Placement Price',
-        description: 'Amount of KC Coins deducted when an influencer places a bid.'
+        description: 'Amount of K Coins deducted when an influencer places a bid.'
     },
     [KCSettingKey.DAILY_ALLOWANCE_BRAND]: {
         label: 'Daily Allowance (Brand)',
-        description: 'Amount of KC Coins credited to brand accounts daily.'
+        description: 'Amount of K Coins credited to brand accounts daily.'
     },
     [KCSettingKey.DAILY_ALLOWANCE_INFLUENCER]: {
         label: 'Daily Allowance (Influencer)',
-        description: 'Amount of KC Coins credited to influencer accounts daily.'
+        description: 'Amount of K Coins credited to influencer accounts daily.'
     },
     [KCSettingKey.REFERRAL_REWARD_REFERRER]: {
         label: 'Referrer Reward',

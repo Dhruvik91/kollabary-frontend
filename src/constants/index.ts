@@ -203,3 +203,5 @@ export const PWA_STORAGE_KEYS = {
 
 
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
+
+export const COIN_URL = "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary-coin.png";

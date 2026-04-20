@@ -3,21 +3,30 @@ import { KCTransaction, TransactionType, TransactionPurpose } from '@/types/wall
 import { cn } from '@/lib/utils';
 import { ArrowDownLeft, ArrowUpRight, Coins, Gift, ShoppingBag, Target, Settings } from 'lucide-react';
 import { format } from 'date-fns';
+import { COIN_URL } from '@/constants';
 
 interface TransactionItemProps {
     transaction: KCTransaction;
 }
 
 const getPurposeIcon = (purpose: TransactionPurpose) => {
+    const coinImg = (
+        <img 
+            src={COIN_URL} 
+            alt="KC" 
+            className="w-3.5 h-3.5 object-contain"
+        />
+    );
+
     switch (purpose) {
         case TransactionPurpose.AUCTION_CREATION: return <ShoppingBag size={14} />;
         case TransactionPurpose.COLLABORATION_CREATION: return <Target size={14} />;
-        case TransactionPurpose.BID_PLACEMENT: return <Coins size={14} />;
-        case TransactionPurpose.DAILY_ALLOWANCE: return <Gift size={14} />;
-        case TransactionPurpose.REFERRAL_REWARD: return <ArrowUpRight size={14} />;
-        case TransactionPurpose.SIGNUP_BONUS: return <Gift size={14} />;
+        case TransactionPurpose.BID_PLACEMENT: return coinImg;
+        case TransactionPurpose.DAILY_ALLOWANCE: return coinImg;
+        case TransactionPurpose.REFERRAL_REWARD: return coinImg;
+        case TransactionPurpose.SIGNUP_BONUS: return coinImg;
         case TransactionPurpose.SYSTEM_ADJUSTMENT: return <Settings size={14} />;
-        default: return <Coins size={14} />;
+        default: return coinImg;
     }
 };
 
@@ -49,12 +58,17 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
             </div>
             
             <div className="flex flex-col items-end gap-1">
-                <p className={cn(
-                    "text-sm sm:text-base font-black tracking-tight",
+                <div className={cn(
+                    "flex items-center gap-1 text-sm sm:text-base font-black tracking-tight",
                     isCredit ? "text-emerald-500" : "text-foreground"
                 )}>
-                    {isCredit ? "+" : "-"}{transaction.amount} <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase">KC</span>
-                </p>
+                    <span>{isCredit ? "+" : "-"}{transaction.amount}</span>
+                    <img 
+                        src={COIN_URL} 
+                        alt="K" 
+                        className="w-4 h-4 object-contain"
+                    />
+                </div>
                 <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-muted border border-border/50 text-[7px] sm:text-[8px] font-black uppercase tracking-wider text-muted-foreground">
                     {getPurposeIcon(transaction.purpose)}
                     <span>{transaction.type}</span>
