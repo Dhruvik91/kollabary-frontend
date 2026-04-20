@@ -199,3 +199,6 @@ export const PWA_STORAGE_KEYS = {
     INSTALL_DISMISSED: 'pwa-install-dismissed',
     INSTALLED: 'pwa-installed',
 } as const;
+
+
+export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"

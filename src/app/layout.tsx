@@ -46,13 +46,13 @@ export const metadata: Metadata = {
     siteName: "Kollabary",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["/og-image.png"],
+    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["/twitter-image.png"],
+    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
   },
 };
 

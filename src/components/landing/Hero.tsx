@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FRONTEND_ROUTES } from '@/constants';
+import { FRONTEND_ROUTES, COMPANY_EMAIL } from '@/constants';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 /**
@@ -60,7 +60,7 @@ export const Hero = () => {
                             </Button>
                         </Link>
                         <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all" asChild>
-                            <a href="mailto:support@kollabary.com">
+                            <a href={`mailto:${COMPANY_EMAIL}`}>
                                 Book a Demo
                             </a>
                         </Button>
