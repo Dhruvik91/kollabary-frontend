@@ -29,6 +29,8 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { AuctionDetailHeader } from '../components/AuctionDetailHeader';
 import { AuctionInfoGrid } from '../components/AuctionInfoGrid';
 import { BrandCard } from '../components/BrandCard';
+import { useActionConsent } from '@/hooks/use-action-consent';
+
 import { messagingService } from '@/services/messaging.service';
 import { toast } from 'sonner';
 
@@ -45,6 +47,13 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
 
+    const { executeWithConsent, ConsentModalElement } = useActionConsent({
+        actionType: 'BID_PLACE',
+        title: 'Confirm Your Bid',
+        actionName: 'Place Bid',
+    });
+
+
     useEffect(() => {
         if (!api) return;
         setCount(api.scrollSnapList().length);
@@ -59,8 +68,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const rejectBidMutation = useRejectBid(id);
 
     const handlePlaceBid = async (data: CreateBidDto) => {
-        await placeBidMutation.mutateAsync(data);
+        executeWithConsent(async () => {
+            await placeBidMutation.mutateAsync(data);
+        });
     };
+
 
     const handleAcceptBid = async (bidId: string) => {
         if (!auction) return;
@@ -324,9 +336,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     )}
                 </div>
             </div>
+            {ConsentModalElement}
         </div>
     );
 };
+
 
 const BidStatusDisplay = ({ auction, user }: { auction: any, user: any }) => {
     const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);

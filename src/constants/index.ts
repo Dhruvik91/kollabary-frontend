@@ -201,6 +201,13 @@ export const PWA_STORAGE_KEYS = {
     INSTALLED: 'pwa-installed',
 } as const;
 
+export const CONSENT_STORAGE_KEYS = {
+    AUCTION_CREATE: 'consent-auction-create',
+    BID_PLACE: 'consent-bid-place',
+    COLLAB_REQUEST: 'consent-collab-request',
+} as const;
+
+
 
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
 
