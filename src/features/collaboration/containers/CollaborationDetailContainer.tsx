@@ -136,7 +136,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             proofUrls: urls,
             proofSubmittedAt: new Date().toISOString()
         }, {
-            onSuccess: () => setIsProofDialogOpen(false)
+            onSuccess: () => {
+                setIsProofDialogOpen(false);
+                // Also update status to WORK_SUBMITTED if not already
+                if (collaboration.status !== CollaborationStatus.WORK_SUBMITTED) {
+                    handleUpdateStatus(CollaborationStatus.WORK_SUBMITTED);
+                }
+            }
         });
     };
 
@@ -147,6 +153,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     ].includes(collaboration.status)) || (isRequester && collaboration.status === CollaborationStatus.WORK_SUBMITTED);
 
     const canSubmitProof = isInfluencer && [
+        CollaborationStatus.ACCEPTED,
         CollaborationStatus.IN_PROGRESS,
         CollaborationStatus.WORK_SUBMITTED
     ].includes(collaboration.status);

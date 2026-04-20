@@ -6,6 +6,7 @@ import {
     UpdateCollaborationStatusDto,
     UpdateCollaborationDto
 } from '@/types/collaboration.types';
+import { WALLET_QUERY_KEYS, TRANSACTION_QUERY_KEYS } from '@/hooks/queries/useWalletQueries';
 import { toast } from 'sonner';
 
 /**
@@ -49,6 +50,8 @@ export const useCreateCollaboration = () => {
             collaborationService.createCollaboration(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['collaborations'] });
+            queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+            queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
             toast.success('Collaboration request sent successfully');
         },
         onError: (error: any) => {

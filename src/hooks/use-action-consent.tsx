@@ -40,6 +40,8 @@ export function useActionConsent({
         return setting ? setting.value : undefined;
     }, [settings, settingKey]);
 
+    console.log(coinCost)
+
     const defaultActionName = useMemo(() => {
         switch (actionType) {
             case 'AUCTION_CREATE': return 'Create Auction';

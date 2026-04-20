@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { auctionService } from '@/services/auction.service';
 import { CreateAuctionDto, CreateBidDto } from '@/types/auction.types';
+import { WALLET_QUERY_KEYS, TRANSACTION_QUERY_KEYS } from '@/hooks/queries/useWalletQueries';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
 import { useSocket } from '@/contexts/socket-context';
@@ -239,6 +240,8 @@ export const useCreateAuction = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
+      queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
       toast.success('Auction created successfully!');
     },
   });
@@ -275,6 +278,8 @@ export const usePlaceBid = (auctionId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
       queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
+      queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
       toast.success('Bid placed successfully!');
     },
   });
