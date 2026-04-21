@@ -111,6 +111,7 @@ export const API_CONFIG = {
         referral: {
             base: '/referrals',
             stats: '/referrals/stats',
+            config: '/referrals/config',
         }
 
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useReferralStats } from '@/hooks/queries/useReferralQueries';
+import { useReferralStats, useReferralConfig } from '@/hooks/queries/useReferralQueries';
 import { ReferralCard } from '@/components/shared/ReferralCard';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Users, Info, Rocket, Gift, ShieldCheck } from 'lucide-react';
@@ -11,7 +11,12 @@ import Image from 'next/image';
 import { COIN_URL } from '@/constants';
 
 export const ReferralContainer = () => {
-    const { data: stats, isLoading } = useReferralStats();
+    const { data: stats, isLoading: isStatsLoading } = useReferralStats();
+    const { data: config, isLoading: isConfigLoading } = useReferralConfig();
+
+    const referralBonusText = config 
+        ? `Both you and your friend receive ${config.referrerReward} and ${config.referredReward} K Coins respectively as a bonus for joining our ecosystem.`
+        : "Both you and your friend receive K Coins as a bonus for joining our ecosystem.";
 
     const steps = [
         {
@@ -32,7 +37,7 @@ export const ReferralContainer = () => {
             icon: Gift,
             iconUrl: COIN_URL,
             title: "Earn Rewards",
-            description: "Both you and your friend receive K Coins as a bonus for joining our ecosystem.",
+            description: referralBonusText,
             color: "text-emerald-500",
             bgColor: "bg-emerald-500/10"
         }
@@ -55,7 +60,7 @@ export const ReferralContainer = () => {
                         totalReferrals={stats?.totalReferrals || 0}
                         successfulReferrals={stats?.successfulReferrals || 0}
                         totalEarned={stats?.totalEarned || 0}
-                        loading={isLoading}
+                        loading={isStatsLoading || isConfigLoading}
                     />
                 </div>
 
