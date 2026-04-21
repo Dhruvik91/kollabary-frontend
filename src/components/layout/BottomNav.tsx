@@ -19,7 +19,8 @@ import {
     Gavel,
     Award,
     MessageSquare,
-    BarChart3
+    BarChart3,
+    Coins
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -53,8 +54,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
                 { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
-                { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
-                { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: Handshake, label: 'Recents' },
+                { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
@@ -62,9 +62,9 @@ export const BottomNav = () => {
         if (user?.role === UserRole.INFLUENCER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
-                { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+                { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }

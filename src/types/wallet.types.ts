@@ -11,6 +11,7 @@ export enum TransactionPurpose {
     REFERRAL_REWARD = 'REFERRAL_REWARD',
     SIGNUP_BONUS = 'SIGNUP_BONUS',
     SYSTEM_ADJUSTMENT = 'SYSTEM_ADJUSTMENT',
+    KCOIN_TOPUP = 'KCOIN_TOPUP',
 }
 
 export interface Wallet {

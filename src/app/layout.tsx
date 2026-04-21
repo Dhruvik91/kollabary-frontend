@@ -7,6 +7,7 @@ import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
+import Script from "next/script";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -94,6 +95,7 @@ export default function RootLayout({
                 {children}
                 <Toaster position="top-right" richColors closeButton />
                 <PWAInstaller />
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
               </SocketProvider>
             </AuthProvider>
           </ThemeProvider>

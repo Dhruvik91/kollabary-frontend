@@ -120,6 +120,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
+        { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
     ];
 
     const adminLinks = [
@@ -134,6 +135,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REWARDS, icon: Coins, label: 'Rewards Config' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REFERRALS, icon: UserPlus, label: 'Referral Config' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.TOP_UP, icon: Coins, label: 'Top-up Plans' },
     ];
 
 
@@ -146,6 +148,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
+        { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
     ];
 
     const getLinksByRole = () => {

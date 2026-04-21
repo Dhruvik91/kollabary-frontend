@@ -111,6 +111,15 @@ export const API_CONFIG = {
         referral: {
             base: '/referrals',
             stats: '/referrals/stats',
+        },
+        topUp: {
+            plans: '/top-up/plans',
+            initiate: '/payment/top-up/initiate',
+            verify: '/payment/top-up/verify',
+        },
+        adminTopUp: {
+            plans: '/admin/top-up/plans',
+            planUpdate: (id: string) => `/admin/top-up/plans/${id}`,
         }
 
     }
@@ -164,7 +173,9 @@ export const FRONTEND_ROUTES = {
             CONVERSATIONS: '/admin/conversations',
             REWARDS: '/admin/rewards',
             REFERRALS: '/admin/referrals',
+            TOP_UP: '/admin/top-up',
         },
+        TOP_UP: '/top-up',
     },
     HOME: '/',
     TERMS: '/terms',
