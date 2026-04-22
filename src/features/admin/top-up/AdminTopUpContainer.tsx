@@ -19,7 +19,7 @@ import { useAdminTopUpPlans, useDeleteTopUpPlan, useUpdateTopUpPlan } from '@/ho
 import { TopUpPlan } from '@/types/payment.types';
 import { PlanFormDialog } from './components/PlanFormDialog';
 import { cn } from '@/lib/utils';
-import { 
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -104,7 +104,7 @@ export function AdminTopUpContainer() {
             header: 'Status',
             accessorKey: 'isActive',
             cell: ({ row }) => (
-                <Badge 
+                <Badge
                     variant={row.original.isActive ? "default" : "secondary"}
                     className={cn(
                         "rounded-lg text-[10px] uppercase font-bold cursor-pointer",
@@ -119,20 +119,20 @@ export function AdminTopUpContainer() {
         {
             id: 'actions',
             header: 'Actions',
-            meta: { headerAlign: 'right' },
+            meta: { headerAlign: 'left' },
             cell: ({ row }) => (
-                <div className="flex items-center justify-end gap-2">
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
+                <div className="flex items-center justify-start gap-2">
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary"
                         onClick={() => handleEdit(row.original)}
                     >
                         <Edit2 size={14} />
                     </Button>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-8 w-8 rounded-lg text-rose-500 hover:bg-rose-500/10"
                         onClick={() => setDeletingId(row.original.id)}
                     >
@@ -181,10 +181,10 @@ export function AdminTopUpContainer() {
                 }
             />
 
-            <PlanFormDialog 
-                open={isFormOpen} 
-                onOpenChange={setIsFormOpen} 
-                plan={editingPlan} 
+            <PlanFormDialog
+                open={isFormOpen}
+                onOpenChange={setIsFormOpen}
+                plan={editingPlan}
             />
 
             <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>

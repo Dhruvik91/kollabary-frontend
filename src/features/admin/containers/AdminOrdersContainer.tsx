@@ -103,9 +103,9 @@ export const AdminOrdersContainer = () => {
         },
         {
             id: 'actions',
-            header: () => <div className="text-right">Actions</div>,
+            header: () => <div className="text-left">Actions</div>,
             cell: ({ row }) => (
-                <div className="text-right">
+                <div className="text-left">
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button variant="ghost" size="icon" onClick={() => setSelectedOrder(row.original)}>
