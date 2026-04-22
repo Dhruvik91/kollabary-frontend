@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { BASE_IMAGE_URL } from '@/constants';
 
 export type RankTier =
     | 'Rising Creator'
@@ -26,69 +27,32 @@ const tierConfigs: Record<string, {
 }> = {
     'Rising Creator': {
         label: 'Rising Creator',
-        image: '/badges/rising_creator.png',
+        image: `${BASE_IMAGE_URL}/rising_creator.png`,
         description: 'New influencer building initial trust.'
     },
     'Emerging Partner': {
         label: 'Emerging Partner',
-        image: '/badges/emerging_partner.png',
+        image: `${BASE_IMAGE_URL}/emerging_partner.png`,
         description: 'Actively collaborating and gaining traction.'
     },
     'Trusted Collaborator': {
         label: 'Trusted Collaborator',
-        image: '/badges/trusted_collaborator.png',
+        image: `${BASE_IMAGE_URL}/trusted_collaborator.png`,
         description: 'Reliable influencer with consistent performance.'
     },
     'Pro Influencer': {
         label: 'Pro Influencer',
-        image: '/badges/pro_influencer.png',
+        image: `${BASE_IMAGE_URL}/pro_influencer.png`,
         description: 'High-performing creator with strong presence.'
     },
     'Elite Creator': {
         label: 'Elite Creator',
-        image: '/badges/elite_creator.png',
+        image: `${BASE_IMAGE_URL}/elite_creator.png`,
         description: 'Top-tier influencer with proven consistency.'
     },
     'Kollabary Icon': {
         label: 'Kollabary Icon',
-        image: '/badges/kollabary_icon.png',
-        description: 'Platform leader. Trusted at scale.'
-    }
-};
-
-const tierConfigsV2: Record<string, {
-    label: string;
-    image: string;
-    description: string;
-}> = {
-    'Rising Creator': {
-        label: 'Rising Creator',
-        image: '/badgesV2/rising_creator.png',
-        description: 'New influencer building initial trust.'
-    },
-    'Emerging Partner': {
-        label: 'Emerging Partner',
-        image: '/badgesV2/emerging_partner.png',
-        description: 'Actively collaborating and gaining traction.'
-    },
-    'Trusted Collaborator': {
-        label: 'Trusted Collaborator',
-        image: '/badgesV2/trusted_collaborator.png',
-        description: 'Reliable influencer with consistent performance.'
-    },
-    'Pro Influencer': {
-        label: 'Pro Influencer',
-        image: '/badgesV2/pro_influencer.png',
-        description: 'High-performing creator with strong presence.'
-    },
-    'Elite Creator': {
-        label: 'Elite Creator',
-        image: '/badgesV2/elite_creator.png',
-        description: 'Top-tier influencer with proven consistency.'
-    },
-    'Kollabary Icon': {
-        label: 'Kollabary Icon',
-        image: '/badgesV2/kollabary_icon.png',
+        image: `${BASE_IMAGE_URL}/kollabary_icon.png`,
         description: 'Platform leader. Trusted at scale.'
     }
 };
@@ -105,7 +69,7 @@ export const RankTierBadge = ({
     className,
     size = 'md'
 }: RankTierBadgeProps) => {
-    const config = tierConfigsV2[tier] || tierConfigsV2['Rising Creator'];
+    const config = tierConfigs[tier] || tierConfigs['Rising Creator'];
     const dimensions = sizeMap[size];
 
     return (

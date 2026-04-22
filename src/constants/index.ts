@@ -231,8 +231,9 @@ export const CONSENT_STORAGE_KEYS = {
     COLLAB_REQUEST: 'consent-collab-request',
 } as const;
 
-
-
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
 
 export const COIN_URL = "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary-coin.png";
+
+export const BASE_IMAGE_URL = "https://kollabary.s3.ap-south-1.amazonaws.com"
+
