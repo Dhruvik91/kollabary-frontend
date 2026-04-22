@@ -67,6 +67,12 @@ export const API_CONFIG = {
             conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
             kcSettings: '/admin/kc-settings',
             kcSettingUpdate: (key: string) => `/admin/kc-settings/${key}`,
+            finance: '/admin/finance',
+            orders: '/admin/orders',
+            users: '/admin/users',
+            userStatusUpdate: (id: string) => `/admin/users/${id}/status`,
+            userBulkStatus: '/admin/users/bulk-status',
+            userVerify: (id: string) => `/admin/users/${id}/verify`,
         },
         verification: {
             base: '/verification/request',

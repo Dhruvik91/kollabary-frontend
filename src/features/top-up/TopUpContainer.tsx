@@ -70,7 +70,7 @@ export const TopUpContainer = () => {
                     color: "#E91E8C",
                 },
                 modal: {
-                    ondismiss: function() {
+                    ondismiss: function () {
                         toast.info("Payment cancelled");
                         if (activeOrderIdRef.current) {
                             cancelOrder(activeOrderIdRef.current);
@@ -106,9 +106,9 @@ export const TopUpContainer = () => {
                     subtitle="Choose a plan to boost your balance and unlock more opportunities."
                     icon={Coins}
                 />
-                <div className="w-full md:w-auto">
+                {/* <div className="w-full md:w-auto">
                     <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} />
-                </div>
+                </div> */}
             </div>
 
             <div className="bg-gradient-to-br from-primary/5 via-transparent to-primary/5 rounded-3xl p-4 md:p-8 border border-primary/10">

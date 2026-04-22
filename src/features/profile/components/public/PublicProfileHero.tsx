@@ -8,6 +8,7 @@ import { ShareButton } from '@/components/shared/ShareButton';
 import { FRONTEND_ROUTES } from '@/constants';
 import Link from 'next/link';
 import Image from 'next/image';
+import { UserRole } from '@/types/auth.types';
 
 interface PublicProfileHeroProps {
     profileId: string;
@@ -83,7 +84,7 @@ export const PublicProfileHero = ({
                             </Button>
                         </Link>
                         <ShareButton
-                            type="brand"
+                            type={UserRole.USER}
                             id={profileId}
                             variant="outline"
                             size="lg"

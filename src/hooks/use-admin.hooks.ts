@@ -15,7 +15,65 @@ export const adminKeys = {
     verifications: () => [...adminKeys.all, 'verifications'] as const,
     ranking: () => [...adminKeys.all, 'ranking'] as const,
     subscriptions: () => [...adminKeys.all, 'subscriptions'] as const,
+    users: () => [...adminKeys.all, 'users'] as const,
 };
+
+/**
+ * Hook to fetch platform users with pagination and filters
+ */
+export function useAdminUsers(filters?: any) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: [...adminKeys.users(), filters],
+        queryFn: () => adminService.getAllUsers(filters),
+        enabled: user?.role === UserRole.ADMIN,
+    });
+}
+
+/**
+ * Hook for bulk updating user status
+ */
+export function useBulkUpdateUserStatus() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userIds, status }: { userIds: string[]; status: string }) =>
+            adminService.bulkUpdateUserStatus(userIds, status),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('User status updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update users', {
+                description: error.message,
+            });
+        },
+    });
+}
+
+/**
+ * Hook for individual user moderation (ban/unban/verify)
+ */
+export function useModerateUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userId, status, isVerified }: { userId: string; status?: string; isVerified?: boolean }) => {
+            if (status) return adminService.updateUserStatus(userId, status);
+            if (isVerified !== undefined) return adminService.verifyInfluencer(userId, isVerified);
+            throw new Error('No action specified');
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('User updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Moderation failed', {
+                description: error.message,
+            });
+        },
+    });
+}
 
 /**
  * Hook to fetch platform statistics

@@ -3,7 +3,8 @@ import httpService from '@/lib/http-service';
 import { 
     TopUpPlan, 
     InitiateTopUpResponse, 
-    VerifyPaymentDto 
+    VerifyPaymentDto,
+    PaymentOrder
 } from '@/types/payment.types';
 
 export const paymentService = {

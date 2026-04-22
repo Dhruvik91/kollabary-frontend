@@ -140,6 +140,54 @@ export const adminService = {
     },
 
     /**
+     * Get financial statistics with filters
+     */
+    getFinanceStats: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.finance, { params });
+        return response.data;
+    },
+
+    /**
+     * List all platform orders
+     */
+    getAllOrders: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.orders, { params });
+        return response.data;
+    },
+
+    /**
+     * List all platform users
+     */
+    getAllUsers: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.users, { params });
+        return response.data;
+    },
+
+    /**
+     * Bulk update user status
+     */
+    bulkUpdateUserStatus: async (userIds: string[], status: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userBulkStatus, { userIds, status });
+        return response.data;
+    },
+
+    /**
+     * Update individual user status
+     */
+    updateUserStatus: async (userId: string, status: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userStatusUpdate(userId), { status });
+        return response.data;
+    },
+
+    /**
+     * Directly verify influencer
+     */
+    verifyInfluencer: async (userId: string, isVerified: boolean): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { isVerified });
+        return response.data;
+    },
+
+    /**
      * Create influencer account
      */
     createInfluencer: async (data: any): Promise<any> => {
