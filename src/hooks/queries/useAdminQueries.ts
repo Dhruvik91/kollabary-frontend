@@ -12,9 +12,9 @@ export const useAdminQueries = () => {
     const { user } = useAuth();
     const isAdmin = user?.role === UserRole.ADMIN;
 
-    const useStats = () => useQuery({
-        queryKey: ['admin', 'stats'],
-        queryFn: () => adminService.getStats(),
+    const useStats = (range: string = 'TODAY') => useQuery({
+        queryKey: ['admin', 'stats', range],
+        queryFn: () => adminService.getStats({ range }),
         enabled: isAdmin,
     });
 

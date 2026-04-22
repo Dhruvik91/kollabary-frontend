@@ -13,8 +13,8 @@ export const adminService = {
     /**
      * Get platform statistics
      */
-    getStats: async (): Promise<any> => {
-        const response = await httpService.get(API_CONFIG.path.admin.stats);
+    getStats: async (params?: { range?: string; startDate?: string; endDate?: string }): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.stats, { params });
         return response.data;
     },
 

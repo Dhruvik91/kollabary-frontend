@@ -78,11 +78,11 @@ export function useModerateUser() {
 /**
  * Hook to fetch platform statistics
  */
-export function useAdminStats() {
+export function useAdminStats(range: string = 'TODAY') {
     const { user } = useAuth();
     return useQuery({
-        queryKey: adminKeys.stats(),
-        queryFn: adminService.getStats,
+        queryKey: [...adminKeys.stats(), range],
+        queryFn: () => adminService.getStats({ range }),
         staleTime: 2 * 60 * 1000, // 2 minutes
         enabled: user?.role === UserRole.ADMIN,
     });
