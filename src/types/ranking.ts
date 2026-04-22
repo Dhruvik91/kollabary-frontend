@@ -3,7 +3,7 @@ export interface RankingMetric<T> {
     value?: number;
     hours?: number;
     percentage?: number;
-    isVerified?: boolean;
+    verified?: boolean;
     score: number;
     maxScore: number;
 }

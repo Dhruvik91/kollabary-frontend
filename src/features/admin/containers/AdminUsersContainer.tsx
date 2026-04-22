@@ -142,7 +142,7 @@ export const AdminUsersContainer = () => {
             header: 'Verified',
             cell: ({ row }) => (
                 row.original.role === 'INFLUENCER' ? (
-                    row.original.influencerProfile?.isVerified ? (
+                    row.original.influencerProfile?.verified ? (
                         <ShieldCheck className="w-5 h-5 text-primary" />
                     ) : (
                         <ShieldAlert className="w-5 h-5 text-muted-foreground opacity-30" />
@@ -200,10 +200,10 @@ export const AdminUsersContainer = () => {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={() => moderateUser({
                                         userId: row.original.id,
-                                        isVerified: !row.original.influencerProfile?.isVerified
+                                        verified: !row.original.influencerProfile?.verified
                                     })}>
                                         <ShieldCheck className="w-4 h-4 mr-2" />
-                                        {row.original.influencerProfile?.isVerified ? 'Remove Verification' : 'Verify Directly'}
+                                        {row.original.influencerProfile?.verified ? 'Remove Verification' : 'Verify Directly'}
                                     </DropdownMenuItem>
                                 </>
                             )}

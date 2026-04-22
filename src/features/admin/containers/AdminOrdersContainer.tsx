@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { adminService } from '@/services/admin.service';
+import { useState } from 'react';
+import { useAdminOrders } from '@/hooks/use-admin.hooks';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -23,35 +23,20 @@ import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const AdminOrdersContainer = () => {
-    const [orders, setOrders] = useState<any[]>([]);
-    const [meta, setMeta] = useState<any>(null);
     const [page, setPage] = useState(0); // DataTable uses 0-indexed page internally
     const [status, setStatus] = useState('ALL');
     const [search, setSearch] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
-    const fetchOrders = async (currentPage = page) => {
-        setIsLoading(true);
-        try {
-            const data = await adminService.getAllOrders({
-                page: currentPage + 1,
-                limit: 10,
-                status: status === 'ALL' ? undefined : status,
-                userId: search
-            });
-            setOrders(data.items);
-            setMeta(data.meta);
-        } catch (error) {
-            toast.error('Failed to fetch orders');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { data, isLoading, refetch } = useAdminOrders({
+        page: page + 1,
+        limit: 10,
+        status: status === 'ALL' ? undefined : status,
+        search: search || undefined
+    });
 
-    useEffect(() => {
-        fetchOrders(page);
-    }, [page, status]);
+    const orders = data?.items || [];
+    const meta = data?.meta || null;
 
     const getStatusBadge = (status: string) => {
         switch (status) {
@@ -198,7 +183,7 @@ export const AdminOrdersContainer = () => {
                     </Select>
                 }
                 appendWithSearch={
-                    <Button variant="outline" onClick={() => fetchOrders()} size="icon" className="bg-background/50 h-10">
+                    <Button variant="outline" onClick={() => refetch()} size="icon" className="bg-background/50 h-10">
                         <RotateCcw className="w-4 h-4" />
                     </Button>
                 }

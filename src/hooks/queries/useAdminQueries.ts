@@ -54,6 +54,9 @@ export const useAdminQueries = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin', 'reports'] });
         },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to update report status');
+        },
     });
 
     const useVerifications = () => useQuery({
@@ -67,6 +70,9 @@ export const useAdminQueries = () => {
             adminService.processVerification(id, status),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin', 'verifications'] });
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to update verification status');
         },
     });
 

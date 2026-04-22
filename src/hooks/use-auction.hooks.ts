@@ -72,7 +72,7 @@ export const useInfiniteAuctions = (filters?: any) => {
 
   return useInfiniteQuery({
     queryKey: [...auctionKeys.list(filters), 'infinite'],
-    queryFn: ({ pageParam = 1 }) => 
+    queryFn: ({ pageParam = 1 }) =>
       auctionService.getAuctions({ ...filters, page: pageParam }),
     getNextPageParam: (lastPage) => {
       if (lastPage.meta.page < lastPage.meta.totalPages) {
@@ -92,40 +92,40 @@ export const useMyAuctions = () => {
 };
 
 export const useInfiniteMyAuctions = (filters?: any, options?: { enabled?: boolean }) => {
-    const queryClient = useQueryClient();
-    const { socket } = useSocket();
+  const queryClient = useQueryClient();
+  const { socket } = useSocket();
 
-    useEffect(() => {
-      if (!socket || !options?.enabled) return;
+  useEffect(() => {
+    if (!socket || !options?.enabled) return;
 
-      const handleAuctionEvents = () => {
-        queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
-      };
+    const handleAuctionEvents = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
+    };
 
-      socket.on('auction_created', handleAuctionEvents);
-      socket.on('auction_updated', handleAuctionEvents);
-      socket.on('auction_deleted', handleAuctionEvents);
+    socket.on('auction_created', handleAuctionEvents);
+    socket.on('auction_updated', handleAuctionEvents);
+    socket.on('auction_deleted', handleAuctionEvents);
 
-      return () => {
-        socket.off('auction_created', handleAuctionEvents);
-        socket.off('auction_updated', handleAuctionEvents);
-        socket.off('auction_deleted', handleAuctionEvents);
-      };
-    }, [socket, queryClient, options?.enabled]);
+    return () => {
+      socket.off('auction_created', handleAuctionEvents);
+      socket.off('auction_updated', handleAuctionEvents);
+      socket.off('auction_deleted', handleAuctionEvents);
+    };
+  }, [socket, queryClient, options?.enabled]);
 
-    return useInfiniteQuery({
-      queryKey: [...auctionKeys.myAuctions(), filters, 'infinite'],
-      queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyAuctions({ ...filters, page: pageParam }),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.meta.page < lastPage.meta.totalPages) {
-          return lastPage.meta.page + 1;
-        }
-        return undefined;
-      },
-      initialPageParam: 1,
-      enabled: options?.enabled ?? true,
-    });
+  return useInfiniteQuery({
+    queryKey: [...auctionKeys.myAuctions(), filters, 'infinite'],
+    queryFn: ({ pageParam = 1 }) =>
+      auctionService.getMyAuctions({ ...filters, page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.page < lastPage.meta.totalPages) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    enabled: options?.enabled ?? true,
+  });
 };
 
 export const useMyBids = () => {
@@ -136,40 +136,40 @@ export const useMyBids = () => {
 };
 
 export const useInfiniteMyBids = (filters?: any, options?: { enabled?: boolean }) => {
-    const queryClient = useQueryClient();
-    const { socket } = useSocket();
+  const queryClient = useQueryClient();
+  const { socket } = useSocket();
 
-    useEffect(() => {
-      if (!socket || !options?.enabled) return;
+  useEffect(() => {
+    if (!socket || !options?.enabled) return;
 
-      const handleBidEvents = () => {
-        queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
-      };
+    const handleBidEvents = () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
+    };
 
-      socket.on('new_bid', handleBidEvents);
-      socket.on('bid_accepted', handleBidEvents);
-      socket.on('bid_rejected', handleBidEvents);
+    socket.on('new_bid', handleBidEvents);
+    socket.on('bid_accepted', handleBidEvents);
+    socket.on('bid_rejected', handleBidEvents);
 
-      return () => {
-        socket.off('new_bid', handleBidEvents);
-        socket.off('bid_accepted', handleBidEvents);
-        socket.off('bid_rejected', handleBidEvents);
-      };
-    }, [socket, queryClient, options?.enabled]);
+    return () => {
+      socket.off('new_bid', handleBidEvents);
+      socket.off('bid_accepted', handleBidEvents);
+      socket.off('bid_rejected', handleBidEvents);
+    };
+  }, [socket, queryClient, options?.enabled]);
 
-    return useInfiniteQuery({
-      queryKey: [...auctionKeys.myBids(), filters, 'infinite'],
-      queryFn: ({ pageParam = 1 }) => 
-        auctionService.getMyBids({ ...filters, page: pageParam }),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.meta.page < lastPage.meta.totalPages) {
-          return lastPage.meta.page + 1;
-        }
-        return undefined;
-      },
-      initialPageParam: 1,
-      enabled: options?.enabled ?? true,
-    });
+  return useInfiniteQuery({
+    queryKey: [...auctionKeys.myBids(), filters, 'infinite'],
+    queryFn: ({ pageParam = 1 }) =>
+      auctionService.getMyBids({ ...filters, page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.page < lastPage.meta.totalPages) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    enabled: options?.enabled ?? true,
+  });
 };
 
 export const useAuctionDetail = (id: string) => {
@@ -181,7 +181,7 @@ export const useAuctionDetail = (id: string) => {
 
     // Function to join or re-join the room
     const joinRoom = () => {
-        socket.emit('join_auction', id);
+      socket.emit('join_auction', id);
     };
 
     joinRoom();
@@ -244,6 +244,9 @@ export const useCreateAuction = () => {
       queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
       toast.success('Auction created successfully!');
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to create auction');
+    },
   });
 };
 
@@ -256,6 +259,9 @@ export const useUpdateAuction = (id: string) => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Auction updated successfully!');
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to update auction');
+    },
   });
 };
 
@@ -267,6 +273,9 @@ export const useDeleteAuction = () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
       toast.success('Auction deleted successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to delete auction');
     },
   });
 };
@@ -282,6 +291,9 @@ export const usePlaceBid = (auctionId: string) => {
       queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
       toast.success('Bid placed successfully!');
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to place bid');
+    },
   });
 };
 
@@ -294,16 +306,22 @@ export const useAcceptBid = (auctionId: string) => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Bid accepted successfully!');
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to accept bid');
+    },
   });
 };
 
 export const useRejectBid = (auctionId: string) => {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
-        toast.success('Bid rejected successfully');
-      },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+      toast.success('Bid rejected successfully');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to reject bid');
+    },
+  });
 };

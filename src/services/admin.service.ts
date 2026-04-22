@@ -77,8 +77,8 @@ export const adminService = {
     /**
      * Update verification status
      */
-    processVerification: async (id: string, status: string, notes?: string): Promise<any> => {
-        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
+    processVerification: async (id: string, status: string, adminNotes?: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, adminNotes });
         return response.data;
     },
 
@@ -182,8 +182,8 @@ export const adminService = {
     /**
      * Directly verify influencer
      */
-    verifyInfluencer: async (userId: string, isVerified: boolean): Promise<any> => {
-        const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { isVerified });
+    verifyInfluencer: async (userId: string, verified: boolean): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { verified });
         return response.data;
     },
 

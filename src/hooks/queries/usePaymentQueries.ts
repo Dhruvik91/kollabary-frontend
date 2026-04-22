@@ -50,6 +50,12 @@ export const useVerifyPayment = () => {
 export const useCancelOrder = () => {
     return useMutation({
         mutationFn: (orderId: string) => paymentService.cancelOrder(orderId),
+        onSuccess: () => {
+            toast.success('Order cancelled successfully');
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to cancel order');
+        },
     });
 };
 

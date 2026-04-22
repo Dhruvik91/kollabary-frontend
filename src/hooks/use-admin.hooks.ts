@@ -16,6 +16,8 @@ export const adminKeys = {
     ranking: () => [...adminKeys.all, 'ranking'] as const,
     subscriptions: () => [...adminKeys.all, 'subscriptions'] as const,
     users: () => [...adminKeys.all, 'users'] as const,
+    finance: (params: any) => [...adminKeys.all, 'finance', params] as const,
+    orders: (params: any) => [...adminKeys.all, 'orders', params] as const,
 };
 
 /**
@@ -58,10 +60,10 @@ export function useModerateUser() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ userId, status, isVerified }: { userId: string; status?: string; isVerified?: boolean }) => {
+        mutationFn: ({ userId, status, verified }: { userId: string; status?: string; verified?: boolean }) => {
             if (status) return adminService.updateUserStatus(userId, status);
-            if (isVerified !== undefined) return adminService.verifyInfluencer(userId, isVerified);
-            throw new Error('No action specified');
+            if (verified !== undefined) return adminService.verifyInfluencer(userId, verified);
+            return Promise.reject(new Error('No action provided'));
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminKeys.users() });
@@ -140,8 +142,8 @@ export function useProcessVerification() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, status, notes }: { id: string; status: 'APPROVED' | 'REJECTED'; notes?: string }) =>
-            adminService.processVerification(id, status, notes),
+        mutationFn: ({ id, status, adminNotes }: { id: string; status: 'APPROVED' | 'REJECTED'; adminNotes?: string }) =>
+            adminService.processVerification(id, status, adminNotes),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminKeys.verifications() });
             queryClient.invalidateQueries({ queryKey: adminKeys.stats() });
@@ -294,5 +296,29 @@ export function useDeleteSubscriptionPlan() {
                 description: error.response?.data?.message || error.message,
             });
         },
+    });
+}
+
+/**
+ * Hook to fetch financial statistics
+ */
+export function useFinanceStats(params: { range: string; startDate?: string; endDate?: string }) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: adminKeys.finance(params),
+        queryFn: () => adminService.getFinanceStats(params),
+        enabled: user?.role === UserRole.ADMIN,
+    });
+}
+
+/**
+ * Hook to fetch all orders with pagination and filters
+ */
+export function useAdminOrders(params: { page: number; limit: number; status?: string; userId?: string; search?: string }) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: adminKeys.orders(params),
+        queryFn: () => adminService.getAllOrders(params),
+        enabled: user?.role === UserRole.ADMIN,
     });
 }

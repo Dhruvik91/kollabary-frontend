@@ -136,6 +136,9 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REWARDS, icon: Coins, label: 'Rewards Config' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REFERRALS, icon: UserPlus, label: 'Referral Config' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.TOP_UP, icon: Coins, label: 'Top-up Plans' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.FINANCE, icon: Coins, label: 'Finance' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.ORDERS, icon: Coins, label: 'Orders' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.USERS, icon: Coins, label: 'Users' },
     ];
 
 

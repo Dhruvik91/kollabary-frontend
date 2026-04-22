@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { adminService } from '@/services/admin.service';
+import { useFinanceStats } from '@/hooks/use-admin.hooks';
+import { Skeleton } from '@/components/ui/skeleton';
+import { MetricCard } from '@/features/dashboard/components/MetricCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
@@ -17,42 +19,33 @@ import {
 } from 'recharts';
 import {
     IndianRupee,
-    TrendingUp,
     ShoppingCart,
     Coins,
     ArrowUpRight,
 } from 'lucide-react';
-import { FinanceStats } from '@/types/admin.types';
-import { toast } from 'sonner';
 
 export const AdminFinanceContainer = () => {
     const [range, setRange] = useState('THIS_MONTH');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [stats, setStats] = useState<FinanceStats | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    const fetchFinanceData = async () => {
-        setIsLoading(true);
-        try {
-            const data = await adminService.getFinanceStats({
-                range,
-                startDate: range === 'CUSTOM' ? startDate : undefined,
-                endDate: range === 'CUSTOM' ? endDate : undefined
-            });
-            setStats(data);
-        } catch (error) {
-            toast.error('Failed to fetch financial stats');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const [appliedParams, setAppliedParams] = useState<{
+        range: string;
+        startDate?: string;
+        endDate?: string;
+    }>({ range: 'THIS_MONTH' });
+
+    const { data: stats, isLoading } = useFinanceStats(appliedParams);
 
     useEffect(() => {
         if (range !== 'CUSTOM') {
-            fetchFinanceData();
+            setAppliedParams({ range, startDate: undefined, endDate: undefined });
         }
     }, [range]);
+
+    const handleApplyCustomRange = () => {
+        setAppliedParams({ range: 'CUSTOM', startDate, endDate });
+    };
 
     return (
         <div className="space-y-8 p-6">
@@ -93,7 +86,7 @@ export const AdminFinanceContainer = () => {
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                             />
-                            <Button size="sm" onClick={fetchFinanceData}>Apply</Button>
+                            <Button size="sm" onClick={handleApplyCustomRange}>Apply</Button>
                         </div>
                     )}
                 </div>
@@ -101,66 +94,41 @@ export const AdminFinanceContainer = () => {
 
             {/* Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Total Revenue</CardTitle>
-                        <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                            <IndianRupee className="w-5 h-5 text-primary" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-bold">₹{stats?.totalRevenue?.toLocaleString() || 0}</div>
-                        <div className="flex items-center gap-1 mt-2 text-xs font-medium text-emerald-500">
-                            <TrendingUp className="w-3 h-3" />
-                            <span>Platform Earnings</span>
-                        </div>
-                    </CardContent>
-                </Card>
+                <MetricCard
+                    label="Total Revenue"
+                    value={`₹${stats?.totalRevenue?.toLocaleString() || 0}`}
+                    icon={IndianRupee}
+                    subtitle="Platform Earnings"
+                    color="text-primary"
+                    isLoading={isLoading}
+                />
 
-                <Card className="relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">KC Coins Sold</CardTitle>
-                        <div className="p-2 bg-amber-500/10 rounded-lg group-hover:bg-amber-500/20 transition-colors">
-                            <Coins className="w-5 h-5 text-amber-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-bold">{stats?.totalCoinsSold?.toLocaleString() || 0} KC</div>
-                        <div className="flex items-center gap-1 mt-2 text-xs font-medium text-amber-500">
-                            <span>Digital Currency Flow</span>
-                        </div>
-                    </CardContent>
-                </Card>
+                <MetricCard
+                    label="KC Coins Sold"
+                    value={`${stats?.totalCoinsSold?.toLocaleString() || 0} KC`}
+                    icon={Coins}
+                    subtitle="Digital Currency Flow"
+                    color="text-amber-500"
+                    isLoading={isLoading}
+                />
 
-                <Card className="relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Total Orders</CardTitle>
-                        <div className="p-2 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                            <ShoppingCart className="w-5 h-5 text-blue-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-bold">{stats?.orderCount || 0}</div>
-                        <div className="flex items-center gap-1 mt-2 text-xs font-medium text-blue-500">
-                            <span>Transaction Count</span>
-                        </div>
-                    </CardContent>
-                </Card>
+                <MetricCard
+                    label="Total Orders"
+                    value={stats?.orderCount || 0}
+                    icon={ShoppingCart}
+                    subtitle="Transaction Count"
+                    color="text-blue-500"
+                    isLoading={isLoading}
+                />
 
-                <Card className="relative overflow-hidden group hover:border-primary/50 transition-all duration-300">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Success Rate</CardTitle>
-                        <div className="p-2 bg-emerald-500/10 rounded-lg group-hover:bg-emerald-500/20 transition-colors">
-                            <ArrowUpRight className="w-5 h-5 text-emerald-500" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-bold">{stats?.successRate?.toFixed(1) || 0}%</div>
-                        <div className="flex items-center gap-1 mt-2 text-xs font-medium text-emerald-500">
-                            <span>Payment Reliability</span>
-                        </div>
-                    </CardContent>
-                </Card>
+                <MetricCard
+                    label="Success Rate"
+                    value={`${stats?.successRate?.toFixed(1) || 0}%`}
+                    icon={ArrowUpRight}
+                    subtitle="Payment Reliability"
+                    color="text-emerald-500"
+                    isLoading={isLoading}
+                />
             </div>
 
             {/* Revenue Trends Chart */}
@@ -172,47 +140,53 @@ export const AdminFinanceContainer = () => {
                     </div>
                 </CardHeader>
                 <CardContent className="h-[400px] px-0">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={stats?.revenueTrends || []}>
-                            <defs>
-                                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                            <XAxis
-                                dataKey="label"
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                                dy={10}
-                            />
-                            <YAxis
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                                tickFormatter={(val) => `₹${val}`}
-                            />
-                            <Tooltip
-                                contentStyle={{
-                                    backgroundColor: 'hsl(var(--background))',
-                                    border: '1px solid hsl(var(--border))',
-                                    borderRadius: '12px',
-                                    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
-                                }}
-                                formatter={(val: any) => [`₹${Number(val).toLocaleString()}`, 'Revenue']}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="value"
-                                stroke="hsl(var(--primary))"
-                                strokeWidth={3}
-                                fillOpacity={1}
-                                fill="url(#colorValue)"
-                            />
-                        </AreaChart>
-                    </ResponsiveContainer>
+                    {isLoading ? (
+                        <div className="px-6 py-4 h-full">
+                            <Skeleton className="w-full h-full rounded-xl" />
+                        </div>
+                    ) : (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={stats?.revenueTrends || []}>
+                                <defs>
+                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                                <XAxis
+                                    dataKey="label"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                                    dy={10}
+                                />
+                                <YAxis
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                                    tickFormatter={(val) => `₹${val}`}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'hsl(var(--background))',
+                                        border: '1px solid hsl(var(--border))',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
+                                    }}
+                                    formatter={(val: any) => [`₹${Number(val).toLocaleString()}`, 'Revenue']}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke="hsl(var(--primary))"
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorValue)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    )}
                 </CardContent>
             </Card>
         </div>
