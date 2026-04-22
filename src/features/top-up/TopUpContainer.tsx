@@ -17,6 +17,11 @@ export const TopUpContainer = () => {
     const { data: wallet, isLoading: isWalletLoading } = useWallet();
 
     const handleBuy = async (planId: string) => {
+        if (!(window as any).Razorpay) {
+            toast.error("Payment Gateway (Razorpay) is still loading. Please try again in a few seconds.");
+            return;
+        }
+
         try {
             const orderData = await initiateTopUp(planId);
 
@@ -28,13 +33,20 @@ export const TopUpContainer = () => {
                 description: "KC Coin Top-up",
                 order_id: orderData.orderId,
                 handler: async function (response: any) {
+                    const toastId = toast.loading("Verifying payment, please do not close this window...");
                     verifyPayment({
                         razorpayOrderId: response.razorpay_order_id,
                         razorpayPaymentId: response.razorpay_payment_id,
                         razorpaySignature: response.razorpay_signature,
+                    }, {
+                        onSettled: () => {
+                            toast.dismiss(toastId);
+                        }
                     });
                 },
                 prefill: {
+                    name: orderData.prefill?.name || "",
+                    email: orderData.prefill?.email || "",
                 },
                 theme: {
                     color: "#E91E8C",

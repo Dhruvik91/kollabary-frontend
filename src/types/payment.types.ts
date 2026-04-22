@@ -40,6 +40,10 @@ export interface InitiateTopUpResponse {
     amount: number;
     currency: string;
     key: string;
+    prefill?: {
+        name: string;
+        email: string;
+    };
 }
 
 export interface VerifyPaymentDto {
