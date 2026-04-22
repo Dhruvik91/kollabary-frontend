@@ -20,7 +20,8 @@ import {
     Award,
     MessageSquare,
     BarChart3,
-    Coins
+    Coins,
+    Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -54,7 +55,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
                 { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
-                { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
+                { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
@@ -64,7 +65,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
-                { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
+                { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
@@ -90,10 +91,13 @@ export const BottomNav = () => {
 
     return (
         <nav
-            className={cn("fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border", `${pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : 'block'}`)}
+            className={cn(
+                "fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border pb-[env(safe-area-inset-bottom)]",
+                pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : "block"
+            )}
             aria-label="Bottom navigation"
         >
-            <div className="flex items-center justify-start sm:justify-around h-16 overflow-x-auto scrollbar-none px-2">
+            <div className="flex items-center justify-around h-16 overflow-x-auto scrollbar-none px-2">
                 {navItems.map((item) => {
                     const active = isActive(item.href);
                     const Icon = item.icon;
@@ -103,7 +107,7 @@ export const BottomNav = () => {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                'relative flex flex-col items-center justify-center gap-0.5 min-w-[64px] sm:flex-1 h-full transition-colors duration-200',
+                                'relative flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors duration-200',
                                 active
                                     ? 'text-primary'
                                     : 'text-muted-foreground hover:text-foreground'
@@ -113,7 +117,7 @@ export const BottomNav = () => {
                             {active && (
                                 <motion.div
                                     layoutId="bottom-nav-pill"
-                                    className="absolute bottom-0 inset-x-2 h-0.5 bg-primary rounded-t-full"
+                                    className="absolute top-0 inset-x-4 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent rounded-b-full"
                                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                                 />
                             )}
