@@ -30,4 +30,28 @@ export const paymentService = {
         const response = await httpService.post<{ success: boolean; coinsCredited: number }>(API_CONFIG.path.topUp.verify, payload);
         return response.data;
     },
+
+    /**
+     * Get user's top-up order history
+     */
+    async getMyOrders(page = 1, limit = 20): Promise<{ items: PaymentOrder[]; meta: any }> {
+        const response = await httpService.get<{ items: PaymentOrder[]; meta: any }>(API_CONFIG.path.topUp.myOrders, { params: { page, limit } });
+        return response.data;
+    },
+
+    /**
+     * Mark an order as cancelled
+     */
+    async cancelOrder(orderId: string): Promise<{ status: string }> {
+        const response = await httpService.post<{ status: string }>(API_CONFIG.path.topUp.cancel(orderId));
+        return response.data;
+    },
+
+    /**
+     * Proactively sync order status with the gateway
+     */
+    async syncOrder(orderId: string): Promise<{ status: string; coinsCredited?: number }> {
+        const response = await httpService.post<{ status: string; coinsCredited?: number }>(API_CONFIG.path.topUp.sync(orderId));
+        return response.data;
+    },
 };

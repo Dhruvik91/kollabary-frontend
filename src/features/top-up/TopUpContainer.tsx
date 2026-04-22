@@ -1,7 +1,8 @@
 'use client';
 
-import { usePaymentPlans, useInitiateTopUp, useVerifyPayment } from '@/hooks/queries/usePaymentQueries';
+import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
+import { OrderHistory } from './components/OrderHistory';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { WalletCard } from '@/components/shared/WalletCard';
 import { ErrorState } from '@/components/shared/ErrorState';
@@ -9,11 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Coins, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWallet } from '@/hooks/queries/useWalletQueries';
+import { useRef } from 'react';
 
 export const TopUpContainer = () => {
+    const activeOrderIdRef = useRef<string | null>(null);
     const { data: plans, isLoading: isPlansLoading, isError, error, refetch } = usePaymentPlans();
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
     const { mutate: verifyPayment } = useVerifyPayment();
+    const { mutate: cancelOrder } = useCancelOrder();
     const { data: wallet, isLoading: isWalletLoading } = useWallet();
 
     const handleBuy = async (planId: string) => {
@@ -24,6 +28,7 @@ export const TopUpContainer = () => {
 
         try {
             const orderData = await initiateTopUp(planId);
+            activeOrderIdRef.current = orderData.orderId;
 
             const options = {
                 key: orderData.key,
@@ -54,6 +59,9 @@ export const TopUpContainer = () => {
                 modal: {
                     ondismiss: function() {
                         toast.info("Payment cancelled");
+                        if (activeOrderIdRef.current) {
+                            cancelOrder(activeOrderIdRef.current);
+                        }
                     }
                 }
             };
@@ -112,6 +120,8 @@ export const TopUpContainer = () => {
                     />
                 )}
             </div>
+
+            <OrderHistory />
 
             <div className="text-center text-muted-foreground text-sm max-w-2xl mx-auto">
                 <p>

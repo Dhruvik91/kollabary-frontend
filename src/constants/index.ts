@@ -116,6 +116,9 @@ export const API_CONFIG = {
             plans: '/top-up/plans',
             initiate: '/payment/top-up/initiate',
             verify: '/payment/top-up/verify',
+            cancel: (id: string) => `/payment/top-up/cancel/${id}`,
+            sync: (id: string) => `/payment/top-up/sync/${id}`,
+            myOrders: '/payment/my-orders',
         },
         adminTopUp: {
             plans: '/admin/top-up/plans',

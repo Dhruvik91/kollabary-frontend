@@ -15,6 +15,13 @@ export const usePaymentPlans = () => {
     });
 };
 
+export const useMyOrders = (page = 1, limit = 20) => {
+    return useQuery({
+        queryKey: [...paymentKeys.all, 'history', page, limit],
+        queryFn: () => paymentService.getMyOrders(page, limit),
+    });
+};
+
 export const useInitiateTopUp = () => {
     return useMutation({
         mutationFn: (planId: string) => paymentService.initiateTopUp(planId),
@@ -36,6 +43,31 @@ export const useVerifyPayment = () => {
         },
         onError: (error: any) => {
             toast.error(error?.response?.data?.message || 'Payment verification failed');
+        },
+    });
+};
+
+export const useCancelOrder = () => {
+    return useMutation({
+        mutationFn: (orderId: string) => paymentService.cancelOrder(orderId),
+    });
+};
+
+export const useSyncOrder = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (orderId: string) => paymentService.syncOrder(orderId),
+        onSuccess: (data) => {
+            if (data.status === 'success') {
+                toast.success('Payment synced successfully!');
+                queryClient.invalidateQueries({ queryKey: ['wallet'] });
+                queryClient.invalidateQueries({ queryKey: ['payment'] });
+            } else {
+                toast.info(`Payment status: ${data.status}`);
+            }
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to sync with gateway');
         },
     });
 };
