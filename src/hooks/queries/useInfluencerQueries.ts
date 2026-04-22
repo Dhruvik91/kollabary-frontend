@@ -40,6 +40,9 @@ export function useCreateInfluencerProfile() {
             queryClient.invalidateQueries({ queryKey: profileKeys.me() });
             toast.success('Influencer profile created successfully!');
         },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to create influencer profile');
+        },
     });
 }
 

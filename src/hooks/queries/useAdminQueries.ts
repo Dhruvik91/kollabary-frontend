@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminService } from '@/services/admin.service';
 import { Auction, Bid } from '@/types/auction.types';
 import { Conversation, Message } from '@/types/messaging.types';
+import { toast } from 'sonner';
 import { Report } from '@/types/report.types';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
@@ -11,9 +12,9 @@ export const useAdminQueries = () => {
     const { user } = useAuth();
     const isAdmin = user?.role === UserRole.ADMIN;
 
-    const useStats = () => useQuery({
-        queryKey: ['admin', 'stats'],
-        queryFn: () => adminService.getStats(),
+    const useStats = (range: string = 'TODAY') => useQuery({
+        queryKey: ['admin', 'stats', range],
+        queryFn: () => adminService.getStats({ range }),
         enabled: isAdmin,
     });
 
@@ -53,6 +54,9 @@ export const useAdminQueries = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin', 'reports'] });
         },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to update report status');
+        },
     });
 
     const useVerifications = () => useQuery({
@@ -67,6 +71,9 @@ export const useAdminQueries = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin', 'verifications'] });
         },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message || 'Failed to update verification status');
+        },
     });
 
     return {
@@ -79,5 +86,62 @@ export const useAdminQueries = () => {
         useUpdateReportStatus,
         useVerifications,
         useUpdateVerificationStatus,
+        useAdminTopUpPlans,
+        useCreateTopUpPlan,
+        useUpdateTopUpPlan,
+        useDeleteTopUpPlan,
     };
+};
+
+// Top-up Plans
+export const useAdminTopUpPlans = () => {
+    return useQuery({
+        queryKey: ['admin', 'top-up-plans'],
+        queryFn: () => adminService.getAllTopUpPlans(),
+    });
+};
+
+export const useCreateTopUpPlan = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (dto: any) => adminService.createTopUpPlan(dto),
+        onSuccess: () => {
+            toast.success('Top-up plan created successfully');
+            queryClient.invalidateQueries({ queryKey: ['admin', 'top-up-plans'] });
+            queryClient.invalidateQueries({ queryKey: ['payment', 'plans'] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to create plan');
+        },
+    });
+};
+
+export const useUpdateTopUpPlan = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, dto }: { id: string; dto: any }) => adminService.updateTopUpPlan(id, dto),
+        onSuccess: () => {
+            toast.success('Top-up plan updated successfully');
+            queryClient.invalidateQueries({ queryKey: ['admin', 'top-up-plans'] });
+            queryClient.invalidateQueries({ queryKey: ['payment', 'plans'] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to update plan');
+        },
+    });
+};
+
+export const useDeleteTopUpPlan = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: string) => adminService.deleteTopUpPlan(id),
+        onSuccess: () => {
+            toast.success('Top-up plan deleted successfully');
+            queryClient.invalidateQueries({ queryKey: ['admin', 'top-up-plans'] });
+            queryClient.invalidateQueries({ queryKey: ['payment', 'plans'] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to delete plan');
+        },
+    });
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Users, Handshake, CheckCircle, Star } from 'lucide-react';
+import { Users, Handshake, CheckCircle, Star, IndianRupee } from 'lucide-react';
 import { AdminStatCard } from './AdminStatCard';
 import { AdminStats } from '@/types/admin.types';
 
@@ -20,6 +20,14 @@ export function AdminStatsGrid({ stats }: AdminStatsGridProps) {
             colorClass: 'bg-blue-600'
         },
         {
+            title: 'Total Revenue',
+            value: `₹${stats?.finance?.totalRevenue?.toLocaleString() || 0}`,
+            icon: IndianRupee,
+            trend: 'up' as const,
+            trendValue: `${stats?.finance?.orderCount} orders`,
+            colorClass: 'bg-emerald-600'
+        },
+        {
             title: 'Active Collaborations',
             value: stats?.collaborations.activeCollaborations || 0,
             icon: Handshake,
@@ -33,7 +41,7 @@ export function AdminStatsGrid({ stats }: AdminStatsGridProps) {
             icon: CheckCircle,
             trend: 'down' as const,
             trendValue: `${stats?.verifications.approvalRate}% appr.`,
-            colorClass: 'bg-emerald-600'
+            colorClass: 'bg-violet-600'
         },
         {
             title: 'Average Rating',
@@ -46,7 +54,7 @@ export function AdminStatsGrid({ stats }: AdminStatsGridProps) {
     ];
 
     return (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {statCards.map((card, idx) => (
                 <motion.div
                     key={card.title}

@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Host
+Host: https://www.kollabary.com
+
+# Sitemaps
+Sitemap: https://www.kollabary.com/sitemap.xml

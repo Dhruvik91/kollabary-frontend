@@ -13,16 +13,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function AdminVerificationsContainer() {
     const { data: requests = [], isLoading } = useAdminVerifications();
     const processVerification = useProcessVerification();
-    const [notes, setNotes] = useState('');
+    const [adminNotes, setAdminNotes] = useState('');
     const [activeRequestId, setActiveRequestId] = useState<string | null>(null);
 
     const handleProcess = (id: string, status: 'APPROVED' | 'REJECTED') => {
-        processVerification.mutate({ id, status, notes });
-        setNotes('');
+        processVerification.mutate({ id, status, adminNotes });
+        setAdminNotes('');
         setActiveRequestId(null);
     };
 
@@ -42,15 +43,19 @@ export function AdminVerificationsContainer() {
                 const user = profile?.user;
                 const fullName = profile?.fullName || user?.profile?.fullName || 'Influencer';
                 const email = user?.email || 'Unknown';
+                const avatarUrl = profile?.avatarUrl;
 
                 return (
                     <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xs ring-1 ring-primary/20">
-                            {fullName[0]?.toUpperCase() || email[0]?.toUpperCase() || '?'}
-                        </div>
+                        <Avatar className="h-9 w-9 rounded-xl border border-primary/10 ring-1 ring-primary/5">
+                            {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} className="object-cover" />}
+                            <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+                                {fullName[0]?.toUpperCase() || email[0]?.toUpperCase() || '?'}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="flex flex-col">
                             <span className="text-sm font-bold text-foreground truncate max-w-[150px]">{fullName}</span>
-                            <span className="text-[10px] text-muted-foreground uppercase opacity-60 font-medium">
+                            <span className="text-[10px] text-muted-foreground uppercase opacity-60 font-medium line-clamp-1">
                                 {email}
                             </span>
                         </div>
@@ -110,14 +115,13 @@ export function AdminVerificationsContainer() {
             meta: { headerAlign: 'left' },
             cell: ({ row }) => {
                 const request = row.original;
-                const userEmail = request.influencerProfile?.user?.email || 'this user';
 
                 return (
                     <div className="flex justify-start items-center gap-2">
                         {request.status === VerificationStatus.PENDING ? (
                             <Button
                                 size="sm"
-                                className="h-8 rounded-xl text-xs px-4 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+                                className="h-8 rounded-xl text-xs px-4"
                                 onClick={() => setActiveRequestId(request.id)}
                             >
                                 Process
@@ -126,72 +130,12 @@ export function AdminVerificationsContainer() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                disabled
-                                className="h-8 w-8 rounded-lg opacity-40 cursor-not-allowed"
+                                className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
+                                onClick={() => setActiveRequestId(request.id)}
                             >
-                                <MoreHorizontal size={14} />
+                                <Eye size={14} />
                             </Button>
                         )}
-
-                        <AnimatedModal
-                            isOpen={activeRequestId === request.id}
-                            onClose={() => setActiveRequestId(null)}
-                            title={request.status === VerificationStatus.PENDING ? 'Process Verification' : 'Verification Details'}
-                            description={request.status === VerificationStatus.PENDING
-                                ? `Provide feedback and decide on this verification request for ${userEmail}.`
-                                : `Review the processed verification for ${userEmail}.`}
-                            footer={request.status === VerificationStatus.PENDING && (
-                                <div className="flex gap-3 justify-end w-full">
-                                    <Button
-                                        variant="outline"
-                                        className="rounded-xl border-rose-500/20 text-rose-600 hover:bg-rose-50 px-6"
-                                        onClick={() => handleProcess(request.id, 'REJECTED')}
-                                    >
-                                        Reject Request
-                                    </Button>
-                                    <Button
-                                        className="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 shadow-lg shadow-emerald-600/20"
-                                        onClick={() => handleProcess(request.id, 'APPROVED')}
-                                    >
-                                        Approve Verification
-                                    </Button>
-                                </div>
-                            )}
-                        >
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold text-foreground">Internal Notes</label>
-                                    <Textarea
-                                        placeholder={request.status === VerificationStatus.PENDING ? "Add feedback for the influencer or reason for rejection..." : "No notes provided."}
-                                        value={request.status === VerificationStatus.PENDING ? notes : (request as any).adminNotes || ''}
-                                        onChange={(e) => setNotes(e.target.value)}
-                                        readOnly={request.status !== VerificationStatus.PENDING}
-                                        className="rounded-xl min-h-[120px] bg-muted/20 border-border/40 focus:border-primary/50 transition-all resize-none p-4"
-                                    />
-                                </div>
-                                {request.status !== VerificationStatus.PENDING && (
-                                    <div className="p-4 rounded-2xl bg-muted/20 border border-border/50 text-sm space-y-3">
-                                        <div className="flex justify-between items-center pb-2 border-b border-border/5">
-                                            <span className="text-muted-foreground font-medium">Decision Status</span>
-                                            <span className={cn(
-                                                "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                                                request.status === VerificationStatus.APPROVED
-                                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                                                    : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
-                                            )}>
-                                                {request.status}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center text-xs">
-                                            <span className="text-muted-foreground">Processed On</span>
-                                            <span className="font-bold text-foreground">
-                                                {formatDate(request.updatedAt)}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </AnimatedModal>
                     </div>
                 );
             },
@@ -221,6 +165,77 @@ export function AdminVerificationsContainer() {
                     </div>
                 }
             />
+
+            {/* Verification Processing/Detail Modal */}
+            {(() => {
+                const activeRequest = requests.find(r => r.id === activeRequestId);
+                if (!activeRequest) return null;
+
+                const isPending = activeRequest.status === VerificationStatus.PENDING;
+                const userEmail = activeRequest.influencerProfile?.user?.email || 'this user';
+
+                return (
+                    <AnimatedModal
+                        isOpen={!!activeRequestId}
+                        onClose={() => setActiveRequestId(null)}
+                        title={isPending ? 'Process Verification' : 'Verification Details'}
+                        description={isPending
+                            ? `Provide feedback and decide on this verification request for ${userEmail}.`
+                            : `Review the processed verification for ${userEmail}.`}
+                        footer={isPending && (
+                            <div className="flex gap-3 justify-end w-full">
+                                <Button
+                                    variant="outline"
+                                    className="rounded-xl border-rose-500/20 text-rose-600 hover:bg-rose-50 px-6"
+                                    onClick={() => handleProcess(activeRequest.id, 'REJECTED')}
+                                >
+                                    Reject Request
+                                </Button>
+                                <Button
+                                    className="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 shadow-lg shadow-emerald-600/20"
+                                    onClick={() => handleProcess(activeRequest.id, 'APPROVED')}
+                                >
+                                    Approve Verification
+                                </Button>
+                            </div>
+                        )}
+                    >
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-foreground">Internal Notes</label>
+                                <Textarea
+                                    placeholder={isPending ? "Add feedback for the influencer or reason for rejection..." : "No notes provided."}
+                                    value={isPending ? adminNotes : (activeRequest as any).adminNotes || ''}
+                                    onChange={(e) => setAdminNotes(e.target.value)}
+                                    readOnly={!isPending}
+                                    className="rounded-xl min-h-[120px] bg-muted/20 border-border/40 focus:border-primary/50 transition-all resize-none p-4"
+                                />
+                            </div>
+                            {!isPending && (
+                                <div className="p-4 rounded-2xl bg-muted/20 border border-border/50 text-sm space-y-3">
+                                    <div className="flex justify-between items-center pb-2 border-b border-border/5">
+                                        <span className="text-muted-foreground font-medium">Decision Status</span>
+                                        <span className={cn(
+                                            "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
+                                            activeRequest.status === VerificationStatus.APPROVED
+                                                ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                                : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
+                                        )}>
+                                            {activeRequest.status}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-xs">
+                                        <span className="text-muted-foreground">Processed On</span>
+                                        <span className="font-bold text-foreground">
+                                            {formatDate(activeRequest.updatedAt)}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </AnimatedModal>
+                );
+            })()}
         </div>
     );
 }

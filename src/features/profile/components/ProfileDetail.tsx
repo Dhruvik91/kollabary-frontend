@@ -24,6 +24,7 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { ShareButton } from '@/components/shared/ShareButton';
 import { PasswordUpdateForm } from './PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
+import { UserRole } from '@/types/auth.types';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -95,10 +96,10 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                                     Edit Profile
                                 </Button>
                             </Link>
-                            <ShareButton 
-                                type="brand" 
-                                id={profile.id} 
-                                variant="outline" 
+                            <ShareButton
+                                type={UserRole.USER}
+                                id={profile.id}
+                                variant="outline"
                                 size="default"
                                 className="h-12 w-12 rounded-xl border-2"
                             />

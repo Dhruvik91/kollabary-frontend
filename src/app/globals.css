@@ -237,9 +237,10 @@
     outline-color: oklch(0.70 0.16 15 / 0.5);
   }
 
-  /* ── Smooth scroll ── */
+  /* ── Smooth scroll & Layout Stability ── */
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
 
   /* ── Balanced Typography ── */

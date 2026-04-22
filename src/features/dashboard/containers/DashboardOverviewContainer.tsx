@@ -152,6 +152,7 @@ export const DashboardOverviewContainer = () => {
                                 value={ranking?.completedCollaborations?.count || 0}
                                 icon={CheckCircle2}
                                 color="text-blue-500"
+                                bgColor="bg-blue-500/10"
                                 subtitle={`${ranking?.completedCollaborations?.score || 0} ranking points`}
                             />
                             <MetricCard
@@ -159,6 +160,7 @@ export const DashboardOverviewContainer = () => {
                                 value={profile?.verified ? "Verified" : "Not Verified"}
                                 icon={Shield}
                                 color={profile?.verified ? "text-emerald-500" : "text-amber-500"}
+                                bgColor={profile?.verified ? "bg-emerald-500/10" : "bg-amber-500/10"}
                                 subtitle={profile?.verified ? "+50 bonus points" : "Verify to unlock higher tiers"}
                             />
                             <MetricCard
@@ -166,6 +168,7 @@ export const DashboardOverviewContainer = () => {
                                 value={profile?.avgRating || "0.0"}
                                 icon={Star}
                                 color="text-yellow-500"
+                                bgColor="bg-yellow-500/10"
                                 subtitle={`Based on ${profile?.totalReviews || 0} reviews`}
                             />
                             <MetricCard
@@ -173,6 +176,7 @@ export const DashboardOverviewContainer = () => {
                                 value={formattedTotalReach}
                                 icon={TrendingUp}
                                 color="text-purple-500"
+                                bgColor="bg-purple-500/10"
                                 subtitle="Combined platform followers"
                             />
                         </div>
@@ -225,6 +229,7 @@ export const DashboardOverviewContainer = () => {
                             value={totalCollabs}
                             icon={Briefcase}
                             color="text-blue-500"
+                            bgColor="bg-blue-500/10"
                             subtitle="All-time collaboration requests"
                         />
                         <MetricCard
@@ -232,6 +237,7 @@ export const DashboardOverviewContainer = () => {
                             value={activeCount}
                             icon={Handshake}
                             color="text-emerald-500"
+                            bgColor="bg-emerald-500/10"
                             subtitle="Currently in progress"
                         />
                         <MetricCard
@@ -239,6 +245,7 @@ export const DashboardOverviewContainer = () => {
                             value={completedCount}
                             icon={CheckCircle2}
                             color="text-purple-500"
+                            bgColor="bg-purple-500/10"
                             subtitle="Successfully finished"
                         />
                         <MetricCard
@@ -246,6 +253,7 @@ export const DashboardOverviewContainer = () => {
                             value={pendingCount}
                             icon={Clock}
                             color="text-amber-500"
+                            bgColor="bg-amber-500/10"
                             subtitle="Awaiting creator response"
                         />
                     </div>
