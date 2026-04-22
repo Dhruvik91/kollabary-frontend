@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
 import Script from "next/script";
+import { GoogleTagManager } from '@next/third-parties/google';
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -85,6 +86,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
