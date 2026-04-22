@@ -10,15 +10,28 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Coins, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWallet } from '@/hooks/queries/useWalletQueries';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 export const TopUpContainer = () => {
     const activeOrderIdRef = useRef<string | null>(null);
     const { data: plans, isLoading: isPlansLoading, isError, error, refetch } = usePaymentPlans();
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
-    const { mutate: verifyPayment } = useVerifyPayment();
+    const { mutate: verifyPayment, isPending: isVerifying } = useVerifyPayment();
     const { mutate: cancelOrder } = useCancelOrder();
     const { data: wallet, isLoading: isWalletLoading } = useWallet();
+
+    // Prevent user from leaving during critical verification phase
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (isVerifying || isInitiating) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [isVerifying, isInitiating]);
 
     const handleBuy = async (planId: string) => {
         if (!(window as any).Razorpay) {
