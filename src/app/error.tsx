@@ -31,7 +31,7 @@ export default function Error({
                 <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] [animation-delay:1.5s]" />
             </div>
 
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, scale: 0.97, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -43,23 +43,23 @@ export default function Error({
                 </div>
 
                 <h1 className="text-4xl md:text-5xl font-display text-foreground mb-6 leading-[1.1] tracking-tight">
-                    Something went <br/><span className="text-destructive">unexpected</span>
+                    Something went <br /><span className="text-destructive">unexpected</span>
                 </h1>
-                
+
                 <p className="text-muted-foreground mb-12 leading-relaxed text-pretty text-sm md:text-base opacity-80">
                     We encountered an unexpected error. Our team has been notified and we're looking into it. In the meantime, you can try refreshing the page.
                 </p>
 
                 <div className="flex flex-col gap-4">
-                    <Button 
+                    <Button
                         onClick={() => reset()}
                         size="lg"
-                        className="w-full h-15 rounded-2xl bg-foreground text-background hover:bg-foreground/90 transition-all font-semibold shadow-xl"
+                        className="w-full h-15 rounded-2xl hover:bg-foreground/90 transition-all font-semibold shadow-xl"
                     >
                         <RotateCcw className="mr-2 w-5 h-5" />
                         Try Again
                     </Button>
-                    
+
                     <Button asChild variant="ghost" className="w-full h-15 rounded-2xl hover:bg-muted transition-all">
                         <Link href="/">
                             <Home className="mr-2 w-5 h-5" />
@@ -67,7 +67,7 @@ export default function Error({
                         </Link>
                     </Button>
                 </div>
-                
+
                 {error.digest && (
                     <div className="mt-8 pt-6 border-t border-border/50">
                         <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest leading-none">
@@ -76,7 +76,7 @@ export default function Error({
                     </div>
                 )}
             </motion.div>
-            
+
             {/* Noise Texture */}
             <div className="fixed inset-0 pointer-events-none opacity-[0.03] noise" />
         </div>

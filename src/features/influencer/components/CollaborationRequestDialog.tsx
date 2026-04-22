@@ -27,6 +27,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { useCreateCollaboration } from '@/hooks/use-collaboration.hooks';
 import { CreateCollaborationDto } from '@/types/collaboration.types';
+import { useActionConsent } from '@/hooks/use-action-consent';
+
 
 const collaborationSchema = z.object({
     title: z.string().min(5, 'Title must be at least 5 characters'),
@@ -59,6 +61,12 @@ export const CollaborationRequestDialog = ({
 }: CollaborationRequestDialogProps) => {
     const [open, setOpen] = React.useState(false);
     const createCollaboration = useCreateCollaboration();
+    const { executeWithConsent, ConsentModalElement } = useActionConsent({
+        actionType: 'COLLAB_REQUEST',
+        title: 'Collaboration Request',
+        actionName: 'Send Request',
+    });
+
 
     const form = useForm<CollaborationFormValues>({
         resolver: zodResolver(collaborationSchema),
@@ -85,13 +93,16 @@ export const CollaborationRequestDialog = ({
             endDate: values.endDate.toISOString(),
         };
 
-        createCollaboration.mutate(dto, {
-            onSuccess: () => {
-                setOpen(false);
-                form.reset();
-            },
+        executeWithConsent(() => {
+            createCollaboration.mutate(dto, {
+                onSuccess: () => {
+                    setOpen(false);
+                    form.reset();
+                },
+            });
         });
     };
+
 
     return (
         <>
@@ -290,6 +301,8 @@ export const CollaborationRequestDialog = ({
                     </form>
                 </Form>
             </AnimatedModal>
+            {ConsentModalElement}
         </>
+
     );
 };

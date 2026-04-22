@@ -51,6 +51,7 @@ import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 const profileSchema = z.object({
     fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
+    username: z.string().min(3, 'Username must be at least 3 characters').max(30, 'Username is too long').regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
     categories: z.string().min(2, 'At least one category is required'),
     avatarUrl: z.string(),
     bio: z.string().min(10, 'Bio should be at least 10 characters').max(500),
@@ -88,6 +89,7 @@ const profileSchema = z.object({
 
 interface ProfileFormValues {
     fullName: string;
+    username: string;
     categories: string;
     avatarUrl: string;
     bio: string;
@@ -151,6 +153,7 @@ export const InfluencerProfileForm = ({
         resolver: zodResolver(profileSchema) as any,
         defaultValues: {
             fullName: initialData?.fullName || '',
+            username: initialData?.user?.username || initialData?.username || '',
             categories: Array.isArray(initialData?.categories) ? initialData.categories.join(', ') : (typeof initialData?.categories === 'string' ? initialData.categories : ''),
             avatarUrl: initialData?.avatarUrl || '',
             bio: initialData?.bio || '',
@@ -175,6 +178,7 @@ export const InfluencerProfileForm = ({
         if (initialData) {
             form.reset({
                 fullName: initialData.fullName || '',
+                username: initialData.user?.username || initialData.username || '',
                 categories: Array.isArray(initialData.categories) ? initialData.categories.join(', ') : (typeof initialData.categories === 'string' ? initialData.categories : ''),
                 avatarUrl: initialData.avatarUrl || '',
                 bio: initialData.bio || '',
@@ -204,7 +208,7 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['fullName', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity']
+            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity']
             : currentStep === 1
                 ? ['platforms']
                 : currentStep === 2
@@ -341,6 +345,27 @@ export const InfluencerProfileForm = ({
                                                     <FormControl>
                                                         <Input placeholder="e.g. John Doe" {...field} className="h-12 rounded-xl bg-background/50" />
                                                     </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="username"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <AtSign size={14} className="text-primary" />
+                                                        Username
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">@</span>
+                                                            <Input placeholder="johndoe" {...field} className="h-12 pl-8 rounded-xl bg-background/50" />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormDescription>Your unique identity. This creates your profile link.</FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}

@@ -6,10 +6,9 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
-
 import { ThemeProvider } from "@/lib/theme-provider";
-
-
+import Script from "next/script";
+import { GoogleTagManager } from '@next/third-parties/google';
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -17,22 +16,41 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kollabary.com"),
   title: {
     template: "%s | Kollabary",
     default: "Kollabary - Enterprise Influencer Collaboration Platform",
   },
-  description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+  description: "Scale your brand through authentic human connections. The next generation influencer management platform for seamless collaborations.",
+  keywords: ["influencer marketing", "brand collaboration", "influencer management", "creators", "enterprise marketing", "Kollabary"],
+  authors: [{ name: "Kollabary Team" }],
+  creator: "Kollabary",
+  publisher: "Kollabary",
   manifest: "/manifest.json",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
     ],
     apple: [
       { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -46,14 +64,19 @@ export const metadata: Metadata = {
     siteName: "Kollabary",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["/og-image.png"],
+    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
+    locale: "en_US",
+    url: "/",
   },
   twitter: {
     card: "summary_large_image",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["/twitter-image.png"],
+    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
+    site: "@kollabary",
+    creator: "@kollabary",
   },
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -63,6 +86,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
@@ -73,6 +97,7 @@ export default function RootLayout({
                 {children}
                 <Toaster position="top-right" richColors closeButton />
                 <PWAInstaller />
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
               </SocketProvider>
             </AuthProvider>
           </ThemeProvider>

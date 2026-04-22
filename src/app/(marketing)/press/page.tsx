@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { StaticPageLayout, StaticSection } from '@/components/marketing/StaticPageLayout';
+import { COMPANY_EMAIL } from '@/constants';
 import { Newspaper, Mail, Download, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -14,7 +15,7 @@ export default function PressPage() {
             <StaticSection title="Media Inquiries" icon={<Mail className="w-6 h-6 text-primary" />} index={0}>
                 <p>For interview requests, statements, or detailed platform insights, please contact our press team.</p>
                 <div className="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10 inline-block font-mono text-primary">
-                    press@kollabary.com
+                    {COMPANY_EMAIL}
                 </div>
             </StaticSection>
 

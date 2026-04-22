@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 
 import React, { useRef, useState } from 'react';
 import { Camera, Upload, X, Loader2, User } from 'lucide-react';
@@ -6,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useUploadFile } from '@/hooks/queries/useUploadQueries';
+
+const MotionImage = motion(Image);
 
 interface ProfileImageUploadProps {
     value?: string;
@@ -73,13 +76,16 @@ export const ProfileImageUpload = ({
                 >
                     <AnimatePresence mode="wait">
                         {previewUrl ? (
-                            <motion.img
+                            <MotionImage
                                 key="preview"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 src={previewUrl}
                                 alt="Profile Preview"
+                                width={160}
+                                height={160}
+                                unoptimized={previewUrl.startsWith('blob:')}
                                 className="w-full h-full object-cover"
                             />
                         ) : (

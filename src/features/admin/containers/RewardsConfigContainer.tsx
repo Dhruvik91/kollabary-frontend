@@ -11,7 +11,7 @@ export function RewardsConfigContainer() {
     const { data: settings = [], isLoading, isError } = useKCSettings();
     const updateMutation = useUpdateKCSetting();
 
-    const rewardSettings = settings.filter(s => 
+    const rewardSettings = settings.filter(s =>
         [
             KCSettingKey.AUCTION_CREATION_PRICE,
             KCSettingKey.COLLABORATION_CREATION_PRICE,
@@ -42,7 +42,7 @@ export function RewardsConfigContainer() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Rewards & Costs</h1>
-                <p className="text-muted-foreground mt-1">Configure how KC Coins are distributed and spent across the platform.</p>
+                <p className="text-muted-foreground mt-1">Configure how K Coins are distributed and spent across the platform.</p>
             </div>
 
             <div className="grid gap-8 max-w-4xl">

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { StaticPageLayout, StaticSection } from '@/components/marketing/StaticPageLayout';
+import { COMPANY_EMAIL } from '@/constants';
 import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
@@ -15,7 +16,7 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
                 <StaticSection title="Email Us" icon={<Mail className="w-6 h-6 text-primary" />} index={0}>
                     <p>For general inquiries, support, or partnership opportunities.</p>
-                    <div className="pt-2 font-bold text-primary">hello@kollabary.com</div>
+                    <div className="pt-2 font-bold text-primary">{COMPANY_EMAIL}</div>
                 </StaticSection>
 
                 <StaticSection title="Support Chat" icon={<MessageCircle className="w-6 h-6 text-primary" />} index={1}>

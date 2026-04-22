@@ -67,6 +67,12 @@ export const API_CONFIG = {
             conversationMessages: (id: string) => `/admin/conversations/${id}/messages`,
             kcSettings: '/admin/kc-settings',
             kcSettingUpdate: (key: string) => `/admin/kc-settings/${key}`,
+            finance: '/admin/finance',
+            orders: '/admin/orders',
+            users: '/admin/users',
+            userStatusUpdate: (id: string) => `/admin/users/${id}/status`,
+            userBulkStatus: '/admin/users/bulk-status',
+            userVerify: (id: string) => `/admin/users/${id}/verify`,
         },
         verification: {
             base: '/verification/request',
@@ -97,6 +103,7 @@ export const API_CONFIG = {
         },
         public: {
             influencer: (id: string) => `/public/influencer/${id}`,
+            influencerBySlug: (slug: string) => `/public/influencer/p/${slug}`,
             brand: (id: string) => `/public/brand/${id}`,
         },
         wallet: {
@@ -110,6 +117,19 @@ export const API_CONFIG = {
         referral: {
             base: '/referrals',
             stats: '/referrals/stats',
+            config: '/referrals/config',
+        },
+        topUp: {
+            plans: '/top-up/plans',
+            initiate: '/payment/top-up/initiate',
+            verify: '/payment/top-up/verify',
+            cancel: (id: string) => `/payment/top-up/cancel/${id}`,
+            sync: (id: string) => `/payment/top-up/sync/${id}`,
+            myOrders: '/payment/my-orders',
+        },
+        adminTopUp: {
+            plans: '/admin/top-up/plans',
+            planUpdate: (id: string) => `/admin/top-up/plans/${id}`,
         }
 
     }
@@ -163,7 +183,13 @@ export const FRONTEND_ROUTES = {
             CONVERSATIONS: '/admin/conversations',
             REWARDS: '/admin/rewards',
             REFERRALS: '/admin/referrals',
+            TOP_UP: '/admin/top-up',
+            FINANCE: '/admin/finance',
+            ORDERS: '/admin/orders',
+            USERS: '/admin/users',
         },
+        TOP_UP: '/top-up',
+        ORDERS: '/orders',
     },
     HOME: '/',
     TERMS: '/terms',
@@ -199,3 +225,16 @@ export const PWA_STORAGE_KEYS = {
     INSTALL_DISMISSED: 'pwa-install-dismissed',
     INSTALLED: 'pwa-installed',
 } as const;
+
+export const CONSENT_STORAGE_KEYS = {
+    AUCTION_CREATE: 'consent-auction-create',
+    BID_PLACE: 'consent-bid-place',
+    COLLAB_REQUEST: 'consent-collab-request',
+} as const;
+
+export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
+
+export const COIN_URL = "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary-coin.png";
+
+export const BASE_IMAGE_URL = "https://kollabary.s3.ap-south-1.amazonaws.com"
+

@@ -261,7 +261,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
             </Button>
 
             {/* Divider */}
-            {onGoogleAuth && (
+            {/* {onGoogleAuth && (
                 <>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -272,7 +272,6 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                         </div>
                     </div>
 
-                    {/* Google Auth Button */}
                     <Button
                         type="button"
                         variant="outline"
@@ -301,7 +300,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                         Google
                     </Button>
                 </>
-            )}
+            )} */}
 
             {/* Login Link */}
             <p className="text-center text-sm text-muted-foreground">

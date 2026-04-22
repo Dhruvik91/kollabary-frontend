@@ -31,6 +31,7 @@ export interface InfluencerProfile {
     locationCity?: string;
     gender?: string;
     languages?: string[];
+    slug?: string;
     totalFollowers: number;
     avgEngagementRate: number;
     audienceGenderRatio?: any;

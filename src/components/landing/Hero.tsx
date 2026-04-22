@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FRONTEND_ROUTES } from '@/constants';
+import { FRONTEND_ROUTES, COMPANY_EMAIL } from '@/constants';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 /**
@@ -36,7 +36,7 @@ export const Hero = () => {
                         className="text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] text-foreground"
                     >
                         Bridge the Gap Between <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Passion</span> & Partnership
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Passion</span> & Partnership
                     </motion.h1>
 
                     <motion.p
@@ -60,7 +60,7 @@ export const Hero = () => {
                             </Button>
                         </Link>
                         <Button size="lg" variant="outline" className="rounded-full px-10 h-16 text-lg font-bold glass border-border text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all" asChild>
-                            <a href="mailto:support@kollabary.com">
+                            <a href={`mailto:${COMPANY_EMAIL}`}>
                                 Book a Demo
                             </a>
                         </Button>

@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface PageHeaderProps {
@@ -11,6 +12,8 @@ interface PageHeaderProps {
     highlightedTitle?: string;
     subtitle?: string;
     icon?: LucideIcon;
+    iconUrl?: string;
+    iconClassName?: string;
     action?: React.ReactNode;
     className?: string;
 }
@@ -21,6 +24,8 @@ export const PageHeader = ({
     highlightedTitle,
     subtitle,
     icon: Icon,
+    iconUrl,
+    iconClassName,
     action,
     className,
 }: PageHeaderProps) => {
@@ -33,7 +38,18 @@ export const PageHeader = ({
                     animate={{ opacity: 1, x: 0 }}
                     className="flex items-center gap-2 text-primary font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[10px] sm:text-xs"
                 >
-                    {Icon && <Icon size={12} className="sm:w-[14px] sm:h-[14px]" />}
+                    {iconUrl ? (
+                        <Image 
+                            src={iconUrl} 
+                            alt={label} 
+                            width={20}
+                            height={20}
+                            priority={true}
+                            className={cn("w-4 h-4 sm:w-5 sm:h-5 object-contain", iconClassName)} 
+                        />
+                    ) : Icon && (
+                        <Icon size={12} className="sm:w-[14px] sm:h-[14px]" />
+                    )}
                     <span>{label}</span>
                 </motion.div>
 

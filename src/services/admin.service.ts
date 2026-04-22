@@ -1,4 +1,9 @@
 import httpService from '@/lib/http-service';
+import { 
+    TopUpPlan, 
+    CreateTopUpPlanDto, 
+    UpdateTopUpPlanDto 
+} from '@/types/payment.types';
 import { API_CONFIG } from '@/constants';
 import { Auction, Bid } from '@/types/auction.types';
 import { Conversation, Message } from '@/types/messaging.types';
@@ -8,8 +13,8 @@ export const adminService = {
     /**
      * Get platform statistics
      */
-    getStats: async (): Promise<any> => {
-        const response = await httpService.get(API_CONFIG.path.admin.stats);
+    getStats: async (params?: { range?: string; startDate?: string; endDate?: string }): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.stats, { params });
         return response.data;
     },
 
@@ -72,9 +77,34 @@ export const adminService = {
     /**
      * Update verification status
      */
-    processVerification: async (id: string, status: string, notes?: string): Promise<any> => {
-        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, notes });
+    processVerification: async (id: string, status: string, adminNotes?: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.verificationUpdate(id), { status, adminNotes });
         return response.data;
+    },
+
+    async updateKCSetting(key: string, value: any) {
+        const response = await httpService.patch(API_CONFIG.path.admin.kcSettingUpdate(key), { value });
+        return response.data;
+    },
+
+    // Top-up Plans Management
+    async getAllTopUpPlans(): Promise<TopUpPlan[]> {
+        const response = await httpService.get<TopUpPlan[]>(API_CONFIG.path.adminTopUp.plans);
+        return response.data;
+    },
+
+    async createTopUpPlan(dto: CreateTopUpPlanDto): Promise<TopUpPlan> {
+        const response = await httpService.post<TopUpPlan>(API_CONFIG.path.adminTopUp.plans, dto);
+        return response.data;
+    },
+
+    async updateTopUpPlan(id: string, dto: UpdateTopUpPlanDto): Promise<TopUpPlan> {
+        const response = await httpService.patch<TopUpPlan>(API_CONFIG.path.adminTopUp.planUpdate(id), dto);
+        return response.data;
+    },
+
+    async deleteTopUpPlan(id: string): Promise<void> {
+        await httpService.delete(API_CONFIG.path.adminTopUp.planUpdate(id));
     },
 
     /**
@@ -106,6 +136,54 @@ export const adminService = {
      */
     recalculateInfluencerScore: async (influencerId: string): Promise<any> => {
         const response = await httpService.post(API_CONFIG.path.ranking.recalculate(influencerId));
+        return response.data;
+    },
+
+    /**
+     * Get financial statistics with filters
+     */
+    getFinanceStats: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.finance, { params });
+        return response.data;
+    },
+
+    /**
+     * List all platform orders
+     */
+    getAllOrders: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.orders, { params });
+        return response.data;
+    },
+
+    /**
+     * List all platform users
+     */
+    getAllUsers: async (params?: any): Promise<any> => {
+        const response = await httpService.get(API_CONFIG.path.admin.users, { params });
+        return response.data;
+    },
+
+    /**
+     * Bulk update user status
+     */
+    bulkUpdateUserStatus: async (userIds: string[], status: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userBulkStatus, { userIds, status });
+        return response.data;
+    },
+
+    /**
+     * Update individual user status
+     */
+    updateUserStatus: async (userId: string, status: string): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userStatusUpdate(userId), { status });
+        return response.data;
+    },
+
+    /**
+     * Directly verify influencer
+     */
+    verifyInfluencer: async (userId: string, verified: boolean): Promise<any> => {
+        const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { verified });
         return response.data;
     },
 

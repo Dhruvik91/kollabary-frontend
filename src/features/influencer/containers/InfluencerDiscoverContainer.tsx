@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -9,13 +9,12 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Filter } from 'lucide-react';
 import { DiscoverHeader } from '../components/DiscoverHeader';
 import { DiscoverNetworkStats } from '../components/DiscoverNetworkStats';
 import { DiscoverLoadingState } from '../components/DiscoverLoadingState';
-import { DiscoverErrorState } from '../components/DiscoverErrorState';
-import { DiscoverEmptyState } from '../components/DiscoverEmptyState';
 import { DiscoverUnauthorizedState } from '../components/DiscoverUnauthorizedState';
+import { EmptyState } from '@/components/shared/EmptyState';
+import { ErrorState } from '@/components/shared/ErrorState';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { InfluencerFilters } from '../components/InfluencerFilters';
@@ -23,6 +22,7 @@ import { InfluencerList } from '../components/InfluencerList';
 import { useInfluencerSearch } from '@/hooks/queries/useInfluencerQueries';
 import { SearchInfluencersDto } from '@/types/influencer.types';
 import { useDebounce } from 'use-debounce';
+import { RotateCcw, Users, Filter } from 'lucide-react';
 
 export const InfluencerDiscoverContainer = () => {
     const { user } = useAuth();
@@ -45,11 +45,22 @@ export const InfluencerDiscoverContainer = () => {
     // Permission check: Only USER and ADMIN can discover influencers
     const isAuthorized = user?.role === UserRole.USER || user?.role === UserRole.ADMIN;
 
-    const handleFilterChange = (newFilters: Partial<SearchInfluencersDto>) => {
-        setFilters((prev) => ({ ...prev, ...newFilters }));
-    };
+    const hasActiveFilters = useMemo(() => {
+        return !!filters.search || 
+               (filters.categories && filters.categories.length > 0) || 
+               !!filters.platform || 
+               !!filters.minFollowers || 
+               !!filters.rankingTier || 
+               !!filters.minRating || 
+               !!filters.maxRating || 
+               filters.verified !== undefined;
+    }, [filters]);
 
-    const handleResetFilters = () => {
+    const handleFilterChange = useCallback((newFilters: Partial<SearchInfluencersDto>) => {
+        setFilters((prev) => ({ ...prev, ...newFilters }));
+    }, []);
+
+    const handleResetFilters = useCallback(() => {
         setFilters({
             limit: 10,
             search: '',
@@ -61,10 +72,15 @@ export const InfluencerDiscoverContainer = () => {
             maxRating: undefined,
             verified: undefined,
         });
-    };
+    }, []);
 
-    const allInfluencers = data?.pages.flatMap((page: any) => page.items) || [];
-    const totalCount = data?.pages[0]?.meta?.total || 0;
+    const allInfluencers = useMemo(() => 
+        data?.pages.flatMap((page: any) => page.items) || [],
+    [data]);
+
+    const totalCount = useMemo(() => 
+        data?.pages[0]?.meta?.total || 0,
+    [data]);
 
     if (!isAuthorized) {
         return <DiscoverUnauthorizedState />;
@@ -138,9 +154,20 @@ export const InfluencerDiscoverContainer = () => {
                     {isLoading ? (
                         <DiscoverLoadingState />
                     ) : isError ? (
-                        <DiscoverErrorState onRetry={() => refetch()} />
+                        <ErrorState onRetry={() => refetch()} />
                     ) : allInfluencers.length === 0 ? (
-                        <DiscoverEmptyState onReset={handleResetFilters} />
+                        <EmptyState 
+                            title={hasActiveFilters ? 'No creators found' : 'Explore our network'}
+                            description={hasActiveFilters 
+                                ? 'Try adjusting your filters or clearing them to see more creators.' 
+                                : 'Our network is full of talented creators ready to collaborate. Start searching to find your perfect match!'}
+                            icon={Users}
+                            secondaryAction={hasActiveFilters ? {
+                                label: 'Clear All Filters',
+                                onClick: handleResetFilters,
+                                icon: RotateCcw
+                            } : undefined}
+                        />
                     ) : (
                         <InfluencerList
                             influencers={allInfluencers}

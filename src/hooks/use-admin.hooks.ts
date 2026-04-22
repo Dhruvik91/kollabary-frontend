@@ -15,16 +15,76 @@ export const adminKeys = {
     verifications: () => [...adminKeys.all, 'verifications'] as const,
     ranking: () => [...adminKeys.all, 'ranking'] as const,
     subscriptions: () => [...adminKeys.all, 'subscriptions'] as const,
+    users: () => [...adminKeys.all, 'users'] as const,
+    finance: (params: any) => [...adminKeys.all, 'finance', params] as const,
+    orders: (params: any) => [...adminKeys.all, 'orders', params] as const,
 };
+
+/**
+ * Hook to fetch platform users with pagination and filters
+ */
+export function useAdminUsers(filters?: any) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: [...adminKeys.users(), filters],
+        queryFn: () => adminService.getAllUsers(filters),
+        enabled: user?.role === UserRole.ADMIN,
+    });
+}
+
+/**
+ * Hook for bulk updating user status
+ */
+export function useBulkUpdateUserStatus() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userIds, status }: { userIds: string[]; status: string }) =>
+            adminService.bulkUpdateUserStatus(userIds, status),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('User status updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update users', {
+                description: error.message,
+            });
+        },
+    });
+}
+
+/**
+ * Hook for individual user moderation (ban/unban/verify)
+ */
+export function useModerateUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userId, status, verified }: { userId: string; status?: string; verified?: boolean }) => {
+            if (status) return adminService.updateUserStatus(userId, status);
+            if (verified !== undefined) return adminService.verifyInfluencer(userId, verified);
+            return Promise.reject(new Error('No action provided'));
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('User updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Moderation failed', {
+                description: error.message,
+            });
+        },
+    });
+}
 
 /**
  * Hook to fetch platform statistics
  */
-export function useAdminStats() {
+export function useAdminStats(range: string = 'TODAY') {
     const { user } = useAuth();
     return useQuery({
-        queryKey: adminKeys.stats(),
-        queryFn: adminService.getStats,
+        queryKey: [...adminKeys.stats(), range],
+        queryFn: () => adminService.getStats({ range }),
         staleTime: 2 * 60 * 1000, // 2 minutes
         enabled: user?.role === UserRole.ADMIN,
     });
@@ -82,8 +142,8 @@ export function useProcessVerification() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, status, notes }: { id: string; status: 'APPROVED' | 'REJECTED'; notes?: string }) =>
-            adminService.processVerification(id, status, notes),
+        mutationFn: ({ id, status, adminNotes }: { id: string; status: 'APPROVED' | 'REJECTED'; adminNotes?: string }) =>
+            adminService.processVerification(id, status, adminNotes),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminKeys.verifications() });
             queryClient.invalidateQueries({ queryKey: adminKeys.stats() });
@@ -236,5 +296,29 @@ export function useDeleteSubscriptionPlan() {
                 description: error.response?.data?.message || error.message,
             });
         },
+    });
+}
+
+/**
+ * Hook to fetch financial statistics
+ */
+export function useFinanceStats(params: { range: string; startDate?: string; endDate?: string }) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: adminKeys.finance(params),
+        queryFn: () => adminService.getFinanceStats(params),
+        enabled: user?.role === UserRole.ADMIN,
+    });
+}
+
+/**
+ * Hook to fetch all orders with pagination and filters
+ */
+export function useAdminOrders(params: { page: number; limit: number; status?: string; userId?: string; search?: string }) {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: adminKeys.orders(params),
+        queryFn: () => adminService.getAllOrders(params),
+        enabled: user?.role === UserRole.ADMIN,
     });
 }

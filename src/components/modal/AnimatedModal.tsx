@@ -115,10 +115,8 @@ export const AnimatedModal = ({
                                         shouldReduceMotion
                                             ? { duration: 0.15 }
                                             : {
-                                                type: 'spring',
-                                                damping: 30,
-                                                stiffness: 400,
-                                                mass: 0.8,
+                                                duration: 0.3,
+                                                ease: [0.16, 1, 0.3, 1], // Custom smooth ease-out
                                             }
                                     }
                                     className={cn(

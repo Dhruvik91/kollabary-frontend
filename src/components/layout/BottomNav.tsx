@@ -19,7 +19,9 @@ import {
     Gavel,
     Award,
     MessageSquare,
-    BarChart3
+    BarChart3,
+    Coins,
+    Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -53,8 +55,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
                 { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
-                { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
-                { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: Handshake, label: 'Recents' },
+                { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
@@ -62,9 +63,9 @@ export const BottomNav = () => {
         if (user?.role === UserRole.INFLUENCER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
-                { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+                { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
                 { href: profileHref, icon: User, label: 'Profile' },
             ];
         }
@@ -90,10 +91,13 @@ export const BottomNav = () => {
 
     return (
         <nav
-            className={cn("fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border", `${pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : 'block'}`)}
+            className={cn(
+                "fixed bottom-0 inset-x-0 z-50 lg:hidden bg-background/80 backdrop-blur-md border-t border-border pb-[env(safe-area-inset-bottom)]",
+                pathname === FRONTEND_ROUTES.DASHBOARD.MESSAGES ? "hidden" : "block"
+            )}
             aria-label="Bottom navigation"
         >
-            <div className="flex items-center justify-around h-16">
+            <div className="flex items-center justify-around h-16 overflow-x-auto scrollbar-none px-2">
                 {navItems.map((item) => {
                     const active = isActive(item.href);
                     const Icon = item.icon;
@@ -113,18 +117,18 @@ export const BottomNav = () => {
                             {active && (
                                 <motion.div
                                     layoutId="bottom-nav-pill"
-                                    className="absolute bottom-0 inset-x-3 h-0.5 bg-primary rounded-t-full"
+                                    className="absolute top-0 inset-x-4 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent rounded-b-full"
                                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                                 />
                             )}
                             <Icon
-                                size={20}
+                                size={18}
                                 className={cn(
                                     'transition-all duration-200',
                                     active && 'scale-110'
                                 )}
                             />
-                            <span className="text-[9px] font-medium leading-none mt-1 truncate max-w-full px-1">
+                            <span className="text-[9px] font-bold leading-none mt-1 truncate max-w-full px-1">
                                 {item.label}
                             </span>
                         </Link>

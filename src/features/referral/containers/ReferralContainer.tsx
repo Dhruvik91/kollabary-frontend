@@ -1,15 +1,22 @@
 'use client';
 
 import React from 'react';
-import { useReferralStats } from '@/hooks/queries/useReferralQueries';
+import { useReferralStats, useReferralConfig } from '@/hooks/queries/useReferralQueries';
 import { ReferralCard } from '@/components/shared/ReferralCard';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Users, Info, Rocket, Gift, ShieldCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { COIN_URL } from '@/constants';
 
 export const ReferralContainer = () => {
-    const { data: stats, isLoading } = useReferralStats();
+    const { data: stats, isLoading: isStatsLoading } = useReferralStats();
+    const { data: config, isLoading: isConfigLoading } = useReferralConfig();
+
+    const referralBonusText = config 
+        ? `Both you and your friend receive ${config.referrerReward} and ${config.referredReward} K Coins respectively as a bonus for joining our ecosystem.`
+        : "Both you and your friend receive K Coins as a bonus for joining our ecosystem.";
 
     const steps = [
         {
@@ -28,8 +35,9 @@ export const ReferralContainer = () => {
         },
         {
             icon: Gift,
+            iconUrl: COIN_URL,
             title: "Earn Rewards",
-            description: "Both you and your friend receive KC Coins as a bonus for joining our ecosystem.",
+            description: referralBonusText,
             color: "text-emerald-500",
             bgColor: "bg-emerald-500/10"
         }
@@ -37,22 +45,22 @@ export const ReferralContainer = () => {
 
     return (
         <div className="space-y-8 pb-20">
-            <PageHeader 
+            <PageHeader
                 label="Referral Program"
                 title="Invite creators &"
                 highlightedTitle="Earn Rewards"
-                subtitle="Help grow the Kollabary community and earn KC Coins for every successful referral."
+                subtitle="Help grow the Kollabary community and earn K Coins for every successful referral."
                 icon={Users}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1">
-                    <ReferralCard 
+                    <ReferralCard
                         referralCode={stats?.referralCode || ''}
                         totalReferrals={stats?.totalReferrals || 0}
                         successfulReferrals={stats?.successfulReferrals || 0}
                         totalEarned={stats?.totalEarned || 0}
-                        loading={isLoading}
+                        loading={isStatsLoading || isConfigLoading}
                     />
                 </div>
 
@@ -60,14 +68,24 @@ export const ReferralContainer = () => {
                     <Card className="rounded-[2.5rem] border-border/50 glass-card overflow-hidden">
                         <div className="p-8 border-b border-border/50 bg-muted/30">
                             <h3 className="font-bold tracking-tight">How it Works</h3>
-                            <p className="text-xs text-muted-foreground mt-1">Simple steps to start earning KC Coins</p>
+                            <p className="text-xs text-muted-foreground mt-1">Simple steps to start earning K Coins</p>
                         </div>
                         <CardContent className="p-8">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {steps.map((step, idx) => (
                                     <div key={idx} className="space-y-4 relative">
-                                        <div className={`w-12 h-12 rounded-2xl ${step.bgColor} ${step.color} flex items-center justify-center`}>
-                                            <step.icon size={24} />
+                                        <div className={`w-12 h-12 rounded-2xl ${step.bgColor} ${step.color} flex items-center justify-center p-2.5`}>
+                                            {step.iconUrl ? (
+                                                <Image 
+                                                    src={step.iconUrl} 
+                                                    alt="" 
+                                                    width={48}
+                                                    height={48}
+                                                    className="w-full h-full object-contain" 
+                                                />
+                                            ) : (
+                                                <step.icon size={24} />
+                                            )}
                                         </div>
                                         <div className="space-y-2">
                                             <h4 className="font-bold text-sm">{step.title}</h4>

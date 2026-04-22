@@ -1,16 +1,22 @@
 import { Auction, BidStatus } from '@/types/auction.types';
 import { AuctionCard } from './AuctionCard';
-import { Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { InfiniteScrollContainer } from '@/components/shared/InfiniteScrollContainer';
+import { motion } from 'framer-motion';
+import { EmptyState } from '@/components/shared/EmptyState';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { PackageSearch, SearchX } from 'lucide-react';
 
 interface AuctionListProps {
     auctions: (Auction & { myBidStatus?: BidStatus })[];
     isLoading: boolean;
+    error?: any;
+    onRetry?: () => void;
     hasNextPage?: boolean;
     isFetchingNextPage?: boolean;
     fetchNextPage?: () => void;
     emptyMessage?: string;
+    hasActiveFilters?: boolean;
+    onResetFilters?: () => void;
     /** When true, removes owner action menus from cards (used for history / read-only views) */
     readOnly?: boolean;
 }
@@ -18,12 +24,20 @@ interface AuctionListProps {
 export const AuctionList = ({
     auctions,
     isLoading,
+    error,
+    onRetry,
     hasNextPage,
     isFetchingNextPage = false,
     fetchNextPage = () => {},
     emptyMessage = "No active auctions found",
+    hasActiveFilters = false,
+    onResetFilters,
     readOnly = false,
 }: AuctionListProps) => {
+    if (error) {
+        return <ErrorState onRetry={onRetry} />;
+    }
+
     return (
         <InfiniteScrollContainer
             items={auctions}
@@ -43,12 +57,17 @@ export const AuctionList = ({
                 </div>
             }
             emptyState={
-                <div className="flex flex-col items-center justify-center py-20 px-8 text-center bg-card/50 backdrop-blur-xl border border-border/50 rounded-[3rem] shadow-2xl shadow-black/5">
-                    <h3 className="text-2xl font-black tracking-tight mb-2 uppercase">No Results</h3>
-                    <p className="text-muted-foreground max-w-md mx-auto font-medium italic">
-                        {emptyMessage}
-                    </p>
-                </div>
+                <EmptyState
+                    title={hasActiveFilters ? "No matches found" : "No active auctions"}
+                    description={hasActiveFilters 
+                        ? "Try adjusting your search or filters to see more opportunities." 
+                        : emptyMessage}
+                    icon={hasActiveFilters ? SearchX : PackageSearch}
+                    secondaryAction={hasActiveFilters && onResetFilters ? {
+                        label: "Clear Filters",
+                        onClick: onResetFilters,
+                    } : undefined}
+                />
             }
             endMessage={
                 <motion.div

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, Clock, MessageCircle, PackageSearch, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorState } from '@/components/shared/ErrorState';
 import { BidForm } from '@/features/auction/components/BidForm';
 import { BidList } from '@/features/auction/components/BidList';
 import { CreateBidDto } from '@/types/auction.types';
@@ -28,6 +29,8 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { AuctionDetailHeader } from '../components/AuctionDetailHeader';
 import { AuctionInfoGrid } from '../components/AuctionInfoGrid';
 import { BrandCard } from '../components/BrandCard';
+import { useActionConsent } from '@/hooks/use-action-consent';
+
 import { messagingService } from '@/services/messaging.service';
 import { toast } from 'sonner';
 
@@ -44,6 +47,13 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
 
+    const { executeWithConsent, ConsentModalElement } = useActionConsent({
+        actionType: 'BID_PLACE',
+        title: 'Confirm Your Bid',
+        actionName: 'Place Bid',
+    });
+
+
     useEffect(() => {
         if (!api) return;
         setCount(api.scrollSnapList().length);
@@ -58,8 +68,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const rejectBidMutation = useRejectBid(id);
 
     const handlePlaceBid = async (data: CreateBidDto) => {
-        await placeBidMutation.mutateAsync(data);
+        executeWithConsent(async () => {
+            await placeBidMutation.mutateAsync(data);
+        });
     };
+
 
     const handleAcceptBid = async (bidId: string) => {
         if (!auction) return;
@@ -93,7 +106,19 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         return <AuctionDetailSkeleton />;
     }
 
-    if (isError || !auction) {
+    if (isError) {
+        return (
+            <div className="py-20">
+                <ErrorState 
+                    title="Edge case in the system" 
+                    description="We couldn't retrieve this auction detail. It might be archived or temporarily unavailable." 
+                    onRetry={() => window.location.reload()} 
+                />
+            </div>
+        );
+    }
+
+    if (!auction) {
         return <AuctionNotFound />;
     }
 
@@ -311,9 +336,11 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                     )}
                 </div>
             </div>
+            {ConsentModalElement}
         </div>
     );
 };
+
 
 const BidStatusDisplay = ({ auction, user }: { auction: any, user: any }) => {
     const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);

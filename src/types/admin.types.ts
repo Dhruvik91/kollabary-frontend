@@ -1,5 +1,18 @@
 import { User } from './auth.types';
 
+export interface TrendPoint {
+    label: string;
+    value: number;
+}
+
+export interface FinanceStats {
+    totalRevenue: number;
+    totalCoinsSold: number;
+    orderCount: number;
+    successRate: number;
+    revenueTrends: TrendPoint[];
+}
+
 export interface AdminStats {
     users: {
         totalUsers: number;
@@ -30,6 +43,7 @@ export interface AdminStats {
         reviewsThisWeek: number;
         reviewsThisMonth: number;
     };
+    finance?: FinanceStats;
     growth: {
         week: string;
         newUsers: number;

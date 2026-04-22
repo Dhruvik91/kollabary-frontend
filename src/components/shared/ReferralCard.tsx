@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Users, Copy, Check, Share2 } from 'lucide-react';
+import { Users, Copy, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import Image from 'next/image';
+import { COIN_URL } from '@/constants';
 
 interface ReferralCardProps {
     referralCode: string;
@@ -61,22 +61,32 @@ export const ReferralCard = ({
                     </div>
                     <div className="space-y-1 pl-4">
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Earned</p>
-                        <p className="text-xl font-black text-primary">{loading ? "-" : totalEarned} KC</p>
+                        <div className="flex items-center gap-1.5">
+                            <p className="text-xl font-black text-primary">{loading ? "-" : totalEarned}</p>
+                            <Image
+                                src={COIN_URL}
+                                alt="KC"
+                                width={16}
+                                height={16}
+                                quality={90}
+                                className="w-4 h-4 object-contain"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">1000 KC Coins</span> for every successful referral! And your friends will get <span className="text-primary font-bold">500 KC Coins</span> for joining with your referral code.
+                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">1000 K Coins</span> for every successful referral! And your friends will get <span className="text-primary font-bold">500 K Coins</span> for joining with your referral code.
                     </p>
-                    
+
                     <div className="flex items-center gap-3 p-2 pl-4 rounded-[1.25rem] bg-muted/30 border border-border/50 group-hover:border-primary/20 transition-colors duration-300">
                         <span className="text-xs font-mono font-bold tracking-widest text-primary truncate flex-1">
                             {loading ? "LOADING..." : referralCode}
                         </span>
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             className="h-10 w-10 rounded-xl hover:bg-primary hover:text-white transition-all duration-300"
                             onClick={handleCopy}
                             disabled={loading || !referralCode}

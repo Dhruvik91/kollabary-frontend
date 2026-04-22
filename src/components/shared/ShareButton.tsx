@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { FRONTEND_ROUTES } from '@/constants';
 import { cn } from '@/lib/utils';
+import { UserRole } from '@/types/auth.types';
 
 interface ShareButtonProps {
-    type: 'influencer' | 'brand';
+    type: UserRole.INFLUENCER | UserRole.USER;
     id: string;
+    slug?: string;
     variant?: 'ghost' | 'outline' | 'default' | 'glass';
     size?: 'sm' | 'default' | 'lg' | 'icon' | 'icon-sm' | 'icon-xs';
     className?: string;
@@ -19,6 +21,7 @@ interface ShareButtonProps {
 export const ShareButton = ({
     type,
     id,
+    slug,
     variant = 'ghost',
     size = 'icon',
     className,
@@ -28,9 +31,10 @@ export const ShareButton = ({
 
     const getShareUrl = () => {
         const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-        const path = type === 'influencer' 
-            ? FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER(id)
-            : FRONTEND_ROUTES.PUBLIC_SHAREABLE.BRAND(id);
+        const identifier = (type === UserRole.INFLUENCER && slug) ? slug : id;
+        const path = type === UserRole.INFLUENCER
+            ? FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER(identifier)
+            : FRONTEND_ROUTES.PUBLIC_SHAREABLE.BRAND(identifier);
         return `${baseUrl}${path}`;
     };
 

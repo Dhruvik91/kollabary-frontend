@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Check, X, User, DollarSign, MessageCircle, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { FRONTEND_ROUTES } from '@/constants';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 
@@ -74,7 +75,14 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                         onClick={() => influencerId && handleInfluencerClick(influencerId)}
                                     >
                                         {avatarUrl ? (
-                                            <img src={avatarUrl} alt={influencerName} className="w-full h-full object-cover transition-transform duration-500" />
+                                            <Image 
+                                                src={avatarUrl} 
+                                                alt={influencerName} 
+                                                width={48}
+                                                height={48}
+                                                loading="lazy"
+                                                className="w-full h-full object-cover transition-transform duration-500" 
+                                            />
                                         ) : (
                                             <User className="text-primary/60" size={22} />
                                         )}

@@ -136,35 +136,35 @@ export const BrandDetailHeader = ({
                                 </div>
                             </div>
 
-                                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
-                                    {!isOwner && (
-                                        <Button
-                                            onClick={onContact}
-                                            disabled={isStartingChat}
-                                            className="w-full sm:w-auto px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-black shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-widest relative overflow-hidden group/btn"
-                                        >
-                                            <MessageCircle size={18} />
-                                            {isStartingChat ? 'Connecting...' : 'Collab Now'}
-                                        </Button>
-                                    )}
-                                    <ShareButton
-                                        type="brand"
-                                        id={brand.id}
+                            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                                {!isOwner && (
+                                    <Button
+                                        onClick={onContact}
+                                        disabled={isStartingChat}
+                                        className="w-full sm:w-auto px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-black shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-widest relative overflow-hidden group/btn"
+                                    >
+                                        <MessageCircle size={18} />
+                                        {isStartingChat ? 'Connecting...' : 'Collab Now'}
+                                    </Button>
+                                )}
+                                <ShareButton
+                                    type={UserRole.USER}
+                                    id={brand.id}
+                                    variant="outline"
+                                    className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:bg-primary/5 hover:border-primary/20 transition-all font-bold text-xs uppercase tracking-widest"
+                                    showLabel
+                                />
+                                {!isOwner && (
+                                    <Button
                                         variant="outline"
-                                        className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:bg-primary/5 hover:border-primary/20 transition-all font-bold text-xs uppercase tracking-widest"
-                                        showLabel
-                                    />
-                                    {!isOwner && (
-                                        <Button
-                                            variant="outline"
-                                            onClick={onReport}
-                                            className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:text-red-500 hover:bg-red-500/5 hover:border-red-500/20 transition-all font-bold text-xs uppercase tracking-widest"
-                                        >
-                                            <Flag size={14} className="mr-2" />
-                                            Report
-                                        </Button>
-                                    )}
-                                </div>
+                                        onClick={onReport}
+                                        className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:text-red-500 hover:bg-red-500/5 hover:border-red-500/20 transition-all font-bold text-xs uppercase tracking-widest"
+                                    >
+                                        <Flag size={14} className="mr-2" />
+                                        Report
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </motion.div>

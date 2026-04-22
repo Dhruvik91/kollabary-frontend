@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { InfluencerProfileForm } from '../components/InfluencerProfileForm';
 import { useCreateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
-import { FRONTEND_ROUTES } from '@/constants';
+import { FRONTEND_ROUTES, COMPANY_EMAIL } from '@/constants';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
@@ -72,7 +72,7 @@ export const InfluencerSetupContainer = () => {
                 transition={{ delay: 0.8 }}
                 className="mt-8 text-sm text-muted-foreground text-center"
             >
-                Need help? <a href="mailto:support@kollabary.com" className="text-primary font-bold hover:underline">Contact our creator team</a>
+                Need help? <a href={`mailto:${COMPANY_EMAIL}`} className="text-primary font-bold hover:underline">Contact our creator team</a>
             </motion.p>
         </div>
     );

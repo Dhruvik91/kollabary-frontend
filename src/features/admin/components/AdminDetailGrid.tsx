@@ -13,7 +13,11 @@ import {
     CheckCircle2,
     XCircle,
     Clock,
-    PieChart
+    PieChart,
+    IndianRupee,
+    Coins,
+    ShoppingCart,
+    ArrowUpRight
 } from 'lucide-react';
 import { AdminStats } from '@/types/admin.types';
 import { cn } from '@/lib/utils';
@@ -50,6 +54,18 @@ export function AdminDetailGrid({ stats }: AdminDetailGridProps) {
                     { label: 'Influencers', value: stats.users.influencers, icon: UserCheck },
                     { label: 'Admins', value: stats.users.admins, icon: ShieldCheck },
                     { label: 'New (This Week)', value: stats.users.newUsersThisWeek, icon: Activity, highlight: true }
+                ]
+            },
+            {
+                title: 'Financial Performance',
+                icon: IndianRupee,
+                color: 'text-emerald-500',
+                bg: 'bg-emerald-500/10',
+                items: [
+                    { label: 'Total Revenue', value: `₹${stats.finance?.totalRevenue?.toLocaleString() || 0}`, icon: IndianRupee, highlight: true },
+                    { label: 'KC Coins Sold', value: `${stats.finance?.totalCoinsSold?.toLocaleString() || 0} KC`, icon: Coins },
+                    { label: 'Order Count', value: stats.finance?.orderCount || 0, icon: ShoppingCart },
+                    { label: 'Success Rate', value: `${stats.finance?.successRate?.toFixed(1) || 0}%`, icon: ArrowUpRight }
                 ]
             },
             {

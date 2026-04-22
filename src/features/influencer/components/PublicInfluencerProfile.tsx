@@ -54,6 +54,7 @@ export const PublicInfluencerProfile = ({
                 location={location}
                 categories={categories}
                 languages={influencer.languages}
+                slug={influencer.slug}
             />
 
             {/* Modular Statistics Grid */}

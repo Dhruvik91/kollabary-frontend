@@ -8,20 +8,28 @@ import { AuctionCreateHeader } from '@/features/auction/components/AuctionCreate
 import { useCreateAuction } from '@/hooks/use-auction.hooks';
 import { CreateAuctionDto } from '@/types/auction.types';
 import { FRONTEND_ROUTES } from '@/constants';
+import { useActionConsent } from '@/hooks/use-action-consent';
 
 export const AuctionCreateContainer = () => {
     const router = useRouter();
     const { mutateAsync: createAuction, isPending } = useCreateAuction();
+    const { executeWithConsent, ConsentModalElement } = useActionConsent({
+        actionType: 'AUCTION_CREATE',
+        title: 'Create New Auction',
+    });
 
     const handleSubmit = async (data: CreateAuctionDto) => {
-        try {
-            await createAuction(data);
-            router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
-            router.refresh();
-        } catch (error) {
-            // Error is handled in the hook's toast
-        }
+        executeWithConsent(async () => {
+            try {
+                await createAuction(data);
+                router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
+                router.refresh();
+            } catch (error) {
+                // Error is handled in the hook's toast
+            }
+        });
     };
+
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
@@ -40,6 +48,8 @@ export const AuctionCreateContainer = () => {
                     />
                 </div>
             </div>
+            {ConsentModalElement}
         </div>
+
     );
 };

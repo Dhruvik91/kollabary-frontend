@@ -4,3 +4,8 @@ export interface ReferralStats {
     totalEarned: number;
     referralCode: string;
 }
+
+export interface ReferralConfig {
+    referrerReward: number;
+    referredReward: number;
+}

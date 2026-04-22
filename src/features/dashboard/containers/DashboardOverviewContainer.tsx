@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useAuth } from '@/contexts/auth-context';
 import {
     Loader2,
@@ -67,16 +68,16 @@ export const DashboardOverviewContainer = () => {
     const isUserCollabsLoading = isUser && (isAllCollabsLoading || isActiveCollabsLoading || isCompletedCollabsLoading || isPendingCollabsLoading);
     const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading || isWalletLoading || isReferralLoading;
 
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center py-32 space-y-4">
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                <p className="text-muted-foreground font-bold uppercase tracking-widest animate-pulse">Loading your dashboard...</p>
-            </div>
-        );
-    }
+    const totalReach = useMemo(() => {
+        if (!profile?.platforms) return 0;
+        return Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0);
+    }, [profile?.platforms]);
 
-    const quickActions = [
+    const formattedTotalReach = useMemo(() =>
+        Intl.NumberFormat('en', { notation: 'compact' }).format(totalReach),
+        [totalReach]);
+
+    const quickActions = useMemo(() => [
         {
             label: 'Explore Creators',
             description: 'Discover talented influencers to collaborate with',
@@ -101,7 +102,16 @@ export const DashboardOverviewContainer = () => {
             color: 'text-emerald-500',
             bgColor: 'bg-emerald-500/10',
         },
-    ];
+    ], []);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-32 space-y-4">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <p className="text-muted-foreground font-bold uppercase tracking-widest animate-pulse">Loading your dashboard...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
@@ -142,6 +152,7 @@ export const DashboardOverviewContainer = () => {
                                 value={ranking?.completedCollaborations?.count || 0}
                                 icon={CheckCircle2}
                                 color="text-blue-500"
+                                bgColor="bg-blue-500/10"
                                 subtitle={`${ranking?.completedCollaborations?.score || 0} ranking points`}
                             />
                             <MetricCard
@@ -149,6 +160,7 @@ export const DashboardOverviewContainer = () => {
                                 value={profile?.verified ? "Verified" : "Not Verified"}
                                 icon={Shield}
                                 color={profile?.verified ? "text-emerald-500" : "text-amber-500"}
+                                bgColor={profile?.verified ? "bg-emerald-500/10" : "bg-amber-500/10"}
                                 subtitle={profile?.verified ? "+50 bonus points" : "Verify to unlock higher tiers"}
                             />
                             <MetricCard
@@ -156,17 +168,15 @@ export const DashboardOverviewContainer = () => {
                                 value={profile?.avgRating || "0.0"}
                                 icon={Star}
                                 color="text-yellow-500"
+                                bgColor="bg-yellow-500/10"
                                 subtitle={`Based on ${profile?.totalReviews || 0} reviews`}
                             />
                             <MetricCard
                                 label="Total Reach"
-                                value={Intl.NumberFormat('en', { notation: 'compact' }).format(
-                                    profile?.platforms
-                                        ? Object.values(profile.platforms).reduce((sum, platform) => sum + (platform.followers || 0), 0)
-                                        : 0
-                                )}
+                                value={formattedTotalReach}
                                 icon={TrendingUp}
                                 color="text-purple-500"
+                                bgColor="bg-purple-500/10"
                                 subtitle="Combined platform followers"
                             />
                         </div>
@@ -177,7 +187,7 @@ export const DashboardOverviewContainer = () => {
                                 <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                             </Link>
                             <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                                <ReferralCard 
+                                <ReferralCard
                                     referralCode={referralStats?.referralCode || ''}
                                     totalReferrals={referralStats?.totalReferrals || 0}
                                     successfulReferrals={referralStats?.successfulReferrals || 0}
@@ -219,6 +229,7 @@ export const DashboardOverviewContainer = () => {
                             value={totalCollabs}
                             icon={Briefcase}
                             color="text-blue-500"
+                            bgColor="bg-blue-500/10"
                             subtitle="All-time collaboration requests"
                         />
                         <MetricCard
@@ -226,6 +237,7 @@ export const DashboardOverviewContainer = () => {
                             value={activeCount}
                             icon={Handshake}
                             color="text-emerald-500"
+                            bgColor="bg-emerald-500/10"
                             subtitle="Currently in progress"
                         />
                         <MetricCard
@@ -233,6 +245,7 @@ export const DashboardOverviewContainer = () => {
                             value={completedCount}
                             icon={CheckCircle2}
                             color="text-purple-500"
+                            bgColor="bg-purple-500/10"
                             subtitle="Successfully finished"
                         />
                         <MetricCard
@@ -240,6 +253,7 @@ export const DashboardOverviewContainer = () => {
                             value={pendingCount}
                             icon={Clock}
                             color="text-amber-500"
+                            bgColor="bg-amber-500/10"
                             subtitle="Awaiting creator response"
                         />
                     </div>
@@ -250,7 +264,7 @@ export const DashboardOverviewContainer = () => {
                             <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                         </Link>
                         <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                            <ReferralCard 
+                            <ReferralCard
                                 referralCode={referralStats?.referralCode || ''}
                                 totalReferrals={referralStats?.totalReferrals || 0}
                                 successfulReferrals={referralStats?.successfulReferrals || 0}

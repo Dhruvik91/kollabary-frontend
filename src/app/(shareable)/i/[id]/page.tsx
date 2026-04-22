@@ -9,8 +9,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
     try {
-        const data = await publicService.getInfluencerPublicData(id);
+        const data = isUuid 
+            ? await publicService.getInfluencerPublicData(id)
+            : await publicService.getInfluencerPublicDataBySlug(id);
+            
         const { fullName, username, bio, avatarUrl } = data;
         const name = fullName || 'Influencer';
         const description = bio || `Connect with ${name} on Kollabary.`;
@@ -42,15 +47,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function InfluencerPublicPage({ params }: Props) {
     const { id } = await params;
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 
     try {
-        const influencer = await publicService.getInfluencerPublicData(id);
+        const influencer = isUuid 
+            ? await publicService.getInfluencerPublicData(id)
+            : await publicService.getInfluencerPublicDataBySlug(id);
 
         if (!influencer) {
             notFound();
         }
 
-        return <PublicInfluencerProfileContainer id={id} initialData={influencer} />;
+        return <PublicInfluencerProfileContainer id={influencer.id} initialData={influencer} />;
     } catch (error) {
         console.error('Error loading public influencer profile:', error);
         notFound();
