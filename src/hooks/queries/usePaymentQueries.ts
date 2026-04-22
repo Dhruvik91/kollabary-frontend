@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { paymentService } from '@/services/payment.service';
 import { VerifyPaymentDto } from '@/types/payment.types';
 import { toast } from 'sonner';
@@ -19,6 +19,18 @@ export const useMyOrders = (page = 1, limit = 20) => {
     return useQuery({
         queryKey: [...paymentKeys.all, 'history', page, limit],
         queryFn: () => paymentService.getMyOrders(page, limit),
+    });
+};
+
+export const useInfiniteMyOrders = (limit = 10) => {
+    return useInfiniteQuery({
+        queryKey: [...paymentKeys.all, 'history', 'infinite', limit],
+        queryFn: ({ pageParam = 1 }) => paymentService.getMyOrders(pageParam, limit),
+        getNextPageParam: (lastPage) => {
+            const { currentPage, totalPages } = lastPage.meta;
+            return currentPage < totalPages ? currentPage + 1 : undefined;
+        },
+        initialPageParam: 1,
     });
 };
 

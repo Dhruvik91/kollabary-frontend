@@ -24,6 +24,13 @@ import {
     Gavel,
     Award,
     Coins,
+    Users,
+    Gift,
+    Share2,
+    Zap,
+    Wallet,
+    Package,
+    UserCog,
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Logo } from '@/components/shared/Logo';
@@ -121,6 +128,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
         { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
     ];
 
     const adminLinks = [
@@ -132,13 +140,13 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.VERIFICATIONS, icon: CheckCircle, label: 'Verifications' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.RANKING, icon: Award, label: 'Ranking' },
         { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.SUBSCRIPTIONS, icon: CreditCard, label: 'Subscriptions' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: UserPlus, label: 'Influencers' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REWARDS, icon: Coins, label: 'Rewards Config' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REFERRALS, icon: UserPlus, label: 'Referral Config' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.TOP_UP, icon: Coins, label: 'Top-up Plans' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.FINANCE, icon: Coins, label: 'Finance' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.ORDERS, icon: Coins, label: 'Orders' },
-        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.USERS, icon: Coins, label: 'Users' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.INFLUENCERS, icon: Users, label: 'Influencers' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REWARDS, icon: Gift, label: 'Rewards Config' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.REFERRALS, icon: Share2, label: 'Referral Config' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.TOP_UP, icon: Zap, label: 'Top-up Plans' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.FINANCE, icon: Wallet, label: 'Finance' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.ORDERS, icon: Package, label: 'Orders' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ADMIN.USERS, icon: UserCog, label: 'Users' },
     ];
 
 
@@ -152,6 +160,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
         { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
+        { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
     ];
 
     const getLinksByRole = () => {

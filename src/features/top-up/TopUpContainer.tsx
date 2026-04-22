@@ -2,7 +2,6 @@
 
 import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
-import { OrderHistory } from './components/OrderHistory';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { WalletCard } from '@/components/shared/WalletCard';
 import { ErrorState } from '@/components/shared/ErrorState';
@@ -133,8 +132,6 @@ export const TopUpContainer = () => {
                     />
                 )}
             </div>
-
-            <OrderHistory />
 
             <div className="text-center text-muted-foreground text-sm max-w-2xl mx-auto">
                 <p>

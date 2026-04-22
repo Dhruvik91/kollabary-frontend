@@ -188,6 +188,7 @@ export const FRONTEND_ROUTES = {
             USERS: '/admin/users',
         },
         TOP_UP: '/top-up',
+        ORDERS: '/orders',
     },
     HOME: '/',
     TERMS: '/terms',
