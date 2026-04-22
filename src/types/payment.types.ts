@@ -32,6 +32,8 @@ export interface PaymentOrder {
     amount: number | string;
     currency: string;
     coins: number;
+    razorpaySignature?: string;
+    metadata?: any;
     createdAt: string;
 }
 

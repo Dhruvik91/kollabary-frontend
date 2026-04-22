@@ -39,7 +39,7 @@ export const useVerifyPayment = () => {
             toast.success(`Payment verified! ${data.coinsCredited} KC added to your wallet.`);
             // Invalidate wallet queries to update balance
             queryClient.invalidateQueries({ queryKey: ['wallet'] });
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: paymentKeys.all });
         },
         onError: (error: any) => {
             toast.error(error?.response?.data?.message || 'Payment verification failed');
