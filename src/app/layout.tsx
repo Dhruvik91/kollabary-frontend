@@ -44,12 +44,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "https://kollabary.s3.ap-south-1.amazonaws.com/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "https://kollabary.s3.ap-south-1.amazonaws.com/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "https://kollabary.s3.ap-south-1.amazonaws.com/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
+    shortcut: "/favicon.ico",
     apple: [
-      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "https://kollabary.s3.ap-south-1.amazonaws.com/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
   appleWebApp: {
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
     siteName: "Kollabary",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
+    images: [{ url: "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary_preview_image.jpg", width: 1200, height: 630 }],
     locale: "en_US",
     url: "/",
   },
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kollabary - Enterprise Influencer Collaboration Platform",
     description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
-    images: ["https://kollabary.s3.ap-south-1.amazonaws.com/email-template-logo.png"],
+    images: [{ url: "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary_preview_image.jpg", width: 1200, height: 630 }],
     site: "@kollabary",
     creator: "@kollabary",
   },
@@ -90,20 +91,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Kollabary",
-              "url": "https://www.kollabary.com",
-              "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"]
-            }),
-          }}
-        />
-      </head>
+      <Script
+        id="schema-org"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Kollabary",
+            "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"],
+            "url": "https://www.kollabary.com"
+          }),
+        }}
+      />
       <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-549HSQ8R'} />
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
