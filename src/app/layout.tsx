@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Kollabary Team" }],
   creator: "Kollabary",
   publisher: "Kollabary",
+  applicationName: "Kollabary",
   manifest: "/manifest.json",
   robots: {
     index: true,
@@ -77,6 +78,9 @@ export const metadata: Metadata = {
     creator: "@kollabary",
   },
   category: "technology",
+  verification: {
+    google: "oULfLngOS9DM_WJH4Ca6k1r6-fmWlFrt08RbCxrn5ZE",
+  },
 };
 
 export default function RootLayout({
@@ -86,7 +90,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Kollabary",
+              "url": "https://kollabary.com",
+              "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"]
+            }),
+          }}
+        />
+      </head>
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-549HSQ8R'} />
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >

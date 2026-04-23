@@ -2,10 +2,26 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /overview/
+Disallow: /settings/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /earnings/
+Disallow: /collaborations/
+Disallow: /auctions/
+Disallow: /influencer/
+Disallow: /influencers/
+Disallow: /my-influencers/
+Disallow: /orders/
+Disallow: /referrals/
+Disallow: /top-up/
+Disallow: /brands/
 Disallow: /api/
+Disallow: /auth/
+Disallow: /*?*
 
 # Host
-Host: https://www.kollabary.com
+Host: https://kollabary.com
 
 # Sitemaps
-Sitemap: https://www.kollabary.com/sitemap.xml
+Sitemap: https://kollabary.com/sitemap.xml

@@ -1,13 +1,28 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: process.env.SITE_URL || 'https://example.com',
+    siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://kollabary.com',
     generateRobotsTxt: true,
     changefreq: 'daily',
     priority: 0.7,
     sitemapSize: 5000,
     exclude: [
-        '/admin/*',
-        '/api/*',
+        '/admin/**',
+        '/overview/**',
+        '/settings/**',
+        '/profile/**',
+        '/messages/**',
+        '/earnings/**',
+        '/collaborations/**',
+        '/auctions/**',
+        '/influencer/**',
+        '/influencers/**',
+        '/my-influencers/**',
+        '/orders/**',
+        '/referrals/**',
+        '/top-up/**',
+        '/brands/**',
+        '/api/**',
+        '/auth/**',
         '/server-sitemap.xml'
     ],
     robotsTxtOptions: {
@@ -15,26 +30,41 @@ module.exports = {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: ['/admin/', '/api/'],
+                disallow: [
+                    '/admin/',
+                    '/overview/',
+                    '/settings/',
+                    '/profile/',
+                    '/messages/',
+                    '/earnings/',
+                    '/collaborations/',
+                    '/auctions/',
+                    '/influencer/',
+                    '/influencers/',
+                    '/my-influencers/',
+                    '/orders/',
+                    '/referrals/',
+                    '/top-up/',
+                    '/brands/',
+                    '/api/',
+                    '/auth/',
+                    '/*?*',
+                ],
             },
+        ],
+        additionalSitemaps: [
+            'https://kollabary.com/sitemap.xml',
         ],
     },
     transform: async (config, path) => {
-        // Custom transformation for specific paths
-        if (path === '/') {
-            return {
-                loc: path,
-                changefreq: 'daily',
-                priority: 1.0,
-                lastmod: new Date().toISOString(),
-            }
-        }
+        // Custom transformation for priority paths
+        const priorityPaths = ['/', '/about', '/solutions', '/pricing'];
+        const isPriorityPage = priorityPaths.includes(path);
 
-        // Default transformation
         return {
             loc: path,
-            changefreq: config.changefreq,
-            priority: config.priority,
+            changefreq: isPriorityPage ? 'daily' : config.changefreq,
+            priority: isPriorityPage ? 1.0 : config.priority,
             lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
         }
     },
