@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://kollabary.com',
+    siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.kollabary.com',
     generateRobotsTxt: true,
     changefreq: 'daily',
     priority: 0.7,
@@ -53,7 +53,7 @@ module.exports = {
             },
         ],
         additionalSitemaps: [
-            'https://kollabary.com/sitemap.xml',
+            'https://www.kollabary.com/sitemap.xml',
         ],
     },
     transform: async (config, path) => {
