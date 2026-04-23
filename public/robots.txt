@@ -21,7 +21,7 @@ Disallow: /auth/
 Disallow: /*?*
 
 # Host
-Host: https://kollabary.com
+Host: https://www.kollabary.com
 
 # Sitemaps
-Sitemap: https://kollabary.com/sitemap.xml
+Sitemap: https://www.kollabary.com/sitemap.xml

@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kollabary.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.kollabary.com"),
   title: {
     template: "%s | Kollabary",
     default: "Kollabary - Enterprise Influencer Collaboration Platform",
@@ -98,7 +98,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "Kollabary",
-              "url": "https://kollabary.com",
+              "url": "https://www.kollabary.com",
               "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"]
             }),
           }}
