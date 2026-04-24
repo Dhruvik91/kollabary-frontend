@@ -1,3 +1,4 @@
+# *
 User-agent: *
 Allow: /
 Disallow: /admin/
@@ -19,12 +20,16 @@ Disallow: /api/
 Disallow: /auth/
 Disallow: /*?*
 
-# Allow scrapers even if they are aggressive
+# facebookexternalhit
 User-agent: facebookexternalhit
 Allow: /
 
+# Googlebot
 User-agent: Googlebot
 Allow: /
+
+# Host
+Host: https://www.kollabary.com
 
 # Sitemaps
 Sitemap: https://www.kollabary.com/sitemap.xml
