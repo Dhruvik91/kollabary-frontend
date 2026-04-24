@@ -6,13 +6,6 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { KCEconomy } from "@/components/landing/KCEconomy";
 import { RankingSystem } from "@/components/landing/RankingSystem";
 import { Community } from "@/components/landing/Community";
-import { TrustSafety } from "@/components/landing/TrustSafety";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Home",
-  description: "Scale your brand through authentic human connections on Kollabary.",
-};
 
 export default function Home() {
   return (
@@ -26,7 +19,6 @@ export default function Home() {
           <KCEconomy />
           <RankingSystem />
           <Community />
-          <TrustSafety />
         </div>
       </main>
       <Footer />

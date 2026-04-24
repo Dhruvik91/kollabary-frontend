@@ -2,19 +2,24 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Star, TrendingUp, ShieldCheck, Target, Zap } from 'lucide-react';
+import { Trophy, Star, TrendingUp, ShieldCheck, Target, Zap, Handshake } from 'lucide-react';
+import { TIER_IMAGES } from '@/constants';
+import Image from 'next/image';
 
 const tiers = [
-    { name: 'Bronze', color: 'text-[#CD7F32]', border: 'border-[#CD7F32]/20', bg: 'bg-[#CD7F32]/5', min: '0 - 500 Score' },
-    { name: 'Silver', color: 'text-[#C0C0C0]', border: 'border-[#C0C0C0]/20', bg: 'bg-[#C0C0C0]/5', min: '501 - 2000 Score' },
-    { name: 'Gold', color: 'text-[#FFD700]', border: 'border-[#FFD700]/20', bg: 'bg-[#FFD700]/5', min: '2001+ Score' },
+    { name: 'Rising Creator', image: TIER_IMAGES.RISING_CREATOR, min: '0 - 10 Collabs', border: 'border-emerald-500/10', bg: 'bg-emerald-500/5', color: 'text-emerald-500', desc: 'Starter tier focusing on initial platform trust and profile verification.' },
+    { name: 'Emerging Partner', image: TIER_IMAGES.EMERGING_PARTNER, min: '11 - 30 Collabs', border: 'border-blue-500/10', bg: 'bg-blue-500/5', color: 'text-blue-500', desc: 'Active contributors demonstrating consistent delivery across multiple campaigns.' },
+    { name: 'Trusted Collaborator', image: TIER_IMAGES.TRUSTED_COLLABORATOR, min: '31 - 75 Collabs', border: 'border-teal-500/10', bg: 'bg-teal-500/5', color: 'text-teal-500', desc: 'Verified partners with a proven track record of 100% collaboration completion.' },
+    { name: 'Pro Influencer', image: TIER_IMAGES.PRO_INFLUENCER, min: '76 - 150 Collabs', border: 'border-purple-500/10', bg: 'bg-purple-500/5', color: 'text-purple-500', desc: 'Professional creators specialized in high-conversion brand partnerships.' },
+    { name: 'Elite Creator', image: TIER_IMAGES.ELITE_CREATOR, min: '151 - 300 Collabs', border: 'border-amber-500/10', bg: 'bg-amber-500/5', color: 'text-amber-500', desc: 'Top 1% earners with priority access to premium, high-budget auctions.' },
+    { name: 'Kollabary Icon', image: TIER_IMAGES.KOLLABARY_ICON, min: '300+ Collabs', border: 'border-primary/20', bg: 'bg-primary/5', color: 'text-primary', desc: 'Legendary status. Trusted at scale by global brands and the platform itself.' },
 ];
 
 const metrics = [
-    { icon: Target, label: 'Performance', desc: 'Completed collaborations & promotions.' },
-    { icon: Zap, label: 'Reliability', desc: 'Response speed & completion rate.' },
-    { icon: Star, label: 'Quality', desc: 'Average ratings from premium brands.' },
-    { icon: ShieldCheck, label: 'Trust', desc: 'Verification status & longevity.' },
+    { icon: Handshake, label: 'Total Collaborations', desc: 'The primary weight in our engine—active participation is rewarded.' },
+    { icon: Target, label: 'Campaign Success', desc: 'Consistent delivery of high-quality assets across all brand partnerships.' },
+    { icon: Star, label: 'Brand Retention', desc: 'The number of brands that choose to work with you multiple times.' },
+    { icon: ShieldCheck, label: 'Verified Proofs', desc: 'Successful submission of proof-of-work for every single contract.' },
 ];
 
 export const RankingSystem = () => {
@@ -31,7 +36,7 @@ export const RankingSystem = () => {
                         <span>Quantifying Creator Excellence</span>
                     </motion.div>
                     <h2 className="text-5xl md:text-7xl font-black mb-10 tracking-tighter">
-                        Data-Driven <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary italic">Prestige.</span>
+                        Data-Driven <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Prestige.</span>
                     </h2>
                     <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
                         Our proprietary ranking engine ensures that the most reliable and high-performing creators rise to the top.
@@ -41,28 +46,54 @@ export const RankingSystem = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                     {/* Tiers Visualization */}
                     <div className="lg:col-span-12 xl:col-span-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {tiers.map((tier, idx) => (
                                 <motion.div
                                     key={tier.name}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: idx * 0.1 }}
-                                    className={`relative p-10 rounded-[3rem] border ${tier.border} ${tier.bg} flex flex-col items-center text-center group hover:scale-[1.02] transition-all duration-500 overflow-hidden`}
+                                    aria-label={`Ranking Tier: ${tier.name}. Requires ${tier.min}.`}
+                                    className={`relative p-8 rounded-[2.5rem] border ${tier.border} ${tier.bg} flex flex-col items-center text-center group hover:scale-[1.03] transition-all duration-500 overflow-hidden active:scale-95 cursor-pointer backdrop-blur-sm`}
                                 >
-                                    <div className="absolute -top-10 -right-10 text-9xl font-black opacity-[0.03] italic pointer-events-none">
-                                        {tier.name[0]}
-                                    </div>
-                                    <div className={`mb-8 p-6 rounded-3xl glass-card flex items-center justify-center ${tier.color} shadow-2xl`}>
-                                        <Trophy size={48} />
-                                    </div>
-                                    <h3 className={`text-4xl font-black mb-2 ${tier.color}`}>{tier.name}</h3>
-                                    <p className="text-sm font-bold text-muted-foreground mb-8">Tier Level {idx + 1}</p>
-                                    <div className="mt-auto px-6 py-2 rounded-full glass-chip text-xs font-black">
-                                        {tier.min}
+                                    {/* Level Badge Overlay */}
+                                    <div className="absolute top-6 left-6 px-3 py-1 rounded-full glass-chip text-[9px] font-black tracking-widest opacity-40 uppercase">
+                                        LVL 0{idx + 1}
                                     </div>
 
-                                    {/* Abstract Pulse */}
+                                    {/* Visual Tier Image */}
+                                    <div className="mb-8 w-32 h-32 relative flex items-center justify-center filter group-hover:drop-shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] transition-all duration-700">
+                                        <Image 
+                                            src={tier.image} 
+                                            alt="" 
+                                            fill 
+                                            sizes="(max-width: 768px) 128px, 160px"
+                                            className="object-contain"
+                                        />
+                                    </div>
+
+                                    <h3 className={`text-xl md:text-2xl font-black mb-2 ${tier.color} tracking-tight`}>{tier.name}</h3>
+                                    <p className="text-[10px] md:text-xs font-bold text-muted-foreground/70 mb-4 max-w-[200px] leading-relaxed">
+                                        {tier.desc}
+                                    </p>
+
+                                    <div className="mt-auto w-full pt-4 border-t border-white/5">
+                                        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-tighter opacity-60 mb-2">
+                                            <span>Required Path</span>
+                                            <span className={tier.color}>{tier.min}</span>
+                                        </div>
+                                        {/* Progress Simulation Bar */}
+                                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                            <motion.div 
+                                                initial={{ width: 0 }}
+                                                whileInView={{ width: "100%" }}
+                                                transition={{ duration: 1.5, delay: idx * 0.2 }}
+                                                className={`h-full bg-current ${tier.color} opacity-40`}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Gamified Background Effect */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 </motion.div>
                             ))}
@@ -92,12 +123,7 @@ export const RankingSystem = () => {
                                 ))}
                             </div>
                             
-                            <div className="mt-12 p-6 rounded-2xl bg-destructive/5 border border-destructive/10">
-                                <h4 className="text-xs font-black text-destructive uppercase tracking-widest mb-2">Penalty Logic</h4>
-                                <p className="text-[10px] text-destructive/70 font-bold leading-relaxed uppercase">
-                                    Cancellations, rejections, or high report counts negatively impact ranking and visibility levels.
-                                </p>
-                            </div>
+
                         </div>
                     </div>
                 </div>

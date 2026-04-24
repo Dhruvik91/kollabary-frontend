@@ -18,7 +18,7 @@ export const TrustSafety = () => {
                         <span>Identity & Security Protocols</span>
                     </motion.div>
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-8">
-                        The Standard for <span className="italic opacity-40">Digital Trust.</span>
+                        The Standard for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Digital Trust.</span>
                     </h2>
                     <p className="text-lg text-muted-foreground font-medium">
                         Platform security is woven into every layer, from onboarding to final settlement.
