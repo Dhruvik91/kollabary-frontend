@@ -20,6 +20,14 @@ Disallow: /api/
 Disallow: /auth/
 Disallow: /*?*
 
+# facebookexternalhit
+User-agent: facebookexternalhit
+Allow: /
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
 # Host
 Host: https://www.kollabary.com
 

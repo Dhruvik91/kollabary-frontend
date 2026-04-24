@@ -44,11 +44,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "https://kollabary.s3.ap-south-1.amazonaws.com/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "https://kollabary.s3.ap-south-1.amazonaws.com/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "https://kollabary.s3.ap-south-1.amazonaws.com/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "https://kollabary.s3.ap-south-1.amazonaws.com/favicon.ico",
     apple: [
       { url: "https://kollabary.s3.ap-south-1.amazonaws.com/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
@@ -115,7 +114,7 @@ export default function RootLayout({
                 {children}
                 <Toaster position="top-right" richColors closeButton />
                 <PWAInstaller />
-                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+
               </SocketProvider>
             </AuthProvider>
           </ThemeProvider>

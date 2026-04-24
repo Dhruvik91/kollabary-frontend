@@ -29,7 +29,6 @@ export default function PrivacyPage() {
 
             <StaticSection title="3. Data Security" icon={<Lock className="w-6 h-6 text-primary" />} index={2}>
                 <p>We take reasonable measures to help protect information about you from loss, theft, misuse, and unauthorized access, disclosure, alteration, and destruction.</p>
-                <p>However, no security system is impenetrable, and we cannot guarantee the absolute security of our systems or your data.</p>
             </StaticSection>
 
             <StaticSection title="4. Your Rights" icon={<FileText className="w-6 h-6 text-primary" />} index={3}>

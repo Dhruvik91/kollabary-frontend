@@ -1,3 +1,5 @@
+import { BRAND } from "zod/v3";
+
 export const API_CONFIG = {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     socketUrl: process.env.NEXT_PUBLIC_WS_URL || process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api$/, ''),
@@ -234,7 +236,22 @@ export const CONSENT_STORAGE_KEYS = {
 
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
 
-export const COIN_URL = "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary-coin.png";
-
 export const BASE_IMAGE_URL = "https://kollabary.s3.ap-south-1.amazonaws.com"
 
+export const COIN_URL = `${BASE_IMAGE_URL}/kollabary-coin.png`;
+
+export const TIER_IMAGES = {
+    RISING_CREATOR: `${BASE_IMAGE_URL}/rising_creator.png`,
+    EMERGING_PARTNER: `${BASE_IMAGE_URL}/emerging_partner.png`,
+    TRUSTED_COLLABORATOR: `${BASE_IMAGE_URL}/trusted_collaborator.png`,
+    PRO_INFLUENCER: `${BASE_IMAGE_URL}/pro_influencer.png`,
+    ELITE_CREATOR: `${BASE_IMAGE_URL}/elite_creator.png`,
+    KOLLABARY_ICON: `${BASE_IMAGE_URL}/kollabary_icon.png`,
+}
+
+export const LANDING_PAGE_IMAGES_URL = {
+    BRAND: `${BASE_IMAGE_URL}/brand_landing.png`,
+    INFLUENCER: `${BASE_IMAGE_URL}/creator_landing.png`,
+    KCOINS: `${BASE_IMAGE_URL}/kcoins_landing.png`,
+    REVIEWS: `${BASE_IMAGE_URL}/review_landing.png`,
+}
