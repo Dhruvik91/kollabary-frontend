@@ -22,21 +22,6 @@ export const KCEconomy = () => {
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
                     <div>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            className="w-24 h-24 mb-10 relative group"
-                        >
-                            <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/40 transition-all duration-500" />
-                            <Image
-                                src={COIN_URL}
-                                alt=""
-                                width={96}
-                                height={96}
-                                sizes="96px"
-                                className="relative z-10 animate-pulse"
-                            />
-                        </motion.div>
 
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
                             The KC <br />
@@ -73,10 +58,10 @@ export const KCEconomy = () => {
                     <div className="relative group">
                         <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl rounded-[4rem] opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
                         <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
-                            <Image 
-                                src={LANDING_PAGE_IMAGES_URL.KCOINS} 
-                                alt="Kollabary Financial Ecosystem" 
-                                fill 
+                            <Image
+                                src={LANDING_PAGE_IMAGES_URL.KCOINS}
+                                alt="Kollabary Financial Ecosystem"
+                                fill
                                 className="object-cover"
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                             />

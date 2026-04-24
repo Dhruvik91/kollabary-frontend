@@ -82,7 +82,7 @@ export const Features = () => {
                     </div>
 
                     {/* Brands Focus */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center mb-32 lg:mb-56">
+                    <div id="brands" className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center mb-32 lg:mb-56">
                         <div className="lg:col-span-5 order-2 lg:order-1">
                             <h3 className="text-3xl md:text-4xl font-black mb-8">
                                 For <span className="text-primary italic">Brands.</span>
@@ -129,7 +129,7 @@ export const Features = () => {
                     </div>
 
                     {/* Influencers Focus */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+                    <div id="influencers" className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                         <div className="lg:col-span-7 relative group">
                             <div className="absolute -inset-10 bg-secondary/10 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none" aria-hidden="true" />
                             <div className="relative aspect-[16/10] sm:aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
