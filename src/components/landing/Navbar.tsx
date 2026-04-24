@@ -138,7 +138,6 @@ export const Navbar = () => {
                     <Link
                         href="/"
                         className="active:scale-95 transition-transform hover:opacity-80"
-                        onClick={(e) => scrollToSection(e, '/#hero')}
                     >
                         <Logo className="w-32 sm:w-40 md:w-44" />
                     </Link>
