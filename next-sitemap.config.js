@@ -2,6 +2,7 @@
 module.exports = {
     siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.kollabary.com',
     generateRobotsTxt: true,
+    generateIndexSitemap: false, // This fixes the "Nested indexing" error by creating a single sitemap.xml
     changefreq: 'daily',
     priority: 0.7,
     sitemapSize: 5000,
@@ -51,9 +52,14 @@ module.exports = {
                     '/*?*',
                 ],
             },
-        ],
-        additionalSitemaps: [
-            'https://www.kollabary.com/sitemap.xml',
+            {
+                userAgent: 'facebookexternalhit',
+                allow: '/',
+            },
+            {
+                userAgent: 'Googlebot',
+                allow: '/',
+            }
         ],
     },
     transform: async (config, path) => {
@@ -65,7 +71,7 @@ module.exports = {
             loc: path,
             changefreq: isPriorityPage ? 'daily' : config.changefreq,
             priority: isPriorityPage ? 1.0 : config.priority,
-            lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+            lastmod: new Date().toISOString(),
         }
     },
 }
