@@ -38,19 +38,22 @@ const steps = [
 
 export const HowItWorks = () => {
     return (
-        <section id="how-it-works" className="py-24 lg:py-40 bg-background relative">
+        <section id="how-it-works" className="py-16 lg:py-40 bg-background relative">
+
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex flex-col lg:flex-row gap-20 items-center justify-between mb-20 lg:mb-32">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center justify-between mb-16 lg:mb-32">
+
                     <div className="max-w-2xl">
                         <motion.h2
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] mb-10"
+                            className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] md:leading-[0.9] mb-6 md:mb-10"
                         >
                             The Kollabary <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Blueprint</span>
                         </motion.h2>
-                        <p className="text-xl text-muted-foreground font-medium max-w-lg">
+                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-lg">
+
                             We've simplified the complex world of creator marketing into a streamlined, automated workflow.
                         </p>
                     </div>
@@ -62,40 +65,45 @@ export const HowItWorks = () => {
                             key={step.title}
                             index={idx}
                             color={step.color}
+                            className="p-8 md:p-10"
                             ariaLabel={`Step 0${idx + 1}: ${step.title}. ${step.desc}`}
                         >
-                            <div className="text-primary font-black text-6xl italic mb-6">0{idx + 1}</div>
-                            <h3 className="text-2xl font-black mb-4 leading-tight">{step.title}</h3>
-                            <p className="text-muted-foreground text-sm font-medium leading-relaxed">
+                            <div className="text-primary font-black text-4xl md:text-6xl italic mb-4 md:mb-6">0{idx + 1}</div>
+                            <h3 className="text-xl md:text-2xl font-black mb-3 md:mb-4 leading-tight">{step.title}</h3>
+                            <p className="text-muted-foreground text-xs md:text-sm font-medium leading-relaxed">
                                 {step.desc}
                             </p>
                         </GlowCard>
+
                     ))}
                 </div>
 
-                <div className="mt-20 lg:mt-32 p-12 lg:p-20 rounded-[3.5rem] bg-primary/5 border border-primary/10 relative overflow-hidden flex flex-col md:flex-row items-center gap-10 md:justify-between text-center md:text-left group">
+                <div className="mt-16 lg:mt-32 p-8 md:p-12 lg:p-20 rounded-3xl md:rounded-[3.5rem] bg-primary/5 border border-primary/10 relative overflow-hidden flex flex-col md:flex-row items-center gap-8 md:justify-between text-center md:text-left group">
+
                     {/* Background Decorative Coins */}
                     <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
                         <motion.div
                             animate={{ y: [0, -20, 0], rotate: [0, 45, 0] }}
                             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute -top-10 -left-10 w-40 h-40 opacity-[0.09] group-hover:opacity-[0.08] transition-opacity duration-700"
+                            className="absolute -top-10 -left-10 w-32 h-32 md:w-40 md:h-40 opacity-[0.09] group-hover:opacity-[0.08] transition-opacity duration-700"
                         >
-                            <Image src={COIN_URL} alt="" fill sizes="160px" className="object-contain" />
+                            <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 128px, 160px" className="object-contain" />
                         </motion.div>
                         <motion.div
                             animate={{ y: [0, 20, 0], rotate: [0, -45, 0] }}
                             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            className="absolute -bottom-10 right-[10%] w-32 h-32 opacity-[0.09] group-hover:opacity-[0.06] transition-opacity duration-700"
+                            className="absolute -bottom-10 right-[10%] w-24 h-24 md:w-32 md:h-32 opacity-[0.09] group-hover:opacity-[0.06] transition-opacity duration-700"
                         >
-                            <Image src={COIN_URL} alt="" fill sizes="128px" className="object-contain" />
+                            <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 96px, 128px" className="object-contain" />
                         </motion.div>
+
                     </div>
 
                     <div className="relative z-10">
-                        <h4 className="text-3xl md:text-4xl font-black mb-4">Ready to start your journey?</h4>
-                        <p className="text-lg text-muted-foreground font-medium max-w-md">Join 500+ brands and creators already scaling on Kollabary.</p>
+                        <h4 className="text-2xl sm:text-3xl md:text-4xl font-black mb-3 md:mb-4">Ready to start your journey?</h4>
+                        <p className="text-base md:text-lg text-muted-foreground font-medium max-w-md">Join 500+ brands and creators already scaling on Kollabary.</p>
                     </div>
+
 
                     <motion.div
                         whileHover={{ scale: 1.05 }}
@@ -103,10 +111,11 @@ export const HowItWorks = () => {
                         className="relative z-10"
                     >
                         <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
-                            <button className="bg-primary text-primary-foreground font-black px-12 py-6 rounded-full shadow-2xl shadow-primary/20 text-lg uppercase tracking-widest hover:brightness-110 transition-all">
+                            <button className="bg-primary text-primary-foreground font-black px-8 py-4 md:px-12 md:py-6 rounded-full shadow-2xl shadow-primary/20 text-base md:text-lg uppercase tracking-wider md:tracking-widest hover:brightness-110 transition-all whitespace-nowrap">
                                 Get Started Now
                             </button>
                         </Link>
+
                     </motion.div>
                 </div>
             </div>

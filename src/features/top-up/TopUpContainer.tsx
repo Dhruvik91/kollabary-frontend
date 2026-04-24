@@ -1,5 +1,8 @@
 'use client';
 
+import Script from 'next/script';
+
+
 import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -138,6 +141,12 @@ export const TopUpContainer = () => {
                     By topping up, you agree to our Terms of Service. KC coins are non-refundable and can only be used within the Kollabary platform.
                 </p>
             </div>
+            <Script
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                strategy="lazyOnload"
+                onLoad={() => console.log('Razorpay loaded')}
+            />
         </div>
     );
 };
+
