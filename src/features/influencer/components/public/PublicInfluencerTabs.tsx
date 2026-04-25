@@ -151,11 +151,12 @@ export const PublicInfluencerTabs = ({
                     })}
                 </div>
 
+{/* 
                 <AudienceInsights
                     genderRatio={genderRatio}
                     ageBrackets={ageBrackets}
                     topCountries={topCountries}
-                />
+                /> */}
             </TabsContent>
 
             <TabsContent value="collaborations" className="space-y-16 animate-in fade-in duration-700 slide-in-from-bottom-4">

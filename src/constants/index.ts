@@ -36,6 +36,8 @@ export const API_CONFIG = {
             search: '/influencer/search',
             myProfile: '/influencer/profile',
             profile: (id: string) => `/influencer/${id}`,
+            status: '/influencer/status',
+            account: '/influencer/account',
         },
         messaging: {
             conversation: '/messaging/conversation',

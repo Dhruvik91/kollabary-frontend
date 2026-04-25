@@ -513,173 +513,44 @@ export const InfluencerProfileDetail = ({
                                         </div>
                                     </div>
 
-                                    {/* Audience Insights Section */}
+                                    {/* Profile Details Section */}
                                     <div className="pt-10 space-y-8 border-t border-border/50">
                                         <div className="flex items-center justify-between">
                                             <h3 className="text-2xl font-black tracking-tight flex items-center gap-3">
                                                 <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
-                                                    <TrendingUp size={22} />
+                                                    <Briefcase size={22} />
                                                 </div>
-                                                Audience Insights
+                                                Profile Details
                                             </h3>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                            {/* Audience Demographics & Languages */}
+                                            {/* Left Column: Languages & Future expansion */}
                                             <div className="space-y-8">
-                                                {/* Gender Ratio */}
-                                                {(influencer.audienceGenderRatio) && (
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
-                                                            <PieChartIcon size={16} />
-                                                            <span>Audience Gender</span>
-                                                        </div>
-                                                        <div className="h-[180px] w-full relative">
-                                                            {isMounted ? (() => {
-                                                                const gender = influencer.audienceGenderRatio || {};
-                                                                const genderData = [
-                                                                    { name: 'Male', value: gender.male || 0 },
-                                                                    { name: 'Female', value: gender.female || 0 },
-                                                                    { name: 'Other', value: gender.other || 0 }
-                                                                ].filter(d => d.value > 0);
-
-                                                                const COLORS = ['#3b82f6', '#ec4899', '#818cf8'];
-
-                                                                if (genderData.length === 0) return (
-                                                                    <div className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground italic bg-muted/20 rounded-2xl border border-dashed border-border/50">
-                                                                        No data available
-                                                                    </div>
-                                                                );
-
-                                                                return (
-                                                                    <ResponsiveContainer width="100%" height="100%" aspect={3}>
-                                                                        <PieChart>
-                                                                            <Pie
-                                                                                data={genderData}
-                                                                                cx="50%"
-                                                                                cy="50%"
-                                                                                innerRadius={60}
-                                                                                outerRadius={80}
-                                                                                paddingAngle={5}
-                                                                                dataKey="value"
-                                                                            >
-                                                                                {genderData.map((entry, index) => (
-                                                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
-                                                                                ))}
-                                                                            </Pie>
-                                                                            <Tooltip
-                                                                                contentStyle={{
-                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
-                                                                                    backdropFilter: 'blur(12px)',
-                                                                                    borderRadius: '1.25rem',
-                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                                                                                    padding: '12px 16px'
-                                                                                }}
-                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
-                                                                                labelStyle={{ display: 'none' }}
-                                                                            />
-                                                                        </PieChart>
-                                                                    </ResponsiveContainer>
-                                                                );
-                                                            })() : (
-                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
-                                                            )}
-
-                                                            <div className="flex justify-center gap-4 mt-2">
-                                                                {['Male', 'Female', 'Other'].map((label, idx) => (
-                                                                    <div key={label} className="flex items-center gap-1.5">
-                                                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ['#3b82f6', '#ec4899', '#818cf8'][idx] }} />
-                                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase">{label}</span>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
+                                                <div className="space-y-3">
+                                                    <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                        <MessageCircle size={16} />
+                                                        <span>Languages</span>
                                                     </div>
-                                                )}
-
-                                                {/* Age Brackets */}
-                                                {(influencer.audienceAgeBrackets) && (
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
-                                                            <BarChart3 size={16} />
-                                                            <span>Age Distribution</span>
-                                                        </div>
-                                                        <div className="h-[180px] w-full">
-                                                            {isMounted ? (() => {
-                                                                const brackets = influencer.audienceAgeBrackets || {};
-                                                                const labels = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
-                                                                const ageData = labels.map(label => ({
-                                                                    name: label,
-                                                                    value: brackets[label] || 0
-                                                                }));
-
-                                                                return (
-                                                                    <ResponsiveContainer width="100%" height="100%" aspect={2}>
-                                                                        <BarChart data={ageData}>
-                                                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
-                                                                            <XAxis
-                                                                                dataKey="name"
-                                                                                axisLine={false}
-                                                                                tickLine={false}
-                                                                                tick={{ fontSize: 9, fontWeight: 700, fill: 'currentColor', opacity: 0.5 }}
-                                                                            />
-                                                                            <Tooltip
-                                                                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                                                                                contentStyle={{
-                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
-                                                                                    backdropFilter: 'blur(12px)',
-                                                                                    borderRadius: '1.25rem',
-                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                                                                                    padding: '12px 16px'
-                                                                                }}
-                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
-                                                                                labelStyle={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}
-                                                                            />
-                                                                            <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={20} />
-                                                                        </BarChart>
-                                                                    </ResponsiveContainer>
-                                                                );
-                                                            })() : (
-                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
-                                                            )}
-                                                        </div>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {(languages || []).map(lang => (
+                                                            <Badge key={lang} variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold">
+                                                                {lang}
+                                                            </Badge>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Hidden Audience Data */}
+                                                {false && (
+                                                    <div className="opacity-0 h-0 overflow-hidden">
+                                                        {/* Gender Split, Age, etc would be here */}
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {/* Top Countries & Pricing */}
+                                            {/* Right Column: Pricing */}
                                             <div className="space-y-8">
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                    <div className="space-y-3">
-                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                                            <Globe size={16} />
-                                                            <span>Top Regions</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {(audienceTopCountries || []).map(country => (
-                                                                <Badge key={country} className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/10 rounded-lg px-2.5 py-1 text-[10px] font-bold">
-                                                                    {country}
-                                                                </Badge>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                                            <MessageCircle size={16} />
-                                                            <span>Languages</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {(languages || []).map(lang => (
-                                                                <Badge key={lang} variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold">
-                                                                    {lang}
-                                                                </Badge>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div className="p-6 sm:p-8 rounded-[2rem] bg-linear-to-br from-primary/10 via-background to-background border border-primary/20 shadow-2xl shadow-primary/5 group/price relative overflow-hidden">
                                                     <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50" />
                                                     <div className="relative z-10">

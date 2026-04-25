@@ -103,12 +103,12 @@ export default function RootLayout({
           }),
         }}
       />
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-549HSQ8R'} />
+      {/* <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-549HSQ8R'} /> */}
       <body
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AuthProvider>
               <SocketProvider>
                 {children}

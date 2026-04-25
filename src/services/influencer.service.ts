@@ -52,5 +52,21 @@ export const influencerService = {
     async updateProfile(dto: Partial<CreateInfluencerProfileDto>): Promise<InfluencerProfile> {
         const response = await httpService.patch<InfluencerProfile>(API_CONFIG.path.influencer.myProfile, dto);
         return response.data;
+    },
+
+    /**
+     * Update current user status (Active/Inactive)
+     */
+    async updateStatus(status: string): Promise<any> {
+        const response = await httpService.patch(API_CONFIG.path.influencer.status, { status });
+        return response.data;
+    },
+
+    /**
+     * Soft delete current user account
+     */
+    async deleteAccount(): Promise<any> {
+        const response = await httpService.delete(API_CONFIG.path.influencer.account);
+        return response.data;
     }
 };

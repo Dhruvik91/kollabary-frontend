@@ -14,6 +14,10 @@ import {
     Plus,
     X,
     LogOut,
+    UserX,
+    UserCheck,
+    Trash2,
+    AlertTriangle,
 } from 'lucide-react';
 import { BackButton } from '@/components/shared/BackButton';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
@@ -28,11 +32,12 @@ import { Badge } from '@/components/ui/badge';
 import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn } from '@/lib/utils';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
-import { useUpdateInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { useUpdateInfluencerProfile, useUpdateUserStatus, useDeleteAccount } from '@/hooks/queries/useInfluencerQueries';
 import { FRONTEND_ROUTES } from '@/constants';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { useLogout } from '@/hooks/use-auth.hooks';
+import { UserStatus } from '@/types/auth.types';
 import {
     Select,
     SelectContent,
@@ -67,10 +72,16 @@ export const InfluencerSettingsView = ({
     const verificationMutation = useSubmitVerification();
     const changePasswordMutation = useChangePasswordMutation();
     const logoutMutation = useLogout();
+    const updateStatusMutation = useUpdateUserStatus();
+    const deleteAccountMutation = useDeleteAccount();
+    
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const currentVerification = (verificationRequests as any[])?.[0];
     const { availability, verified } = influencer;
+    const userStatus = influencer.user?.status;
     const collaborationTypes = influencer.collaborationTypes || [];
 
     const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
@@ -111,6 +122,22 @@ export const InfluencerSettingsView = ({
             case AvailabilityStatus.CLOSED: return 'You are not accepting collaborations right now';
             default: return '';
         }
+    };
+
+    const handleToggleStatus = () => {
+        const nextStatus = userStatus === UserStatus.ACTIVE ? UserStatus.INACTIVE : UserStatus.ACTIVE;
+        updateStatusMutation.mutate(nextStatus, {
+            onSuccess: () => setIsStatusModalOpen(false)
+        });
+    };
+
+    const handleDeleteAccount = () => {
+        deleteAccountMutation.mutate(undefined, {
+            onSuccess: () => {
+                setIsDeleteModalOpen(false);
+                logoutMutation.mutate();
+            }
+        });
     };
 
     return (
@@ -354,7 +381,73 @@ export const InfluencerSettingsView = ({
                     </Card>
                 </motion.div>
 
-                {/* 5. Logout (Mobile Only) */}
+                {/* 5. Account Management (Active/Inactive & Delete) */}
+                <motion.div variants={item}>
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-zinc-500/10 rounded-xl flex items-center justify-center text-zinc-500 dark:text-zinc-400">
+                                    <Settings size={20} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold tracking-tight">Account Management</h3>
+                                    <p className="text-sm text-muted-foreground">Control your account visibility and lifecycle</p>
+                                </div>
+                            </div>
+                        </div>
+                        <CardContent className="p-6 space-y-6">
+                            {/* Inactive / Active Toggle */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-zinc-500/5 border border-zinc-500/10 rounded-2xl">
+                                <div className="flex items-center gap-3">
+                                    <div className={cn("w-10 h-10 rounded-full flex items-center justify-center", 
+                                        userStatus === UserStatus.ACTIVE ? "bg-green-500/10 text-green-500" : "bg-zinc-500/10 text-zinc-500"
+                                    )}>
+                                        {userStatus === UserStatus.ACTIVE ? <UserCheck size={20} /> : <UserX size={20} />}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold">Account Visibility</p>
+                                        <p className="text-sm text-muted-foreground">
+                                            {userStatus === UserStatus.ACTIVE 
+                                                ? "Your profile is visible to brands and other users." 
+                                                : "Your profile is currently hidden from search and brands."}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant={userStatus === UserStatus.ACTIVE ? "outline" : "default"}
+                                    onClick={() => setIsStatusModalOpen(true)}
+                                    className="rounded-xl font-bold px-6"
+                                    disabled={updateStatusMutation.isPending}
+                                >
+                                    {userStatus === UserStatus.ACTIVE ? "Deactivate Account" : "Activate Account"}
+                                </Button>
+                            </div>
+
+                            {/* Soft Delete */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-red-500/10 rounded-full flex items-center justify-center text-red-500">
+                                        <Trash2 size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-red-600 dark:text-red-400">Delete Account</p>
+                                        <p className="text-sm text-muted-foreground">Permanently remove your account and all data. This action is not reversible.</p>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() => setIsDeleteModalOpen(true)}
+                                    className="rounded-xl font-bold px-6 shadow-lg shadow-red-500/20 hover:bg-red-600 transition-all"
+                                    disabled={deleteAccountMutation.isPending}
+                                >
+                                    Delete Account
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
+                {/* 6. Logout (Mobile Only) */}
                 <motion.div variants={item} className="lg:hidden">
                     <Card className="rounded-[2rem] border-red-500/20 bg-red-500/5 dark:bg-red-500/10 overflow-hidden">
                         <div className="p-6 border-b border-red-500/20 bg-red-500/10">
@@ -437,6 +530,79 @@ export const InfluencerSettingsView = ({
                             disabled={!docUrl || verificationMutation.isPending}
                         >
                             {verificationMutation.isPending ? "Submitting..." : "Submit Request"}
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
+
+            {/* Status Change Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isStatusModalOpen}
+                onClose={() => setIsStatusModalOpen(false)}
+                title={userStatus === UserStatus.ACTIVE ? "Deactivate Account?" : "Activate Account?"}
+                description={userStatus === UserStatus.ACTIVE 
+                    ? "Your profile will be hidden from search results and you won't receive new collaboration requests. You can reactivate anytime." 
+                    : "Your profile will become visible again and you can start receiving collaboration requests."}
+                size="sm"
+            >
+                <div className="flex flex-col gap-3">
+                    <Button
+                        size="lg"
+                        className={cn("w-full rounded-2xl font-bold h-12 shadow-lg", 
+                            userStatus === UserStatus.ACTIVE ? "bg-zinc-800 text-white shadow-zinc-500/20" : "bg-primary text-primary-foreground shadow-primary/20"
+                        )}
+                        onClick={handleToggleStatus}
+                        disabled={updateStatusMutation.isPending}
+                    >
+                        {updateStatusMutation.isPending 
+                            ? "Updating..." 
+                            : (userStatus === UserStatus.ACTIVE ? "Yes, Deactivate" : "Yes, Activate")}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12"
+                        onClick={() => setIsStatusModalOpen(false)}
+                        disabled={updateStatusMutation.isPending}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </AnimatedModal>
+
+            {/* Delete Account Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Permanently Delete Account?"
+                description="This action cannot be undone. All your profile data, collaborations history and wallet information will be permanently removed after a grace period."
+                size="sm"
+            >
+                <div className="space-y-4">
+                    <div className="p-4 bg-red-500/5 border border-red-500/20 rounded-2xl flex gap-3 text-red-600 dark:text-red-400">
+                        <AlertTriangle size={20} className="shrink-0" />
+                        <p className="text-xs font-medium leading-relaxed">
+                            Deleting your account is permanent. You will lose access to all your earnings and collaboration history.
+                        </p>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                        <Button
+                            variant="destructive"
+                            size="lg"
+                            className="w-full rounded-2xl font-bold h-12 shadow-lg shadow-red-500/20"
+                            onClick={handleDeleteAccount}
+                            disabled={deleteAccountMutation.isPending}
+                        >
+                            {deleteAccountMutation.isPending ? "Deleting..." : "Permanently Delete"}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="lg"
+                            className="w-full rounded-2xl font-bold h-12"
+                            onClick={() => setIsDeleteModalOpen(false)}
+                            disabled={deleteAccountMutation.isPending}
+                        >
+                            Keep My Account
                         </Button>
                     </div>
                 </div>

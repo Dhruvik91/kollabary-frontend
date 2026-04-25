@@ -94,3 +94,45 @@ export function useUpdateInfluencerProfile() {
         },
     });
 }
+
+/**
+ * Hook for updating user status (Active/Inactive)
+ */
+export function useUpdateUserStatus() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (status: string) => influencerService.updateStatus(status),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: authKeys.me() });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            toast.success('Account status updated successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update status', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}
+
+/**
+ * Hook for soft deleting account
+ */
+export function useDeleteAccount() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => influencerService.deleteAccount(),
+        onSuccess: () => {
+            // After deletion, we should clear all queries and will likely be redirected by a top-level effect
+            queryClient.clear();
+            toast.success('Account deleted successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to delete account', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}
