@@ -10,6 +10,7 @@ export interface TopUpPlan {
     name: string;
     amount: number | string;
     coins: number;
+    bonusCoins?: number;
     isActive: boolean;
     createdAt: string;
     updatedAt: string;

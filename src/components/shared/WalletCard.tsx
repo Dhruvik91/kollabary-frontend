@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { COIN_URL } from '@/constants';
@@ -61,13 +60,6 @@ export const WalletCard = ({
                         <div className="flex flex-col">
                             <span className="text-lg font-bold text-primary/60 leading-none">K</span>
                             <span className="text-[10px] font-black text-primary/40 uppercase tracking-tighter">Coins</span>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 pt-4">
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">
-                            <TrendingUp size={12} />
-                            <span>EARNED TODAY: 50 KC</span>
                         </div>
                     </div>
                 </div>

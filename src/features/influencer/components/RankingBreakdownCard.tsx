@@ -75,9 +75,6 @@ export const RankingBreakdownCard = ({ breakdown, className, stats }: RankingBre
                         </div>
                         <h3 className="font-bold tracking-tight text-sm sm:text-lg">Ranking Breakdown</h3>
                     </div>
-                    <div className={cn("px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm", getScoreBg(totalScore))}>
-                        {rankingTier}
-                    </div>
                 </div>
             </CardHeader>
 

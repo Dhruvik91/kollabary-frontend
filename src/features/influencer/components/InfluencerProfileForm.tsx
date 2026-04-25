@@ -50,6 +50,7 @@ import { ImageUpload } from '@/components/shared/ImageUpload';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
 
 const profileSchema = z.object({
     fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
@@ -210,7 +211,7 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity']
+            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity', 'gender']
             : currentStep === 1
                 ? ['platforms']
                 : ['collaborationTypes', 'availability'];
@@ -232,6 +233,7 @@ export const InfluencerProfileForm = ({
         // Convert comma-separated strings back to arrays for the parent onSubmit
         const formattedValues = {
             ...data,
+            username: data.username, // Explicitly include username
             categories: typeof data.categories === 'string' 
                 ? data.categories.split(',').map(s => s.trim()).filter(Boolean)
                 : data.categories,
@@ -462,8 +464,41 @@ export const InfluencerProfileForm = ({
                                                         Full Address
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="e.g. 123 Main St, San Francisco, CA" {...field} className="h-12 rounded-xl bg-background/50" />
+                                                        <LocationAutocomplete
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                            disabled={isLoading}
+                                                            placeholder="e.g. 123 Main St, San Francisco, CA"
+                                                        />
                                                     </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="gender"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <Sparkles size={14} className="text-primary" />
+                                                        Gender
+                                                    </FormLabel>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger className="h-12 rounded-xl bg-background/50">
+                                                                <SelectValue placeholder="Select gender" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent className="rounded-2xl">
+                                                            <SelectItem value="male">Male</SelectItem>
+                                                            <SelectItem value="female">Female</SelectItem>
+                                                            <SelectItem value="non-binary">Non-binary</SelectItem>
+                                                            <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                                                            <SelectItem value="other">Other</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}

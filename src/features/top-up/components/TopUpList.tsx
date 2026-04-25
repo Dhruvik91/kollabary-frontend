@@ -22,18 +22,15 @@ export const TopUpList = ({ plans, onBuy, isLoading }: TopUpListProps) => {
         );
     }
 
-    // Heuristic: Plan with most coins could be popular, or we can just pick the middle one for UI demo
-    const popularIndex = Math.floor(plans.length / 2);
-
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-8 px-4">
-            {plans.map((plan, index) => (
+            {plans.map((plan) => (
                 <TopUpCard
                     key={plan.id}
                     plan={plan}
                     onBuy={onBuy}
                     isLoading={isLoading}
-                    isPopular={index === popularIndex}
+                    isPopular={plan.name.toLowerCase().includes('growth')}
                 />
             ))}
         </div>

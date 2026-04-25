@@ -13,7 +13,6 @@ import {
     Youtube,
     Twitter,
     Globe,
-    ExternalLink,
     Briefcase,
     Calendar,
     MessageCircle,
@@ -22,22 +21,8 @@ import {
     Settings,
     Award,
     LayoutGrid,
-    TrendingUp,
-    PieChart as PieChartIcon,
-    BarChart3,
+    SparklesIcon,
 } from 'lucide-react';
-import {
-    ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    Tooltip,
-    CartesianGrid
-} from 'recharts';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
@@ -109,7 +94,6 @@ export const InfluencerProfileDetail = ({
         languages,
         minPrice,
         maxPrice,
-        audienceTopCountries,
         gender
     } = influencer;
 
@@ -240,7 +224,7 @@ export const InfluencerProfileDetail = ({
                                     <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-3">
-                                                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter truncate min-w-0 bg-linear-to-b from-foreground to-foreground/70 bg-clip-text leading-[1.1]">
+                                                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black tracking-tighter min-w-0 bg-linear-to-b from-foreground to-foreground/70 bg-clip-text leading-[1.1]">
                                                     {profile?.fullName || fullName || 'Creator'}
                                                 </h1>
                                             </div>
@@ -540,6 +524,18 @@ export const InfluencerProfileDetail = ({
                                                         ))}
                                                     </div>
                                                 </div>
+
+                                                {gender && (
+                                                    <div className="space-y-3 pt-2">
+                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                            <SparklesIcon size={16} />
+                                                            <span>Gender</span>
+                                                        </div>
+                                                        <Badge variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold capitalize">
+                                                            {gender.replace(/-/g, ' ')}
+                                                        </Badge>
+                                                    </div>
+                                                )}
                                                 
                                                 {/* Hidden Audience Data */}
                                                 {false && (
@@ -571,15 +567,6 @@ export const InfluencerProfileDetail = ({
                                                                     <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
                                                                 </div>
                                                             </div>
-                                                            {(maxPrice || 0) > (minPrice || 0) && (
-                                                                <>
-                                                                    <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent" />
-                                                                    <div className="flex justify-between items-end">
-                                                                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Project Max</span>
-                                                                        <span className="text-xl font-bold text-foreground/80">${maxPrice}</span>
-                                                                    </div>
-                                                                </>
-                                                            )}
                                                             <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
                                                                 * Final pricing varies based on usage rights, content complexity, and timeline.
                                                             </p>
