@@ -8,9 +8,12 @@ import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Coins, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRef, useEffect } from 'react';
+import { FRONTEND_ROUTES } from '@/constants';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export const TopUpContainer = () => {
     const activeOrderIdRef = useRef<string | null>(null);
@@ -104,6 +107,14 @@ export const TopUpContainer = () => {
                     highlightedTitle="Coins"
                     subtitle="Choose a plan to boost your balance and unlock more opportunities."
                     icon={Coins}
+                    action={
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                            <Button className="h-12 px-6 rounded-2xl bg-secondary hover:bg-secondary/90 text-white font-bold transition-all gap-2 border-none">
+                                <span className="uppercase tracking-widest text-[10px]">Invite & Earn</span>
+                                <ArrowUpRight size={18} />
+                            </Button>
+                        </Link>
+                    }
                 />
             </div>
 
