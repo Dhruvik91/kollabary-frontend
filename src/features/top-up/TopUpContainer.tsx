@@ -6,12 +6,10 @@ import Script from 'next/script';
 import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { WalletCard } from '@/components/shared/WalletCard';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Coins, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { useWallet } from '@/hooks/queries/useWalletQueries';
 import { useRef, useEffect } from 'react';
 
 export const TopUpContainer = () => {
@@ -20,7 +18,6 @@ export const TopUpContainer = () => {
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
     const { mutate: verifyPayment, isPending: isVerifying } = useVerifyPayment();
     const { mutate: cancelOrder } = useCancelOrder();
-    const { data: wallet, isLoading: isWalletLoading } = useWallet();
 
     // Prevent user from leaving during critical verification phase
     useEffect(() => {
@@ -108,9 +105,6 @@ export const TopUpContainer = () => {
                     subtitle="Choose a plan to boost your balance and unlock more opportunities."
                     icon={Coins}
                 />
-                {/* <div className="w-full md:w-auto">
-                    <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} />
-                </div> */}
             </div>
 
             <div className="bg-gradient-to-br from-primary/5 via-transparent to-primary/5 rounded-3xl p-4 md:p-8 border border-primary/10">

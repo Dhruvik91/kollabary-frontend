@@ -23,7 +23,7 @@ export const TopUpList = ({ plans, onBuy, isLoading }: TopUpListProps) => {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-8 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 py-4 sm:py-8 px-2 sm:px-4">
             {plans.map((plan) => (
                 <TopUpCard
                     key={plan.id}
