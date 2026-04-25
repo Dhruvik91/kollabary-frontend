@@ -179,7 +179,11 @@ export const BottomNav = () => {
                                 <span className="text-[9px] font-bold leading-none mt-1">More</span>
                             </button>
                         </SheetTrigger>
-                        <SheetContent side="bottom" className="rounded-t-[2.5rem] p-0 border-t border-primary/20 bg-background/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto">
+                        <SheetContent 
+                            side="bottom" 
+                            className="rounded-t-[2.5rem] p-0 border-t border-primary/20 bg-background/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto"
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                        >
                             <SheetHeader className="pt-6 pb-2">
                                 <div className="w-12 h-1.5 bg-muted rounded-full mx-auto mb-4" />
                                 <SheetTitle className="text-center text-lg font-bold">Quick Navigation</SheetTitle>
