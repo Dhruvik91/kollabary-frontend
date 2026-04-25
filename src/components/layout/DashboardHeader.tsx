@@ -6,7 +6,6 @@ import {
     Search,
     MessageSquare,
     Trophy,
-    Coins,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import { useWallet } from '@/hooks/queries/useWalletQueries';
@@ -20,6 +19,7 @@ import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES, COIN_URL } from '@/constants';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 /**
  * Header component for the authenticated dashboard.
@@ -33,22 +33,36 @@ export const DashboardHeader = () => {
     const { data: tierGuide } = useTierGuide();
 
     const isInfluencer = user?.role === UserRole.INFLUENCER;
+    const profileHref = isInfluencer
+        ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE
+        : FRONTEND_ROUTES.DASHBOARD.PROFILE;
 
     return (
         <header className="sticky top-0 right-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
-            <div className="flex items-center gap-4 max-w-xl invisible">
-                <div className="relative group flex-grow hidden sm:flex items-center">
-                    <Search className="absolute left-3 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
-                    <Input
-                        placeholder="Search..."
-                        className="pl-10 h-10 bg-muted/50 border-transparent focus-visible:bg-background focus-visible:ring-primary/20 transition-all rounded-xl w-full"
-                    />
-                </div>
+            <div className="flex items-center gap-4">
+                <Link href={profileHref} className="lg:hidden">
+                    <Avatar className="h-9 w-9 border border-border/50">
+                        <AvatarImage src={user?.profile?.avatarUrl || user?.influencerProfile?.avatarUrl} alt={user?.profile?.fullName || 'User'} />
+                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold uppercase">
+                            {(user?.profile?.fullName || user?.email || 'U').charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                </Link>
 
-                {/* Mobile Search Button icon instead of full bar */}
-                <Button variant="ghost" size="icon" className="sm:hidden text-muted-foreground h-10 w-10">
-                    <Search size={20} />
-                </Button>
+                <div className="flex items-center gap-4 max-w-xl invisible hidden sm:flex">
+                    <div className="relative group flex-grow items-center">
+                        <Search className="absolute left-3 text-muted-foreground group-focus-within:text-primary transition-colors" size={18} />
+                        <Input
+                            placeholder="Search..."
+                            className="pl-10 h-10 bg-muted/50 border-transparent focus-visible:bg-background focus-visible:ring-primary/20 transition-all rounded-xl w-full"
+                        />
+                    </div>
+
+                    {/* Mobile Search Button icon instead of full bar */}
+                    <Button variant="ghost" size="icon" className="sm:hidden text-muted-foreground h-10 w-10">
+                        <Search size={20} />
+                    </Button>
+                </div>
             </div>
 
             <div className="flex items-center gap-2 md:gap-4">
