@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import ConfettiEffect from '@/components/shared/ConfettiEffect';
+
 import {
     useCollaborationDetail,
     useUpdateCollaborationStatus,
@@ -27,7 +30,6 @@ import { EditCollaborationDialog } from '../components/EditCollaborationDialog';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useCreateReview, useInfluencerReviews } from '@/hooks/use-review.hooks';
 import { ReviewSubmissionModal } from '@/features/review/components/ReviewSubmissionModal';
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, AlertCircle, Loader2, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -58,6 +60,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     const handleMessagePartner = () => {
         if (!collaboration) return;
@@ -128,7 +131,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const canAccept = collaboration.status === CollaborationStatus.REQUESTED && isInfluencer;
 
     const handleUpdateStatus = (status: CollaborationStatus) => {
-        updateStatus({ status });
+        updateStatus({ status }, {
+            onSuccess: () => {
+                if (status === CollaborationStatus.ACCEPTED) {
+                    setShowConfetti(true);
+                }
+            }
+        });
     };
 
     const handleUploadProof = (urls: string[]) => {
@@ -188,6 +197,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             transition={{ duration: 0.5 }}
             className="space-y-6 sm:space-y-8 pb-20 md:px-0"
         >
+            {showConfetti && (
+                <ConfettiEffect 
+                    recycle={false} 
+                    numberOfPieces={500} 
+                    onConfettiComplete={() => setShowConfetti(false)} 
+                />
+            )}
             {/* Header with Navigation & Actions */}
             <CollaborationHeader
                 canEdit={canEditDetail}

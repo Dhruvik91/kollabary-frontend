@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import ConfettiEffect from '@/components/shared/ConfettiEffect';
 import { useAuth } from '@/contexts/auth-context';
 import {
     Loader2,
@@ -27,17 +28,19 @@ import { useRankingBreakdown } from '@/hooks/queries/useRanking';
 import { useCollaborations } from '@/hooks/use-collaboration.hooks';
 import { RankingScoreCard } from '@/features/influencer/components/RankingScoreCard';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'sonner';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
-import { PageHeader } from '@/components/shared/PageHeader';
 import { useWallet } from '@/hooks/queries/useWalletQueries';
 import { useReferralStats } from '@/hooks/queries/useReferralQueries';
+import { PageHeader } from '@/components/shared/PageHeader';
 import { WalletCard } from '@/components/shared/WalletCard';
 import { ReferralCard } from '@/components/shared/ReferralCard';
-import Link from 'next/link';
 
 export const DashboardOverviewContainer = () => {
     const { user, isLoading: isAuthLoading } = useAuth();
+    const [showConfetti, setShowConfetti] = useState(false);
 
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const isUser = user?.role === UserRole.USER;
@@ -64,6 +67,25 @@ export const DashboardOverviewContainer = () => {
 
     const { data: wallet, isLoading: isWalletLoading } = useWallet();
     const { data: referralStats, isLoading: isReferralLoading } = useReferralStats();
+
+    // Detect Tier Unlock
+    useEffect(() => {
+        if (isInfluencer && ranking?.rankingTier && user?.id) {
+            const storageKey = `last-celebrated-tier-${user.id}`;
+            const lastTier = localStorage.getItem(storageKey);
+            
+            if (lastTier && lastTier !== ranking.rankingTier) {
+                // Tier has changed! (Assuming tiers always go up or the user wants to celebrate any change)
+                setShowConfetti(true);
+                toast.success(`Congratulations! You've unlocked the ${ranking.rankingTier} tier!`, {
+                    icon: <Trophy className="h-5 w-5 text-yellow-500" />,
+                    duration: 5000,
+                });
+            }
+            
+            localStorage.setItem(storageKey, ranking.rankingTier);
+        }
+    }, [isInfluencer, ranking?.rankingTier, user?.id]);
 
     const isUserCollabsLoading = isUser && (isAllCollabsLoading || isActiveCollabsLoading || isCompletedCollabsLoading || isPendingCollabsLoading);
     const isLoading = isAuthLoading || (isInfluencer && (isProfileLoading || isRankingLoading)) || isUserCollabsLoading || isWalletLoading || isReferralLoading;
@@ -115,6 +137,13 @@ export const DashboardOverviewContainer = () => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
+            {showConfetti && (
+                <ConfettiEffect 
+                    recycle={false} 
+                    numberOfPieces={500} 
+                    onConfettiComplete={() => setShowConfetti(false)} 
+                />
+            )}
             <PageHeader
                 label="Dashboard Overview"
                 title="Welcome,"
