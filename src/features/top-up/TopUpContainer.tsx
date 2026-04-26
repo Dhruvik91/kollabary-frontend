@@ -10,12 +10,14 @@ import { ErrorState } from '@/components/shared/ErrorState';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { FRONTEND_ROUTES } from '@/constants';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import ConfettiEffect from '@/components/shared/ConfettiEffect';
 
 export const TopUpContainer = () => {
+    const [showConfetti, setShowConfetti] = useState(false);
     const activeOrderIdRef = useRef<string | null>(null);
     const { data: plans, isLoading: isPlansLoading, isError, error, refetch } = usePaymentPlans();
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
@@ -59,6 +61,10 @@ export const TopUpContainer = () => {
                         razorpayPaymentId: response.razorpay_payment_id,
                         razorpaySignature: response.razorpay_signature,
                     }, {
+                        onSuccess: () => {
+                            setShowConfetti(true);
+                            toast.success("Payment verified successfully! Your KC coins have been added.");
+                        },
                         onSettled: () => {
                             toast.dismiss(toastId);
                         }
@@ -100,6 +106,13 @@ export const TopUpContainer = () => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
+            {showConfetti && (
+                <ConfettiEffect 
+                    recycle={false} 
+                    numberOfPieces={500} 
+                    onConfettiComplete={() => setShowConfetti(false)} 
+                />
+            )}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <PageHeader
                     label="TOP UP"

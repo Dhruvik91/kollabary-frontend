@@ -20,7 +20,7 @@ export const AuctionInfoGrid = ({
     bidsCount 
 }: AuctionInfoGridProps) => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-6 border-b border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-12 gap-y-8 pb-6 border-b border-border">
             <div className="space-y-1">
                 <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Budget Range</p>
                 <p className="text-base sm:text-lg font-black text-foreground flex items-center">

@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 import { useCreateCollaboration } from '@/hooks/use-collaboration.hooks';
 import { CreateCollaborationDto } from '@/types/collaboration.types';
 import { useActionConsent } from '@/hooks/use-action-consent';
+import ConfettiEffect from '@/components/shared/ConfettiEffect';
 
 
 const collaborationSchema = z.object({
@@ -66,6 +67,7 @@ export const CollaborationRequestDialog = ({
         title: 'Collaboration Request',
         actionName: 'Send Request',
     });
+    const [showConfetti, setShowConfetti] = React.useState(false);
 
 
     const form = useForm<CollaborationFormValues>({
@@ -96,6 +98,7 @@ export const CollaborationRequestDialog = ({
         executeWithConsent(() => {
             createCollaboration.mutate(dto, {
                 onSuccess: () => {
+                    setShowConfetti(true);
                     setOpen(false);
                     form.reset();
                 },
@@ -302,6 +305,12 @@ export const CollaborationRequestDialog = ({
                 </Form>
             </AnimatedModal>
             {ConsentModalElement}
+            {showConfetti && (
+                <ConfettiEffect
+                    recycle={false}
+                    onConfettiComplete={() => setShowConfetti(false)}
+                />
+            )}
         </>
 
     );
