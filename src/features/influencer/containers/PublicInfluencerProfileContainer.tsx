@@ -15,6 +15,7 @@ interface PublicInfluencerProfileContainerProps {
 export const PublicInfluencerProfileContainer = ({ id, initialData }: PublicInfluencerProfileContainerProps) => {
     const { data, isLoading, isError } = usePublicInfluencer(id, initialData);
 
+
     if (isLoading) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
