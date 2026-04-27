@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
@@ -14,9 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfile } from '@/services/profile.service';
-import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
-import { useRole } from '@/hooks/queries/useAuthQueries';
 import { UserRole } from '@/types/auth.types';
 import { ShareButton } from '@/components/shared/ShareButton';
 import {
