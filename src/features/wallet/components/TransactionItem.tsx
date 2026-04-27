@@ -26,7 +26,8 @@ const getPurposeIcon = (purpose: TransactionPurpose) => {
         case TransactionPurpose.AUCTION_CREATION: return <ShoppingBag size={14} />;
         case TransactionPurpose.COLLABORATION_CREATION: return <Target size={14} />;
         case TransactionPurpose.BID_PLACEMENT: return coinImg;
-        case TransactionPurpose.DAILY_ALLOWANCE: return coinImg;
+        case TransactionPurpose.WEEKLY_REWARD: return coinImg;
+        case TransactionPurpose.NEW_ARRIVAL_BONUS: return coinImg;
         case TransactionPurpose.REFERRAL_REWARD: return coinImg;
         case TransactionPurpose.SIGNUP_BONUS: return coinImg;
         case TransactionPurpose.SYSTEM_ADJUSTMENT: return <Settings size={14} />;

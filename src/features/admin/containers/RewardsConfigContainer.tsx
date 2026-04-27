@@ -16,8 +16,9 @@ export function RewardsConfigContainer() {
             KCSettingKey.AUCTION_CREATION_PRICE,
             KCSettingKey.COLLABORATION_CREATION_PRICE,
             KCSettingKey.BID_PLACEMENT_PRICE,
-            KCSettingKey.DAILY_ALLOWANCE_BRAND,
-            KCSettingKey.DAILY_ALLOWANCE_INFLUENCER
+            KCSettingKey.WEEKLY_REWARD_BRAND,
+            KCSettingKey.WEEKLY_REWARD_INFLUENCER,
+            KCSettingKey.NEW_ARRIVAL_BONUS_AMOUNT
         ].includes(s.key)
     );
 
