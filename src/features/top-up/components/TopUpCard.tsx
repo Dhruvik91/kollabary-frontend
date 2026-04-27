@@ -109,6 +109,7 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
                                 alt="KC Coin"
                                 width={100}
                                 height={100}
+                                quality={90}
                                 className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-[0_10px_20px_rgba(255,215,0,0.5)]"
                                 priority
                             />

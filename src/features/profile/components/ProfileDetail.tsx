@@ -60,7 +60,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                         className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] bg-zinc-100 glass-chip border-4 md:border-8 border-background shadow-2xl overflow-hidden flex items-center justify-center relative group"
                     >
                         {displayImage ? (
-                            <Image src={displayImage} alt={fullName} fill className="object-cover" />
+                            <Image src={displayImage} alt={fullName} fill className="object-cover" sizes="(max-width: 768px) 128px, 160px" loading="eager" />
                         ) : (
                             <div className="text-4xl md:text-5xl font-black text-primary/40 group-hover:text-primary transition-colors">
                                 {fullName.charAt(0)}

@@ -106,6 +106,7 @@ export const ImageUpload = ({
                             alt="Preview"
                             fill
                             className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 400px"
                         />
                     </div>
                     {!disabled && (
