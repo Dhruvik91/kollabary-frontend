@@ -30,6 +30,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
@@ -444,13 +449,20 @@ export function DataTable<T>({
           {title || <div />}
           <div className={`flex items-center justify-${searchPosition} gap-2`}>
             {prependWithSearch}
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="max-w-sm px-4 py-2 border border-border bg-background/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-sans placeholder:text-muted-foreground outline-none"
-            />
+            <Tooltip delayDuration={500}>
+              <TooltipTrigger asChild>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="max-w-sm px-4 py-2 border border-border bg-background/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-sans placeholder:text-muted-foreground outline-none"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                Search across all visible columns
+              </TooltipContent>
+            </Tooltip>
             {appendWithSearch}
           </div>
         </div>
@@ -508,10 +520,18 @@ export function DataTable<T>({
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                            {{
-                              asc: " ↑",
-                              desc: " ↓",
-                            }[header.column.getIsSorted() as string] ?? null}
+                            {header.column.getIsSorted() && (
+                              <Tooltip delayDuration={300}>
+                                <TooltipTrigger asChild>
+                                  <span className="text-primary font-bold">
+                                    {header.column.getIsSorted() === "asc" ? " ↑" : " ↓"}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent side="top">
+                                  Sorted {header.column.getIsSorted() === "asc" ? "Ascending" : "Descending"}
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
                           </div>
                         </th>
                       ))}
@@ -643,10 +663,15 @@ export function DataTable<T>({
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious
-                        onClick={() => displayPageIndex > 0 && handlePageChange(displayPageIndex - 1)}
-                        className={displayPageIndex === 0 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
+                      <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                          <PaginationPrevious
+                            onClick={() => displayPageIndex > 0 && handlePageChange(displayPageIndex - 1)}
+                            className={displayPageIndex === 0 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>Previous Page</TooltipContent>
+                      </Tooltip>
                     </PaginationItem>
                     {Array.from({ length: displayTotalPages }, (_, i) => i).map((pageNum) => {
                       if (
@@ -678,10 +703,15 @@ export function DataTable<T>({
                       return null;
                     })}
                     <PaginationItem>
-                      <PaginationNext
-                        onClick={() => displayPageIndex < displayTotalPages - 1 && handlePageChange(displayPageIndex + 1)}
-                        className={displayPageIndex === displayTotalPages - 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
+                      <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                          <PaginationNext
+                            onClick={() => displayPageIndex < displayTotalPages - 1 && handlePageChange(displayPageIndex + 1)}
+                            className={displayPageIndex === displayTotalPages - 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>Next Page</TooltipContent>
+                      </Tooltip>
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>

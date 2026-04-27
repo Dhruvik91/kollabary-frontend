@@ -21,6 +21,11 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AuctionCardProps {
     auction: Auction & { myBidStatus?: BidStatus };
@@ -84,9 +89,18 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
                     {/* ── Top bar: status badge left │ 3-dot menu right ── */}
                     <div className="flex items-center justify-between gap-2">
                         {/* Status badge — always top-left */}
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest leading-none ${getAuctionStatusStyles(status)}`}>
-                            {status}
-                        </span>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest leading-none cursor-help ${getAuctionStatusStyles(status)}`}>
+                                    {status}
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="text-[10px] font-bold uppercase tracking-wider">
+                                {status === AuctionStatus.OPEN ? 'Active and accepting bids' : 
+                                 status === AuctionStatus.COMPLETED ? 'Bidding finished' : 
+                                 'This auction has been cancelled'}
+                            </TooltipContent>
+                        </Tooltip>
 
                         <div className="flex items-center gap-1.5">
                             {/* My-bid indicator (influencer view) */}
@@ -178,18 +192,32 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
 
                     {/* ── Stats / Info grid ── */}
                     <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 dark:bg-white/[0.03] rounded-2xl border border-border mt-auto">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
-                                <DollarSign size={10} /> Budget
-                            </span>
-                            <p className="text-sm font-black italic truncate">{budgetRange}</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
-                                <Calendar size={10} /> Deadline
-                            </span>
-                            <p className="text-sm font-black italic truncate">{formattedDeadline}</p>
-                        </div>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <div className="flex flex-col gap-1 cursor-default">
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
+                                        <DollarSign size={10} /> Budget
+                                    </span>
+                                    <p className="text-sm font-black italic truncate">{budgetRange}</p>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {budgetRange === 'Competitive' ? 'The brand is looking for competitive offers' : `Flexible budget range: ${budgetRange}`}
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <div className="flex flex-col gap-1 cursor-default">
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
+                                        <Calendar size={10} /> Deadline
+                                    </span>
+                                    <p className="text-sm font-black italic truncate">{formattedDeadline}</p>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                This auction closes on {formattedDeadline}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
 
                     {/* ── Action Button ── */}

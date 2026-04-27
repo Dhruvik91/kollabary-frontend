@@ -3,6 +3,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { COIN_URL } from '@/constants';
 import Image from 'next/image';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface WalletCardProps {
     balance: number | string;
@@ -49,19 +54,34 @@ export const WalletCard = ({
                 </div>
 
                 <div className="space-y-4">
-                    <div className="flex items-baseline gap-2">
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl font-black tracking-tighter"
-                        >
-                            {loading ? "---" : formattedBalance}
-                        </motion.h2>
-                        <div className="flex flex-col">
-                            <span className="text-lg font-bold text-primary/60 leading-none">K</span>
-                            <span className="text-[10px] font-black text-primary/40 uppercase tracking-tighter">Coins</span>
-                        </div>
-                    </div>
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <div className="flex items-baseline gap-2 cursor-help">
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="text-5xl font-black tracking-tighter"
+                                >
+                                    {loading ? "---" : formattedBalance}
+                                </motion.h2>
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-bold text-primary/60 leading-none">K</span>
+                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-tighter">Coins</span>
+                                </div>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="max-w-[240px] p-4 bg-background/95 backdrop-blur-md border-primary/20">
+                            <div className="space-y-2">
+                                <p className="font-bold text-primary flex items-center gap-2">
+                                    <Image src={COIN_URL} alt="K" width={16} height={16} />
+                                    K Coins
+                                </p>
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                    The official platform currency. Use K Coins to bid in auctions, pay for collaborations, and unlock premium features.
+                                </p>
+                            </div>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             </CardContent>
 

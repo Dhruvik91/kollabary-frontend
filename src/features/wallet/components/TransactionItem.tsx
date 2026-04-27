@@ -5,6 +5,11 @@ import { ArrowDownLeft, ArrowUpRight, ShoppingBag, Target, Settings } from 'luci
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { COIN_URL } from '@/constants';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TransactionItemProps {
     transaction: KCTransaction;
@@ -53,9 +58,16 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
                 </div>
 
                 <div className="space-y-0.5">
-                    <h5 className="text-[13px] sm:text-sm font-bold capitalize tracking-tight leading-none">
-                        {getPurposeLabel(transaction.purpose)}
-                    </h5>
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <h5 className="text-[13px] sm:text-sm font-bold capitalize tracking-tight leading-none cursor-help">
+                                {getPurposeLabel(transaction.purpose)}
+                            </h5>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            Purpose: {getPurposeLabel(transaction.purpose)}
+                        </TooltipContent>
+                    </Tooltip>
                     <p className="text-[10px] sm:text-xs text-muted-foreground font-medium">
                         {format(new Date(transaction.createdAt), 'MMM dd, yyyy • hh:mm a')}
                     </p>
@@ -77,10 +89,17 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
                         className="w-4 h-4 object-contain"
                     />
                 </div>
-                <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-muted border border-border/50 text-[7px] sm:text-[8px] font-black uppercase tracking-wider text-muted-foreground">
-                    {getPurposeIcon(transaction.purpose)}
-                    <span>{transaction.type}</span>
-                </div>
+                <Tooltip delayDuration={300}>
+                    <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-muted border border-border/50 text-[7px] sm:text-[8px] font-black uppercase tracking-wider text-muted-foreground cursor-help">
+                            {getPurposeIcon(transaction.purpose)}
+                            <span>{transaction.type}</span>
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="text-[10px] font-bold">
+                        {isCredit ? "Funds Added to Wallet" : "Funds Debited from Wallet"}
+                    </TooltipContent>
+                </Tooltip>
             </div>
         </div>
     );

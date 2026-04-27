@@ -14,6 +14,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -166,12 +171,19 @@ export const MessageBubble = ({
                             : "bg-muted/30 hover:bg-muted/50 border border-border/20"
                     )}
                 >
-                    <div className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                        isOwn ? "bg-white/20 text-white" : "bg-primary/10 text-primary"
-                    )}>
-                        <FileText size={20} />
-                    </div>
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <div className={cn(
+                                "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                                isOwn ? "bg-white/20 text-white" : "bg-primary/10 text-primary"
+                            )}>
+                                <FileText size={20} />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            {ext} Document
+                        </TooltipContent>
+                    </Tooltip>
                     <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold truncate">{filename}</p>
                         <p className={cn(
@@ -181,10 +193,19 @@ export const MessageBubble = ({
                             {ext} Document
                         </p>
                     </div>
-                    <Download size={16} className={cn(
-                        "shrink-0",
-                        isOwn ? "text-white/50" : "text-muted-foreground/50"
-                    )} />
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <div>
+                                <Download size={16} className={cn(
+                                    "shrink-0",
+                                    isOwn ? "text-white/50" : "text-muted-foreground/50"
+                                )} />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            Download Attachment
+                        </TooltipContent>
+                    </Tooltip>
                 </a>
             );
         }
@@ -268,9 +289,16 @@ export const MessageBubble = ({
                         )}>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full bg-muted/20 hover:bg-muted/40 text-muted-foreground transition-all">
-                                        <MoreVertical size={14} />
-                                    </Button>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full bg-muted/20 hover:bg-muted/40 text-muted-foreground transition-all cursor-help">
+                                                <MoreVertical size={14} />
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top">
+                                            Message Options
+                                        </TooltipContent>
+                                    </Tooltip>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="rounded-xl border-border/50 shadow-xl p-1 min-w-[120px]">
                                     {messageType === 'text' && (
@@ -296,11 +324,25 @@ export const MessageBubble = ({
                 </div>
 
                 <div className="flex items-center gap-2 px-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200">
-                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-                        {format(new Date(message.createdAt), 'h:mm a')}
-                    </span>
+                    <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider cursor-default">
+                                {format(new Date(message.createdAt), 'h:mm a')}
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="text-[10px]">
+                            {format(new Date(message.createdAt), 'PPPP p')}
+                        </TooltipContent>
+                    </Tooltip>
                     {message.updatedAt && message.updatedAt !== message.createdAt && (
-                        <span className="text-[10px] text-muted-foreground italic tracking-tight opacity-70">(edited)</span>
+                        <Tooltip delayDuration={500}>
+                            <TooltipTrigger asChild>
+                                <span className="text-[10px] text-muted-foreground italic tracking-tight opacity-70 cursor-default">(edited)</span>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="text-[10px]">
+                                Edited at {format(new Date(message.updatedAt), 'h:mm a')}
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
             </div>

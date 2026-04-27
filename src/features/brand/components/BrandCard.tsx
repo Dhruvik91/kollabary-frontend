@@ -11,6 +11,12 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { UserProfile } from '@/services/profile.service';
 import { ShareButton } from '@/components/shared/ShareButton';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface BrandCardProps {
     brand: UserProfile;
@@ -98,10 +104,17 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
 
                         <div className="flex flex-wrap gap-2">
                             {location && (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-zinc-100 dark:bg-white/5 text-zinc-600 dark:text-zinc-400 border border-border/50">
-                                    <MapPin size={12} className="text-secondary/70" />
-                                    {location}
-                                </span>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-zinc-100 dark:bg-white/5 text-zinc-600 dark:text-zinc-400 border border-border/50 cursor-help">
+                                            <MapPin size={12} className="text-secondary/70" />
+                                            {location}
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">
+                                        Primary Location: {location}
+                                    </TooltipContent>
+                                </Tooltip>
                             )}
                         </div>
 
@@ -109,17 +122,31 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                         <div className="grid grid-cols-2 gap-3 p-3 bg-zinc-50/50 dark:bg-white/2 rounded-2xl border border-border/40 mt-auto">
                             <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Auctions</span>
-                                <div className="flex items-center gap-1.5">
-                                    <Briefcase size={12} className="text-secondary/70" />
-                                    <p className="text-sm font-black">{stats?.totalAuctions ?? 0}</p>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-1.5 cursor-help">
+                                            <Briefcase size={12} className="text-secondary/70" />
+                                            <p className="text-sm font-black">{stats?.totalAuctions ?? 0}</p>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">
+                                        Total Public Auctions Created
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-1">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Collabs</span>
-                                <div className="flex items-center gap-1.5">
-                                    <Handshake size={12} className="text-secondary/70" />
-                                    <p className="text-sm font-black">{stats?.completedCollaborations ?? 0}</p>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-1.5 cursor-help">
+                                            <Handshake size={12} className="text-secondary/70" />
+                                            <p className="text-sm font-black">{stats?.completedCollaborations ?? 0}</p>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">
+                                        Successfully Completed Collaborations
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                         </div>
 

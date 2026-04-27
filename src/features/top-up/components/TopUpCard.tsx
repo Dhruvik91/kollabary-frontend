@@ -6,8 +6,13 @@ import { Button } from '@/components/ui/button';
 import { COIN_URL } from '@/constants';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Coins, IndianRupee, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TopUpCardProps {
     plan: TopUpPlan;
@@ -18,7 +23,7 @@ interface TopUpCardProps {
 
 export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps) => {
     const bonusCoins = plan.bonusCoins || 0;
-    const totalCoins = plan.coins + bonusCoins;
+    const totalCoins = (plan.coins || 0) + bonusCoins;
 
     // Plan specific colors mapping
     const getPlanColor = (name: string) => {
@@ -64,10 +69,17 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
 
                 {isPopular && (
                     <div className="absolute top-0 right-0 z-20">
-                        <div className="bg-amber-500 text-white text-[9px] sm:text-[10px] font-black px-3 sm:px-4 py-1 sm:py-1.5 rounded-bl-xl flex items-center gap-1.5 uppercase tracking-[0.1em] shadow-lg">
-                            <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
-                            Most Popular
-                        </div>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <div className="bg-amber-500 text-white text-[9px] sm:text-[10px] font-black px-3 sm:px-4 py-1 sm:py-1.5 rounded-bl-xl flex items-center gap-1.5 uppercase tracking-[0.1em] shadow-lg cursor-help">
+                                    <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
+                                    Most Popular
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="left" className="font-bold">
+                                Chosen by 70% of our creators
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 )}
 
@@ -106,18 +118,36 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
                     <div className="w-full space-y-2 sm:space-y-3">
                         <div className="flex justify-between items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-muted/30 rounded-xl border border-border/50">
                             <span className="text-xs sm:text-sm font-medium text-muted-foreground">Coins</span>
-                            <span className="text-sm sm:text-base font-bold">{plan.coins.toLocaleString()} KC</span>
+                            <span className="text-sm sm:text-base font-bold">{(plan.coins || 0).toLocaleString()} KC</span>
                         </div>
-                        
-                        <div className={cn(
-                            "flex justify-between items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border transition-colors",
-                            bonusCoins > 0 ? "bg-amber-500/10 border-amber-500/20" : "bg-muted/10 border-border/20 opacity-50"
-                        )}>
-                            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Bonus</span>
-                            <span className={cn("text-sm sm:text-base font-bold", bonusCoins > 0 ? "text-amber-600" : "")}>
-                                +{bonusCoins.toLocaleString()} KC
-                            </span>
-                        </div>
+
+                        {bonusCoins > 0 ? (
+                            <Tooltip delayDuration={300}>
+                                <TooltipTrigger asChild>
+                                    <div className={cn(
+                                        "flex justify-between items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border transition-colors cursor-help",
+                                        "bg-amber-500/10 border-amber-500/20"
+                                    )}>
+                                        <span className="text-xs sm:text-sm font-medium text-muted-foreground">Bonus</span>
+                                        <span className="text-sm sm:text-base font-bold text-amber-600">
+                                            +{bonusCoins.toLocaleString()} KC
+                                        </span>
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent side="top" className="font-bold">
+                                    Extra coins included in this plan!
+                                </TooltipContent>
+                            </Tooltip>
+                        ) : (
+                            <div className={cn(
+                                "flex justify-between items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border transition-colors border-border/20 opacity-50 bg-muted/10"
+                            )}>
+                                <span className="text-xs sm:text-sm font-medium text-muted-foreground">Bonus</span>
+                                <span className="text-sm sm:text-base font-bold text-muted-foreground">
+                                    +0 KC
+                                </span>
+                            </div>
+                        )}
 
                         <div className="pt-1 sm:pt-2">
                             <div className={cn(
@@ -138,7 +168,7 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
                     <Button
                         className={cn(
                             "w-full h-12 sm:h-14 text-sm sm:text-md font-black transition-all duration-300 group rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl",
-                           "bg-amber-500 hover:bg-amber-600 text-white border-none"
+                            "bg-amber-500 hover:bg-amber-600 text-white border-none"
                         )}
                         onClick={() => onBuy(plan.id)}
                         disabled={isLoading}

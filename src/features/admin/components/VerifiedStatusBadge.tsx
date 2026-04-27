@@ -4,6 +4,12 @@ import React from 'react';
 import { Clock, CheckCircle, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VerificationStatus } from '@/types/admin.types';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface VerifiedStatusBadgeProps {
     status: VerificationStatus;
@@ -31,9 +37,16 @@ export function VerifiedStatusBadge({ status }: VerifiedStatusBadgeProps) {
     const { icon: Icon, className, label } = config[status];
 
     return (
-        <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-current/20 shadow-sm", className)}>
-            <Icon size={10} className="shrink-0 opacity-80" />
-            <span className="leading-none">{label}</span>
-        </div>
+        <Tooltip delayDuration={300}>
+            <TooltipTrigger asChild>
+                <div className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-current/20 shadow-sm cursor-help", className)}>
+                    <Icon size={10} className="shrink-0 opacity-80" />
+                    <span className="leading-none">{label}</span>
+                </div>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="font-bold">
+                Verification Status: {label}
+            </TooltipContent>
+        </Tooltip>
     );
 }

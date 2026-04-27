@@ -6,6 +6,11 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import Image from 'next/image';
 import { COIN_URL } from '@/constants';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ReferralCardProps {
     referralCode: string;
@@ -84,15 +89,22 @@ export const ReferralCard = ({
                         <span className="text-xs font-mono font-bold tracking-widest text-primary truncate flex-1">
                             {loading ? "LOADING..." : referralCode}
                         </span>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10 rounded-xl hover:bg-primary hover:text-white transition-all duration-300"
-                            onClick={handleCopy}
-                            disabled={loading || !referralCode}
-                        >
-                            {copied ? <Check size={16} /> : <Copy size={16} />}
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-10 w-10 rounded-xl hover:bg-primary hover:text-white transition-all duration-300"
+                                    onClick={handleCopy}
+                                    disabled={loading || !referralCode}
+                                >
+                                    {copied ? <Check size={16} /> : <Copy size={16} />}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {copied ? 'Copied!' : 'Copy Referral Link'}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 </div>
             </CardContent>

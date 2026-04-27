@@ -47,6 +47,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const AdminUsersContainer = () => {
     const [page, setPage] = useState(0); // DataTable uses 0-indexed page
@@ -162,9 +167,23 @@ export const AdminUsersContainer = () => {
                 }
 
                 return isVerified ? (
-                    <ShieldCheck className="w-5 h-5 text-primary" />
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <ShieldCheck className="w-5 h-5 text-primary cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            Verified {isInfluencer ? 'Influencer' : 'Brand'}
+                        </TooltipContent>
+                    </Tooltip>
                 ) : (
-                    <ShieldAlert className="w-5 h-5 text-muted-foreground opacity-30" />
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <ShieldAlert className="w-5 h-5 text-muted-foreground opacity-30 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            Not Verified
+                        </TooltipContent>
+                    </Tooltip>
                 );
             },
         },
