@@ -36,6 +36,7 @@ export interface User {
 export interface AuthResponse {
     access_token: string;
     user: User;
+    isNewUser?: boolean;
 }
 
 export interface LoginCredentials {
