@@ -186,6 +186,14 @@ export const adminService = {
         const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { verified });
         return response.data;
     },
+    
+    /**
+     * Add coins to user wallet
+     */
+    addCoinsToUser: async (userId: string, amount: number): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.admin.userAddCoins(userId), { amount });
+        return response.data;
+    },
 
     /**
      * Create influencer account

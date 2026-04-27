@@ -77,6 +77,7 @@ export const API_CONFIG = {
             userStatusUpdate: (id: string) => `/admin/users/${id}/status`,
             userBulkStatus: '/admin/users/bulk-status',
             userVerify: (id: string) => `/admin/users/${id}/verify`,
+            userAddCoins: (id: string) => `/admin/users/${id}/coins`,
         },
         verification: {
             base: '/verification/request',

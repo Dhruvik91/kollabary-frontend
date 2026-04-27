@@ -4,7 +4,8 @@ import { useState } from 'react';
 import {
     useAdminUsers,
     useBulkUpdateUserStatus,
-    useModerateUser
+    useModerateUser,
+    useAdminAddCoins
 } from '@/hooks/use-admin.hooks';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,8 +19,12 @@ import {
     AlertTriangle,
     Mail,
     Calendar,
-    Ban
+    Ban,
+    Coins
 } from 'lucide-react';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -51,6 +56,9 @@ export const AdminUsersContainer = () => {
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [isBulkConfirmOpen, setIsBulkConfirmOpen] = useState(false);
     const [bulkAction, setBulkAction] = useState<'ACTIVE' | 'SUSPENDED' | null>(null);
+    const [isAddCoinsOpen, setIsAddCoinsOpen] = useState(false);
+    const [selectedUserForCoins, setSelectedUserForCoins] = useState<any>(null);
+    const [coinAmount, setCoinAmount] = useState<string>('');
 
     const { data, isLoading } = useAdminUsers({
         page: page + 1,
@@ -62,6 +70,7 @@ export const AdminUsersContainer = () => {
 
     const { mutate: bulkStatusUpdate, isPending: isBulkUpdating } = useBulkUpdateUserStatus();
     const { mutate: moderateUser } = useModerateUser();
+    const { mutate: addCoins, isPending: isAddingCoins } = useAdminAddCoins();
 
     const handleSelectAll = (checked: boolean) => {
         if (checked && data?.items) {
@@ -219,6 +228,14 @@ export const AdminUsersContainer = () => {
                                         <ShieldCheck className="w-4 h-4 mr-2" />
                                         {(row.original.role === 'INFLUENCER' ? row.original.influencerProfile?.verified : row.original.profile?.verified) ? 'Remove Verification' : 'Verify Directly'}
                                     </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => {
+                                        setSelectedUserForCoins(row.original);
+                                        setIsAddCoinsOpen(true);
+                                    }}>
+                                        <Coins className="w-4 h-4 mr-2" />
+                                        Add K Coins
+                                    </DropdownMenuItem>
                                 </>
                             )}
                         </DropdownMenuContent>
@@ -351,6 +368,62 @@ export const AdminUsersContainer = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            {/* Add Coins Modal */}
+            <AnimatedModal
+                isOpen={isAddCoinsOpen}
+                onClose={() => {
+                    setIsAddCoinsOpen(false);
+                    setCoinAmount('');
+                    setSelectedUserForCoins(null);
+                }}
+                title="Add K Coins"
+                description={`Directly credit K Coins to ${selectedUserForCoins?.profile?.fullName || selectedUserForCoins?.username}'s wallet.`}
+                size="sm"
+            >
+                <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="amount">Coin Amount</Label>
+                        <Input
+                            id="amount"
+                            type="number"
+                            placeholder="Enter amount (e.g. 500)"
+                            value={coinAmount}
+                            onChange={(e) => setCoinAmount(e.target.value)}
+                            className="text-lg font-bold h-12"
+                        />
+                    </div>
+                    <div className="pt-4 flex gap-3">
+                        <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => setIsAddCoinsOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            className="flex-1"
+                            disabled={!coinAmount || parseFloat(coinAmount) <= 0 || isAddingCoins}
+                            onClick={() => {
+                                if (selectedUserForCoins && coinAmount) {
+                                    addCoins({
+                                        userId: selectedUserForCoins.id,
+                                        amount: parseFloat(coinAmount)
+                                    }, {
+                                        onSuccess: () => {
+                                            setIsAddCoinsOpen(false);
+                                            setCoinAmount('');
+                                            setSelectedUserForCoins(null);
+                                        }
+                                    });
+                                }
+                            }}
+                        >
+                            {isAddingCoins ? 'Processing...' : 'Confirm Addition'}
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
         </div>
     );
 };

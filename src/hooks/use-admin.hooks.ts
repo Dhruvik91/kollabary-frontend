@@ -78,6 +78,26 @@ export function useModerateUser() {
 }
 
 /**
+ * Hook for adding coins to a user wallet
+ */
+export function useAdminAddCoins() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userId, amount }: { userId: string; amount: number }) =>
+            adminService.addCoinsToUser(userId, amount),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('K Coins added successfully');
+        },
+        onError: (error: any) => {
+            const message = error.response?.data?.message || 'Failed to add K coins';
+            toast.error(message);
+        },
+    });
+}
+
+/**
  * Hook to fetch platform statistics
  */
 export function useAdminStats(range: string = 'TODAY') {
