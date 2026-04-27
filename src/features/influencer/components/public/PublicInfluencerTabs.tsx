@@ -248,7 +248,13 @@ export const PublicInfluencerTabs = ({
                                                 <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
                                                     <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 overflow-hidden relative border-border/50 group-hover/card:border-primary/50 transition-all">
                                                         {brand.avatarUrl ? (
-                                                            <Image src={brand.avatarUrl} alt="" fill className="object-cover" />
+                                                            <Image 
+                                                                src={brand.avatarUrl} 
+                                                                alt={brand.fullName || 'Brand'} 
+                                                                fill 
+                                                                className="object-cover"
+                                                                sizes="56px"
+                                                            />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center text-primary/30 text-xl font-black uppercase">
                                                                 {brand.fullName?.charAt(0) || 'B'}

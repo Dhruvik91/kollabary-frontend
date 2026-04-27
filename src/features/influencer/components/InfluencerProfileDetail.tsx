@@ -23,6 +23,11 @@ import {
     LayoutGrid,
     SparklesIcon,
 } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
@@ -231,16 +236,30 @@ export const InfluencerProfileDetail = ({
 
                                             <div className="flex flex-wrap items-center gap-2">
                                                 {verified && (
-                                                    <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border border-blue-500/20">
-                                                        <CheckCircle2 size={14} />
-                                                        Verified Creator
-                                                    </div>
+                                                    <Tooltip delayDuration={300}>
+                                                        <TooltipTrigger asChild>
+                                                            <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border border-blue-500/20 cursor-help">
+                                                                <CheckCircle2 size={14} />
+                                                                Verified Creator
+                                                            </div>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="top" className="font-bold">
+                                                            Verified Account
+                                                        </TooltipContent>
+                                                    </Tooltip>
                                                 )}
 
-                                                <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-full border border-border/50">
-                                                    <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
-                                                </div>
+                                                <Tooltip delayDuration={500}>
+                                                    <TooltipTrigger asChild>
+                                                        <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-full border border-border/50 cursor-help">
+                                                            <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                                            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="top" className="font-bold text-[10px] uppercase tracking-wider">
+                                                        Availability: {availability}
+                                                    </TooltipContent>
+                                                </Tooltip>
 
 
                                             </div>
@@ -290,14 +309,20 @@ export const InfluencerProfileDetail = ({
                                             </>
                                         ) : (
                                             <>
-                                                <Button
-                                                    variant="outline"
-                                                    onClick={() => setIsReportModalOpen(true)}
-                                                    className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/20 rounded-2xl border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all flex items-center justify-center"
-                                                    title="Report Influencer"
-                                                >
-                                                    <Flag size={18} />
-                                                </Button>
+                                                <Tooltip delayDuration={300}>
+                                                    <TooltipTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            onClick={() => setIsReportModalOpen(true)}
+                                                            className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/20 rounded-2xl border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all flex items-center justify-center p-0"
+                                                        >
+                                                            <Flag size={18} />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="top" className="font-bold">
+                                                        Report Profile
+                                                    </TooltipContent>
+                                                </Tooltip>
                                                 <ShareButton
                                                     type={UserRole.INFLUENCER}
                                                     id={influencer.id}
@@ -441,23 +466,29 @@ export const InfluencerProfileDetail = ({
                                             </div>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                                                 {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
-                                                    <a
-                                                        key={name}
-                                                        href={data.handle}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-3 p-3 bg-muted/30 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
-                                                    >
-                                                        <div className="w-8 h-8 bg-zinc-100 glass-chip rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
-                                                            {getPlatformIcon(name)}
-                                                        </div>
-                                                        <div className="min-w-0">
-                                                            <p className="text-xs font-bold capitalize truncate">{name}</p>
-                                                            <p className="text-[10px] font-black text-primary truncate leading-none">
-                                                                {Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}
-                                                            </p>
-                                                        </div>
-                                                    </a>
+                                                    <Tooltip key={name} delayDuration={300}>
+                                                        <TooltipTrigger asChild>
+                                                            <a
+                                                                href={data.handle}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-3 p-3 bg-muted/30 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
+                                                            >
+                                                                <div className="w-8 h-8 bg-zinc-100 glass-chip rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+                                                                    {getPlatformIcon(name)}
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <p className="text-xs font-bold capitalize truncate">{name}</p>
+                                                                    <p className="text-[10px] font-black text-primary truncate leading-none">
+                                                                        {Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}
+                                                                    </p>
+                                                                </div>
+                                                            </a>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="top">
+                                                            View Profile on {name}
+                                                        </TooltipContent>
+                                                    </Tooltip>
                                                 ))}
                                             </div>
                                         </div>

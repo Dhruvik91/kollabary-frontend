@@ -12,6 +12,7 @@ import {
     PencilLine,
     Lock,
     LogOut,
+    ShieldCheck,
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useLogout } from '@/hooks/use-auth.hooks';
@@ -25,6 +26,8 @@ import { ShareButton } from '@/components/shared/ShareButton';
 import { PasswordUpdateForm } from './PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { UserRole } from '@/types/auth.types';
+import { VerificationSection } from './VerificationSection';
+import { AccountManagementSection } from './AccountManagementSection';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -57,7 +60,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                         className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] bg-zinc-100 glass-chip border-4 md:border-8 border-background shadow-2xl overflow-hidden flex items-center justify-center relative group"
                     >
                         {displayImage ? (
-                            <Image src={displayImage} alt={fullName} fill className="object-cover" />
+                            <Image src={displayImage} alt={fullName} fill className="object-cover" sizes="(max-width: 768px) 128px, 160px" loading="eager" />
                         ) : (
                             <div className="text-4xl md:text-5xl font-black text-primary/40 group-hover:text-primary transition-colors">
                                 {fullName.charAt(0)}
@@ -67,7 +70,14 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
 
                     <div className="flex-1 space-y-2 md:pb-4">
                         <div className="flex flex-wrap items-center gap-4">
-                            <h1 className="text-3xl md:text-4xl font-black tracking-tight">{fullName}</h1>
+                            <h1 className="text-3xl md:text-4xl font-black tracking-tight flex items-center gap-2">
+                                {fullName}
+                                {profile.verified && (
+                                    <div className="text-blue-500 bg-blue-500/10 p-1 rounded-full border border-blue-500/20" title="Verified Account">
+                                        <ShieldCheck size={20} />
+                                    </div>
+                                )}
+                            </h1>
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full border border-primary/20 text-xs font-bold uppercase tracking-wider">
                                 <AtSign size={12} />
                                 {username}
@@ -162,10 +172,18 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                 </div>
             </div>
 
+            {/* Trust & Verification */}
+            {isOwner && (
+                <div className="lg:col-span-3">
+                    <VerificationSection profile={profile} />
+                </div>
+            )}
+
             {/* Account Security (Password Update) */}
             {isOwner && (
                 <div className="lg:col-span-3">
                     <Card className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3 text-primary">
@@ -186,6 +204,13 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                             </div>
                         </div>
                     </Card>
+                </div>
+            )}
+
+            {/* Account Management (Lifecycle: Deactivate/Delete) */}
+            {isOwner && (
+                <div className="lg:col-span-3">
+                    <AccountManagementSection profile={profile} />
                 </div>
             )}
 

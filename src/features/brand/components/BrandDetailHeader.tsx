@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
@@ -14,10 +13,15 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfile } from '@/services/profile.service';
-import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { ShareButton } from '@/components/shared/ShareButton';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface BrandDetailHeaderProps {
     brand: UserProfile;
@@ -98,10 +102,17 @@ export const BrandDetailHeader = ({
 
                             {/* Verification Badge */}
                             <div className="absolute bottom-1 -right-1 sm:bottom-2 sm:-right-2 z-20">
-                                <div className="bg-primary shadow-lg shadow-primary/25 text-primary-foreground px-3 py-1 rounded-xl flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest border border-white/10">
-                                    <CheckCircle2 size={12} fill="currentColor" className="text-primary-foreground" />
-                                    <span>Verified</span>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="bg-primary shadow-lg shadow-primary/25 text-primary-foreground px-3 py-1 rounded-xl flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest border border-white/10 cursor-help">
+                                            <CheckCircle2 size={12} fill="currentColor" className="text-primary-foreground" />
+                                            <span>Verified</span>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top" className="font-bold">
+                                        Verified Business Account
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                         </div>
 
@@ -120,19 +131,40 @@ export const BrandDetailHeader = ({
 
                                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
                                     {brand.location && (
-                                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground">
-                                            <MapPin size={13} className="text-primary" />
-                                            <span className="text-[10px] sm:text-xs font-bold">{brand.location}</span>
-                                        </div>
+                                        <Tooltip delayDuration={300}>
+                                            <TooltipTrigger asChild>
+                                                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground cursor-help">
+                                                    <MapPin size={13} className="text-primary" />
+                                                    <span className="text-[10px] sm:text-xs font-bold">{brand.location}</span>
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top">
+                                                Business Location
+                                            </TooltipContent>
+                                        </Tooltip>
                                     )}
-                                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground">
-                                        <TrendingUp size={13} className="text-secondary" />
-                                        <span className="text-[10px] sm:text-xs font-bold">{stats.totalAuctions} Auctions</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground">
-                                        <Award size={13} className="text-primary" />
-                                        <span className="text-[10px] sm:text-xs font-bold">{stats.completedCollaborations} Success</span>
-                                    </div>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground cursor-help">
+                                                <TrendingUp size={13} className="text-secondary" />
+                                                <span className="text-[10px] sm:text-xs font-bold">{stats.totalAuctions} Auctions</span>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top">
+                                            Campaign Auctions Hosted
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 text-muted-foreground cursor-help">
+                                                <Award size={13} className="text-primary" />
+                                                <span className="text-[10px] sm:text-xs font-bold">{stats.completedCollaborations} Success</span>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top">
+                                            Successfully Completed Partnerships
+                                        </TooltipContent>
+                                    </Tooltip>
                                 </div>
                             </div>
 
@@ -155,14 +187,21 @@ export const BrandDetailHeader = ({
                                     showLabel
                                 />
                                 {!isOwner && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={onReport}
-                                        className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:text-red-500 hover:bg-red-500/5 hover:border-red-500/20 transition-all font-bold text-xs uppercase tracking-widest"
-                                    >
-                                        <Flag size={14} className="mr-2" />
-                                        Report
-                                    </Button>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                onClick={onReport}
+                                                className="w-full sm:w-auto h-12 px-5 bg-background/50 rounded-xl border-border text-muted-foreground hover:text-red-500 hover:bg-red-500/5 hover:border-red-500/20 transition-all font-bold text-xs uppercase tracking-widest"
+                                            >
+                                                <Flag size={14} className="mr-2" />
+                                                Report
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top" className="font-bold">
+                                            Report this Business
+                                        </TooltipContent>
+                                    </Tooltip>
                                 )}
                             </div>
                         </div>

@@ -8,6 +8,12 @@ import { RefreshCw, Clock, CheckCircle2, XCircle, AlertCircle, Package } from 'l
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Helper components for status visuals
 export const getStatusIcon = (status: PaymentStatus) => {
@@ -40,9 +46,16 @@ export const OrderItem = ({ order, isSyncing, onSync }: OrderItemProps) => {
             className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg hover:shadow-primary/5 group"
         >
             <div className="flex items-center gap-5">
-                <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform hidden sm:block">
-                    {getStatusIcon(order.status)}
-                </div>
+                <Tooltip delayDuration={300}>
+                    <TooltipTrigger asChild>
+                        <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform hidden sm:block cursor-help">
+                            {getStatusIcon(order.status)}
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="font-bold">
+                        Status: {order.status}
+                    </TooltipContent>
+                </Tooltip>
                 <div className="flex flex-col space-y-1">
                     <div className="flex items-center gap-2">
                         <span className="text-lg font-bold text-foreground">
@@ -68,16 +81,22 @@ export const OrderItem = ({ order, isSyncing, onSync }: OrderItemProps) => {
                     {getStatusBadge(order.status)}
                     
                     {order.status === PaymentStatus.PENDING && onSync && (
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-9 w-9 rounded-xl text-primary hover:text-primary hover:bg-primary/20"
-                            onClick={() => onSync(order.id)}
-                            disabled={isSyncing}
-                            title="Sync with Payment Gateway"
-                        >
-                            <RefreshCw className={cn("w-4 h-4", isSyncing && "animate-spin")} />
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-9 w-9 rounded-xl text-primary hover:text-primary hover:bg-primary/20"
+                                    onClick={() => onSync(order.id)}
+                                    disabled={isSyncing}
+                                >
+                                    <RefreshCw className={cn("w-4 h-4", isSyncing && "animate-spin")} />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                Sync with Payment Gateway
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
             </div>

@@ -9,6 +9,11 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/auth-context';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ReviewCardProps {
     review: Review;
@@ -56,9 +61,16 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
                                 </p>
                             </div>
 
-                            <div className="flex items-center gap-1 bg-yellow-500/5 px-2 py-1 rounded-full border border-yellow-500/10 shrink-0">
-                                {renderStars(review.rating)}
-                            </div>
+                            <Tooltip delayDuration={300}>
+                                <TooltipTrigger asChild>
+                                    <div className="flex items-center gap-1 bg-yellow-500/5 px-2 py-1 rounded-full border border-yellow-500/10 shrink-0 cursor-help">
+                                        {renderStars(review.rating)}
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent side="top" className="font-bold">
+                                    Rating: {review.rating}/5
+                                </TooltipContent>
+                            </Tooltip>
                         </div>
 
                         <p className="text-sm leading-relaxed text-muted-foreground italic line-clamp-3">
@@ -68,26 +80,40 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
                         {isOwner && (onEdit || onDelete) && (
                             <div className="flex items-center gap-2 pt-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
                                 {onEdit && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 px-3 rounded-xl gap-2 hover:bg-primary/10 hover:text-primary transition-all font-bold text-[11px]"
-                                        onClick={() => onEdit(review)}
-                                    >
-                                        <Edit2 size={12} />
-                                        Edit
-                                    </Button>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 px-3 rounded-xl gap-2 hover:bg-primary/10 hover:text-primary transition-all font-bold text-[11px]"
+                                                onClick={() => onEdit(review)}
+                                            >
+                                                <Edit2 size={12} />
+                                                Edit
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top">
+                                            Edit your review
+                                        </TooltipContent>
+                                    </Tooltip>
                                 )}
                                 {onDelete && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 px-3 rounded-xl gap-2 hover:bg-destructive/10 hover:text-destructive transition-all font-bold text-[11px]"
-                                        onClick={() => onDelete(review.id)}
-                                    >
-                                        <Trash2 size={12} />
-                                        Delete
-                                    </Button>
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 px-3 rounded-xl gap-2 hover:bg-destructive/10 hover:text-destructive transition-all font-bold text-[11px]"
+                                                onClick={() => onDelete(review.id)}
+                                            >
+                                                <Trash2 size={12} />
+                                                Delete
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top">
+                                            Delete your review
+                                        </TooltipContent>
+                                    </Tooltip>
                                 )}
                             </div>
                         )}

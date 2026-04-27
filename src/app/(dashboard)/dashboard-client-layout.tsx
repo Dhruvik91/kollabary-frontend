@@ -6,9 +6,10 @@ import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { AuthGuard } from '@/components/guards/AuthGuard';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
 import { ProfileSetupGuard } from '@/components/guards/ProfileSetupGuard';
+import { SignupBonusModal } from '@/components/modal/SignupBonusModal';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 export default function DashboardClientLayout({
     children,
@@ -22,6 +23,21 @@ export default function DashboardClientLayout({
         pathName === FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
 
     const isMessagesPage = pathName === FRONTEND_ROUTES.DASHBOARD.MESSAGES;
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const [isBonusModalOpen, setIsBonusModalOpen] = useState(false);
+
+    React.useEffect(() => {
+        if (searchParams.get('showBonus') === 'true') {
+            setIsBonusModalOpen(true);
+            // Clean up URL
+            const newParams = new URLSearchParams(searchParams.toString());
+            newParams.delete('showBonus');
+            const cleanPath = `${pathName}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+            router.replace(cleanPath, { scroll: false });
+        }
+    }, [searchParams, pathName, router]);
 
     return (
         <AuthGuard>
@@ -94,6 +110,10 @@ export default function DashboardClientLayout({
                     </div>
                 </ProfileSetupGuard>
             )}
+            <SignupBonusModal 
+                isOpen={isBonusModalOpen} 
+                onClose={() => setIsBonusModalOpen(false)} 
+            />
         </AuthGuard>
     );
 }

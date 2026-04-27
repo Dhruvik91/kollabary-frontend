@@ -36,13 +36,17 @@ const SETTING_LABELS: Record<KCSettingKey, { label: string; description: string 
         label: 'Bid Placement Price',
         description: 'Amount of K Coins deducted when an influencer places a bid.'
     },
-    [KCSettingKey.DAILY_ALLOWANCE_BRAND]: {
-        label: 'Daily Allowance (Brand)',
-        description: 'Amount of K Coins credited to brand accounts daily.'
+    [KCSettingKey.WEEKLY_REWARD_BRAND]: {
+        label: 'Weekly Reward (Brand)',
+        description: 'Amount of K Coins credited to brand accounts every week.'
     },
-    [KCSettingKey.DAILY_ALLOWANCE_INFLUENCER]: {
-        label: 'Daily Allowance (Influencer)',
-        description: 'Amount of K Coins credited to influencer accounts daily.'
+    [KCSettingKey.WEEKLY_REWARD_INFLUENCER]: {
+        label: 'Weekly Reward (Influencer)',
+        description: 'Amount of K Coins credited to influencer accounts every week.'
+    },
+    [KCSettingKey.NEW_ARRIVAL_BONUS_AMOUNT]: {
+        label: 'New Arrival Bonus',
+        description: 'A one-time bonus of K Coins credited to new users upon account activation.'
     },
     [KCSettingKey.REFERRAL_REWARD_REFERRER]: {
         label: 'Referrer Reward',

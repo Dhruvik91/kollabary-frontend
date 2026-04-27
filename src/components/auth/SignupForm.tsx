@@ -12,6 +12,11 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Loader2, Building2, User, Gift } from 'lucide-react';
 import { useState } from 'react';
 import { UserRole } from '@/types/auth.types';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from '@/lib/utils';
 
 interface SignupFormProps {
@@ -147,21 +152,28 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                             aria-describedby={errors.password ? 'password-error password-strength' : 'password-strength'}
                             {...register('password')}
                         />
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowPassword(!showPassword)}
-                            disabled={isLoading}
-                            aria-label={showPassword ? "Hide password" : "Show password"}
-                        >
-                            {showPassword ? (
-                                <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            ) : (
-                                <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            )}
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    disabled={isLoading}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    ) : (
+                                        <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    )}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {showPassword ? "Hide Password" : "Show Password"}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                     {errors.password && (
                         <p id="password-error" className="text-sm text-destructive" role="alert">
@@ -204,21 +216,28 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                             aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
                             {...register('confirmPassword')}
                         />
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            disabled={isLoading}
-                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                        >
-                            {showConfirmPassword ? (
-                                <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            ) : (
-                                <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            )}
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    disabled={isLoading}
+                                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showConfirmPassword ? (
+                                        <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    ) : (
+                                        <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    )}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {showConfirmPassword ? "Hide Password" : "Show Password"}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                     {errors.confirmPassword && (
                         <p id="confirm-password-error" className="text-sm text-destructive" role="alert">

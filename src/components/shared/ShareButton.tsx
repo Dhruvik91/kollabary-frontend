@@ -7,6 +7,11 @@ import { toast } from 'sonner';
 import { FRONTEND_ROUTES } from '@/constants';
 import { cn } from '@/lib/utils';
 import { UserRole } from '@/types/auth.types';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ShareButtonProps {
     type: UserRole.INFLUENCER | UserRole.USER;
@@ -75,18 +80,25 @@ export const ShareButton = ({
     const isGlass = variant === 'glass';
 
     return (
-        <Button
-            variant={isGlass ? 'ghost' : variant}
-            size={size}
-            className={cn(
-                "rounded-xl transition-all active:scale-95",
-                isGlass && "bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white shadow-xl",
-                className
-            )}
-            onClick={handleClick}
-        >
-            {isCopied ? <Check size={18} className="text-emerald-500" /> : <Share2 size={18} />}
-            {showLabel && <span className="ml-2 font-bold uppercase tracking-widest text-[10px]">Share</span>}
-        </Button>
+        <Tooltip delayDuration={300}>
+            <TooltipTrigger asChild>
+                <Button
+                    variant={isGlass ? 'ghost' : variant}
+                    size={size}
+                    className={cn(
+                        "rounded-xl transition-all active:scale-95",
+                        isGlass && "bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white shadow-xl",
+                        className
+                    )}
+                    onClick={handleClick}
+                >
+                    {isCopied ? <Check size={18} className="text-emerald-500" /> : <Share2 size={18} />}
+                    {showLabel && <span className="ml-2 font-bold uppercase tracking-widest text-[10px]">Share</span>}
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+                {isCopied ? 'Link Copied!' : 'Share Profile'}
+            </TooltipContent>
+        </Tooltip>
     );
 };

@@ -11,6 +11,11 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface LoginFormProps {
     onSubmit: (data: LoginFormData) => void;
@@ -80,21 +85,28 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                             aria-describedby={errors.password ? 'password-error' : undefined}
                             {...register('password')}
                         />
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowPassword(!showPassword)}
-                            disabled={isLoading}
-                            aria-label={showPassword ? "Hide password" : "Show password"}
-                        >
-                            {showPassword ? (
-                                <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            ) : (
-                                <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                            )}
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    disabled={isLoading}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    ) : (
+                                        <Eye className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                                    )}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {showPassword ? "Hide Password" : "Show Password"}
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                     {errors.password && (
                         <p id="password-error" className="text-sm text-destructive" role="alert">

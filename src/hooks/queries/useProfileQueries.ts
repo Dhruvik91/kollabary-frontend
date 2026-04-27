@@ -38,6 +38,7 @@ export function useSaveProfile() {
         mutationFn: profileService.saveProfile,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: profileKeys.me() });
+            queryClient.invalidateQueries({ queryKey: ['influencer'] });
             toast.success('Profile saved successfully');
         },
         onError: (error: any) => {
@@ -58,6 +59,7 @@ export function useUpdateProfile() {
         mutationFn: profileService.updateProfile,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: profileKeys.me() });
+            queryClient.invalidateQueries({ queryKey: ['influencer'] });
             toast.success('Profile updated successfully');
         },
         onError: (error: any) => {
@@ -122,5 +124,74 @@ export function useInfiniteBrandSearch(params: { name?: string, location?: strin
         },
         initialPageParam: 1,
         staleTime: 2 * 60 * 1000,
+    });
+}
+
+/**
+ * Hook to update account status
+ */
+export function useUpdateStatus() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: profileService.updateStatus,
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({ queryKey: profileKeys.me() });
+            queryClient.invalidateQueries({ queryKey: profileKeys.all });
+            queryClient.invalidateQueries({ queryKey: ['influencer'] });
+            toast.success(data.message || 'Status updated');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to update status', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}
+
+/**
+ * Hook to delete account
+ */
+export function useDeleteAccount() {
+    return useMutation({
+        mutationFn: profileService.deleteAccount,
+        onSuccess: () => {
+            toast.success('Account deleted successfully');
+            window.location.href = '/'; // Simple redirect for now
+        },
+        onError: (error: any) => {
+            toast.error('Failed to delete account', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}
+
+/**
+ * Hook to submit verification request
+ */
+export function useSubmitVerification() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: profileService.submitVerification,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['verification', 'me'] });
+            toast.success('Verification request submitted successfully');
+        },
+        onError: (error: any) => {
+            toast.error('Failed to submit verification', {
+                description: error.response?.data?.message || 'Something went wrong',
+            });
+        },
+    });
+}
+
+/**
+ * Hook to fetch user's verification requests
+ */
+export function useMyVerificationRequests() {
+    return useQuery({
+        queryKey: ['verification', 'me'],
+        queryFn: profileService.getVerificationRequests,
+        staleTime: 10 * 60 * 1000,
     });
 }

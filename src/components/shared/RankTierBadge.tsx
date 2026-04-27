@@ -4,6 +4,11 @@ import React from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { BASE_IMAGE_URL } from '@/constants';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type RankTier =
     | 'Rising Creator'
@@ -72,7 +77,7 @@ export const RankTierBadge = ({
     const config = tierConfigs[tier] || tierConfigs['Rising Creator'];
     const dimensions = sizeMap[size];
 
-    return (
+    const content = (
         <div className={cn("inline-flex flex-col items-center shrink-0", className)}>
             <Image
                 src={config.image}
@@ -90,5 +95,19 @@ export const RankTierBadge = ({
                 </p>
             )}
         </div>
+    );
+
+    if (showDescription) return content;
+
+    return (
+        <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+                {content}
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-[200px] text-center p-3">
+                <p className="font-bold text-primary mb-1">{config.label}</p>
+                <p className="text-xs text-muted-foreground">{config.description}</p>
+            </TooltipContent>
+        </Tooltip>
     );
 };

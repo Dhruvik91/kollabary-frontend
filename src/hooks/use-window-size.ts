@@ -1,42 +1,32 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 
 /**
- * Custom hook that returns the current window dimensions.
- * Useful for components that need to respond to window resize events,
- * such as canvas-based effects like confetti.
+ * Hook that returns the current window size
+ * Handles SSR by returning 0 on server
  */
-export const useWindowSize = () => {
-  // Initialize state with undefined width/height so server and client renders match
-  // Lear more: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState<{
-    width: number | undefined;
-    height: number | undefined;
-  }>({
-    width: undefined,
-    height: undefined,
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
   });
 
   useEffect(() => {
-    // Handler to call on window resize
-    function handleResize() {
-      // Set window width/height to state
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+    // Only execute on client
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      };
+
+      // Set initial size
+      handleResize();
+
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
-
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-
-    // Call handler right away so state gets updated with initial window size
-    handleResize();
-
-    // Remove event listener on cleanup
-    return () => window.removeEventListener('resize', handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
+  }, []);
 
   return windowSize;
-};
+}

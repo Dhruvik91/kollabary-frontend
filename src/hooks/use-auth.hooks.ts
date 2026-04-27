@@ -97,7 +97,7 @@ export function useLogin() {
             });
 
             // Reload to trigger middleware redirection
-            window.location.href = '/';
+            window.location.href = data.isNewUser ? '/?showBonus=true' : '/';
         },
         onError: (error: Error, variables) => {
             const message = axios.isAxiosError(error)
@@ -247,7 +247,7 @@ export function useVerifyEmail() {
             });
 
             // Redirect to dashboard
-            router.push('/');
+            router.push(data.isNewUser ? '/?showBonus=true' : '/');
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

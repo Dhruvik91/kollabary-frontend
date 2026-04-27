@@ -6,6 +6,11 @@ import { LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MetricCardProps {
     label: string;
@@ -41,9 +46,16 @@ export const MetricCard = ({
                         <Icon size={24} className={color} />
                     </div>
                     {trend && (
-                        <div className={cn("flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold", trend.isPositive ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
-                            {trend.isPositive ? "+" : "-"}{trend.value}%
-                        </div>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <div className={cn("flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold cursor-help", trend.isPositive ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
+                                    {trend.isPositive ? "+" : "-"}{trend.value}%
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {trend.isPositive ? "Up" : "Down"} {trend.value}% compared to last month
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
                 <div className="space-y-1">

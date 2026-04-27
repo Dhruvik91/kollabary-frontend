@@ -4,6 +4,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AdminStatCardProps {
     title: string;
@@ -33,22 +38,36 @@ export function AdminStatCard({
                     <h3 className="mt-2 text-3xl font-bold tracking-tight">{value}</h3>
 
                     {trend && (
-                        <div className="mt-2 flex items-center gap-1">
-                            <span className={cn(
-                                "flex items-center text-xs font-semibold",
-                                trend === 'up' ? "text-emerald-500" : "text-rose-500"
-                            )}>
-                                {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                                {trendValue}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground">vs average</span>
-                        </div>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <div className="mt-2 flex items-center gap-1 cursor-help w-fit">
+                                    <span className={cn(
+                                        "flex items-center text-xs font-semibold",
+                                        trend === 'up' ? "text-emerald-500" : "text-rose-500"
+                                    )}>
+                                        {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                        {trendValue}
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground">vs average</span>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                {trend === 'up' ? 'Positive' : 'Negative'} growth compared to platform average
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
 
-                <div className={cn("rounded-xl p-3 text-white shadow-lg", colorClass)}>
-                    <Icon size={24} />
-                </div>
+                <Tooltip delayDuration={300}>
+                    <TooltipTrigger asChild>
+                        <div className={cn("rounded-xl p-3 text-white shadow-lg cursor-help", colorClass)}>
+                            <Icon size={24} />
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="left">
+                        {title} Category
+                    </TooltipContent>
+                </Tooltip>
             </div>
 
             {/* Background Accent */}

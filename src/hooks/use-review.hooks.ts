@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { reviewService } from '@/services/review.service';
 import { CreateReviewDto, UpdateReviewDto } from '@/types/review.types';
 import { toast } from 'sonner';
+import { influencerKeys } from './queries/useInfluencerQueries';
 
 export const useInfluencerReviews = (influencerId: string) => {
     return useQuery({
@@ -18,7 +19,7 @@ export const useCreateReview = () => {
         mutationFn: (data: CreateReviewDto) => reviewService.createReview(data),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['reviews', variables.influencerId] });
-            queryClient.invalidateQueries({ queryKey: ['influencer', variables.influencerId] });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.detail(variables.influencerId) });
             toast.success('Review submitted successfully!');
         },
         onError: (error: any) => {
@@ -35,7 +36,7 @@ export const useUpdateReview = (influencerId: string) => {
             reviewService.updateReview(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['reviews', influencerId] });
-            queryClient.invalidateQueries({ queryKey: ['influencer', influencerId] });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.detail(influencerId) });
             toast.success('Review updated successfully!');
         },
         onError: (error: any) => {
@@ -51,7 +52,7 @@ export const useDeleteReview = (influencerId: string) => {
         mutationFn: (id: string) => reviewService.deleteReview(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['reviews', influencerId] });
-            queryClient.invalidateQueries({ queryKey: ['influencer', influencerId] });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.detail(influencerId) });
             toast.success('Review deleted successfully!');
         },
         onError: (error: any) => {
