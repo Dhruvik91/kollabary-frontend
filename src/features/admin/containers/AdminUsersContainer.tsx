@@ -140,17 +140,24 @@ export const AdminUsersContainer = () => {
         {
             id: 'verified',
             header: 'Verified',
-            cell: ({ row }) => (
-                row.original.role === 'INFLUENCER' ? (
-                    row.original.influencerProfile?.verified ? (
-                        <ShieldCheck className="w-5 h-5 text-primary" />
-                    ) : (
-                        <ShieldAlert className="w-5 h-5 text-muted-foreground opacity-30" />
-                    )
+            cell: ({ row }) => {
+                const role = row.original.role;
+                const isInfluencer = role === 'INFLUENCER';
+                const isBrand = role === 'USER';
+                const isVerified = isInfluencer 
+                    ? row.original.influencerProfile?.verified 
+                    : row.original.profile?.verified;
+
+                if (!isInfluencer && !isBrand) {
+                    return <span className="text-xs text-muted-foreground italic">N/A</span>;
+                }
+
+                return isVerified ? (
+                    <ShieldCheck className="w-5 h-5 text-primary" />
                 ) : (
-                    <span className="text-xs text-muted-foreground italic">N/A</span>
-                )
-            ),
+                    <ShieldAlert className="w-5 h-5 text-muted-foreground opacity-30" />
+                );
+            },
         },
         {
             accessorKey: 'createdAt',
@@ -195,15 +202,22 @@ export const AdminUsersContainer = () => {
                                 </DropdownMenuItem>
                             )}
 
-                            {row.original.role === 'INFLUENCER' && (
+                            {(row.original.role === 'INFLUENCER' || row.original.role === 'USER') && (
                                 <>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => moderateUser({
-                                        userId: row.original.id,
-                                        verified: !row.original.influencerProfile?.verified
-                                    })}>
+                                    <DropdownMenuItem onClick={() => {
+                                        const isInfluencer = row.original.role === 'INFLUENCER';
+                                        const isVerified = isInfluencer 
+                                            ? row.original.influencerProfile?.verified 
+                                            : row.original.profile?.verified;
+                                        
+                                        moderateUser({
+                                            userId: row.original.id,
+                                            verified: !isVerified
+                                        });
+                                    }}>
                                         <ShieldCheck className="w-4 h-4 mr-2" />
-                                        {row.original.influencerProfile?.verified ? 'Remove Verification' : 'Verify Directly'}
+                                        {(row.original.role === 'INFLUENCER' ? row.original.influencerProfile?.verified : row.original.profile?.verified) ? 'Remove Verification' : 'Verify Directly'}
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -253,7 +267,7 @@ export const AdminUsersContainer = () => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="ALL">All Roles</SelectItem>
-                                <SelectItem value="USER">Regular Users</SelectItem>
+                                <SelectItem value="USER">Brands / Users</SelectItem>
                                 <SelectItem value="INFLUENCER">Influencers</SelectItem>
                                 <SelectItem value="ADMIN">Admins</SelectItem>
                             </SelectContent>

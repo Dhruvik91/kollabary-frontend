@@ -62,7 +62,7 @@ export function useModerateUser() {
     return useMutation({
         mutationFn: ({ userId, status, verified }: { userId: string; status?: string; verified?: boolean }) => {
             if (status) return adminService.updateUserStatus(userId, status);
-            if (verified !== undefined) return adminService.verifyInfluencer(userId, verified);
+            if (verified !== undefined) return adminService.verifyUser(userId, verified);
             return Promise.reject(new Error('No action provided'));
         },
         onSuccess: () => {
