@@ -31,6 +31,28 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+
+import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
+
+const SOCIAL_PLATFORMS = [
+    { label: 'Instagram', value: 'instagram' },
+    { label: 'YouTube', value: 'youtube' },
+    { label: 'Twitter', value: 'twitter' },
+    { label: 'LinkedIn', value: 'linkedin' },
+    { label: 'TikTok', value: 'tiktok' },
+    { label: 'Twitch', value: 'twitch' },
+    { label: 'Facebook', value: 'facebook' },
+    { label: 'Threads', value: 'threads' },
+    { label: 'Other', value: 'other' },
+];
+
 const profileSchema = z.object({
     username: z.string().min(3, 'Username must be at least 3 characters').max(30),
     fullName: z.string().min(2, 'Full name is required'),
@@ -197,7 +219,12 @@ export const ProfileSetupForm = ({
                                             Location
                                         </FormLabel>
                                         <FormControl>
-                                            <Input placeholder="City, Country" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
+                                            <LocationAutocomplete
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                disabled={isLoading}
+                                                placeholder="Search and select your location..."
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -263,9 +290,20 @@ export const ProfileSetupForm = ({
                                                     name={`socials.${index}.platform`}
                                                     render={({ field }) => (
                                                         <FormItem className="space-y-0">
-                                                            <FormControl>
-                                                                <Input placeholder="e.g. Threads" {...field} className="h-10 rounded-lg bg-background border-none shadow-sm" />
-                                                            </FormControl>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                <FormControl>
+                                                                    <SelectTrigger className="h-10 rounded-lg bg-background border-none shadow-sm w-full">
+                                                                        <SelectValue placeholder="Platform" />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {SOCIAL_PLATFORMS.map((platform) => (
+                                                                        <SelectItem key={platform.value} value={platform.value}>
+                                                                            {platform.label}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
                                                             <FormMessage className="text-[10px]" />
                                                         </FormItem>
                                                     )}

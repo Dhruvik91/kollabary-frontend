@@ -16,6 +16,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ChatWindowProps {
     conversation: Conversation;
@@ -65,14 +71,21 @@ export const ChatWindow = ({
             <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-border/30 glass-card bg-card/60 z-20 shrink-0">
                 <div className="flex items-center gap-4">
                     {onBack && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={onBack}
-                            className="lg:hidden rounded-xl hover:bg-muted/50"
-                        >
-                            <ArrowLeft size={20} />
-                        </Button>
+                        <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={onBack}
+                                    className="lg:hidden rounded-xl hover:bg-muted/50"
+                                >
+                                    <ArrowLeft size={20} />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                Back to Conversations
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                     <div className="relative">
                         <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
@@ -93,11 +106,18 @@ export const ChatWindow = ({
 
                 <div className="flex items-center gap-1">
                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">
-                                <MoreVertical size={18} />
-                            </Button>
-                        </DropdownMenuTrigger>
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9 cursor-help">
+                                    <MoreVertical size={18} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="font-bold">
+                            More Options
+                        </TooltipContent>
+                    </Tooltip>
                         <DropdownMenuContent align="end" className="rounded-2xl border-border/50 shadow-2xl min-w-[200px] p-2">
                             <DropdownMenuItem
                                 className="gap-3 rounded-xl p-3 text-destructive focus:text-destructive focus:bg-destructive/10"

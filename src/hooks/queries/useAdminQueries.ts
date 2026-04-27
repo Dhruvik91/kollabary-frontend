@@ -70,6 +70,8 @@ export const useAdminQueries = () => {
             adminService.processVerification(id, status),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin', 'verifications'] });
+            queryClient.invalidateQueries({ queryKey: ['admin', 'stats'] });
+            queryClient.invalidateQueries({ queryKey: ['influencer'] });
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to update verification status');

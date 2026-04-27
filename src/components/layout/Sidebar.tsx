@@ -46,6 +46,11 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NavItemProps {
     href: string;
@@ -57,39 +62,53 @@ interface NavItemProps {
 }
 
 const NavItem = ({ href, icon: Icon, label, isCollapsed, isActive, badge }: NavItemProps) => {
+    const content = (
+        <div className={cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative",
+            isActive
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 hover:text-foreground"
+        )}>
+            <Icon size={20} className={cn("flex-shrink-0", isActive ? "" : "group-hover:scale-110 transition-transform")} />
+
+            {!isCollapsed && (
+                <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-sm font-medium whitespace-nowrap"
+                >
+                    {label}
+                    {badge && (
+                        <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold bg-primary-foreground text-primary rounded-md">
+                            {badge}
+                        </span>
+                    )}
+                </motion.span>
+            )}
+
+            {isActive && (
+                <motion.div
+                    layoutId="active-pill"
+                    className="absolute -left-1 bg-primary-foreground rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+            )}
+        </div>
+    );
+
     return (
         <Link href={href} className="block group">
-            <div className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative",
-                isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 hover:text-foreground"
-            )}>
-                <Icon size={20} className={cn("flex-shrink-0", isActive ? "" : "group-hover:scale-110 transition-transform")} />
-
-                {!isCollapsed && (
-                    <motion.span
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="text-sm font-medium whitespace-nowrap"
-                    >
+            {isCollapsed ? (
+                <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                        {content}
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="font-semibold">
                         {label}
-                        {badge && (
-                            <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold bg-primary-foreground text-primary rounded-md">
-                                {badge}
-                            </span>
-                        )}
-                    </motion.span>
-                )}
-
-                {isActive && (
-                    <motion.div
-                        layoutId="active-pill"
-                        className="absolute -left-1 bg-primary-foreground rounded-full"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                )}
-            </div>
+                        {badge && <span className="ml-2 text-xs opacity-70">({badge})</span>}
+                    </TooltipContent>
+                </Tooltip>
+            ) : content}
         </Link>
     );
 };
@@ -192,7 +211,18 @@ export const Sidebar = ({
             {/* Sidebar Header */}
             <div className="h-28 flex items-center justify-center border-b border-border/50 shrink-0 px-3">
                 <Link href="/overview" className="active:scale-95 transition-transform">
-                    <Logo isCollapsed={isCollapsed} className={cn(isCollapsed ? "w-12" : "w-40")} />
+                    {isCollapsed ? (
+                        <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                                <div>
+                                    <Logo isCollapsed={isCollapsed} className="w-12" />
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">Kollabary Home</TooltipContent>
+                        </Tooltip>
+                    ) : (
+                        <Logo isCollapsed={isCollapsed} className="w-40" />
+                    )}
                 </Link>
             </div>
 
@@ -213,29 +243,56 @@ export const Sidebar = ({
                 {/* User Profile Popover */}
                 {user && (
                     <Popover>
-                        <PopoverTrigger asChild>
-                            <button className={cn(
-                                "w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group",
-                                isCollapsed ? "justify-center" : "px-3"
-                            )}>
-                                <div className="relative shrink-0">
-                                    <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
-                                        {user.profile?.avatarUrl ? (
-                                            <Image
-                                                src={user.profile.avatarUrl}
-                                                alt={user.email}
-                                                width={36}
-                                                height={36}
-                                                priority={true}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <User size={18} />
-                                        )}
+                        {isCollapsed ? (
+                            <Tooltip delayDuration={0}>
+                                <TooltipTrigger asChild>
+                                    <PopoverTrigger asChild>
+                                        <button className="w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center justify-center transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group">
+                                            <div className="relative shrink-0">
+                                                <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
+                                                    {user.profile?.avatarUrl ? (
+                                                        <Image
+                                                            src={user.profile.avatarUrl}
+                                                            alt={user.email}
+                                                            width={36}
+                                                            height={36}
+                                                            priority={true}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <User size={18} />
+                                                    )}
+                                                </div>
+                                                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
+                                            </div>
+                                        </button>
+                                    </PopoverTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" className="flex flex-col gap-1">
+                                    <span className="font-bold">{user.profile?.fullName || user.email.split('@')[0]}</span>
+                                    <span className="text-[10px] uppercase tracking-wider opacity-70">{user.role}</span>
+                                </TooltipContent>
+                            </Tooltip>
+                        ) : (
+                            <PopoverTrigger asChild>
+                                <button className="w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group px-3">
+                                    <div className="relative shrink-0">
+                                        <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
+                                            {user.profile?.avatarUrl ? (
+                                                <Image
+                                                    src={user.profile.avatarUrl}
+                                                    alt={user.email}
+                                                    width={36}
+                                                    height={36}
+                                                    priority={true}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <User size={18} />
+                                            )}
+                                        </div>
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
                                     </div>
-                                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full" />
-                                </div>
-                                {!isCollapsed && (
                                     <div className="flex flex-col min-w-0 text-left">
                                         <span className="text-sm font-bold leading-none truncate group-hover:text-primary transition-colors">
                                             {user.profile?.fullName || user.email.split('@')[0]}
@@ -244,9 +301,9 @@ export const Sidebar = ({
                                             {user.role}
                                         </span>
                                     </div>
-                                )}
-                            </button>
-                        </PopoverTrigger>
+                                </button>
+                            </PopoverTrigger>
+                        )}
                         <PopoverContent
                             side={isCollapsed ? "right" : "top"}
                             align={isCollapsed ? "center" : "end"}
@@ -329,14 +386,21 @@ export const Sidebar = ({
                 {sidebarContent}
 
                 {/* Desktop Toggle Button - Positioned outside but relative to aside */}
-                <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={onToggleCollapse}
-                    className="absolute -right-3 top-20 w-6 h-6 bg-card border border-border rounded-full hidden lg:flex items-center justify-center shadow-sm text-muted-foreground hover:text-primary transition-colors z-50 hover:scale-110 active:scale-95"
-                >
-                    {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-                </Button>
+                <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={onToggleCollapse}
+                            className="absolute -right-3 top-20 w-6 h-6 bg-card border border-border rounded-full hidden lg:flex items-center justify-center shadow-sm text-muted-foreground hover:text-primary transition-colors z-50 hover:scale-110 active:scale-95"
+                        >
+                            {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                        {isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    </TooltipContent>
+                </Tooltip>
             </aside>
         </>
     );

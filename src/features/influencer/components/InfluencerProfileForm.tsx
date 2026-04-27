@@ -48,6 +48,9 @@ import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types'
 import { cn } from '@/lib/utils';
 import { ImageUpload } from '@/components/shared/ImageUpload';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
+import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
+import { MultiSelect } from '@/components/ui/multi-select';
+import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
 
 const profileSchema = z.object({
     fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
@@ -136,7 +139,7 @@ interface InfluencerProfileFormProps {
 const steps = [
     { id: 'basics', title: 'The Basics', icon: Briefcase },
     { id: 'platforms', title: 'Your Reach', icon: Users },
-    { id: 'demographics', title: 'Demographics', icon: Sparkles },
+//  { id: 'demographics', title: 'Demographics', icon: Sparkles },
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
 ];
 
@@ -208,12 +211,10 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity']
+            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity', 'gender']
             : currentStep === 1
                 ? ['platforms']
-                : currentStep === 2
-                    ? ['gender', 'languages', 'minPrice', 'maxPrice']
-                    : ['collaborationTypes', 'availability'];
+                : ['collaborationTypes', 'availability'];
 
         const isValid = await form.trigger(fieldsToValidate as any);
         if (isValid) {
@@ -232,6 +233,7 @@ export const InfluencerProfileForm = ({
         // Convert comma-separated strings back to arrays for the parent onSubmit
         const formattedValues = {
             ...data,
+            username: data.username, // Explicitly include username
             categories: typeof data.categories === 'string' 
                 ? data.categories.split(',').map(s => s.trim()).filter(Boolean)
                 : data.categories,
@@ -381,10 +383,11 @@ export const InfluencerProfileForm = ({
                                                         Categories
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input 
-                                                            placeholder="e.g. Fitness, Tech, Beauty (comma separated)" 
-                                                            {...field}
-                                                            className="h-12 rounded-xl bg-background/50" 
+                                                        <MultiSelect
+                                                            options={[...INFLUENCER_CATEGORIES]}
+                                                            value={typeof field.value === 'string' ? field.value.split(',').map(s => s.trim()).filter(Boolean) : (Array.isArray(field.value) ? field.value : [])}
+                                                            onChange={(vals) => field.onChange(vals.join(', '))}
+                                                            placeholder="Select categories"
                                                         />
                                                     </FormControl>
                                                     <FormDescription>Help brands find you by listing relevant categories.</FormDescription>
@@ -461,8 +464,41 @@ export const InfluencerProfileForm = ({
                                                         Full Address
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="e.g. 123 Main St, San Francisco, CA" {...field} className="h-12 rounded-xl bg-background/50" />
+                                                        <LocationAutocomplete
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                            disabled={isLoading}
+                                                            placeholder="e.g. 123 Main St, San Francisco, CA"
+                                                        />
                                                     </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="gender"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="font-bold flex items-center gap-2">
+                                                        <Sparkles size={14} className="text-primary" />
+                                                        Gender
+                                                    </FormLabel>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger className="h-12 rounded-xl bg-background/50">
+                                                                <SelectValue placeholder="Select gender" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent className="rounded-2xl">
+                                                            <SelectItem value="male">Male</SelectItem>
+                                                            <SelectItem value="female">Female</SelectItem>
+                                                            <SelectItem value="non-binary">Non-binary</SelectItem>
+                                                            <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                                                            <SelectItem value="other">Other</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -623,187 +659,8 @@ export const InfluencerProfileForm = ({
                                     </div>
                                 )}
 
+
                                 {currentStep === 2 && (
-                                    <div className="space-y-6">
-                                        <div className="flex items-center gap-3 mb-6">
-                                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                                <Sparkles size={20} />
-                                            </div>
-                                            <div>
-                                                <h2 className="text-2xl font-black tracking-tight">Demographics & Pricing</h2>
-                                                <p className="text-sm text-muted-foreground">Help brands understand your audience and rates.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <FormField
-                                                control={form.control}
-                                                name="gender"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="font-bold">Your Gender</FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                            <FormControl>
-                                                                <SelectTrigger className="h-12 rounded-xl bg-background/50">
-                                                                    <SelectValue placeholder="Select gender" />
-                                                                </SelectTrigger>
-                                                            </FormControl>
-                                                            <SelectContent className="rounded-2xl">
-                                                                <SelectItem value="Male">Male</SelectItem>
-                                                                <SelectItem value="Female">Female</SelectItem>
-                                                                <SelectItem value="Non-binary">Non-binary</SelectItem>
-                                                                <SelectItem value="Other">Other</SelectItem>
-                                                                <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-
-                                            <FormField
-                                                control={form.control}
-                                                name="languages"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="font-bold">Languages</FormLabel>
-                                                        <FormControl>
-                                                            <Input 
-                                                                placeholder="e.g. English, Spanish (comma separated)" 
-                                                                {...field}
-                                                                className="h-12 rounded-xl bg-background/50" 
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-
-                                        <FormField
-                                            control={form.control}
-                                            name="audienceTopCountries"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="font-bold">Top Audience Countries</FormLabel>
-                                                    <FormControl>
-                                                        <Input 
-                                                            placeholder="e.g. USA, UK, India (comma separated)" 
-                                                            {...field}
-                                                            className="h-12 rounded-xl bg-background/50" 
-                                                        />
-                                                    </FormControl>
-                                                    <FormDescription>Where is most of your audience located?</FormDescription>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <div className="space-y-6 pt-6 border-t border-border/50">
-                                            <div>
-                                                <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Audience Gender Ratio (%)</h3>
-                                                <div className="grid grid-cols-3 gap-4">
-                                                    {(['male', 'female', 'other'] as const).map((gender) => (
-                                                        <FormField
-                                                            key={gender}
-                                                            control={form.control}
-                                                            name={`audienceGenderRatio.${gender}`}
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormLabel className="text-[10px] uppercase">{gender}</FormLabel>
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            type="number"
-                                                                            min={0}
-                                                                            max={100}
-                                                                            {...field}
-                                                                            onChange={e => field.onChange(parseInt(e.target.value) || 0)}
-                                                                            className="h-10 rounded-lg bg-background/50"
-                                                                        />
-                                                                    </FormControl>
-                                                                </FormItem>
-                                                            )}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Audience Age Brackets (%)</h3>
-                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                                    {(['13-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'] as const).map((age) => (
-                                                        <FormField
-                                                            key={age}
-                                                            control={form.control}
-                                                            name={`audienceAgeBrackets.${age}`}
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormLabel className="text-[10px] uppercase">{age}</FormLabel>
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            type="number"
-                                                                            min={0}
-                                                                            max={100}
-                                                                            {...field}
-                                                                            onChange={e => field.onChange(parseInt(e.target.value) || 0)}
-                                                                            className="h-10 rounded-lg bg-background/50"
-                                                                        />
-                                                                    </FormControl>
-                                                                </FormItem>
-                                                            )}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border/50">
-                                            <FormField
-                                                control={form.control}
-                                                name="minPrice"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
-                                                        <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
-                                                            />
-                                                        </FormControl>
-                                                        <FormDescription>Your starting rate for collaborations.</FormDescription>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-
-                                            <FormField
-                                                control={form.control}
-                                                name="maxPrice"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
-                                                        <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
-                                                            />
-                                                        </FormControl>
-                                                        <FormDescription>Optional: High-end rate or package price.</FormDescription>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-
-                                {currentStep === 3 && (
                                     <div className="space-y-6">
                                         <div className="flex items-center gap-3 mb-6">
                                             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
@@ -859,6 +716,50 @@ export const InfluencerProfileForm = ({
                                                     }}
                                                 />
                                             ))}
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-border/50">
+                                            <FormField
+                                                control={form.control}
+                                                name="minPrice"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
+                                                        <FormControl>
+                                                            <Input 
+                                                                type="number" 
+                                                                placeholder="0" 
+                                                                {...field} 
+                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                className="h-12 rounded-xl bg-background/50" 
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription>Your starting rate for collaborations.</FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="maxPrice"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
+                                                        <FormControl>
+                                                            <Input 
+                                                                type="number" 
+                                                                placeholder="0" 
+                                                                {...field} 
+                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                className="h-12 rounded-xl bg-background/50" 
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription>Optional: High-end rate.</FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
                                         </div>
 
                                         <FormField

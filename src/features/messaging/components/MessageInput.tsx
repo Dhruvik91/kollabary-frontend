@@ -3,6 +3,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Send, Paperclip, Smile, X, FileText, ImageIcon, Loader2 } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { useUploadFile } from '@/hooks/queries/useUploadQueries';
@@ -141,22 +147,29 @@ export const MessageInput = ({
             {/* Main input bar */}
             <div className="flex items-end gap-2 glass-card bg-card/80 rounded-2xl p-2 pl-3 border border-border/40 transition-colors focus-within:border-primary/50">
                 {/* Attach file button */}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn(
-                        "h-10 w-10 text-muted-foreground hover:text-primary rounded-xl shrink-0 transition-colors hover:bg-primary/10",
-                        isUploading && "text-primary animate-pulse"
-                    )}
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploading || disabled}
-                >
-                    {isUploading ? (
-                        <Loader2 size={18} className="animate-spin" />
-                    ) : (
-                        <Paperclip size={18} />
-                    )}
-                </Button>
+                <Tooltip delayDuration={300}>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={cn(
+                                "h-10 w-10 text-muted-foreground hover:text-primary rounded-xl shrink-0 transition-colors hover:bg-primary/10",
+                                isUploading && "text-primary animate-pulse"
+                            )}
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isUploading || disabled}
+                        >
+                            {isUploading ? (
+                                <Loader2 size={18} className="animate-spin" />
+                            ) : (
+                                <Paperclip size={18} />
+                            )}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="font-bold">
+                        Attach File (Max 5MB)
+                    </TooltipContent>
+                </Tooltip>
 
                 {/* Text input */}
                 <Textarea
@@ -172,13 +185,21 @@ export const MessageInput = ({
 
                 {/* Action buttons */}
                 <div className="flex items-center gap-1 shrink-0 pb-0.5">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 text-muted-foreground hover:text-amber-500 rounded-xl transition-colors hover:bg-amber-500/10"
-                    >
-                        <Smile size={18} />
-                    </Button>
+
+                    <Tooltip delayDuration={300}>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-10 w-10 text-muted-foreground hover:text-amber-500 rounded-xl transition-colors hover:bg-amber-500/10"
+                            >
+                                <Smile size={18} />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="font-bold">
+                            Insert Emoji
+                        </TooltipContent>
+                    </Tooltip>
 
                     <Button
                         onClick={handleSend}

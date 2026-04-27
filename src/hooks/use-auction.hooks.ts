@@ -257,6 +257,7 @@ export const useUpdateAuction = (id: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
       toast.success('Auction updated successfully!');
     },
     onError: (error: any) => {
@@ -304,6 +305,7 @@ export const useAcceptBid = (auctionId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myAuctions() });
       toast.success('Bid accepted successfully!');
     },
     onError: (error: any) => {
@@ -318,6 +320,8 @@ export const useRejectBid = (auctionId: string) => {
     mutationFn: (bidId: string) => auctionService.rejectBid(bidId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(auctionId) });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.myBids() });
+      queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
       toast.success('Bid rejected successfully');
     },
     onError: (error: any) => {

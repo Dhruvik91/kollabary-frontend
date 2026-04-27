@@ -42,7 +42,14 @@ export const PublicProfileHero = ({
                     className="w-40 h-40 md:w-56 md:h-56 rounded-[3rem] bg-zinc-100 glass-chip border-4 md:border-[12px] border-background shadow-2xl overflow-hidden flex items-center justify-center relative group shrink-0"
                 >
                     {avatarUrl ? (
-                        <Image src={avatarUrl} alt={fullName} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <Image 
+                            src={avatarUrl} 
+                            alt={fullName} 
+                            fill 
+                            priority
+                            sizes="(max-width: 768px) 160px, 224px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                        />
                     ) : (
                         <div className="text-5xl md:text-7xl font-black text-primary/30">
                             {fullName.charAt(0)}

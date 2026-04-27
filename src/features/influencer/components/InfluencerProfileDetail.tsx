@@ -13,7 +13,6 @@ import {
     Youtube,
     Twitter,
     Globe,
-    ExternalLink,
     Briefcase,
     Calendar,
     MessageCircle,
@@ -22,22 +21,13 @@ import {
     Settings,
     Award,
     LayoutGrid,
-    TrendingUp,
-    PieChart as PieChartIcon,
-    BarChart3,
+    SparklesIcon,
 } from 'lucide-react';
 import {
-    ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
     Tooltip,
-    CartesianGrid
-} from 'recharts';
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfluencerProfile, AvailabilityStatus } from '@/types/influencer.types';
@@ -109,7 +99,6 @@ export const InfluencerProfileDetail = ({
         languages,
         minPrice,
         maxPrice,
-        audienceTopCountries,
         gender
     } = influencer;
 
@@ -240,23 +229,37 @@ export const InfluencerProfileDetail = ({
                                     <div className="flex-1 min-w-0 space-y-3 sm:space-y-4">
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-3">
-                                                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter truncate min-w-0 bg-linear-to-b from-foreground to-foreground/70 bg-clip-text leading-[1.1]">
+                                                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black tracking-tighter min-w-0 bg-linear-to-b from-foreground to-foreground/70 bg-clip-text leading-[1.1]">
                                                     {profile?.fullName || fullName || 'Creator'}
                                                 </h1>
                                             </div>
 
                                             <div className="flex flex-wrap items-center gap-2">
                                                 {verified && (
-                                                    <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border border-blue-500/20">
-                                                        <CheckCircle2 size={14} />
-                                                        Verified Creator
-                                                    </div>
+                                                    <Tooltip delayDuration={300}>
+                                                        <TooltipTrigger asChild>
+                                                            <div className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest border border-blue-500/20 cursor-help">
+                                                                <CheckCircle2 size={14} />
+                                                                Verified Creator
+                                                            </div>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="top" className="font-bold">
+                                                            Verified Account
+                                                        </TooltipContent>
+                                                    </Tooltip>
                                                 )}
 
-                                                <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-full border border-border/50">
-                                                    <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
-                                                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
-                                                </div>
+                                                <Tooltip delayDuration={500}>
+                                                    <TooltipTrigger asChild>
+                                                        <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded-full border border-border/50 cursor-help">
+                                                            <span className={cn("w-2 h-2 rounded-full", getAvailabilityColor(availability))} />
+                                                            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">{availability}</span>
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="top" className="font-bold text-[10px] uppercase tracking-wider">
+                                                        Availability: {availability}
+                                                    </TooltipContent>
+                                                </Tooltip>
 
 
                                             </div>
@@ -306,14 +309,20 @@ export const InfluencerProfileDetail = ({
                                             </>
                                         ) : (
                                             <>
-                                                <Button
-                                                    variant="outline"
-                                                    onClick={() => setIsReportModalOpen(true)}
-                                                    className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/20 rounded-2xl border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all flex items-center justify-center"
-                                                    title="Report Influencer"
-                                                >
-                                                    <Flag size={18} />
-                                                </Button>
+                                                <Tooltip delayDuration={300}>
+                                                    <TooltipTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            onClick={() => setIsReportModalOpen(true)}
+                                                            className="h-12 sm:h-14 w-12 sm:w-14 bg-muted/20 rounded-2xl border-border/50 hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all flex items-center justify-center p-0"
+                                                        >
+                                                            <Flag size={18} />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side="top" className="font-bold">
+                                                        Report Profile
+                                                    </TooltipContent>
+                                                </Tooltip>
                                                 <ShareButton
                                                     type={UserRole.INFLUENCER}
                                                     id={influencer.id}
@@ -457,23 +466,29 @@ export const InfluencerProfileDetail = ({
                                             </div>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                                                 {Object.entries(platforms || {}).map(([name, data]: [string, any]) => (
-                                                    <a
-                                                        key={name}
-                                                        href={data.handle}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-3 p-3 bg-muted/30 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
-                                                    >
-                                                        <div className="w-8 h-8 bg-zinc-100 glass-chip rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
-                                                            {getPlatformIcon(name)}
-                                                        </div>
-                                                        <div className="min-w-0">
-                                                            <p className="text-xs font-bold capitalize truncate">{name}</p>
-                                                            <p className="text-[10px] font-black text-primary truncate leading-none">
-                                                                {Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}
-                                                            </p>
-                                                        </div>
-                                                    </a>
+                                                    <Tooltip key={name} delayDuration={300}>
+                                                        <TooltipTrigger asChild>
+                                                            <a
+                                                                href={data.handle}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-3 p-3 bg-muted/30 glass-section border border-border/50 rounded-2xl hover:border-primary/50 transition-colors group"
+                                                            >
+                                                                <div className="w-8 h-8 bg-zinc-100 glass-chip rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+                                                                    {getPlatformIcon(name)}
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <p className="text-xs font-bold capitalize truncate">{name}</p>
+                                                                    <p className="text-[10px] font-black text-primary truncate leading-none">
+                                                                        {Intl.NumberFormat('en', { notation: 'compact' }).format(data.followers)}
+                                                                    </p>
+                                                                </div>
+                                                            </a>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="top">
+                                                            View Profile on {name}
+                                                        </TooltipContent>
+                                                    </Tooltip>
                                                 ))}
                                             </div>
                                         </div>
@@ -513,173 +528,56 @@ export const InfluencerProfileDetail = ({
                                         </div>
                                     </div>
 
-                                    {/* Audience Insights Section */}
+                                    {/* Profile Details Section */}
                                     <div className="pt-10 space-y-8 border-t border-border/50">
                                         <div className="flex items-center justify-between">
                                             <h3 className="text-2xl font-black tracking-tight flex items-center gap-3">
                                                 <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
-                                                    <TrendingUp size={22} />
+                                                    <Briefcase size={22} />
                                                 </div>
-                                                Audience Insights
+                                                Profile Details
                                             </h3>
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                            {/* Audience Demographics & Languages */}
+                                            {/* Left Column: Languages & Future expansion */}
                                             <div className="space-y-8">
-                                                {/* Gender Ratio */}
-                                                {(influencer.audienceGenderRatio) && (
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
-                                                            <PieChartIcon size={16} />
-                                                            <span>Audience Gender</span>
+                                                <div className="space-y-3">
+                                                    <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                        <MessageCircle size={16} />
+                                                        <span>Languages</span>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {(languages || []).map(lang => (
+                                                            <Badge key={lang} variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold">
+                                                                {lang}
+                                                            </Badge>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                {gender && (
+                                                    <div className="space-y-3 pt-2">
+                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                                                            <SparklesIcon size={16} />
+                                                            <span>Gender</span>
                                                         </div>
-                                                        <div className="h-[180px] w-full relative">
-                                                            {isMounted ? (() => {
-                                                                const gender = influencer.audienceGenderRatio || {};
-                                                                const genderData = [
-                                                                    { name: 'Male', value: gender.male || 0 },
-                                                                    { name: 'Female', value: gender.female || 0 },
-                                                                    { name: 'Other', value: gender.other || 0 }
-                                                                ].filter(d => d.value > 0);
-
-                                                                const COLORS = ['#3b82f6', '#ec4899', '#818cf8'];
-
-                                                                if (genderData.length === 0) return (
-                                                                    <div className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground italic bg-muted/20 rounded-2xl border border-dashed border-border/50">
-                                                                        No data available
-                                                                    </div>
-                                                                );
-
-                                                                return (
-                                                                    <ResponsiveContainer width="100%" height="100%" aspect={3}>
-                                                                        <PieChart>
-                                                                            <Pie
-                                                                                data={genderData}
-                                                                                cx="50%"
-                                                                                cy="50%"
-                                                                                innerRadius={60}
-                                                                                outerRadius={80}
-                                                                                paddingAngle={5}
-                                                                                dataKey="value"
-                                                                            >
-                                                                                {genderData.map((entry, index) => (
-                                                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
-                                                                                ))}
-                                                                            </Pie>
-                                                                            <Tooltip
-                                                                                contentStyle={{
-                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
-                                                                                    backdropFilter: 'blur(12px)',
-                                                                                    borderRadius: '1.25rem',
-                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                                                                                    padding: '12px 16px'
-                                                                                }}
-                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
-                                                                                labelStyle={{ display: 'none' }}
-                                                                            />
-                                                                        </PieChart>
-                                                                    </ResponsiveContainer>
-                                                                );
-                                                            })() : (
-                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
-                                                            )}
-
-                                                            <div className="flex justify-center gap-4 mt-2">
-                                                                {['Male', 'Female', 'Other'].map((label, idx) => (
-                                                                    <div key={label} className="flex items-center gap-1.5">
-                                                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ['#3b82f6', '#ec4899', '#818cf8'][idx] }} />
-                                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase">{label}</span>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
+                                                        <Badge variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold capitalize">
+                                                            {gender.replace(/-/g, ' ')}
+                                                        </Badge>
                                                     </div>
                                                 )}
-
-                                                {/* Age Brackets */}
-                                                {(influencer.audienceAgeBrackets) && (
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-center gap-2 text-primary/70 font-bold text-xs uppercase tracking-widest">
-                                                            <BarChart3 size={16} />
-                                                            <span>Age Distribution</span>
-                                                        </div>
-                                                        <div className="h-[180px] w-full">
-                                                            {isMounted ? (() => {
-                                                                const brackets = influencer.audienceAgeBrackets || {};
-                                                                const labels = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
-                                                                const ageData = labels.map(label => ({
-                                                                    name: label,
-                                                                    value: brackets[label] || 0
-                                                                }));
-
-                                                                return (
-                                                                    <ResponsiveContainer width="100%" height="100%" aspect={2}>
-                                                                        <BarChart data={ageData}>
-                                                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
-                                                                            <XAxis
-                                                                                dataKey="name"
-                                                                                axisLine={false}
-                                                                                tickLine={false}
-                                                                                tick={{ fontSize: 9, fontWeight: 700, fill: 'currentColor', opacity: 0.5 }}
-                                                                            />
-                                                                            <Tooltip
-                                                                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                                                                                contentStyle={{
-                                                                                    backgroundColor: 'rgba(23, 23, 23, 0.9)',
-                                                                                    backdropFilter: 'blur(12px)',
-                                                                                    borderRadius: '1.25rem',
-                                                                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                                                                                    padding: '12px 16px'
-                                                                                }}
-                                                                                itemStyle={{ color: 'white', fontWeight: 'bold', fontSize: '12px' }}
-                                                                                labelStyle={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 'bold', marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}
-                                                                            />
-                                                                            <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={20} />
-                                                                        </BarChart>
-                                                                    </ResponsiveContainer>
-                                                                );
-                                                            })() : (
-                                                                <div className="h-full w-full bg-muted/20 rounded-2xl animate-pulse" />
-                                                            )}
-                                                        </div>
+                                                
+                                                {/* Hidden Audience Data */}
+                                                {false && (
+                                                    <div className="opacity-0 h-0 overflow-hidden">
+                                                        {/* Gender Split, Age, etc would be here */}
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {/* Top Countries & Pricing */}
+                                            {/* Right Column: Pricing */}
                                             <div className="space-y-8">
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                    <div className="space-y-3">
-                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                                            <Globe size={16} />
-                                                            <span>Top Regions</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {(audienceTopCountries || []).map(country => (
-                                                                <Badge key={country} className="bg-primary/5 hover:bg-primary/10 text-primary border-primary/10 rounded-lg px-2.5 py-1 text-[10px] font-bold">
-                                                                    {country}
-                                                                </Badge>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                                                            <MessageCircle size={16} />
-                                                            <span>Languages</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {(languages || []).map(lang => (
-                                                                <Badge key={lang} variant="secondary" className="bg-muted/50 hover:bg-muted/80 text-foreground border-border/30 rounded-lg px-2.5 py-1 text-[10px] font-bold">
-                                                                    {lang}
-                                                                </Badge>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div className="p-6 sm:p-8 rounded-[2rem] bg-linear-to-br from-primary/10 via-background to-background border border-primary/20 shadow-2xl shadow-primary/5 group/price relative overflow-hidden">
                                                     <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-50" />
                                                     <div className="relative z-10">
@@ -700,15 +598,6 @@ export const InfluencerProfileDetail = ({
                                                                     <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
                                                                 </div>
                                                             </div>
-                                                            {(maxPrice || 0) > (minPrice || 0) && (
-                                                                <>
-                                                                    <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent" />
-                                                                    <div className="flex justify-between items-end">
-                                                                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Project Max</span>
-                                                                        <span className="text-xl font-bold text-foreground/80">${maxPrice}</span>
-                                                                    </div>
-                                                                </>
-                                                            )}
                                                             <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
                                                                 * Final pricing varies based on usage rights, content complexity, and timeline.
                                                             </p>

@@ -76,6 +76,7 @@ export const MyInfluencersList = ({
                                                     src={displayAvatar}
                                                     alt={influencer.fullName || profile?.fullName || 'Influencer'}
                                                     fill
+                                                    sizes="80px"
                                                     className="object-cover"
                                                 />
                                             ) : (

@@ -35,7 +35,6 @@ export function ThemeToggle() {
             size="icon"
             onClick={toggleTheme}
             className="w-9 h-9 rounded-xl hover:bg-accent/50 transition-colors relative overflow-hidden"
-            title={`Current theme: ${theme}. Click to cycle.`}
         >
             <AnimatePresence mode="wait" initial={false}>
                 {theme === 'light' && (

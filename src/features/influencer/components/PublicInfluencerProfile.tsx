@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Briefcase, Quote } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankingBreakdown } from '@/types/ranking';
 import { Review } from '@/types/review.types';
@@ -42,7 +40,7 @@ export const PublicInfluencerProfile = ({
     const totalReach = influencer.totalFollowers || 0;
 
     return (
-        <div className="space-y-8 pb-20">
+        <div className="space-y-12 pb-20">
             {/* Modular Hero Section */}
             <PublicInfluencerHero
                 influencerId={influencer.id}
@@ -66,41 +64,9 @@ export const PublicInfluencerProfile = ({
             />
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Column Part 1: Bio (Always first in content) */}
-                <div className="lg:col-span-2 order-1">
-                    <Card className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card p-8 md:p-10">
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4 text-primary">
-                                <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
-                                    <Briefcase size={22} />
-                                </div>
-                                <h3 className="text-2xl font-black tracking-tight">Biography</h3>
-                            </div>
-                            <div className="relative">
-                                <Quote className="absolute -top-4 -left-6 h-12 w-12 text-primary/5 -z-10" />
-                                <p className="text-lg md:text-xl text-muted-foreground/90 leading-relaxed font-medium italic">
-                                    {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They're likely focused on creating their next masterpiece!"}
-                                </p>
-                            </div>
-                        </div>
-                    </Card>
-                </div>
-
-                {/* Right Column: Sidebar (Rankings/Status) - 2nd on mobile, 3rd on desktop */}
-                <div className="lg:col-span-1 order-2 lg:order-3 lg:row-span-2">
-                    <PublicInfluencerSidebar
-                        influencer={influencer}
-                        ranking={ranking}
-                        minPrice={minPrice ?? 0}
-                        maxPrice={maxPrice ?? 0}
-                        collaborationTypes={collaborationTypes}
-                        availability={availability}
-                    />
-                </div>
-
-                {/* Left Column Part 2: Tabs - 3rd on mobile, 2nd on desktop */}
-                <div className="lg:col-span-2 order-3 lg:order-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                {/* Left Column: Tabs Content (Now includes Biography) */}
+                <div className="lg:col-span-2 space-y-12">
                     <PublicInfluencerTabs
                         influencerId={influencer.id}
                         platforms={platforms}
@@ -111,7 +77,22 @@ export const PublicInfluencerProfile = ({
                         genderRatio={influencer.audienceGenderRatio}
                         ageBrackets={influencer.audienceAgeBrackets}
                         topCountries={influencer.audienceTopCountries}
+                        collaborationTypes={collaborationTypes}
                     />
+                </div>
+
+                {/* Right Column: Sidebar (Offerings/Pricing/Rankings) */}
+                <div className="lg:col-span-1 space-y-8">
+                    <div className="sticky top-24">
+                        <PublicInfluencerSidebar
+                            influencer={influencer}
+                            ranking={ranking}
+                            minPrice={minPrice ?? 0}
+                            maxPrice={maxPrice ?? 0}
+                            collaborationTypes={collaborationTypes}
+                            availability={availability}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

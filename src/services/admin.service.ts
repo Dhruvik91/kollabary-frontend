@@ -180,10 +180,18 @@ export const adminService = {
     },
 
     /**
-     * Directly verify influencer
+     * Directly verify user (Influencer or Brand/User)
      */
-    verifyInfluencer: async (userId: string, verified: boolean): Promise<any> => {
+    verifyUser: async (userId: string, verified: boolean): Promise<any> => {
         const response = await httpService.patch(API_CONFIG.path.admin.userVerify(userId), { verified });
+        return response.data;
+    },
+    
+    /**
+     * Add coins to user wallet
+     */
+    addCoinsToUser: async (userId: string, amount: number): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.admin.userAddCoins(userId), { amount });
         return response.data;
     },
 

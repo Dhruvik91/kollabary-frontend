@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Instagram, Twitter, Linkedin, Youtube, ExternalLink, CheckCircle2, ArrowRight, MessageSquareOff, Loader2 } from 'lucide-react';
+import { Globe, Instagram, Twitter, Linkedin, Youtube, ExternalLink, CheckCircle2, ArrowRight, MessageSquareOff, Loader2, Zap } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReviewCard } from '@/features/review/components/ReviewCard';
 import { AudienceInsights } from './AudienceInsights';
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
+import { Badge } from '@/components/ui/badge';
 import {
     Carousel,
     CarouselContent,
@@ -30,6 +32,7 @@ interface PublicInfluencerTabsProps {
     genderRatio?: Record<string, number>;
     ageBrackets?: Record<string, number>;
     topCountries?: string[];
+    collaborationTypes?: string[];
 }
 
 export const PublicInfluencerTabs = ({
@@ -42,6 +45,7 @@ export const PublicInfluencerTabs = ({
     genderRatio,
     ageBrackets,
     topCountries,
+    collaborationTypes = [],
 }: PublicInfluencerTabsProps) => {
     const [portfolioApi, setPortfolioApi] = useState<CarouselApi>();
     const [reviewsApi, setReviewsApi] = useState<CarouselApi>();
@@ -103,59 +107,110 @@ export const PublicInfluencerTabs = ({
             </TabsList>
 
             <TabsContent value="about" className="space-y-12 animate-in fade-in duration-700 slide-in-from-bottom-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {Object.entries(platforms).map(([name, data]) => {
-                        const Icon = platformIcons[name.toLowerCase()] || Globe;
-                        return (
-                            <Card key={name} className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card overflow-hidden group hover:scale-[1.02] transition-all duration-500">
-                                <CardContent className="p-8 space-y-8">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-foreground/5 rounded-2xl flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                                                <Icon size={24} />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-black text-lg capitalize">{name}</h4>
-                                                <p className="text-xs text-muted-foreground font-medium">@{data.handle}</p>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-2xl font-black tracking-tight">{formatNumber(data.followers)}</p>
-                                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Followers</p>
-                                        </div>
-                                    </div>
+                {/* Biography Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="md:col-span-2 space-y-6">
+                        <div className="flex items-center gap-3 text-primary">
+                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                <Globe size={20} />
+                            </div>
+                            <h3 className="text-xl font-black tracking-tight">Biography</h3>
+                        </div>
+                        <p className="text-lg text-muted-foreground/90 leading-relaxed font-medium italic">
+                            {bio || "This creator hasn't added a bio yet, but their work speaks for itself. They're likely focused on creating their next masterpiece!"}
+                        </p>
+                    </div>
 
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between text-xs font-black uppercase tracking-widest text-muted-foreground/60">
-                                            <span>Engagement</span>
-                                            <span className="text-primary">{data.engagementRate || 0}%</span>
-                                        </div>
-                                        <div className="w-full bg-primary/10 rounded-full h-3 overflow-hidden border border-primary/5">
-                                            <motion.div
-                                                className="h-full bg-linear-to-r from-primary to-primary/60 rounded-full"
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${data.engagementRate || 0}%` }}
-                                                transition={{ duration: 1.5, ease: "circOut" }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <Button variant="ghost" className="w-full rounded-2xl h-12 gap-2 font-black text-[11px] uppercase tracking-widest bg-muted/20 hover:bg-primary hover:text-white transition-all group" asChild>
-                                        <a href={`https://${name}.com/${data.handle}`} target="_blank" rel="noopener noreferrer">
-                                            Explore Profile <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
-                                        </a>
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        );
-                    })}
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 text-primary">
+                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                <ArrowRight size={20} />
+                            </div>
+                            <h3 className="text-xl font-black tracking-tight">Quick Facts</h3>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="p-4 bg-muted/20 rounded-2xl border border-border/50">
+                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Collaboration Types</p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {collaborationTypes.length > 0 ? (
+                                        collaborationTypes.map((type) => (
+                                            <Badge
+                                                key={type}
+                                                variant="outline"
+                                                className="bg-primary/5 border border-primary/10 text-primary rounded-lg text-[10px] font-bold shadow-none uppercase px-2 py-0.5"
+                                            >
+                                                {formatCollaborationType(type)}
+                                            </Badge>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm font-bold text-muted-foreground italic">Contact for details</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="p-4 bg-muted/20 rounded-2xl border border-border/50">
+                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Response Time</p>
+                                <p className="text-sm font-bold">Usually within 24 hours</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <AudienceInsights
-                    genderRatio={genderRatio}
-                    ageBrackets={ageBrackets}
-                    topCountries={topCountries}
-                />
+                {/* Platform Statistics */}
+                <div className="space-y-8">
+                    <div className="flex items-center gap-3 text-primary">
+                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                            <Zap size={20} />
+                        </div>
+                        <h3 className="text-xl font-black tracking-tight uppercase">Presence Across Platforms</h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {Object.entries(platforms).map(([name, data]) => {
+                            const Icon = platformIcons[name.toLowerCase()] || Globe;
+                            return (
+                                <Card key={name} className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card overflow-hidden group hover:scale-[1.02] transition-all duration-500">
+                                    <CardContent className="p-8 space-y-8">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-foreground/5 rounded-2xl flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                                                    <Icon size={24} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-black text-lg capitalize">{name}</h4>
+                                                    <p className="text-xs text-muted-foreground font-medium">@{data.handle}</p>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-2xl font-black tracking-tight">{formatNumber(data.followers)}</p>
+                                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Followers</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <div className="flex justify-between text-xs font-black uppercase tracking-widest text-muted-foreground/60">
+                                                <span>Engagement</span>
+                                                <span className="text-primary">{data.engagementRate || 0}%</span>
+                                            </div>
+                                            <div className="w-full bg-primary/10 rounded-full h-3 overflow-hidden border border-primary/5">
+                                                <motion.div
+                                                    className="h-full bg-linear-to-r from-primary to-primary/60 rounded-full"
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: `${data.engagementRate || 0}%` }}
+                                                    transition={{ duration: 1.5, ease: "circOut" }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <Button variant="ghost" className="w-full rounded-2xl h-12 gap-2 font-black text-[11px] uppercase tracking-widest bg-muted/20 hover:bg-primary hover:text-white transition-all group" asChild>
+                                            <a href={`https://${name}.com/${data.handle}`} target="_blank" rel="noopener noreferrer">
+                                                Explore Profile <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
+                                            </a>
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            );
+                        })}
+                    </div>
+                </div>
             </TabsContent>
 
             <TabsContent value="collaborations" className="space-y-16 animate-in fade-in duration-700 slide-in-from-bottom-4">
@@ -193,7 +248,13 @@ export const PublicInfluencerTabs = ({
                                                 <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
                                                     <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 overflow-hidden relative border-border/50 group-hover/card:border-primary/50 transition-all">
                                                         {brand.avatarUrl ? (
-                                                            <Image src={brand.avatarUrl} alt="" fill className="object-cover" />
+                                                            <Image 
+                                                                src={brand.avatarUrl} 
+                                                                alt={brand.fullName || 'Brand'} 
+                                                                fill 
+                                                                className="object-cover"
+                                                                sizes="56px"
+                                                            />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center text-primary/30 text-xl font-black uppercase">
                                                                 {brand.fullName?.charAt(0) || 'B'}

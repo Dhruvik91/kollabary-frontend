@@ -9,8 +9,11 @@ import { useCreateAuction } from '@/hooks/use-auction.hooks';
 import { CreateAuctionDto } from '@/types/auction.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { useActionConsent } from '@/hooks/use-action-consent';
+import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { useState } from 'react';
 
 export const AuctionCreateContainer = () => {
+    const [showConfetti, setShowConfetti] = useState(false);
     const router = useRouter();
     const { mutateAsync: createAuction, isPending } = useCreateAuction();
     const { executeWithConsent, ConsentModalElement } = useActionConsent({
@@ -22,8 +25,12 @@ export const AuctionCreateContainer = () => {
         executeWithConsent(async () => {
             try {
                 await createAuction(data);
-                router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
-                router.refresh();
+                setShowConfetti(true);
+                // Delay redirect to show confetti
+                setTimeout(() => {
+                    router.push(FRONTEND_ROUTES.DASHBOARD.AUCTIONS);
+                    router.refresh();
+                }, 3000);
             } catch (error) {
                 // Error is handled in the hook's toast
             }
@@ -33,6 +40,13 @@ export const AuctionCreateContainer = () => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
+            {showConfetti && (
+                <ConfettiEffect 
+                    recycle={false} 
+                    numberOfPieces={500} 
+                    onConfettiComplete={() => setShowConfetti(false)} 
+                />
+            )}
             <div className="flex items-center justify-between">
                 <BackButton label="Back to Auctions" className="p-0" />
             </div>

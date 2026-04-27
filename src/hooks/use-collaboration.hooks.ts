@@ -72,6 +72,8 @@ export const useUpdateCollaborationStatus = (id: string) => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['collaborations'] });
             queryClient.invalidateQueries({ queryKey: ['collaborations', id] });
+            queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+            queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
             toast.success(`Collaboration ${data.status.toLowerCase()} successfully`);
         },
         onError: (error: any) => {
@@ -109,6 +111,9 @@ export const useDeleteCollaboration = () => {
         mutationFn: (id: string) => collaborationService.deleteCollaboration(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['collaborations'] });
+            queryClient.invalidateQueries({ queryKey: ['my-influencers'] });
+            queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+            queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
             toast.success('Collaboration deleted successfully');
         },
         onError: (error: any) => {

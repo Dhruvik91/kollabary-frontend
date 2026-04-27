@@ -108,7 +108,11 @@ export const InfluencerDiscoverContainer = () => {
                                     <span className="xs:hidden">Filters</span>
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="bottom" className="h-[85vh] rounded-t-[3.5rem] p-0 border-t border-border/50 bg-background/80 backdrop-blur-2xl">
+                            <SheetContent 
+                                side="bottom" 
+                                className="h-[85vh] rounded-t-[3.5rem] p-0 border-t border-border/50 bg-background/80 backdrop-blur-2xl"
+                                onOpenAutoFocus={(e) => e.preventDefault()}
+                            >
                                 <SheetHeader className="px-8 pt-8 pb-4 border-b border-border/50">
                                     <div className="flex items-center justify-between">
                                         <SheetTitle className="text-3xl font-black tracking-tight">Refine</SheetTitle>

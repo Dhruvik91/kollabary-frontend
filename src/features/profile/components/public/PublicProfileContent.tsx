@@ -91,7 +91,13 @@ export const PublicProfileContent = ({
                                             <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
                                                 <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 overflow-hidden relative border-2 border-border/50 group-hover/card:border-primary/50 transition-all">
                                                     {creator.avatarUrl ? (
-                                                        <Image src={creator.avatarUrl} alt="" fill className="object-cover" />
+                                                        <Image 
+                                                            src={creator.avatarUrl} 
+                                                            alt={creator.fullName || 'Creator'} 
+                                                            fill 
+                                                            className="object-cover"
+                                                            sizes="56px"
+                                                        />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-primary/30 text-xl font-black uppercase">
                                                             {creator.fullName?.charAt(0)}

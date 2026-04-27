@@ -7,6 +7,7 @@ import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google';
 
@@ -108,13 +109,14 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased selection:bg-primary/10 selection:text-primary`}
       >
         <QueryProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AuthProvider>
               <SocketProvider>
-                {children}
-                <Toaster position="top-right" richColors closeButton />
-                <PWAInstaller />
-
+                <TooltipProvider>
+                  {children}
+                  <Toaster position="top-right" richColors closeButton />
+                  <PWAInstaller />
+                </TooltipProvider>
               </SocketProvider>
             </AuthProvider>
           </ThemeProvider>

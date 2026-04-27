@@ -13,6 +13,11 @@ import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import { FRONTEND_ROUTES } from '@/constants';
 import { ShareButton } from '@/components/shared/ShareButton';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface InfluencerCardProps {
     influencer: InfluencerProfile;
@@ -85,24 +90,38 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                 
                                 {/* Verified Stamp on Avatar */}
                                 {verified && (
-                                    <div className="absolute -top-3 -right-3 z-20 pointer-events-none animate-in fade-in zoom-in duration-500">
-                                        <div className="relative rotate-12 group-hover:rotate-[5deg] group-hover:scale-110 transition-all duration-700">
-                                            {/* Prismatic Outer Glow */}
-                                            <div className="absolute inset-[-4px] bg-linear-to-tr from-cyan-500/40 via-blue-500/40 to-purple-500/40 rounded-full blur-lg opacity-60 animate-pulse" />
-                                            
-                                            {/* Minimalist Glass Seed */}
-                                            <div className="relative w-10 h-10 bg-slate-950/60 backdrop-blur-xl border border-white/30 rounded-xl flex items-center justify-center shadow-xl">
-                                                <ShieldCheck size={14} className="text-white fill-blue-400/20" />
-                                                {/* Corner Accent */}
-                                                <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-blue-400 rounded-tr-sm opacity-60" />
-                                            </div>
-                                        </div>
+                                    <div className="absolute -top-3 -right-3 z-20 animate-in fade-in zoom-in duration-500">
+                                        <Tooltip delayDuration={300}>
+                                            <TooltipTrigger asChild>
+                                                <div className="relative rotate-12 group-hover:rotate-[5deg] group-hover:scale-110 transition-all duration-700 cursor-help">
+                                                    {/* Prismatic Outer Glow */}
+                                                    <div className="absolute inset-[-4px] bg-linear-to-tr from-cyan-500/40 via-blue-500/40 to-purple-500/40 rounded-full blur-lg opacity-60 animate-pulse" />
+
+                                                    {/* Minimalist Glass Seed */}
+                                                    <div className="relative w-10 h-10 bg-slate-950/60 backdrop-blur-xl border border-white/30 rounded-xl flex items-center justify-center shadow-xl">
+                                                        <ShieldCheck size={14} className="text-white fill-blue-400/20" />
+                                                        {/* Corner Accent */}
+                                                        <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-blue-400 rounded-tr-sm opacity-60" />
+                                                    </div>
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top" className="font-bold">
+                                                Verified Creator
+                                            </TooltipContent>
+                                        </Tooltip>
                                     </div>
                                 )}
                                 {/* Status Indicator */}
-                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-background rounded-full border-2 border-background flex items-center justify-center">
-                                    <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
-                                </div>
+                                <Tooltip delayDuration={500}>
+                                    <TooltipTrigger asChild>
+                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-background rounded-full border-2 border-background flex items-center justify-center cursor-help">
+                                            <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom" className="text-[10px] font-bold uppercase tracking-wider">
+                                        Online
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
 
                             {/* Tier Badge Floating Right */}
@@ -139,24 +158,39 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                         <div className="grid grid-cols-3 gap-3 p-3 bg-zinc-50/50 dark:bg-white/2 rounded-2xl border border-border/40 mt-auto group-hover:border-primary/20 transition-colors duration-300">
                             <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Collabs</span>
-                                <div className="flex items-center gap-1">
-                                    <Award size={12} className="text-primary/70" />
-                                    <p className="text-sm font-black italic">{completedCollaborations ?? 0}</p>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-1 cursor-help">
+                                            <Award size={12} className="text-primary/70" />
+                                            <p className="text-sm font-black italic">{completedCollaborations ?? 0}</p>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">Successfully finished collaborations</TooltipContent>
+                                </Tooltip>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-1 border-r border-border/50">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Rating</span>
-                                <div className="flex items-center gap-0.5">
-                                    <Star size={12} className="text-yellow-500 fill-yellow-500" />
-                                    <p className="text-sm font-black italic">{avgRating}</p>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-0.5 cursor-help">
+                                            <Star size={12} className="text-yellow-500 fill-yellow-500" />
+                                            <p className="text-sm font-black italic">{avgRating}</p>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">Average rating from past partners</TooltipContent>
+                                </Tooltip>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-1">
                                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">Reviews</span>
-                                <div className="flex items-center gap-1">
-                                    <MessageSquare size={12} className="text-primary/70" />
-                                    <p className="text-sm font-black italic">{totalReviews}</p>
-                                </div>
+                                <Tooltip delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center gap-1 cursor-help">
+                                            <MessageSquare size={12} className="text-primary/70" />
+                                            <p className="text-sm font-black italic">{totalReviews}</p>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">Total partnership reviews received</TooltipContent>
+                                </Tooltip>
                             </div>
                         </div>
 

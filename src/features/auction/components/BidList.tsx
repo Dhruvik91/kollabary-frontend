@@ -9,6 +9,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FRONTEND_ROUTES } from '@/constants';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface BidListProps {
     bids: Bid[];
@@ -95,10 +100,17 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                             {influencerName}
                                         </h4>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20">
-                                                <DollarSign size={10} className="text-primary" />
-                                                <span className="text-xs font-black text-primary tracking-tighter italic">{bid.amount}</span>
-                                            </div>
+                                            <Tooltip delayDuration={300}>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20 cursor-help">
+                                                        <DollarSign size={10} className="text-primary" />
+                                                        <span className="text-xs font-black text-primary tracking-tighter italic">{bid.amount}</span>
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent side="right">
+                                                    Proposed budget for this collaboration
+                                                </TooltipContent>
+                                            </Tooltip>
                                         </div>
                                     </div>
                                 </div>
@@ -122,15 +134,22 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                             {/* Action Area */}
                             {showActions && bid.status === BidStatus.PENDING && (
                                 <div className="flex gap-2 pt-2 border-t border-border/20 mt-1">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => setRejectingBidId(bid.id)}
-                                        disabled={isProcessing}
-                                        className="rounded-xl h-10 w-11 p-0 border-2 border-border/40 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all duration-300 active:scale-90 group/btn"
-                                    >
-                                        <X size={16} className="group-hover/btn:rotate-90 transition-transform duration-300" />
-                                    </Button>
+                                        <Tooltip delayDuration={300}>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={() => setRejectingBidId(bid.id)}
+                                                    disabled={isProcessing}
+                                                    className="rounded-xl h-10 w-11 p-0 border-2 border-border/40 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all duration-300 active:scale-90 group/btn"
+                                                >
+                                                    <X size={16} className="group-hover/btn:rotate-90 transition-transform duration-300" />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top" className="bg-red-500 text-white border-none font-bold text-[10px] uppercase">
+                                                Reject Proposal
+                                            </TooltipContent>
+                                        </Tooltip>
                                     <Button
                                         size="sm"
                                         onClick={() => onAccept(bid.id)}

@@ -36,6 +36,8 @@ export const API_CONFIG = {
             search: '/influencer/search',
             myProfile: '/influencer/profile',
             profile: (id: string) => `/influencer/${id}`,
+            status: '/influencer/status',
+            account: '/influencer/account',
         },
         messaging: {
             conversation: '/messaging/conversation',
@@ -75,6 +77,7 @@ export const API_CONFIG = {
             userStatusUpdate: (id: string) => `/admin/users/${id}/status`,
             userBulkStatus: '/admin/users/bulk-status',
             userVerify: (id: string) => `/admin/users/${id}/verify`,
+            userAddCoins: (id: string) => `/admin/users/${id}/coins`,
         },
         verification: {
             base: '/verification/request',
@@ -85,6 +88,7 @@ export const API_CONFIG = {
         profile: {
             base: '/profile',
             me: '/profile',
+            status: '/profile/status',
             search: '/profile/search',
             brand: (id: string) => `/profile/brand/${id}`,
         },
