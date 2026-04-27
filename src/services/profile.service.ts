@@ -13,6 +13,8 @@ export interface UserProfile {
     socialLinks?: Record<string, string>;
     createdAt: string;
     updatedAt: string;
+    verified?: boolean;
+    status?: string;
     stats?: {
         totalAuctions: number;
         activeAuctionsCount: number;
@@ -23,6 +25,7 @@ export interface UserProfile {
         id: string;
         email: string;
         role: string;
+        status: string;
     };
 }
 
@@ -112,6 +115,38 @@ export const profileService = {
      */
     changePassword: async (data: ChangePasswordData): Promise<{ message: string }> => {
         const response = await httpService.patch<{ message: string }>(API_CONFIG.path.auth.changePassword, data);
+        return response.data;
+    },
+
+    /**
+     * Update account status (Activate/Deactivate)
+     */
+    updateStatus: async (status: string): Promise<{ success: boolean }> => {
+        const response = await httpService.patch<{ success: boolean }>(API_CONFIG.path.profile.status, { status });
+        return response.data;
+    },
+
+    /**
+     * Delete account
+     */
+    deleteAccount: async (): Promise<{ success: boolean }> => {
+        const response = await httpService.delete<{ success: boolean }>(API_CONFIG.path.profile.base);
+        return response.data;
+    },
+
+    /**
+     * Submit verification request
+     */
+    submitVerification: async (documents: any): Promise<any> => {
+        const response = await httpService.post(API_CONFIG.path.verification.base, { documents });
+        return response.data;
+    },
+
+    /**
+     * Get user's verification requests
+     */
+    getVerificationRequests: async (): Promise<any[]> => {
+        const response = await httpService.get<any[]>(API_CONFIG.path.verification.myRequests);
         return response.data;
     }
 };

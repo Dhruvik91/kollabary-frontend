@@ -87,6 +87,7 @@ export const API_CONFIG = {
         profile: {
             base: '/profile',
             me: '/profile',
+            status: '/profile/status',
             search: '/profile/search',
             brand: (id: string) => `/profile/brand/${id}`,
         },

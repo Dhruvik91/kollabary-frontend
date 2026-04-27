@@ -84,7 +84,9 @@ export function useUpdateInfluencerProfile() {
     return useMutation({
         mutationFn: (data: Partial<CreateInfluencerProfileDto>) => influencerService.updateProfile(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            queryClient.invalidateQueries({ queryKey: authKeys.me() });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.all });
+            queryClient.invalidateQueries({ queryKey: profileKeys.me() });
             toast.success('Influencer profile updated successfully');
         },
         onError: (error: any) => {
@@ -106,6 +108,8 @@ export function useUpdateUserStatus() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
             queryClient.invalidateQueries({ queryKey: influencerKeys.me() });
+            queryClient.invalidateQueries({ queryKey: influencerKeys.all });
+            queryClient.invalidateQueries({ queryKey: profileKeys.all });
             toast.success('Account status updated successfully');
         },
         onError: (error: any) => {

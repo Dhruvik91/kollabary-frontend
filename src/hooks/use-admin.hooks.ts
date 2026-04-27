@@ -193,9 +193,13 @@ export function useUpdateRankingWeights() {
  * Hook to recalculate all scores
  */
 export function useRecalculateScores() {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: adminService.recalculateAllScores,
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.stats() });
+            queryClient.invalidateQueries({ queryKey: ['influencer'] });
             toast.success('Recalculation triggered successfully');
         },
         onError: (error: any) => {
@@ -233,9 +237,12 @@ export function useRecalculateInfluencerScore() {
  * Hook to create a new influencer account
  */
 export function useCreateInfluencer() {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: (data: any) => adminService.createInfluencer(data),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
             toast.success('Influencer account created successfully');
         },
         onError: (error: any) => {
@@ -269,6 +276,7 @@ export function useCreateSubscriptionPlan() {
         mutationFn: (data: any) => adminService.createSubscriptionPlan(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminKeys.subscriptions() });
+            queryClient.invalidateQueries({ queryKey: ['subscription'] });
             toast.success('Subscription plan created');
         },
         onError: (error: any) => {
@@ -289,6 +297,7 @@ export function useDeleteSubscriptionPlan() {
         mutationFn: (id: string) => adminService.deleteSubscriptionPlan(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminKeys.subscriptions() });
+            queryClient.invalidateQueries({ queryKey: ['subscription'] });
             toast.success('Subscription plan deleted');
         },
         onError: (error: any) => {

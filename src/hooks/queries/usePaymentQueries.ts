@@ -60,9 +60,11 @@ export const useVerifyPayment = () => {
 };
 
 export const useCancelOrder = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (orderId: string) => paymentService.cancelOrder(orderId),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: paymentKeys.all });
             toast.success('Order cancelled successfully');
         },
         onError: (error: any) => {
