@@ -1,4 +1,4 @@
-const isDev = process.env.NEXT_PUBLIC_NODE === 'dev';
+const isDev = process.env.NEXT_PUBLIC_NODE === 'dev' || process.env.NODE_ENV === 'development';
 
 export function registerServiceWorker() {
   if (isDev) {
@@ -34,6 +34,7 @@ export function listenForSWUpdates() {
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       // Reload the page when a new service worker takes control
+      console.log('New service worker active, reloading...');
       window.location.reload();
     });
   }
