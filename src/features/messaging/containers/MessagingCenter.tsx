@@ -76,8 +76,10 @@ export const MessagingCenter = () => {
             if (partner.role === UserRole.INFLUENCER) {
                 const influencerId = partner.influencerProfile?.id || partner.id;
                 router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(String(influencerId)));
+            } else if (partner.role === UserRole.USER) {
+                const brandId = partner?.profile?.id;
+                router.push(FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(String(brandId)));
             }
-            // For brands (UserRole.USER), add redirection when specific brand profile route is ready
         }
     };
 
@@ -169,7 +171,7 @@ export const MessagingCenter = () => {
                                 </ChatWindow>
                             </motion.div>
                         ) : (
-                            <motion.div 
+                            <motion.div
                                 key="empty-messages"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
