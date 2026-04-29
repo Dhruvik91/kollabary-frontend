@@ -9,7 +9,6 @@ import {
     Eye,
     RotateCcw
 } from 'lucide-react';
-import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
@@ -21,6 +20,9 @@ import {
 
 import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
+
+import { PageHeader } from '@/components/shared/PageHeader';
+import { ShoppingBag } from 'lucide-react';
 
 export const AdminOrdersContainer = () => {
     const [page, setPage] = useState(0); // DataTable uses 0-indexed page internally
@@ -147,13 +149,14 @@ export const AdminOrdersContainer = () => {
     ];
 
     return (
-        <div className="space-y-6 p-6">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight">Order Management</h1>
-                    <p className="text-muted-foreground mt-1">Audit and manage all KC top-up transactions.</p>
-                </div>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Transaction Audit"
+                title="Order"
+                highlightedTitle="Management"
+                subtitle="Audit and manage all KC top-up transactions."
+                icon={ShoppingBag}
+            />
 
             <DataTable
                 data={orders}

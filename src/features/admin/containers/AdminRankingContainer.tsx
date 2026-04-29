@@ -10,6 +10,9 @@ import { RefreshCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+import { Trophy } from 'lucide-react';
+
 export function AdminRankingContainer() {
     const { data: weightsData, isLoading } = useRankingWeights();
     const updateWeights = useUpdateRankingWeights();
@@ -47,7 +50,10 @@ export function AdminRankingContainer() {
     if (isLoading || !localWeights) {
         return (
             <div className="space-y-8">
-                <Skeleton className="h-10 w-64" />
+                <div className="space-y-3">
+                    <Skeleton className="h-10 w-64" />
+                    <Skeleton className="h-4 w-96" />
+                </div>
                 <div className="grid gap-6 lg:grid-cols-2">
                     <Skeleton className="h-96 w-full rounded-2xl" />
                     <Skeleton className="h-96 w-full rounded-2xl" />
@@ -58,22 +64,23 @@ export function AdminRankingContainer() {
 
     return (
         <div className="space-y-8 pb-10">
-            {/* Header */}
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Ranking & Scoring</h1>
-                    <p className="text-muted-foreground">Adjust algorithm weights and manage global score recalculation.</p>
-                </div>
-
-                <Button
-                    onClick={handleRecalculate}
-                    className="rounded-xl gap-2 bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200"
-                    disabled={recalculateScores.isPending}
-                >
-                    <RefreshCcw size={16} className={cn(recalculateScores.isPending && "animate-spin")} />
-                    Recalculate All Scores
-                </Button>
-            </div>
+            <PageHeader
+                label="Algorithm Control"
+                title="Ranking &"
+                highlightedTitle="Scoring"
+                subtitle="Adjust algorithm weights and manage global score recalculation."
+                icon={Trophy}
+                action={
+                    <Button
+                        onClick={handleRecalculate}
+                        className="rounded-xl gap-2 bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200"
+                        disabled={recalculateScores.isPending}
+                    >
+                        <RefreshCcw size={16} className={cn(recalculateScores.isPending && "animate-spin")} />
+                        Recalculate All Scores
+                    </Button>
+                }
+            />
 
             <div className="grid gap-6 lg:grid-cols-2">
                 <RankingWeightForm

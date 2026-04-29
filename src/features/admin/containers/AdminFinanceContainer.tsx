@@ -17,12 +17,8 @@ import {
     AreaChart,
     Area
 } from 'recharts';
-import {
-    IndianRupee,
-    ShoppingCart,
-    Coins,
-    ArrowUpRight,
-} from 'lucide-react';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { ArrowUpRight, Coins, IndianRupee, Landmark, ShoppingCart } from 'lucide-react';
 
 export const AdminFinanceContainer = () => {
     const [range, setRange] = useState('THIS_MONTH');
@@ -48,49 +44,51 @@ export const AdminFinanceContainer = () => {
     };
 
     return (
-        <div className="space-y-8 p-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Financial Overview</h1>
-                    <p className="text-muted-foreground mt-1">Track revenue and KC coin sales across the platform.</p>
-                </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Financial Analytics"
+                title="Revenue"
+                highlightedTitle="Overview"
+                subtitle="Track revenue and KC coin sales across the platform."
+                icon={Landmark}
+                action={
+                    <div className="flex items-center gap-2 bg-card p-2 rounded-xl border shadow-sm">
+                        <Select value={range} onValueChange={setRange}>
+                            <SelectTrigger className="w-[180px] border-none focus:ring-0">
+                                <SelectValue placeholder="Select Range" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="TODAY">Today</SelectItem>
+                                <SelectItem value="THIS_WEEK">This Week</SelectItem>
+                                <SelectItem value="THIS_MONTH">This Month</SelectItem>
+                                <SelectItem value="LAST_MONTH">Last Month</SelectItem>
+                                <SelectItem value="THIS_YEAR">This Year</SelectItem>
+                                <SelectItem value="LAST_YEAR">Last Year</SelectItem>
+                                <SelectItem value="CUSTOM">Custom Range</SelectItem>
+                            </SelectContent>
+                        </Select>
 
-                <div className="flex items-center gap-2 bg-card p-2 rounded-xl border shadow-sm">
-                    <Select value={range} onValueChange={setRange}>
-                        <SelectTrigger className="w-[180px] border-none focus:ring-0">
-                            <SelectValue placeholder="Select Range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="TODAY">Today</SelectItem>
-                            <SelectItem value="THIS_WEEK">This Week</SelectItem>
-                            <SelectItem value="THIS_MONTH">This Month</SelectItem>
-                            <SelectItem value="LAST_MONTH">Last Month</SelectItem>
-                            <SelectItem value="THIS_YEAR">This Year</SelectItem>
-                            <SelectItem value="LAST_YEAR">Last Year</SelectItem>
-                            <SelectItem value="CUSTOM">Custom Range</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    {range === 'CUSTOM' && (
-                        <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
-                            <Input
-                                type="date"
-                                className="w-[140px] h-9"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
-                            <span className="text-muted-foreground text-sm">to</span>
-                            <Input
-                                type="date"
-                                className="w-[140px] h-9"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
-                            <Button size="sm" onClick={handleApplyCustomRange}>Apply</Button>
-                        </div>
-                    )}
-                </div>
-            </div>
+                        {range === 'CUSTOM' && (
+                            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                                <Input
+                                    type="date"
+                                    className="w-[140px] h-9"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+                                <span className="text-muted-foreground text-sm">to</span>
+                                <Input
+                                    type="date"
+                                    className="w-[140px] h-9"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                />
+                                <Button size="sm" onClick={handleApplyCustomRange}>Apply</Button>
+                            </div>
+                        )}
+                    </div>
+                }
+            />
 
             {/* Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

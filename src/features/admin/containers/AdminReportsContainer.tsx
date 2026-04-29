@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+
 export function AdminReportsContainer() {
     const updateStatus = useUpdateReportStatus();
     const { data: reports = [], isLoading } = useAdminReports({});
@@ -147,12 +149,14 @@ export function AdminReportsContainer() {
     ];
 
     return (
-        <div className="space-y-6 pb-10 px-0 sm:px-4 md:px-0">
-            {/* Header */}
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">User Reports</h1>
-                <p className="text-muted-foreground">Manage and resolve reports submitted by users.</p>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Compliance Control"
+                title="User"
+                highlightedTitle="Reports"
+                subtitle="Manage and resolve reports submitted by users across the platform."
+                icon={ShieldAlert}
+            />
 
             {/* Reports DataTable */}
             <DataTable

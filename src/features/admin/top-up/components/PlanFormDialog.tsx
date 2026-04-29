@@ -27,6 +27,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { TopUpPlan, CreateTopUpPlanDto } from '@/types/payment.types';
 import { useCreateTopUpPlan, useUpdateTopUpPlan } from '@/hooks/queries/useAdminQueries';
 
+import { COIN_URL } from '@/constants';
+
 const planSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
     amount: z.coerce.number().min(1, 'Amount must be greater than 0'),
@@ -63,40 +65,48 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
     });
 
     useEffect(() => {
-        if (plan) {
-            form.reset({
-                name: plan.name,
-                amount: Number(plan.amount),
-                coins: plan.coins,
-                bonusCoins: plan.bonusCoins || 0,
-                description: plan.description || '',
-                isPopular: plan.isPopular || false,
-                isActive: plan.isActive,
-            });
-        } else {
-            form.reset({
-                name: '',
-                amount: 0,
-                coins: 0,
-                bonusCoins: 0,
-                description: '',
-                isPopular: false,
-                isActive: true,
-            });
+        if (open) {
+            if (plan) {
+                form.reset({
+                    name: plan.name,
+                    amount: Number(plan.amount),
+                    coins: plan.coins,
+                    bonusCoins: plan.bonusCoins || 0,
+                    description: plan.description || '',
+                    isPopular: plan.isPopular || false,
+                    isActive: plan.isActive,
+                });
+            } else {
+                form.reset({
+                    name: '',
+                    amount: 0,
+                    coins: 0,
+                    bonusCoins: 0,
+                    description: '',
+                    isPopular: false,
+                    isActive: true,
+                });
+            }
         }
-    }, [plan, form]);
+    }, [plan, form, open]);
 
     const onSubmit = (values: PlanFormValues) => {
         if (plan) {
             updatePlan.mutate(
                 { id: plan.id, dto: values },
                 {
-                    onSuccess: () => onOpenChange(false),
+                    onSuccess: () => {
+                        onOpenChange(false);
+                        form.reset();
+                    },
                 }
             );
         } else {
             createPlan.mutate(values as CreateTopUpPlanDto, {
-                onSuccess: () => onOpenChange(false),
+                onSuccess: () => {
+                    onOpenChange(false);
+                    form.reset();
+                },
             });
         }
     };
@@ -107,12 +117,19 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px] rounded-2xl">
                 <DialogHeader>
-                    <DialogTitle>{plan ? 'Edit Top-up Plan' : 'Create Top-up Plan'}</DialogTitle>
-                    <DialogDescription>
-                        {plan 
-                            ? 'Update the details of the existing top-up package.' 
-                            : 'Add a new KC coin package for users and influencers.'}
-                    </DialogDescription>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center p-2">
+                            <img src={COIN_URL} alt="KC" className="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                            <DialogTitle>{plan ? 'Edit Top-up Plan' : 'Create Top-up Plan'}</DialogTitle>
+                            <DialogDescription>
+                                {plan 
+                                    ? 'Update the details of the existing top-up package.' 
+                                    : 'Add a new KC coin package for users and influencers.'}
+                            </DialogDescription>
+                        </div>
+                    </div>
                 </DialogHeader>
 
                 <Form {...form}>

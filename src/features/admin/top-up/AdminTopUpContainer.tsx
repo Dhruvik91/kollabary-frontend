@@ -1,24 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { Coins, Plus, Trash2, Edit2, IndianRupee, AlertCircle, Zap } from 'lucide-react';
 import {
-    Coins,
-    Plus,
-    Trash2,
-    Edit2,
-    IndianRupee,
-    AlertCircle,
-    Zap
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/shared/DataTable';
+    useAdminTopUpPlans,
+    useDeleteTopUpPlan,
+    useUpdateTopUpPlan
+} from '@/hooks/queries/useAdminQueries';
+import { TopUpPlan } from '@/types/payment.types';
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
-import { useAdminTopUpPlans, useDeleteTopUpPlan, useUpdateTopUpPlan } from '@/hooks/queries/useAdminQueries';
-import { TopUpPlan } from '@/types/payment.types';
-import { PlanFormDialog } from './components/PlanFormDialog';
 import { cn } from '@/lib/utils';
+import { DataTable } from '@/components/shared/DataTable';
+import { PlanFormDialog } from './components/PlanFormDialog';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -27,8 +22,10 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
+    AlertDialogTitle
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { COIN_URL } from '@/constants';
 
 export function AdminTopUpContainer() {
     const { data: plans = [], isLoading, isError, refetch } = useAdminTopUpPlans();
@@ -89,7 +86,11 @@ export function AdminTopUpContainer() {
             cell: ({ row }) => (
                 <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-1.5 font-bold text-primary italic">
-                        <Coins size={16} />
+                        <img
+                            src={COIN_URL}
+                            alt="KC"
+                            className="w-4 h-4 object-contain animate-pulse-slow"
+                        />
                         {row.original.coins} KC
                     </div>
                     {(row.original.bonusCoins ?? 0) > 0 && (
@@ -167,18 +168,20 @@ export function AdminTopUpContainer() {
     }
 
     return (
-        <div className="space-y-8 pb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 className="text-3xl font-black tracking-tight text-foreground uppercase">Top-up Plans</h1>
-                    <p className="text-muted-foreground font-medium mt-1 italic">Manage the KC coin economy and packages.</p>
-                </div>
-
-                <Button onClick={handleCreate} className="rounded-xl gap-2 shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all font-bold">
-                    <Plus size={18} />
-                    Create New Plan
-                </Button>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Economy Control"
+                title="Top-up"
+                highlightedTitle="Plans"
+                subtitle="Manage the KC coin economy and packages."
+                icon={Coins}
+                action={
+                    <Button onClick={handleCreate} className="rounded-xl gap-2 shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all font-bold">
+                        <Plus size={18} />
+                        Create New Plan
+                    </Button>
+                }
+            />
 
             <DataTable
                 data={plans}

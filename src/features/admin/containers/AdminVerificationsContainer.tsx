@@ -15,6 +15,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+import { ShieldCheck } from 'lucide-react';
+
 export function AdminVerificationsContainer() {
     const { data: requests = [], isLoading } = useAdminVerifications();
     const processVerification = useProcessVerification();
@@ -143,12 +146,14 @@ export function AdminVerificationsContainer() {
     ];
 
     return (
-        <div className="space-y-6 pb-10">
-            {/* Header */}
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">Verification Requests</h1>
-                <p className="text-muted-foreground">Review and process identity verification for influencers.</p>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Trust & Safety"
+                title="Verification"
+                highlightedTitle="Requests"
+                subtitle="Review and process identity verification for influencers."
+                icon={ShieldCheck}
+            />
 
             {/* Verifications DataTable */}
             <DataTable
