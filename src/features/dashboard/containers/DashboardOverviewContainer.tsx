@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { useConfetti } from '@/contexts/confetti-context';
 import { useAuth } from '@/contexts/auth-context';
 import {
     Loader2,
@@ -40,7 +40,7 @@ import { ReferralCard } from '@/components/shared/ReferralCard';
 
 export const DashboardOverviewContainer = () => {
     const { user, isLoading: isAuthLoading } = useAuth();
-    const [showConfetti, setShowConfetti] = useState(false);
+    const { triggerConfetti } = useConfetti();
 
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const isUser = user?.role === UserRole.USER;
@@ -76,7 +76,7 @@ export const DashboardOverviewContainer = () => {
 
             if (lastTier && lastTier !== ranking.rankingTier) {
                 // Tier has changed! (Assuming tiers always go up or the user wants to celebrate any change)
-                setShowConfetti(true);
+                triggerConfetti({ numberOfPieces: 500 });
                 toast.success(`Congratulations! You've unlocked the ${ranking.rankingTier} tier!`, {
                     icon: <Trophy className="h-5 w-5 text-yellow-500" />,
                     duration: 5000,
@@ -137,13 +137,6 @@ export const DashboardOverviewContainer = () => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
-            {showConfetti && (
-                <ConfettiEffect
-                    recycle={false}
-                    numberOfPieces={500}
-                    onConfettiComplete={() => setShowConfetti(false)}
-                />
-            )}
             <PageHeader
                 label="Dashboard Overview"
                 title="Welcome,"

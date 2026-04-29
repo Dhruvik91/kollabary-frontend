@@ -10,13 +10,13 @@ import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } f
 import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ErrorState } from '@/components/shared/ErrorState';
-import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { useConfetti } from '@/contexts/confetti-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { FRONTEND_ROUTES } from '@/constants';
 
 export const TopUpContainer = () => {
-    const [showConfetti, setShowConfetti] = useState(false);
+    const { triggerConfetti } = useConfetti();
     const activeOrderIdRef = useRef<string | null>(null);
     const { data: plans, isLoading: isPlansLoading, isError, error, refetch } = usePaymentPlans();
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
@@ -61,7 +61,7 @@ export const TopUpContainer = () => {
                         razorpaySignature: response.razorpay_signature,
                     }, {
                         onSuccess: () => {
-                            setShowConfetti(true);
+                            triggerConfetti({ numberOfPieces: 500 });
                             toast.success("Payment verified successfully! Your KC coins have been added.");
                         },
                         onSettled: () => {
@@ -105,13 +105,6 @@ export const TopUpContainer = () => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
-            {showConfetti && (
-                <ConfettiEffect
-                    recycle={false}
-                    numberOfPieces={500}
-                    onConfettiComplete={() => setShowConfetti(false)}
-                />
-            )}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-card/30 p-8 rounded-[2.5rem] border border-border/50 shadow-2xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
                 <PageHeader

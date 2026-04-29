@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { useConfetti } from '@/contexts/confetti-context';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, Clock, MessageCircle, PackageSearch, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -42,7 +42,7 @@ interface AuctionDetailContainerProps {
 export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const { user } = useAuth();
     const router = useRouter();
-    const [showConfetti, setShowConfetti] = useState(false);
+    const { triggerConfetti } = useConfetti();
 
     const { data: auction, isLoading, isError } = useAuctionDetail(id);
     const [api, setApi] = useState<CarouselApi>();
@@ -73,7 +73,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                 // Use a key in sessionStorage to ensure it only runs once per acceptance
                 const storageKey = `confetti-bid-accepted-${myBid.id}`;
                 if (!sessionStorage.getItem(storageKey)) {
-                    setShowConfetti(true);
+                    triggerConfetti({ numberOfPieces: 500 });
                     sessionStorage.setItem(storageKey, 'true');
                 }
             }
@@ -95,7 +95,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         if (!auction) return;
         try {
             await acceptBidMutation.mutateAsync(bidId);
-            setShowConfetti(true);
+            triggerConfetti({ numberOfPieces: 500 });
         } catch (error) {
             // Error handled by mutation hook
         }
@@ -147,13 +147,6 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20">
-            {showConfetti && (
-                <ConfettiEffect 
-                    recycle={false} 
-                    numberOfPieces={500} 
-                    onConfettiComplete={() => setShowConfetti(false)} 
-                />
-            )}
             <div className="flex items-center justify-between">
                 <BackButton label="Back to Auctions" className="p-0" />
             </div>
