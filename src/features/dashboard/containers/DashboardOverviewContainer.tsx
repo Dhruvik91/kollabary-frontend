@@ -73,7 +73,7 @@ export const DashboardOverviewContainer = () => {
         if (isInfluencer && ranking?.rankingTier && user?.id) {
             const storageKey = `last-celebrated-tier-${user.id}`;
             const lastTier = localStorage.getItem(storageKey);
-            
+
             if (lastTier && lastTier !== ranking.rankingTier) {
                 // Tier has changed! (Assuming tiers always go up or the user wants to celebrate any change)
                 setShowConfetti(true);
@@ -82,7 +82,7 @@ export const DashboardOverviewContainer = () => {
                     duration: 5000,
                 });
             }
-            
+
             localStorage.setItem(storageKey, ranking.rankingTier);
         }
     }, [isInfluencer, ranking?.rankingTier, user?.id]);
@@ -138,10 +138,10 @@ export const DashboardOverviewContainer = () => {
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             {showConfetti && (
-                <ConfettiEffect 
-                    recycle={false} 
-                    numberOfPieces={500} 
-                    onConfettiComplete={() => setShowConfetti(false)} 
+                <ConfettiEffect
+                    recycle={false}
+                    numberOfPieces={500}
+                    onConfettiComplete={() => setShowConfetti(false)}
                 />
             )}
             <PageHeader
@@ -226,23 +226,6 @@ export const DashboardOverviewContainer = () => {
                                 />
                             </Link>
                         </div>
-
-                        {/* Recent Activity Placeholder or Quick Stats */}
-                        <Card className="rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden">
-                            <div className="p-6 border-b border-border/50 bg-muted/30 flex items-center justify-between">
-                                <h3 className="font-bold tracking-tight">Recent Performance</h3>
-                                <Link href="#" className="text-xs font-bold text-primary hover:underline">View Analytics</Link>
-                            </div>
-                            <CardContent className="p-12 flex flex-col items-center justify-center text-center space-y-4">
-                                <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center text-primary/30">
-                                    <TrendingUp size={32} />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="font-bold">Growth Tracking</p>
-                                    <p className="text-sm text-muted-foreground">Your performance data is being aggregated. Check back soon for detailed insights.</p>
-                                </div>
-                            </CardContent>
-                        </Card>
                     </div>
 
                     <div className="lg:col-span-1">
