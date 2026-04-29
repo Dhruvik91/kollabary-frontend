@@ -1,20 +1,19 @@
 'use client';
 
+import { useRef, useEffect, useState } from 'react';
 import Script from 'next/script';
-
-
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
 import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ErrorState } from '@/components/shared/ErrorState';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
-import { useRef, useEffect, useState } from 'react';
-import { FRONTEND_ROUTES } from '@/constants';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { FRONTEND_ROUTES } from '@/constants';
 
 export const TopUpContainer = () => {
     const [showConfetti, setShowConfetti] = useState(false);
@@ -107,36 +106,43 @@ export const TopUpContainer = () => {
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
             {showConfetti && (
-                <ConfettiEffect 
-                    recycle={false} 
-                    numberOfPieces={500} 
-                    onConfettiComplete={() => setShowConfetti(false)} 
+                <ConfettiEffect
+                    recycle={false}
+                    numberOfPieces={500}
+                    onConfettiComplete={() => setShowConfetti(false)}
                 />
             )}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-card/30 p-8 rounded-[2.5rem] border border-border/50 shadow-2xl relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
                 <PageHeader
-                    label="TOP UP"
+                    label="BOOST YOUR WALLET"
                     title="KC"
                     highlightedTitle="Coins"
-                    subtitle="Choose a plan to boost your balance and unlock more opportunities."
+                    subtitle="Unlock premium features, bid on top collaborations, and grow your presence with KC Coins."
                     icon={Coins}
+                    className="relative z-10"
                     action={
                         <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                            <Button className="h-12 px-6 rounded-2xl bg-secondary hover:bg-secondary/90 text-white font-bold transition-all gap-2 border-none">
-                                <span className="uppercase tracking-widest text-[10px]">Invite & Earn</span>
-                                <ArrowUpRight size={18} />
+                            <Button className="h-14 px-8 rounded-2xl bg-gradient-to-r from-secondary to-secondary/80 hover:scale-105 active:scale-95 text-white font-black transition-all gap-3 border-none shadow-xl shadow-secondary/20">
+                                <span className="uppercase tracking-[0.2em] text-[11px]">Invite & Earn Free KC</span>
+                                <ArrowUpRight size={20} />
                             </Button>
                         </Link>
                     }
                 />
             </div>
 
-            <div className="bg-gradient-to-br from-primary/5 via-transparent to-primary/5 rounded-3xl p-4 md:p-8 border border-primary/10">
-                <div className="max-w-4xl mx-auto text-center space-y-4 mb-4">
-                    <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider">
-                        <Sparkles className="w-4 h-4" />
-                        Limited Time Offers
-                    </div>
+            <div className="bg-gradient-to-br from-primary/5 via-transparent to-primary/5 rounded-[3rem] p-6 md:p-12 border border-primary/10 relative">
+                <div className="max-w-4xl mx-auto text-center space-y-6 mb-12">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="inline-flex items-center gap-3 bg-primary/10 text-primary px-6 py-2.5 rounded-full text-xs sm:text-sm font-black uppercase tracking-[0.25em] border border-primary/20 shadow-lg backdrop-blur-sm"
+                    >
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse text-amber-500" />
+                        Exclusive Creator Packages
+                    </motion.div>
+                    <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground uppercase">Ready to scale your influence?</h2>
                 </div>
 
                 {isPlansLoading ? (

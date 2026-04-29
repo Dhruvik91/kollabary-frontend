@@ -73,7 +73,12 @@ export function AdminTopUpContainer() {
                     <div className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                         <Zap size={18} />
                     </div>
-                    <span className="font-bold text-sm">{row.original.name}</span>
+                    <div className="flex flex-col">
+                        <span className="font-bold text-sm">{row.original.name}</span>
+                        {row.original.isPopular && (
+                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">Popular</span>
+                        )}
+                    </div>
                 </div>
             ),
         },
@@ -82,9 +87,17 @@ export function AdminTopUpContainer() {
             header: 'KC Coins',
             accessorKey: 'coins',
             cell: ({ row }) => (
-                <div className="flex items-center gap-1.5 font-bold text-primary italic">
-                    <Coins size={16} />
-                    {row.original.coins} KC
+                <div className="flex flex-col gap-0.5">
+                    <div className="flex items-center gap-1.5 font-bold text-primary italic">
+                        <Coins size={16} />
+                        {row.original.coins} KC
+                    </div>
+                    {(row.original.bonusCoins ?? 0) > 0 && (
+                        <div className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                            <Plus size={10} />
+                            {row.original.bonusCoins} Bonus
+                        </div>
+                    )}
                 </div>
             ),
         },

@@ -30,7 +30,7 @@ export const TopUpList = ({ plans, onBuy, isLoading }: TopUpListProps) => {
                     plan={plan}
                     onBuy={onBuy}
                     isLoading={isLoading}
-                    isPopular={plan.name.toLowerCase().includes('growth')}
+                    isPopular={plan.isPopular}
                 />
             ))}
         </div>

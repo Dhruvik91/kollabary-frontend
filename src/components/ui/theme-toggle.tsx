@@ -37,7 +37,7 @@ export function ThemeToggle() {
             className="w-9 h-9 rounded-xl hover:bg-accent/50 transition-colors relative overflow-hidden"
         >
             <AnimatePresence mode="wait" initial={false}>
-                {theme === 'light' && (
+                {theme === 'light' ? (
                     <motion.div
                         key="sun"
                         initial={{ y: 20, opacity: 0, rotate: -45 }}
@@ -47,8 +47,7 @@ export function ThemeToggle() {
                     >
                         <Sun className="h-5 w-5 text-amber-500" />
                     </motion.div>
-                )}
-                {theme === 'dark' && (
+                ) : theme === 'dark' ? (
                     <motion.div
                         key="moon"
                         initial={{ y: 20, opacity: 0, rotate: -45 }}
@@ -58,8 +57,7 @@ export function ThemeToggle() {
                     >
                         <Moon className="h-5 w-5 text-blue-400" />
                     </motion.div>
-                )}
-                {theme === 'system' && (
+                ) : (
                     <motion.div
                         key="monitor"
                         initial={{ y: 20, opacity: 0, rotate: -45 }}

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBrandProfile } from '@/hooks/queries/useProfileQueries';
@@ -20,10 +20,11 @@ interface BrandDetailContainerProps {
 }
 
 export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => {
+    const [activeTab, setActiveTab] = useState('about');
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const router = useRouter();
     const { data: brand, isLoading, error } = useBrandProfile(brandId);
     const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
-    const [isReportModalOpen, setIsReportModalOpen] = React.useState(false);
 
     if (isLoading) {
         return (
@@ -96,7 +97,7 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
                 />
 
                 <div className="space-y-8 lg:space-y-12">
-                    <Tabs defaultValue="about" className="space-y-8 lg:space-y-12">
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8 lg:space-y-12">
                         <div className="flex justify-center sm:justify-start">
                             <TabsList variant="pill">
                                 <TabsTrigger value="about">
@@ -109,29 +110,31 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
                         </div>
 
                         <AnimatePresence mode="wait">
-                            <TabsContent value="about" key="about" className="m-0 focus-visible:outline-none ring-offset-background">
-                                <motion.div
-                                    key="about-tab"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <BrandAbout brand={brand} />
-                                </motion.div>
-                            </TabsContent>
-
-                            <TabsContent value="auctions" key="auctions" className="m-0 focus-visible:outline-none ring-offset-background">
-                                <motion.div
-                                    key="auctions-tab"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <BrandAuctionList auctions={brand.activeAuctions || []} />
-                                </motion.div>
-                            </TabsContent>
+                            {activeTab === 'about' ? (
+                                <TabsContent value="about" key="about" className="m-0 focus-visible:outline-none ring-offset-background">
+                                    <motion.div
+                                        key="about-tab"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <BrandAbout brand={brand} />
+                                    </motion.div>
+                                </TabsContent>
+                            ) : (
+                                <TabsContent value="auctions" key="auctions" className="m-0 focus-visible:outline-none ring-offset-background">
+                                    <motion.div
+                                        key="auctions-tab"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <BrandAuctionList auctions={brand.activeAuctions || []} />
+                                    </motion.div>
+                                </TabsContent>
+                            )}
                         </AnimatePresence>
                     </Tabs>
                 </div>
