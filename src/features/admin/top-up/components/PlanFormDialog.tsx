@@ -27,6 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { TopUpPlan, CreateTopUpPlanDto } from '@/types/payment.types';
 import { useCreateTopUpPlan, useUpdateTopUpPlan } from '@/hooks/queries/useAdminQueries';
 
+import { ImageUpload } from '@/components/shared/ImageUpload';
 import { COIN_URL } from '@/constants';
 
 const planSchema = z.object({
@@ -35,6 +36,7 @@ const planSchema = z.object({
     coins: z.coerce.number().min(1, 'Coins must be greater than 0'),
     bonusCoins: z.coerce.number().min(0).default(0),
     description: z.string().optional(),
+    imageUrl: z.string().optional(),
     isPopular: z.boolean().default(false),
     isActive: z.boolean().default(true),
 });
@@ -59,6 +61,7 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
             coins: 0,
             bonusCoins: 0,
             description: '',
+            imageUrl: '',
             isPopular: false,
             isActive: true,
         },
@@ -73,6 +76,7 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
                     coins: plan.coins,
                     bonusCoins: plan.bonusCoins || 0,
                     description: plan.description || '',
+                    imageUrl: plan.imageUrl || '',
                     isPopular: plan.isPopular || false,
                     isActive: plan.isActive,
                 });
@@ -83,6 +87,7 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
                     coins: 0,
                     bonusCoins: 0,
                     description: '',
+                    imageUrl: '',
                     isPopular: false,
                     isActive: true,
                 });
@@ -184,6 +189,24 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
                                     <FormLabel>Bonus Coins (Optional)</FormLabel>
                                     <FormControl>
                                         <Input type="number" placeholder="20" {...field} className="rounded-xl" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Plan Image (Optional)</FormLabel>
+                                    <FormControl>
+                                        <ImageUpload 
+                                            value={field.value} 
+                                            onChange={field.onChange}
+                                            onRemove={() => field.onChange('')}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
