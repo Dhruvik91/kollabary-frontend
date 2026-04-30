@@ -10,7 +10,8 @@ import {
     AlertCircle,
     Check,
     Trash2,
-    Edit2
+    Edit2,
+    CheckCircle2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import {
     useCreateSubscriptionPlan,
     useDeleteSubscriptionPlan
 } from '@/hooks/use-admin.hooks';
+import { PageHeader } from '@/components/shared/PageHeader';
 import { cn } from '@/lib/utils';
 import {
     Dialog,
@@ -33,6 +35,8 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 
 const getIconForPlan = (name: string, index: number) => {
     const icons = [Zap, ShieldCheck, Settings2];
@@ -45,13 +49,20 @@ const getColorForPlan = (index: number, popular?: boolean) => {
     return colors[index % colors.length];
 };
 
+
 export function AdminSubscriptionsContainer() {
     const { data: plans = [], isLoading, isError } = useAdminSubscriptionPlans();
     const createPlan = useCreateSubscriptionPlan();
     const deletePlan = useDeleteSubscriptionPlan();
 
     const [isAdding, setIsAdding] = useState(false);
-    const [newPlan, setNewPlan] = useState({ name: '', price: '' });
+    const [newPlan, setNewPlan] = useState({
+        name: '',
+        price: '',
+        description: '',
+        isPopular: false,
+        isActive: true
+    });
 
     const handleAddPlan = () => {
         if (!newPlan.name || !newPlan.price) return;
@@ -60,12 +71,21 @@ export function AdminSubscriptionsContainer() {
             {
                 name: newPlan.name,
                 price: parseInt(newPlan.price),
+                description: newPlan.description,
+                isPopular: newPlan.isPopular,
+                isActive: newPlan.isActive,
                 features: [],
             },
             {
                 onSuccess: () => {
                     setIsAdding(false);
-                    setNewPlan({ name: '', price: '' });
+                    setNewPlan({
+                        name: '',
+                        price: '',
+                        description: '',
+                        isPopular: false,
+                        isActive: true
+                    });
                 },
             }
         );
@@ -92,13 +112,29 @@ export function AdminSubscriptionsContainer() {
                         </div>
                         <div className="flex flex-col">
                             <span className="font-bold text-sm text-foreground">{plan.name}</span>
-                            {plan.popular && (
+                            {(plan.isPopular || plan.popular) && (
                                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">Popular</span>
                             )}
                         </div>
                     </div>
                 );
             },
+        },
+        {
+            id: 'status',
+            header: 'Status',
+            accessorKey: 'isActive',
+            cell: ({ row }) => (
+                <Badge
+                    variant={row.original.isActive ? "default" : "secondary"}
+                    className={cn(
+                        "rounded-lg text-[10px] uppercase font-bold",
+                        row.original.isActive ? "bg-emerald-500/10 text-emerald-600" : ""
+                    )}
+                >
+                    {row.original.isActive ? 'Active' : 'Inactive'}
+                </Badge>
+            ),
         },
         {
             id: 'price',
@@ -134,9 +170,9 @@ export function AdminSubscriptionsContainer() {
                     <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary">
                         <Edit2 size={16} />
                     </Button>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-9 w-9 rounded-xl text-rose-500 hover:bg-rose-500/10 hover:text-rose-600"
                         onClick={() => handleDelete(row.original.id)}
                     >
@@ -159,67 +195,91 @@ export function AdminSubscriptionsContainer() {
 
     return (
         <div className="space-y-8 pb-10">
-            {/* Header */}
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Subscription Tiers</h1>
-                    <p className="text-muted-foreground font-medium mt-1">Define pricing and feature limits for the platform.</p>
-                </div>
-
-                <Dialog open={isAdding} onOpenChange={setIsAdding}>
-                    <DialogTrigger asChild>
-                        <Button className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all">
-                            <Plus size={18} />
-                            New Plan
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="rounded-2xl sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Create New Plan</DialogTitle>
-                            <DialogDescription>
-                                Add a new subscription tier to the platform.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="py-4 space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Plan Name</label>
-                                <Input
-                                    placeholder="e.g. Pro, Professional, Enterprise"
-                                    value={newPlan.name}
-                                    onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
-                                    className="rounded-xl"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Monthly Price ($)</label>
-                                <Input
-                                    type="number"
-                                    placeholder="29"
-                                    value={newPlan.price}
-                                    onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
-                                    className="rounded-xl"
-                                />
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button
-                                variant="outline"
-                                onClick={() => setIsAdding(false)}
-                                className="rounded-xl"
-                            >
-                                Cancel
+            <PageHeader
+                label="Monetization Strategy"
+                title="Subscription"
+                highlightedTitle="Tiers"
+                subtitle="Define pricing and feature limits for the platform."
+                icon={CreditCard}
+                action={
+                    <Dialog open={isAdding} onOpenChange={setIsAdding}>
+                        <DialogTrigger asChild>
+                            <Button className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all">
+                                <Plus size={18} />
+                                New Plan
                             </Button>
-                            <Button
-                                onClick={handleAddPlan}
-                                className="rounded-xl"
-                                disabled={createPlan.isPending}
-                            >
-                                Create Plan
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
-            </div>
+                        </DialogTrigger>
+                        <DialogContent className="rounded-2xl sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Create New Plan</DialogTitle>
+                                <DialogDescription>
+                                    Add a new subscription tier to the platform.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="py-4 space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Plan Name</label>
+                                    <Input
+                                        placeholder="e.g. Pro, Professional, Enterprise"
+                                        value={newPlan.name}
+                                        onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
+                                        className="rounded-xl"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Monthly Price ($)</label>
+                                    <Input
+                                        type="number"
+                                        placeholder="29"
+                                        value={newPlan.price}
+                                        onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
+                                        className="rounded-xl"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Description</label>
+                                    <Textarea
+                                        placeholder="Describe the plan value..."
+                                        value={newPlan.description}
+                                        onChange={(e) => setNewPlan({ ...newPlan, description: e.target.value })}
+                                        className="rounded-xl resize-none"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between p-3 border border-border/50 rounded-xl">
+                                    <label className="text-sm font-medium">Popular Plan</label>
+                                    <Switch
+                                        checked={newPlan.isPopular}
+                                        onCheckedChange={(checked) => setNewPlan({ ...newPlan, isPopular: checked })}
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between p-3 border border-border/50 rounded-xl">
+                                    <label className="text-sm font-medium">Active</label>
+                                    <Switch
+                                        checked={newPlan.isActive}
+                                        onCheckedChange={(checked) => setNewPlan({ ...newPlan, isActive: checked })}
+                                    />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsAdding(false)}
+                                    className="rounded-xl"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={handleAddPlan}
+                                    className="rounded-xl"
+                                    disabled={createPlan.isPending}
+                                >
+                                    Create Plan
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                }
+            />
 
             {/* Plans DataTable */}
             <DataTable

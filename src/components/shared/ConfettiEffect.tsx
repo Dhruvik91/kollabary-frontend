@@ -93,6 +93,8 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({
     return null;
   }
 
+  const pieces = typeof numberOfPieces === 'boolean' ? (numberOfPieces ? 200 : 0) : numberOfPieces;
+
   return (
     <div 
       className={className} 
@@ -107,17 +109,32 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({
         ...style 
       }}
     >
+      {/* Left side confetti */}
       <Confetti
         width={width}
         height={height}
         run={run}
         recycle={recycle}
-        numberOfPieces={typeof numberOfPieces === 'boolean' ? (numberOfPieces ? 200 : 0) : numberOfPieces}
+        numberOfPieces={Math.floor(pieces / 2)}
         onConfettiComplete={onConfettiComplete}
         colors={colors}
         gravity={gravity}
-        wind={wind}
-        confettiSource={confettiSource}
+        wind={wind + 0.5}
+        confettiSource={{ x: 0, y: 0, w: 0, h: height }}
+        drawShape={drawShape}
+        opacity={opacity}
+      />
+      {/* Right side confetti */}
+      <Confetti
+        width={width}
+        height={height}
+        run={run}
+        recycle={recycle}
+        numberOfPieces={Math.floor(pieces / 2)}
+        colors={colors}
+        gravity={gravity}
+        wind={wind - 0.5}
+        confettiSource={{ x: width, y: 0, w: 0, h: height }}
         drawShape={drawShape}
         opacity={opacity}
       />

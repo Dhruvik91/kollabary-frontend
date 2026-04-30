@@ -12,6 +12,7 @@ import {
     Check
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { RankTierBadge } from '@/components/shared/RankTierBadge';
 import { RankingBreakdown } from '@/types/ranking';
 import { cn } from '@/lib/utils';
 
@@ -32,14 +33,6 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
         return 'text-emerald-500';
     };
 
-    const getScoreBg = (score: number) => {
-        if (score >= 90) return 'from-purple-500/20 to-pink-500/5 border-purple-500/20';
-        if (score >= 75) return 'from-violet-500/20 to-amber-500/5 border-violet-500/20';
-        if (score >= 60) return 'from-amber-500/20 to-amber-500/5 border-amber-500/20';
-        if (score >= 40) return 'from-indigo-500/20 to-indigo-500/5 border-indigo-500/20';
-        if (score >= 20) return 'from-blue-500/20 to-blue-500/5 border-blue-500/20';
-        return 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/20';
-    };
 
     return (
         <Card className={cn("rounded-[2rem] md:rounded-[2.5rem] border-border/50 backdrop-blur-md overflow-hidden", className)}>
@@ -88,9 +81,7 @@ export const RankingScoreCard = ({ breakdown, className }: RankingScoreCardProps
                             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Score</span>
                         </div>
                     </div>
-                    <div className={cn("px-4 py-1.5 rounded-full text-xs font-bold border text-center transition-all duration-500", getScoreBg(totalScore))}>
-                        {breakdown.rankingTier}
-                    </div>
+                    <RankTierBadge tier={breakdown.rankingTier} size="md" />
                 </div>
 
                 {/* Breakdown List */}

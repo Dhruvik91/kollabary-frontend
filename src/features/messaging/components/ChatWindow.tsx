@@ -19,7 +19,6 @@ import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import {
     Tooltip,
     TooltipContent,
-    TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -54,8 +53,11 @@ export const ChatWindow = ({
         ? conversation.userTwo
         : conversation.userOne;
 
-    const partnerInitials = partner.profile?.fullName
-        ? partner.profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase()
+    const partnerName = partner.influencerProfile?.fullName || partner.profile?.fullName || partner.email.split('@')[0];
+    const partnerAvatar = partner.influencerProfile?.avatarUrl || partner.profile?.avatarUrl;
+
+    const partnerInitials = partnerName
+        ? partnerName.split(' ').map(n => n[0]).join('').toUpperCase()
         : partner.email[0].toUpperCase();
 
     // Auto-scroll to bottom on new messages
@@ -89,14 +91,14 @@ export const ChatWindow = ({
                     )}
                     <div className="relative">
                         <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
-                            <AvatarImage src={partner.profile?.avatarUrl} />
+                            <AvatarImage src={partnerAvatar} />
                             <AvatarFallback className="bg-primary/5 text-primary font-bold text-xs">{partnerInitials}</AvatarFallback>
                         </Avatar>
                         <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-background rounded-full" />
                     </div>
                     <div>
                         <h3 className="font-bold text-[14px] leading-tight mb-0.5 tracking-tight">
-                            {partner.profile?.fullName || partner.email.split('@')[0]}
+                            {partnerName}
                         </h3>
                         <p className="text-[10px] text-muted-foreground/60 font-black uppercase tracking-widest">
                             Online
@@ -106,18 +108,11 @@ export const ChatWindow = ({
 
                 <div className="flex items-center gap-1">
                     <DropdownMenu>
-                    <Tooltip delayDuration={300}>
-                        <TooltipTrigger asChild>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9 cursor-help">
-                                    <MoreVertical size={18} />
-                                </Button>
-                            </DropdownMenuTrigger>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom" className="font-bold">
-                            More Options
-                        </TooltipContent>
-                    </Tooltip>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-muted-foreground/60 rounded-xl hover:text-foreground transition-colors h-9 w-9">
+                                <MoreVertical size={18} />
+                            </Button>
+                        </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="rounded-2xl border-border/50 shadow-2xl min-w-[200px] p-2">
                             <DropdownMenuItem
                                 className="gap-3 rounded-xl p-3 text-destructive focus:text-destructive focus:bg-destructive/10"
@@ -188,7 +183,7 @@ export const ChatWindow = ({
                             <div className="space-y-1">
                                 <h3 className="font-bold text-xl tracking-tight">No messages yet</h3>
                                 <p className="text-muted-foreground text-sm max-w-[240px] mx-auto leading-relaxed">
-                                    Send a message to start the conversation with {partner.profile?.firstName || 'this partner'}.
+                                    Send a message to start the conversation with {partnerName.split(' ')[0] || 'this partner'}.
                                 </p>
                             </div>
                         </div>

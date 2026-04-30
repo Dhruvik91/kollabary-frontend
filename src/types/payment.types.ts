@@ -12,6 +12,9 @@ export interface TopUpPlan {
     coins: number;
     bonusCoins?: number;
     isActive: boolean;
+    description?: string;
+    imageUrl?: string;
+    isPopular?: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -21,6 +24,10 @@ export interface CreateTopUpPlanDto {
     amount: number;
     coins: number;
     isActive?: boolean;
+    bonusCoins?: number;
+    description?: string;
+    imageUrl?: string;
+    isPopular?: boolean;
 }
 
 export interface UpdateTopUpPlanDto extends Partial<CreateTopUpPlanDto> { }

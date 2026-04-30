@@ -11,6 +11,8 @@ import { useAdminQueries } from '@/hooks/queries/useAdminQueries';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+
 export const AdminBidsContainer = () => {
     const { useBids } = useAdminQueries();
     const [search, setSearch] = useState('');
@@ -102,11 +104,14 @@ export const AdminBidsContainer = () => {
     ];
 
     return (
-        <div className="space-y-8 pb-12">
-            <div>
-                <h2 className="text-3xl font-black tracking-tight text-foreground uppercase">System Bids</h2>
-                <p className="text-muted-foreground font-medium mt-1">Review all influencer proposals across platform auctions.</p>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Bid Monitoring"
+                title="Proposal"
+                highlightedTitle="Tracking"
+                subtitle="Review all influencer proposals across platform auctions."
+                icon={Gavel}
+            />
 
             <DataTable
                 data={bids}

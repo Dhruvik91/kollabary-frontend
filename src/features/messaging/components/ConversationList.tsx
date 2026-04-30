@@ -53,8 +53,12 @@ export const ConversationList = ({
                         : conversation.userOne;
 
                     const isActive = conversation.id === activeConversationId;
-                    const initials = partner.profile?.fullName
-                        ? partner.profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase()
+                    
+                    const fullName = partner.influencerProfile?.fullName || partner.profile?.fullName || partner.email.split('@')[0];
+                    const avatarUrl = partner.influencerProfile?.avatarUrl || partner.profile?.avatarUrl;
+                    
+                    const initials = fullName
+                        ? fullName.split(' ').map(n => n[0]).join('').toUpperCase()
                         : partner.email[0].toUpperCase();
 
                     return (
@@ -84,7 +88,7 @@ export const ConversationList = ({
                                     "h-10 w-10 border-2 transition-transform duration-200 group-hover:scale-105",
                                     isActive ? "border-primary/20" : "border-background shadow-sm"
                                 )}>
-                                    <AvatarImage src={partner.profile?.avatarUrl} />
+                                    <AvatarImage src={avatarUrl} />
                                     <AvatarFallback className={cn(
                                         "font-bold text-xs",
                                         isActive ? "bg-primary text-primary-foreground" : "bg-primary/5 text-primary"
@@ -100,7 +104,7 @@ export const ConversationList = ({
                                         "font-bold truncate text-[13px] tracking-tight",
                                         isActive ? "text-primary" : "text-foreground"
                                     )}>
-                                        {partner.profile?.fullName || partner.email.split('@')[0]}
+                                        {fullName}
                                     </h4>
                                     <span className={cn(
                                         "text-[9px] whitespace-nowrap ml-2 font-bold opacity-60",

@@ -7,7 +7,8 @@ import { AdminDetailGrid } from '../components/AdminDetailGrid';
 import { AdminGrowthChart } from '../components/AdminGrowthChart';
 import { AdminManagementCard } from '../components/AdminManagementCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ShieldAlert } from 'lucide-react';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { ShieldAlert, BarChart3 } from 'lucide-react';
 
 export function AdminOverviewContainer() {
     const { data: stats, isLoading, isError } = useAdminStats();
@@ -15,9 +16,9 @@ export function AdminOverviewContainer() {
     if (isLoading) {
         return (
             <div className="space-y-8">
-                <div>
+                <div className="space-y-3">
                     <Skeleton className="h-10 w-48" />
-                    <Skeleton className="mt-2 h-4 w-64" />
+                    <Skeleton className="h-4 w-64" />
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -52,11 +53,13 @@ export function AdminOverviewContainer() {
 
     return (
         <div className="space-y-8 pb-10">
-            {/* Header section */}
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground">Platform Overview</h1>
-                <p className="text-muted-foreground">Monitor platform health, growth, and pending administrative tasks.</p>
-            </div>
+            <PageHeader
+                label="Admin Overview"
+                title="Platform"
+                highlightedTitle="Insights"
+                subtitle="Monitor platform health, growth, and pending administrative tasks."
+                icon={BarChart3}
+            />
 
             {/* Main Stats Grid */}
             <AdminStatsGrid stats={stats} />

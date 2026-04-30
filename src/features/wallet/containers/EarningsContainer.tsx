@@ -36,7 +36,7 @@ export const EarningsContainer = () => {
                 iconUrl={COIN_URL}
                 action={
                     <Link href={FRONTEND_ROUTES.DASHBOARD.TOP_UP}>
-                        <Button className="h-12 px-6 rounded-2xl bg-secondary hover:bg-secondary/90 text-white font-bold transition-all gap-2 border-none">
+                        <Button className="h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
                             <span className="uppercase tracking-widest text-[10px]">Top Up</span>
                             <ArrowUpRight size={18} />
                         </Button>
