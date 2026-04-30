@@ -5,6 +5,7 @@ import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
+import { ConfettiProvider } from '@/contexts/confetti-context';
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -111,13 +112,15 @@ export default function RootLayout({
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AuthProvider>
-              <SocketProvider>
-                <TooltipProvider>
-                  {children}
-                  <Toaster position="top-right" richColors closeButton />
-                  <PWAInstaller />
-                </TooltipProvider>
-              </SocketProvider>
+              <ConfettiProvider>
+                <SocketProvider>
+                  <TooltipProvider>
+                    {children}
+                    <Toaster position="top-right" richColors closeButton />
+                    <PWAInstaller />
+                  </TooltipProvider>
+                </SocketProvider>
+              </ConfettiProvider>
             </AuthProvider>
           </ThemeProvider>
         </QueryProvider>

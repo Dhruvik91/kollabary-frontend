@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { useConfetti } from '@/contexts/confetti-context';
 
 import {
     useCollaborationDetail,
@@ -17,7 +17,6 @@ import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
 
 // Sub-components
-import { CollaborationHeader } from '../components/CollaborationHeader';
 import { CollaborationMainInfo } from '../components/CollaborationMainInfo';
 import { CollaborationPartnerCard } from '../components/CollaborationPartnerCard';
 import { CollaborationProgressTracker } from '../components/CollaborationProgressTracker';
@@ -35,6 +34,7 @@ import { Star, AlertCircle, Loader2, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { BackButton } from '@/components/shared/BackButton';
 
 interface CollaborationDetailContainerProps {
     id: string;
@@ -60,7 +60,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [showConfetti, setShowConfetti] = useState(false);
+    const { triggerConfetti } = useConfetti();
 
     const handleMessagePartner = () => {
         if (!collaboration) return;
@@ -134,7 +134,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         updateStatus({ status }, {
             onSuccess: () => {
                 if (status === CollaborationStatus.ACCEPTED) {
-                    setShowConfetti(true);
+                    triggerConfetti({ numberOfPieces: 500 });
                 }
             }
         });
@@ -188,7 +188,6 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     };
 
     const canEditDetail = isRequester && (collaboration.status === CollaborationStatus.REQUESTED || collaboration.status === CollaborationStatus.ACCEPTED);
-    const canDeleteDetail = isRequester && collaboration.status === CollaborationStatus.REQUESTED;
 
     return (
         <motion.div
@@ -197,20 +196,12 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             transition={{ duration: 0.5 }}
             className="space-y-6 sm:space-y-8 pb-20 md:px-0"
         >
-            {showConfetti && (
-                <ConfettiEffect 
-                    recycle={false} 
-                    numberOfPieces={500} 
-                    onConfettiComplete={() => setShowConfetti(false)} 
-                />
-            )}
             {/* Header with Navigation & Actions */}
-            <CollaborationHeader
-                canEdit={canEditDetail}
-                canDelete={canDeleteDetail}
-                onEdit={() => setIsEditDialogOpen(true)}
-                onDelete={() => setIsDeleteDialogOpen(true)}
-            />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full min-w-0">
+                <div className="flex justify-start">
+                    <BackButton label="Back to List" />
+                </div>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content Area */}

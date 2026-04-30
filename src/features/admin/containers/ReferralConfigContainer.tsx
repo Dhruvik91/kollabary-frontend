@@ -7,6 +7,9 @@ import { KCSettingsForm } from '../components/KCSettingsForm';
 import { KCSettingKey } from '@/services/kc-setting.service';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+import { Users } from 'lucide-react';
+
 export function ReferralConfigContainer() {
     const { data: settings = [], isLoading, isError } = useKCSettings();
     const updateMutation = useUpdateKCSetting();
@@ -20,8 +23,11 @@ export function ReferralConfigContainer() {
 
     if (isLoading) {
         return (
-            <div className="space-y-6">
-                <Skeleton className="h-10 w-48" />
+            <div className="space-y-8">
+                <div className="space-y-3">
+                    <Skeleton className="h-10 w-64" />
+                    <Skeleton className="h-4 w-96" />
+                </div>
                 <Skeleton className="h-64 w-full rounded-2xl" />
             </div>
         );
@@ -36,11 +42,14 @@ export function ReferralConfigContainer() {
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">Referral System</h1>
-                <p className="text-muted-foreground mt-1">Manage rewards for bringing new users to Kollabary.</p>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Growth Engine"
+                title="Referral"
+                highlightedTitle="System"
+                subtitle="Manage rewards for bringing new users to Kollabary."
+                icon={Users}
+            />
 
             <div className="grid gap-8 max-w-4xl">
                 <KCSettingsForm

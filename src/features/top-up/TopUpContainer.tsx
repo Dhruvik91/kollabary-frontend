@@ -1,23 +1,22 @@
 'use client';
 
+import { useRef, useEffect, useState } from 'react';
 import Script from 'next/script';
-
-
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
 import { usePaymentPlans, useInitiateTopUp, useVerifyPayment, useCancelOrder } from '@/hooks/queries/usePaymentQueries';
 import { TopUpList } from './components/TopUpList';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ErrorState } from '@/components/shared/ErrorState';
+import { useConfetti } from '@/contexts/confetti-context';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowUpRight, Coins, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
-import { useRef, useEffect, useState } from 'react';
-import { FRONTEND_ROUTES } from '@/constants';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import ConfettiEffect from '@/components/shared/ConfettiEffect';
+import { FRONTEND_ROUTES } from '@/constants';
 
 export const TopUpContainer = () => {
-    const [showConfetti, setShowConfetti] = useState(false);
+    const { triggerConfetti } = useConfetti();
     const activeOrderIdRef = useRef<string | null>(null);
     const { data: plans, isLoading: isPlansLoading, isError, error, refetch } = usePaymentPlans();
     const { mutateAsync: initiateTopUp, isPending: isInitiating } = useInitiateTopUp();
@@ -62,7 +61,7 @@ export const TopUpContainer = () => {
                         razorpaySignature: response.razorpay_signature,
                     }, {
                         onSuccess: () => {
-                            setShowConfetti(true);
+                            triggerConfetti({ numberOfPieces: 500 });
                             toast.success("Payment verified successfully! Your KC coins have been added.");
                         },
                         onSettled: () => {
@@ -106,43 +105,27 @@ export const TopUpContainer = () => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
-            {showConfetti && (
-                <ConfettiEffect 
-                    recycle={false} 
-                    numberOfPieces={500} 
-                    onConfettiComplete={() => setShowConfetti(false)} 
-                />
-            )}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <PageHeader
-                    label="TOP UP"
-                    title="KC"
-                    highlightedTitle="Coins"
-                    subtitle="Choose a plan to boost your balance and unlock more opportunities."
-                    icon={Coins}
-                    action={
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
-                            <Button className="h-12 px-6 rounded-2xl bg-secondary hover:bg-secondary/90 text-white font-bold transition-all gap-2 border-none">
-                                <span className="uppercase tracking-widest text-[10px]">Invite & Earn</span>
-                                <ArrowUpRight size={18} />
-                            </Button>
-                        </Link>
-                    }
-                />
-            </div>
-
-            <div className="bg-gradient-to-br from-primary/5 via-transparent to-primary/5 rounded-3xl p-4 md:p-8 border border-primary/10">
-                <div className="max-w-4xl mx-auto text-center space-y-4 mb-4">
-                    <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider">
-                        <Sparkles className="w-4 h-4" />
-                        Limited Time Offers
-                    </div>
-                </div>
-
+            <PageHeader
+                label="BOOST YOUR WALLET"
+                title="KC"
+                highlightedTitle="Coins"
+                subtitle="Unlock premium features, bid on top collaborations, and grow your presence with KC Coins."
+                icon={Coins}
+                className="relative z-10"
+                action={
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                        <Button className="h-14 px-8 rounded-2xl bg-gradient-to-r from-secondary to-secondary/80 hover:scale-105 active:scale-95 text-white font-black transition-all gap-3 border-none shadow-xl shadow-secondary/20">
+                            <span className="uppercase tracking-[0.2em] text-[11px]">Invite & Earn </span>
+                            <ArrowUpRight size={20} />
+                        </Button>
+                    </Link>
+                }
+            />
+            <div className="relative">
                 {isPlansLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-8 px-4">
-                        {[1, 2, 3].map((i) => (
-                            <Skeleton key={i} className="h-[400px] rounded-2xl w-full" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-12 px-4 max-w-7xl mx-auto justify-items-center">
+                        {[1, 2, 3, 4].map((i) => (
+                            <Skeleton key={i} className="h-[480px] rounded-[2.5rem] w-full max-w-[320px]" />
                         ))}
                     </div>
                 ) : (

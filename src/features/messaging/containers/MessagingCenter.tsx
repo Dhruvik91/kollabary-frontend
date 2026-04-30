@@ -76,8 +76,10 @@ export const MessagingCenter = () => {
             if (partner.role === UserRole.INFLUENCER) {
                 const influencerId = partner.influencerProfile?.id || partner.id;
                 router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(String(influencerId)));
+            } else if (partner.role === UserRole.USER) {
+                const brandId = partner?.profile?.id;
+                router.push(FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(String(brandId)));
             }
-            // For brands (UserRole.USER), add redirection when specific brand profile route is ready
         }
     };
 
@@ -169,7 +171,14 @@ export const MessagingCenter = () => {
                                 </ChatWindow>
                             </motion.div>
                         ) : (
-                            <div className="flex-1 flex flex-col items-center justify-center text-center p-12 space-y-8 animate-in fade-in zoom-in-95 duration-700 bg-[radial-gradient(circle_at_center,var(--tw-gradient-from),transparent_70%)] from-primary/5">
+                            <motion.div
+                                key="empty-messages"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="flex-1 flex flex-col items-center justify-center text-center p-12 space-y-8 animate-in fade-in zoom-in-95 duration-700 bg-[radial-gradient(circle_at_center,var(--tw-gradient-from),transparent_70%)] from-primary/5"
+                            >
                                 <div className="relative">
                                     <div className="absolute -inset-12 bg-primary/10 rounded-[5rem] blur-3xl animate-pulse" />
                                     <div className="relative w-24 h-24 rounded-[2.5rem] bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center text-primary shadow-2xl rotate-6 group hover:rotate-0 transition-all duration-500 border border-primary/10">
@@ -190,7 +199,7 @@ export const MessagingCenter = () => {
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">Secure Messaging</span>
                                     <div className="h-1 w-24 bg-gradient-to-r from-transparent via-border to-transparent" />
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                     </AnimatePresence>
                 </div>

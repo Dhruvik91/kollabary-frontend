@@ -22,6 +22,8 @@ import { useAdminQueries } from '@/hooks/queries/useAdminQueries';
 import { format } from 'date-fns';
 import { Conversation, Message } from '@/types/messaging.types';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+
 export const AdminConversationsContainer = () => {
     const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
     const { useConversations, useConversationMessages } = useAdminQueries();
@@ -38,13 +40,14 @@ export const AdminConversationsContainer = () => {
     };
 
     return (
-        <div className="space-y-8 pb-12">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-3xl font-black tracking-tight text-foreground uppercase">System Messages</h2>
-                    <p className="text-muted-foreground font-medium mt-1">Audit platform communication and moderate conversations.</p>
-                </div>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Communication Audit"
+                title="System"
+                highlightedTitle="Messages"
+                subtitle="Audit platform communication and moderate conversations."
+                icon={MessageSquare}
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[700px]">
                 {/* Conversations List */}

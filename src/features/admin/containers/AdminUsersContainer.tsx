@@ -20,7 +20,8 @@ import {
     Mail,
     Calendar,
     Ban,
-    Coins
+    Coins,
+    Users
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Input } from '@/components/ui/input';
@@ -47,11 +48,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { PageHeader } from '@/components/shared/PageHeader';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export const AdminUsersContainer = () => {
     const [page, setPage] = useState(0); // DataTable uses 0-indexed page
@@ -158,8 +156,8 @@ export const AdminUsersContainer = () => {
                 const role = row.original.role;
                 const isInfluencer = role === 'INFLUENCER';
                 const isBrand = role === 'USER';
-                const isVerified = isInfluencer 
-                    ? row.original.influencerProfile?.verified 
+                const isVerified = isInfluencer
+                    ? row.original.influencerProfile?.verified
                     : row.original.profile?.verified;
 
                 if (!isInfluencer && !isBrand) {
@@ -235,10 +233,10 @@ export const AdminUsersContainer = () => {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={() => {
                                         const isInfluencer = row.original.role === 'INFLUENCER';
-                                        const isVerified = isInfluencer 
-                                            ? row.original.influencerProfile?.verified 
+                                        const isVerified = isInfluencer
+                                            ? row.original.influencerProfile?.verified
                                             : row.original.profile?.verified;
-                                        
+
                                         moderateUser({
                                             userId: row.original.id,
                                             verified: !isVerified
@@ -275,13 +273,14 @@ export const AdminUsersContainer = () => {
     };
 
     return (
-        <div className="space-y-6 p-6">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight">Platform Population</h1>
-                    <p className="text-muted-foreground mt-1">Full control over users, influencers, and their access.</p>
-                </div>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="User Management"
+                title="Platform"
+                highlightedTitle="Population"
+                subtitle="Full control over users, influencers, and their access."
+                icon={Users}
+            />
 
             <DataTable
                 data={data?.items || []}

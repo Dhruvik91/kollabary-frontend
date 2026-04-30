@@ -105,7 +105,6 @@ export const DashboardHeader = () => {
                                         <span className="text-sm font-bold tracking-tight text-foreground/90 tabular-nums">
                                             {(wallet?.balance ?? 0).toLocaleString()}
                                         </span>
-                                        <span className="text-[10px] font-black text-primary uppercase tracking-tighter">K</span>
                                     </div>
                                 )}
                             </div>

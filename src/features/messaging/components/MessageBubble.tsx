@@ -71,8 +71,11 @@ export const MessageBubble = ({
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(message.message);
 
-    const initials = message.sender.profile?.fullName
-        ? message.sender.profile.fullName.split(' ').map(n => n[0]).join('').toUpperCase()
+    const senderName = message.sender.influencerProfile?.fullName || message.sender.profile?.fullName || message.sender.email.split('@')[0];
+    const senderAvatar = message.sender.influencerProfile?.avatarUrl || message.sender.profile?.avatarUrl;
+
+    const initials = senderName
+        ? senderName.split(' ').map(n => n[0]).join('').toUpperCase()
         : message.sender.email?.[0]?.toUpperCase() || '?';
 
     const messageType = getMessageType(message.message);
@@ -239,7 +242,7 @@ export const MessageBubble = ({
         >
             {showAvatar && !isOwn && (
                 <Avatar className="h-9 w-9 shrink-0 mb-1 border-2 border-background shadow-md">
-                    <AvatarImage src={message.sender.profile?.avatarUrl} />
+                    <AvatarImage src={senderAvatar} />
                     <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">{initials}</AvatarFallback>
                 </Avatar>
             )}
@@ -254,9 +257,7 @@ export const MessageBubble = ({
                     "flex items-center gap-2 group/bubble",
                     isOwn && "flex-row"
                 )}>
-                    {isEditing ? (
-                        bubbleContent
-                    ) : (
+                    {!isEditing && isOwn ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild className="sm:pointer-events-none">
                                 {bubbleContent}
@@ -280,6 +281,8 @@ export const MessageBubble = ({
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                    ) : (
+                        bubbleContent
                     )}
 
                     {isOwn && !isEditing && (

@@ -65,7 +65,6 @@ export const WalletCard = ({
                                     {loading ? "---" : formattedBalance}
                                 </motion.h2>
                                 <div className="flex flex-col">
-                                    <span className="text-lg font-bold text-primary/60 leading-none">K</span>
                                     <span className="text-[10px] font-black text-primary/40 uppercase tracking-tighter">Coins</span>
                                 </div>
                             </div>

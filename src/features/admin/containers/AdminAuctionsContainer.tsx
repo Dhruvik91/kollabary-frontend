@@ -11,6 +11,8 @@ import { useAdminQueries } from '@/hooks/queries/useAdminQueries';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
+import { PageHeader } from '@/components/shared/PageHeader';
+
 export const AdminAuctionsContainer = () => {
     const { useAuctions } = useAdminQueries();
     const [search, setSearch] = useState('');
@@ -110,11 +112,14 @@ export const AdminAuctionsContainer = () => {
     ];
 
     return (
-        <div className="space-y-8 pb-12">
-            <div>
-                <h2 className="text-3xl font-black tracking-tight text-foreground uppercase">System Auctions</h2>
-                <p className="text-muted-foreground font-medium mt-1">Monitor and manage all platform auctions.</p>
-            </div>
+        <div className="space-y-8 pb-10">
+            <PageHeader
+                label="Campaign Control"
+                title="System"
+                highlightedTitle="Auctions"
+                subtitle="Monitor and manage all platform auctions."
+                icon={Hammer}
+            />
 
             <DataTable
                 data={auctions}
