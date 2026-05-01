@@ -46,8 +46,8 @@ export const DashboardHeader = () => {
     return (
         <header className="sticky top-0 inset-x-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
             <div className="flex items-center gap-4">
-                <Link 
-                    href={profileHref} 
+                <Link
+                    href={profileHref}
                     className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-accent/50 transition-all shrink-0"
                 >
                     <Avatar className="h-9 w-9 border border-border/50 shrink-0 shadow-sm">

@@ -101,19 +101,21 @@ export const BrandDetailHeader = ({
                             </motion.div>
 
                             {/* Verification Badge */}
-                            <div className="absolute bottom-1 -right-1 sm:bottom-2 sm:-right-2 z-20">
-                                <Tooltip delayDuration={300}>
-                                    <TooltipTrigger asChild>
-                                        <div className="bg-primary shadow-lg shadow-primary/25 text-primary-foreground px-3 py-1 rounded-xl flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest border border-white/10 cursor-help">
-                                            <CheckCircle2 size={12} fill="currentColor" className="text-primary-foreground" />
-                                            <span>Verified</span>
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="top" className="font-bold">
-                                        Verified Business Account
-                                    </TooltipContent>
-                                </Tooltip>
-                            </div>
+                            {brand.verified && (
+                                <div className="absolute bottom-1 -right-1 sm:bottom-2 sm:-right-2 z-20">
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <div className="bg-primary shadow-lg shadow-primary/25 text-primary-foreground px-3 py-1 rounded-xl flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest border border-white/10 cursor-help">
+                                                <CheckCircle2 size={12} fill="currentColor" className="text-primary-foreground" />
+                                                <span>Verified</span>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top" className="font-bold">
+                                            Verified Business Account
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
+                            )}
                         </div>
 
                         {/* Info Content */}
@@ -125,7 +127,7 @@ export const BrandDetailHeader = ({
                                     </h1>
                                     <p className="text-muted-foreground font-bold tracking-[0.2em] uppercase text-[9px] sm:text-[10px] lg:text-xs flex items-center justify-center lg:justify-start gap-2 opacity-80">
                                         <Globe size={11} className="text-primary" />
-                                        Official Partner · {brand.location || 'Global'}
+                                        Official Partner
                                     </p>
                                 </div>
 
