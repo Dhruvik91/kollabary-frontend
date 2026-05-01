@@ -12,18 +12,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export const OrdersContainer = () => {
     const limit = 10;
-    
-    const { 
-        data: infiniteData, 
-        isLoading, 
-        isError, 
-        error, 
+
+    const {
+        data: infiniteData,
+        isLoading,
+        isError,
+        error,
         refetch,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage
     } = useInfiniteMyOrders(limit);
-    
+
     const { mutate: syncOrder, isPending: isSyncing } = useSyncOrder();
 
     // Flatten all items from all pages
@@ -75,7 +75,7 @@ export const OrdersContainer = () => {
                 icon={Package}
             />
 
-            <div className="max-w-5xl">
+            <div className="max-w-5xl mx-auto ">
                 <InfiniteScrollContainer
                     items={orders}
                     isLoading={isLoading}
@@ -86,9 +86,9 @@ export const OrdersContainer = () => {
                     emptyState={emptyState}
                     gridClassName="space-y-4"
                     renderItem={(order) => (
-                        <OrderItem 
-                            key={order.id} 
-                            order={order} 
+                        <OrderItem
+                            key={order.id}
+                            order={order}
                             isSyncing={isSyncing}
                             onSync={syncOrder}
                         />
@@ -98,7 +98,7 @@ export const OrdersContainer = () => {
 
             <div className="text-center text-muted-foreground text-sm max-w-2xl mx-auto pt-8 border-t border-border/50">
                 <p>
-                    If your payment is successful but the status is still pending, use the sync button to update it. 
+                    If your payment is successful but the status is still pending, use the sync button to update it.
                     For further assistance, contact our support team.
                 </p>
             </div>

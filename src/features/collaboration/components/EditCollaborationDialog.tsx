@@ -65,7 +65,7 @@ export const EditCollaborationDialog = ({
             title: collaboration.title,
             description: collaboration.description || '',
             proposedTerms: (collaboration.proposedTerms?.details as string) || '',
-            agreedTerms: (collaboration.agreedTerms?.details as string) || (collaboration.agreedTerms?.bidAmount ? `$${collaboration.agreedTerms.bidAmount}` : ''),
+            agreedTerms: (collaboration.agreedTerms?.details as string) || (collaboration.agreedTerms?.bidAmount ? `₹${collaboration.agreedTerms.bidAmount}` : ''),
             startDate: collaboration.startDate ? new Date(collaboration.startDate) : new Date(),
             endDate: collaboration.endDate ? new Date(collaboration.endDate) : new Date(Date.now() + 86400000),
         },
@@ -164,7 +164,7 @@ export const EditCollaborationDialog = ({
                                 <FormLabel className="font-bold text-primary">Agreed Budget / Terms (Optional)</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="e.g. $500, Product Gift, or 'Talked on DM'"
+                                        placeholder="e.g. ₹500, Product Gift, or 'Talked on DM'"
                                         className="h-12 rounded-xl bg-primary/5 border-primary/20 focus:ring-primary"
                                         {...field}
                                     />

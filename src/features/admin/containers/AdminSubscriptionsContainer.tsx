@@ -142,7 +142,7 @@ export function AdminSubscriptionsContainer() {
             accessorKey: 'price',
             cell: ({ row }) => (
                 <div className="flex items-baseline gap-1">
-                    <span className="text-lg font-black text-foreground tabular-nums">${row.original.price}</span>
+                    <span className="text-lg font-black text-foreground tabular-nums">₹{row.original.price}</span>
                     <span className="text-[10px] text-muted-foreground uppercase font-bold">/mo</span>
                 </div>
             ),
@@ -227,7 +227,7 @@ export function AdminSubscriptionsContainer() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium">Monthly Price ($)</label>
+                                    <label className="text-sm font-medium">Monthly Price (₹)</label>
                                     <Input
                                         type="number"
                                         placeholder="29"
@@ -322,7 +322,7 @@ export function AdminSubscriptionsContainer() {
                     <div className="h-10 w-px bg-border shrink-0 self-center" />
                     <div className="text-center">
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Avg. Revenue/User</p>
-                        <p className="text-2xl font-black mt-1 text-blue-600 tabular-nums italic">$42.10</p>
+                        <p className="text-2xl font-black mt-1 text-blue-600 tabular-nums italic">₹42.10</p>
                     </div>
                 </div>
             </motion.div>

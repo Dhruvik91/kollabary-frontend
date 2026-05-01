@@ -567,7 +567,7 @@ export const InfluencerProfileDetail = ({
                                                         </Badge>
                                                     </div>
                                                 )}
-                                                
+
                                                 {/* Hidden Audience Data */}
                                                 {false && (
                                                     <div className="opacity-0 h-0 overflow-hidden">
@@ -588,14 +588,13 @@ export const InfluencerProfileDetail = ({
                                                                 </div>
                                                                 <h4 className="text-xl font-black tracking-tight">Standard Rates</h4>
                                                             </div>
-                                                            <div className="text-[10px] font-black text-primary uppercase bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">USD</div>
                                                         </div>
 
                                                         <div className="space-y-4">
                                                             <div className="flex justify-between items-end">
                                                                 <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Starting from</span>
                                                                 <div className="text-right">
-                                                                    <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">${minPrice || 0}</span>
+                                                                    <span className="text-3xl font-black text-primary group-hover/price:scale-105 inline-block transition-transform">₹{minPrice || 0}</span>
                                                                 </div>
                                                             </div>
                                                             <p className="text-[9px] text-muted-foreground/60 mt-4 leading-relaxed font-medium italic">
