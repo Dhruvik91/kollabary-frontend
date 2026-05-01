@@ -1,20 +1,16 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { MapPin, MessageSquare, Eye, Briefcase, Handshake, Globe } from 'lucide-react';
+import { MapPin, Eye, Briefcase, Handshake } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
-import { useStartConversation } from '@/hooks/use-messaging.hooks';
 import { UserProfile } from '@/services/profile.service';
-import { ShareButton } from '@/components/shared/ShareButton';
 import {
     Tooltip,
     TooltipContent,
-    TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -24,7 +20,6 @@ interface BrandCardProps {
 
 export const BrandCard = ({ brand }: BrandCardProps) => {
     const router = useRouter();
-    const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
 
     const {
         id,
@@ -37,19 +32,6 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
         stats,
         user
     } = brand;
-
-    const handleMessage = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (user?.id) {
-            startConversation(user.id, {
-                onSuccess: (conversation) => {
-                    router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
-                }
-            });
-        }
-    };
 
     return (
         <motion.div
@@ -151,22 +133,13 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 pt-2">
+                        <div className="grid grid-cols-1 gap-3 pt-2">
                             <Button
                                 onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(id))}
                                 className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 transition-all"
                             >
                                 <Eye size={16} />
                                 Profile
-                            </Button>
-                            <Button
-                                onClick={handleMessage}
-                                disabled={isStartingChat}
-                                variant="outline"
-                                className="h-11 rounded-xl font-bold text-xs uppercase tracking-widest gap-2 border-2 hover:bg-zinc-50 dark:hover:bg-white/5 transition-all shadow-sm"
-                            >
-                                <MessageSquare size={16} />
-                                Message
                             </Button>
                         </div>
                     </div>
