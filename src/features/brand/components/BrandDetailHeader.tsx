@@ -84,9 +84,9 @@ export const BrandDetailHeader = ({
                                 className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden p-1 bg-linear-to-br from-primary/40 via-border to-secondary/40 shadow-xl relative z-10"
                             >
                                 <div className="w-full h-full rounded-[1.8rem] lg:rounded-[2.3rem] overflow-hidden relative bg-card border border-border/50">
-                                    {brand.avatarUrl ? (
+                                    {brand.avatarUrl || brand.profileImage ? (
                                         <Image
-                                            src={brand.avatarUrl}
+                                            src={brand.avatarUrl || brand.profileImage || ''}
                                             alt={brand.fullName}
                                             fill
                                             sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 176px"

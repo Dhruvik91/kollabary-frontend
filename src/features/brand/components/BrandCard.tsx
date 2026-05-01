@@ -31,6 +31,7 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
         fullName,
         username,
         avatarUrl,
+        profileImage,
         bio,
         location,
         stats,
@@ -71,9 +72,9 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                     {/* Profile Section with Overlapping Avatar */}
                     <div className="relative px-6 -mt-12 mb-4">
                         <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-4 border-background/80 backdrop-blur-sm shadow-xl group-hover:scale-105 transition-transform duration-500 bg-background">
-                            {avatarUrl ? (
+                            {avatarUrl || profileImage ? (
                                 <Image
-                                    src={avatarUrl}
+                                    src={avatarUrl || profileImage || ''}
                                     alt={fullName}
                                     fill
                                     sizes="80px"
