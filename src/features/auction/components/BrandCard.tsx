@@ -13,10 +13,11 @@ interface BrandCardProps {
     avatarLetter: string;
     avatarUrl?: string;
     onContactClick?: () => void;
+    showContactButton?: boolean;
     className?: string;
 }
 
-export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onContactClick, className }: BrandCardProps) => {
+export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onContactClick, showContactButton = false, className }: BrandCardProps) => {
     return (
         <div className={cn("bg-card border border-border rounded-[2rem] p-6 backdrop-blur-xl transition-all duration-300", className)}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -55,13 +56,15 @@ export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onConta
                             View Profile
                         </Button>
                     </Link>
-                    <Button 
-                        className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-xl shadow-primary/10"
-                        onClick={onContactClick}
-                    >
-                        <MessageSquare className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                        Contact Brand
-                    </Button>
+                    {showContactButton && (
+                        <Button 
+                            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-xl shadow-primary/10"
+                            onClick={onContactClick}
+                        >
+                            <MessageSquare className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                            Contact Brand
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
