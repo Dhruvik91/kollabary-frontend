@@ -1,4 +1,4 @@
-import React from 'react';
+"use client"
 import { Pitch, PitchStatus } from '@/types/pitch.types';
 import { formatDistanceToNow } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
@@ -16,11 +16,6 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface PitchCardProps {
     pitch: Pitch;
@@ -110,45 +105,43 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
                 </div>
 
                 {/* Message Content */}
-                <div className="relative">
-                    <div className="absolute -left-2 top-0 bottom-0 w-1 bg-primary/10 rounded-full" />
-                    <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 line-clamp-3 group-hover:line-clamp-none transition-all duration-500 italic">
-                        "{pitch.message}"
-                    </p>
+                <div className="space-y-4">
+                    <div className="relative">
+                        <div className="absolute -left-2 top-0 bottom-0 w-1 bg-primary/10 rounded-full" />
+                        <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 line-clamp-3 group-hover:line-clamp-none transition-all duration-500 italic">
+                            "{pitch.message}"
+                        </p>
+                    </div>
+
+                    {pitch.workUrl && (
+                        <a
+                            href={pitch.workUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2.5 rounded-2xl bg-primary/5 border border-primary/10 text-primary hover:bg-primary/10 transition-all group/link w-full sm:w-fit"
+                        >
+                            <span className="text-[10px] font-black uppercase tracking-widest">View Reference Work</span>
+                            <ExternalLink size={12} className="opacity-50" />
+                        </a>
+                    )}
                 </div>
 
                 {/* Footer Actions */}
-                <div className="pt-4 flex flex-col sm:flex-row items-center justify-between border-t border-border/50 gap-4">
-                    <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
-                        {pitch.status === PitchStatus.ACCEPTED && (
-                            <Tooltip delayDuration={300}>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="w-9 h-9 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 border border-transparent hover:border-primary/20"
-                                        onClick={handleMessage}
-                                        disabled={isStartingChat}
-                                    >
-                                        <MessageSquare size={16} className={cn(isStartingChat && "animate-pulse")} />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top">
-                                    Send Message
-                                </TooltipContent>
-                            </Tooltip>
-                        )}
-                        <Tooltip delayDuration={300}>
-                            <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" className="w-9 h-9 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 border border-transparent hover:border-primary/20">
-                                    <ExternalLink size={16} />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                                View Pitch Details
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
+                <div className={cn(
+                    "pt-4 flex flex-col sm:flex-row items-center justify-between border-t border-border/50 gap-4",
+                    (isSent || !isPending) && pitch.status !== PitchStatus.ACCEPTED && "hidden"
+                )}>
+                    {pitch.status === PitchStatus.ACCEPTED && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full sm:w-auto h-10 px-6 rounded-2xl text-[10px] font-black uppercase tracking-widest border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-primary/20 transition-all duration-300 gap-2"
+                            onClick={handleMessage}
+                            disabled={isStartingChat}
+                        >
+                            {isStartingChat ? 'Opening Chat...' : 'Send Message'}
+                        </Button>
+                    )}
 
                     {!isSent && isPending && (
                         <div className="flex items-center gap-2 w-full sm:w-auto">

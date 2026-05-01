@@ -5,6 +5,7 @@ import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/shared/ImageUpload';
 import { useCreatePitch } from '@/hooks/use-pitch.hooks';
 import { useActionConsent } from '@/hooks/use-action-consent';
 import { UserProfile } from '@/services/profile.service';
@@ -22,6 +23,7 @@ export const PitchNowModal = ({
     brand
 }: PitchNowModalProps) => {
     const [message, setMessage] = useState('');
+    const [workUrl, setWorkUrl] = useState('');
     const createPitch = useCreatePitch();
 
     const { executeWithConsent, ConsentModalElement } = useActionConsent({
@@ -37,10 +39,12 @@ export const PitchNowModal = ({
             try {
                 await createPitch.mutateAsync({
                     targetId: brand.user?.id || '',
-                    message
+                    message,
+                    workUrl: workUrl.trim() || undefined
                 });
                 onClose();
                 setMessage('');
+                setWorkUrl('');
             } catch (error) {
                 // Error handled by hook toast
             }
@@ -88,6 +92,19 @@ export const PitchNowModal = ({
                     </div>
 
                     <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label className="text-xs font-black uppercase tracking-[0.15em] text-foreground/70 px-1">
+                                Reference Work (Optional)
+                            </Label>
+                            <ImageUpload
+                                value={workUrl}
+                                onChange={setWorkUrl}
+                                className="bg-background/50"
+                                message='Work Image or Video'
+                                maxSize={100}
+                            />
+                        </div>
+
                         <div className="flex items-center justify-between px-1">
                             <Label className="text-xs font-black uppercase tracking-[0.15em] text-foreground/70">
                                 Your Pitch Message

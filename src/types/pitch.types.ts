@@ -12,6 +12,7 @@ export interface Pitch {
     target: any; // User object
     message: string;
     status: PitchStatus;
+    workUrl?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -19,6 +20,7 @@ export interface Pitch {
 export interface CreatePitchDto {
     targetId: string;
     message: string;
+    workUrl?: string;
 }
 
 export interface UpdatePitchStatusDto {
