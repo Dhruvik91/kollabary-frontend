@@ -6,7 +6,7 @@ import { ActionConsentModal } from '@/components/modal/ActionConsentModal';
 import { useKCSettings } from '@/hooks/use-kc-settings.hooks';
 import { KCSettingKey } from '@/services/kc-setting.service';
 
-export type ConsentActionType = 'AUCTION_CREATE' | 'BID_PLACE' | 'COLLAB_REQUEST';
+export type ConsentActionType = 'AUCTION_CREATE' | 'BID_PLACE' | 'COLLAB_REQUEST' | 'PITCH_CREATE';
 
 interface UseActionConsentProps {
     actionType: ConsentActionType;
@@ -29,6 +29,7 @@ export function useActionConsent({
             case 'AUCTION_CREATE': return KCSettingKey.AUCTION_CREATION_PRICE;
             case 'BID_PLACE': return KCSettingKey.BID_PLACEMENT_PRICE;
             case 'COLLAB_REQUEST': return KCSettingKey.COLLABORATION_CREATION_PRICE;
+            case 'PITCH_CREATE': return KCSettingKey.PITCH_PRICE;
             default: return null;
         }
     }, [actionType]);
@@ -45,6 +46,7 @@ export function useActionConsent({
             case 'AUCTION_CREATE': return 'Create Auction';
             case 'BID_PLACE': return 'Place Bid';
             case 'COLLAB_REQUEST': return 'Send Request';
+            case 'PITCH_CREATE': return 'Create Pitch';
             default: return 'Action';
         }
     }, [actionType]);

@@ -1,6 +1,6 @@
 'use client';
 
-import { DollarSign, Calendar, Tag, Gavel } from 'lucide-react';
+import { IndianRupee, Calendar, Tag, Gavel } from 'lucide-react';
 import { format } from 'date-fns';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import {
@@ -31,8 +31,8 @@ export const AuctionInfoGrid = ({
                     <div className="space-y-1 cursor-help">
                         <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest font-bold">Budget Range</p>
                         <p className="text-base sm:text-lg font-black text-foreground flex items-center">
-                            <DollarSign className="h-4 w-4 text-primary mr-1 flex-shrink-0" />
-                            <span className="truncate">{minBudget || 0} - ${maxBudget || 'Open'}</span>
+                            <IndianRupee className="h-4 w-4 text-primary mr-1 flex-shrink-0" />
+                            <span className="truncate">{minBudget || 0} - ₹{maxBudget || 'Open'}</span>
                         </p>
                     </div>
                 </TooltipTrigger>

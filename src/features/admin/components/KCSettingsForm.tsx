@@ -56,6 +56,10 @@ const SETTING_LABELS: Record<KCSettingKey, { label: string; description: string 
         label: 'Referred Reward',
         description: 'Coins rewarded to the new user who signed up using a code.'
     },
+    [KCSettingKey.PITCH_PRICE]: {
+        label: 'Pitch Price',
+        description: 'Amount of K Coins deducted when an influencer pitches for a collaboration.'
+    },
 };
 
 export function KCSettingsForm({

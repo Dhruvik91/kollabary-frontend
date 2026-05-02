@@ -13,7 +13,7 @@ import { BrandAuctionList } from '../components/BrandAuctionList';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ReportModal } from '@/features/report/components/ReportModal';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface BrandDetailContainerProps {
     brandId: string;
@@ -70,11 +70,10 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
 
     return (
         <div className="relative min-h-screen transition-colors duration-500">
-            {/* Ambient Background Decorative Elements - Subtle & Theme Aware */}
+            {/* Ambient Background Decorative Elements */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40 dark:opacity-20">
                 <div className="absolute top-[10%] left-[-5%] w-[40rem] h-[40rem] bg-primary/5 blur-[120px] rounded-full animate-pulse" />
                 <div className="absolute bottom-[20%] right-[-10%] w-[35rem] h-[35rem] bg-secondary/5 blur-[100px] rounded-full animate-pulse [animation-delay:3s]" />
-                <div className="absolute top-[40%] right-[10%] w-[25rem] h-[25rem] bg-primary/5 blur-[80px] rounded-full animate-pulse [animation-delay:5s]" />
             </div>
 
             <motion.div
@@ -97,45 +96,43 @@ export const BrandDetailContainer = ({ brandId }: BrandDetailContainerProps) => 
                 />
 
                 <div className="space-y-8 lg:space-y-12">
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8 lg:space-y-12">
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                         <div className="flex justify-center sm:justify-start">
-                            <TabsList variant="pill">
-                                <TabsTrigger value="about">
+                            <TabsList className="bg-muted/50 p-1 rounded-2xl border border-border/50">
+                                <TabsTrigger value="about" className="rounded-xl px-8 font-bold">
                                     About
                                 </TabsTrigger>
-                                <TabsTrigger value="auctions">
+                                <TabsTrigger value="auctions" className="rounded-xl px-8 font-bold">
                                     Auctions
                                 </TabsTrigger>
                             </TabsList>
                         </div>
 
-                        <AnimatePresence mode="wait">
-                            {activeTab === 'about' ? (
-                                <TabsContent value="about" key="about" className="m-0 focus-visible:outline-none ring-offset-background">
+                        <div className="mt-8">
+                            <AnimatePresence mode="wait" initial={false}>
+                                {activeTab === 'about' ? (
                                     <motion.div
-                                        key="about-tab"
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{ duration: 0.3 }}
+                                        key="about"
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ duration: 0.3, ease: "easeOut" }}
                                     >
                                         <BrandAbout brand={brand} />
                                     </motion.div>
-                                </TabsContent>
-                            ) : (
-                                <TabsContent value="auctions" key="auctions" className="m-0 focus-visible:outline-none ring-offset-background">
+                                ) : (
                                     <motion.div
-                                        key="auctions-tab"
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{ duration: 0.3 }}
+                                        key="auctions"
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ duration: 0.3, ease: "easeOut" }}
                                     >
-                                        <BrandAuctionList auctions={brand.activeAuctions || []} />
+                                        <BrandAuctionList auctions={brand.auctions || []} />
                                     </motion.div>
-                                </TabsContent>
-                            )}
-                        </AnimatePresence>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </Tabs>
                 </div>
             </motion.div>

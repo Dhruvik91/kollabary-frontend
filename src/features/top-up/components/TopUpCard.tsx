@@ -146,7 +146,7 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
                                     "w-full h-14 rounded-[1.5rem] text-[15px] font-black transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 uppercase tracking-wider",
                                     effectiveIsPopular
                                         ? "bg-gradient-to-r from-[#FF4D97] to-[#FF7EB3] text-white border-none hover:opacity-90"
-                                        : "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-none hover:bg-zinc-800 dark:hover:bg-white"
+                                        : "bg-zinc-900 dark:bg-zinc-100 text-white border-none hover:bg-zinc-800 dark:hover:bg-white"
                                 )}
                             >
                                 {isLoading ? (
@@ -194,53 +194,6 @@ export const TopUpCard = ({ plan, onBuy, isLoading, isPopular }: TopUpCardProps)
                             <p className="text-[15px] leading-relaxed text-zinc-500 dark:text-zinc-400 font-medium">
                                 {plan.description || `Enhance your Kollabary experience with the ${plan.name} top-up. Get ${baseCoins.toLocaleString()} coins plus a special bonus of ${bonusCoins.toLocaleString()} coins to unlock premium features and faster growth.`}
                             </p>
-
-                            <div className="mt-8 space-y-4">
-                                <h4 className="text-[11px] font-black uppercase tracking-[0.15em] text-zinc-400">Included in this plan</h4>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center gap-2 text-[13px] text-zinc-600 dark:text-zinc-300 font-medium">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF4D97]" />
-                                        <span>{totalCoins.toLocaleString()} Total Coins</span>
-                                    </li>
-                                    <li className="flex items-center gap-2 text-[13px] text-zinc-600 dark:text-zinc-300 font-medium">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">{bonusCoins.toLocaleString()} Bonus KC</span>
-                                    </li>
-                                    <li className="flex items-center gap-2 text-[13px] text-zinc-600 dark:text-zinc-300 font-medium">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                                        <span>Instant Wallet Credit</span>
-                                    </li>
-                                    <li className="flex items-center gap-2 text-[13px] text-zinc-600 dark:text-zinc-300 font-medium">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                                        <span>No Expiration Date</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="mt-8 pt-6 border-t border-zinc-50 dark:border-zinc-900">
-                            <Button
-                                onClick={() => onBuy(plan.id)}
-                                disabled={isLoading}
-                                className={cn(
-                                    "w-full h-12 rounded-2xl font-black text-sm uppercase tracking-widest transition-all duration-300 active:scale-95",
-                                    effectiveIsPopular
-                                        ? "bg-gradient-to-r from-[#FF4D97] to-[#FF7EB3] text-white border-none hover:opacity-90 shadow-md"
-                                        : "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border-none hover:opacity-90 shadow-sm"
-                                )}
-                            >
-                                {isLoading ? (
-                                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                                        <Zap className="w-4 h-4" />
-                                    </motion.div>
-                                ) : (
-                                    <div className="flex items-center justify-center gap-2">
-                                        <span>Buy Now</span>
-                                        <span className="opacity-30">|</span>
-                                        <span>₹{plan.amount}</span>
-                                    </div>
-                                )}
-                            </Button>
                         </div>
                     </CardContent>
                 </Card>

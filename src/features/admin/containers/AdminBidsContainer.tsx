@@ -3,7 +3,7 @@
 import { format } from 'date-fns';
 import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Gavel, User, DollarSign, Target } from 'lucide-react';
+import { Gavel, User, IndianRupee, Target } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { BidStatus, Bid } from '@/types/auction.types';
 import { useAdminQueries } from '@/hooks/queries/useAdminQueries';
@@ -66,7 +66,7 @@ export const AdminBidsContainer = () => {
             accessorKey: 'amount',
             cell: ({ row }) => (
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-muted/30 border border-border/30 w-fit">
-                    <DollarSign size={14} className="text-primary" />
+                    <IndianRupee size={14} className="text-primary" />
                     <span className="font-black text-sm text-foreground tabular-nums tracking-tighter italic">
                         {row.original.amount}
                     </span>

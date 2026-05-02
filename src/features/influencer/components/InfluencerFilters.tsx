@@ -130,7 +130,7 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                            Min Price ($)
+                            Min Price (₹)
                         </label>
                         <Input
                             type="number"
@@ -142,7 +142,7 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
-                            Max Price ($)
+                            Max Price (₹)
                         </label>
                         <Input
                             type="number"
@@ -254,15 +254,15 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
 
             <Button
                 variant="ghost"
-                onClick={onReset || (() => onFilterChange({ 
-                    search: '', 
+                onClick={onReset || (() => onFilterChange({
+                    search: '',
                     categories: [],
-                    platform: '', 
-                    minFollowers: undefined, 
-                    rankingTier: '', 
-                    minRating: undefined, 
-                    maxRating: undefined, 
-                    verified: undefined 
+                    platform: '',
+                    minFollowers: undefined,
+                    rankingTier: '',
+                    minRating: undefined,
+                    maxRating: undefined,
+                    verified: undefined
                 }))}
                 className="w-full h-11 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center justify-center gap-2 group hover:bg-primary/5 rounded-xl border-none"
             >

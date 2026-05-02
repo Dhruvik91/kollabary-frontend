@@ -21,6 +21,7 @@ export interface UserProfile {
         completedCollaborations: number;
     };
     activeAuctions?: any[];
+    auctions?: any[];
     user?: {
         id: string;
         email: string;

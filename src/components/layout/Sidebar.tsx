@@ -31,6 +31,7 @@ import {
     Wallet,
     Package,
     UserCog,
+    Sparkles,
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Logo } from '@/components/shared/Logo';
@@ -143,6 +144,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
         { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
+        { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
@@ -175,6 +177,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
         { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collaborations' },
         { href: FRONTEND_ROUTES.DASHBOARD.MESSAGES, icon: MessageSquare, label: 'Messages' },
+        { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
         { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
         { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
@@ -250,9 +253,9 @@ export const Sidebar = ({
                                         <button className="w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center justify-center transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group">
                                             <div className="relative shrink-0">
                                                 <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
-                                                    {user.profile?.avatarUrl ? (
+                                                    {user.profile?.avatarUrl || user.profile?.profileImage ? (
                                                         <Image
-                                                            src={user.profile.avatarUrl}
+                                                            src={user.profile.avatarUrl || user.profile.profileImage || ''}
                                                             alt={user.email}
                                                             width={36}
                                                             height={36}
@@ -278,9 +281,9 @@ export const Sidebar = ({
                                 <button className="w-full p-2 rounded-2xl bg-background/50 border border-border/50 flex items-center gap-3 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800/50 group px-3">
                                     <div className="relative shrink-0">
                                         <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform overflow-hidden">
-                                            {user.profile?.avatarUrl ? (
+                                            {user.profile?.avatarUrl || user.profile?.profileImage ? (
                                                 <Image
-                                                    src={user.profile.avatarUrl}
+                                                    src={user.profile.avatarUrl || user.profile.profileImage || ''}
                                                     alt={user.email}
                                                     width={36}
                                                     height={36}
