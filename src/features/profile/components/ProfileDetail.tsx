@@ -200,6 +200,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                                 <PasswordUpdateForm
                                     onSubmit={(data) => changePasswordMutation.mutate(data)}
                                     isLoading={changePasswordMutation.isPending}
+                                    username={username}
                                 />
                             </div>
                         </div>

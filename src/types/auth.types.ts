@@ -15,6 +15,7 @@ export interface Profile {
     fullName: string;
     username: string;
     avatarUrl?: string;
+    profileImage?: string;
     bio?: string;
     location?: string;
     firstName?: string;

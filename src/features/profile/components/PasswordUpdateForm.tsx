@@ -12,13 +12,14 @@ import { Loader2, Lock, ShieldCheck } from 'lucide-react';
 interface PasswordUpdateFormProps {
     onSubmit: (data: { currentPassword: string; newPassword: string }) => void;
     isLoading: boolean;
+    username?: string;
 }
 
 /**
  * Password Update Form (Dumb Component)
  * Pure presentational form for changing account password
  */
-export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormProps) => {
+export const PasswordUpdateForm = ({ onSubmit, isLoading, username }: PasswordUpdateFormProps) => {
     const {
         register,
         handleSubmit,
@@ -43,6 +44,17 @@ export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormPr
 
     return (
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6" noValidate>
+            {/* Hidden username field for accessibility and password managers */}
+            <input
+                type="text"
+                name="username"
+                value={username || ''}
+                readOnly
+                autoComplete="username"
+                className="sr-only"
+                aria-hidden="true"
+                tabIndex={-1}
+            />
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="currentPassword">Current Password</Label>
@@ -51,6 +63,7 @@ export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormPr
                         <Input
                             id="currentPassword"
                             type="password"
+                            autoComplete="current-password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
                             disabled={isLoading}
@@ -73,6 +86,7 @@ export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormPr
                         <Input
                             id="newPassword"
                             type="password"
+                            autoComplete="new-password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
                             disabled={isLoading}
@@ -95,6 +109,7 @@ export const PasswordUpdateForm = ({ onSubmit, isLoading }: PasswordUpdateFormPr
                         <Input
                             id="confirmPassword"
                             type="password"
+                            autoComplete="new-password"
                             placeholder="••••••••"
                             className="pl-10 h-12 rounded-xl"
                             disabled={isLoading}

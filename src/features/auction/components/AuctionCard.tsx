@@ -1,6 +1,6 @@
 'use client';
 
-import { Gavel, Calendar, DollarSign, Tag, User, Edit2, Trash2, MoreVertical, CheckCircle, Clock, XCircle, AlertTriangle } from 'lucide-react';
+import { Gavel, Calendar, IndianRupee, Tag, User, Edit2, Trash2, MoreVertical, CheckCircle, Clock, XCircle, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -45,8 +45,8 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
 
     const formattedDeadline = format(new Date(deadline), 'PPP');
     const budgetRange = minBudget && maxBudget
-        ? `$${minBudget} - $${maxBudget}`
-        : minBudget ? `From $${minBudget}` : maxBudget ? `Up to $${maxBudget}` : 'Competitive';
+        ? `₹${minBudget} - ₹${maxBudget}`
+        : minBudget ? `From ₹${minBudget}` : maxBudget ? `Up to ₹${maxBudget}` : 'Competitive';
 
     const getMyBidStyles = (bidStatus: BidStatus) => {
         switch (bidStatus) {
@@ -196,7 +196,7 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
                             <TooltipTrigger asChild>
                                 <div className="flex flex-col gap-1 cursor-default">
                                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
-                                        <DollarSign size={10} /> Budget
+                                        <IndianRupee size={10} /> Budget
                                     </span>
                                     <p className="text-sm font-black italic truncate">{budgetRange}</p>
                                 </div>

@@ -28,7 +28,8 @@ import {
     Share2,
     Zap,
     Wallet,
-    UserCog
+    UserCog,
+    Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -71,6 +72,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.INFLUENCERS, icon: Rocket, label: 'Explore' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
+                { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
                 { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
                 { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
                 { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
@@ -82,9 +84,10 @@ export const BottomNav = () => {
         if (user?.role === UserRole.INFLUENCER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
+                { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
-                { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
+                { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
                 { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
                 { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
                 { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
@@ -179,8 +182,8 @@ export const BottomNav = () => {
                                 <span className="text-[9px] font-bold leading-none mt-1">More</span>
                             </button>
                         </SheetTrigger>
-                        <SheetContent 
-                            side="bottom" 
+                        <SheetContent
+                            side="bottom"
                             className="rounded-t-[2.5rem] p-0 border-t border-primary/20 bg-background/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto"
                             onOpenAutoFocus={(e) => e.preventDefault()}
                         >
@@ -198,8 +201,8 @@ export const BottomNav = () => {
                                             href={item.href}
                                             className={cn(
                                                 "flex flex-col items-center justify-center p-4 rounded-2xl transition-all duration-300 gap-2",
-                                                active 
-                                                    ? "bg-primary/10 text-primary ring-1 ring-primary/20" 
+                                                active
+                                                    ? "bg-primary/10 text-primary ring-1 ring-primary/20"
                                                     : "hover:bg-muted text-muted-foreground hover:text-foreground"
                                             )}
                                         >

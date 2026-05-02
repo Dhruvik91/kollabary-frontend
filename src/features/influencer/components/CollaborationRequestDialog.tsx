@@ -188,7 +188,7 @@ export const CollaborationRequestDialog = ({
                                     <FormLabel className="font-bold text-primary">Agreed Budget / Terms (Optional)</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="e.g. $500, Product Gift, or 'Talked on DM'"
+                                            placeholder="e.g. ₹500, Product Gift, or 'Talked on DM'"
                                             className="h-12 rounded-xl bg-primary/5 border-primary/20 focus:ring-primary"
                                             {...field}
                                         />

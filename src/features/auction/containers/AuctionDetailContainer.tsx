@@ -145,6 +145,9 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const hasAlreadyBid = auction.bids?.some(bid => bid.influencer.id === user?.id);
     const isCompleted = auction.status === 'COMPLETED';
 
+    const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);
+    const isBidAccepted = myBid?.status === 'ACCEPTED';
+
     return (
         <div className="space-y-6 sm:space-y-8 pb-20">
             <div className="flex items-center justify-between">
@@ -185,6 +188,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                         avatarLetter={auction.creator.profile?.fullName?.charAt(0) || 'B'}
                         avatarUrl={auction.creator.profile?.avatarUrl}
                         onContactClick={handleContactClick}
+                        showContactButton={isBidAccepted}
                         className="rounded-[2rem] p-5 sm:p-8 border border-border bg-card shadow-sm"
                     />
 

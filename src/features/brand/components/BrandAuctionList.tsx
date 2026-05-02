@@ -67,7 +67,13 @@ export const BrandAuctionList = ({ auctions }: BrandAuctionListProps) => {
                             <div className="flex items-start justify-start pt-2 border-t border-border/30">
                                 <div className="text-left">
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Budget</p>
-                                    <p className="text-lg font-black text-foreground tabular-nums">${auction.minBudget || 0} - ${auction.maxBudget || 0}</p>
+                                    <p className="text-lg font-black text-foreground tabular-nums">
+                                        {auction.minBudget || auction.maxBudget ? (
+                                            <>₹{auction.minBudget || 0} - ₹{auction.maxBudget || 0}</>
+                                        ) : (
+                                            <>₹{auction.budget || 0}</>
+                                        )}
+                                    </p>
                                 </div>
                             </div>
 

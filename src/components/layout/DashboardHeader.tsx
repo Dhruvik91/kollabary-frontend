@@ -44,11 +44,14 @@ export const DashboardHeader = () => {
         : FRONTEND_ROUTES.DASHBOARD.PROFILE;
 
     return (
-        <header className="sticky top-0 right-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
+        <header className="sticky top-0 inset-x-0 z-30 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border">
             <div className="flex items-center gap-4">
-                <Link href={profileHref} className="lg:hidden">
-                    <Avatar className="h-9 w-9 border border-border/50">
-                        <AvatarImage src={user?.profile?.avatarUrl || user?.influencerProfile?.avatarUrl} alt={user?.profile?.fullName || 'User'} />
+                <Link
+                    href={profileHref}
+                    className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-accent/50 transition-all shrink-0"
+                >
+                    <Avatar className="h-9 w-9 border border-border/50 shrink-0 shadow-sm">
+                        <AvatarImage src={user?.profile?.avatarUrl || user?.profile?.profileImage || user?.influencerProfile?.avatarUrl} alt={user?.profile?.fullName || 'User'} />
                         <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold uppercase">
                             {(user?.profile?.fullName || user?.email || 'U').charAt(0)}
                         </AvatarFallback>

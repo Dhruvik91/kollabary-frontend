@@ -44,7 +44,7 @@ export function SubscriptionPlanCard({ plan, index, onDelete }: SubscriptionPlan
                     <plan.icon size={24} />
                 </div>
                 <div className="text-right">
-                    <span className="text-3xl font-bold">${plan.price}</span>
+                    <span className="text-3xl font-bold">₹{plan.price}</span>
                     <span className="text-xs text-muted-foreground block">per month</span>
                 </div>
             </div>

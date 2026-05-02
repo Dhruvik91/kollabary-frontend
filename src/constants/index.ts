@@ -136,8 +136,15 @@ export const API_CONFIG = {
         adminTopUp: {
             plans: '/admin/top-up/plans',
             planUpdate: (id: string) => `/admin/top-up/plans/${id}`,
+        },
+        pitch: {
+            base: '/pitches',
+            sent: '/pitches/sent',
+            received: '/pitches/received',
+            admin: '/pitches/admin',
+            status: (id: string) => `/pitches/${id}/status`,
+            detail: (id: string) => `/pitches/${id}`,
         }
-
     }
 }
 
@@ -196,6 +203,7 @@ export const FRONTEND_ROUTES = {
         },
         TOP_UP: '/top-up',
         ORDERS: '/orders',
+        PITCHES: '/pitch',
     },
     HOME: '/',
     TERMS: '/terms',
@@ -236,6 +244,7 @@ export const CONSENT_STORAGE_KEYS = {
     AUCTION_CREATE: 'consent-auction-create',
     BID_PLACE: 'consent-bid-place',
     COLLAB_REQUEST: 'consent-collab-request',
+    PITCH_CREATE: 'consent-pitch-create',
 } as const;
 
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"

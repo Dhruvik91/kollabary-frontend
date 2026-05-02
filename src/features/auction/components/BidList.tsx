@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Bid, BidStatus } from '@/types/auction.types';
 import { Button } from '@/components/ui/button';
-import { Check, X, User, DollarSign, MessageCircle, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Check, X, User, IndianRupee, MessageCircle, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -103,7 +103,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                             <Tooltip delayDuration={300}>
                                                 <TooltipTrigger asChild>
                                                     <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20 cursor-help">
-                                                        <DollarSign size={10} className="text-primary" />
+                                                        <IndianRupee size={10} className="text-primary" />
                                                         <span className="text-xs font-black text-primary tracking-tighter italic">{bid.amount}</span>
                                                     </div>
                                                 </TooltipTrigger>
@@ -212,7 +212,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                         return (
                             <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
                                 <p className="text-sm text-foreground/80 leading-relaxed">
-                                    You are about to reject the bid from <span className="font-bold text-red-500">{name}</span> for <span className="font-bold text-foreground">${bid.amount}</span>.
+                                    You are about to reject the bid from <span className="font-bold text-red-500">{name}</span> for <span className="font-bold text-foreground">₹{bid.amount}</span>.
                                 </p>
                             </div>
                         );
