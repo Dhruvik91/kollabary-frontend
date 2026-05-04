@@ -12,6 +12,8 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useKCSettings } from '@/hooks/use-kc-settings.hooks';
+import { KCSettingKey } from '@/services/kc-setting.service';
 
 interface ReferralCardProps {
     referralCode: string;
@@ -31,6 +33,11 @@ export const ReferralCard = ({
     className
 }: ReferralCardProps) => {
     const [copied, setCopied] = useState(false);
+    const { data: settings } = useKCSettings();
+
+    // Get dynamic reward values from settings, fallback to hardcoded if not loaded
+    const referrerReward = settings?.find(s => s.key === KCSettingKey.REFERRAL_REWARD_REFERRER)?.value || 1000;
+    const referredReward = settings?.find(s => s.key === KCSettingKey.REFERRAL_REWARD_REFERRED)?.value || 500;
 
     const handleCopy = () => {
         if (!referralCode) return;
@@ -86,7 +93,7 @@ export const ReferralCard = ({
 
                 <div className="space-y-4">
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">1000 K Coins</span> for every successful referral! And your friends will get <span className="text-primary font-bold">500 K Coins</span> for joining with your referral code.
+                        Invite your friends to join <span className="text-foreground font-bold">Kollabary</span> and earn <span className="text-primary font-bold">{referrerReward} K Coins</span> for every successful referral! And your friends will get <span className="text-primary font-bold">{referredReward} K Coins</span> for joining with your referral code.
                     </p>
 
                     <div className="flex items-center gap-3 p-2 pl-4 rounded-[1.25rem] bg-muted/30 border border-border/50 group-hover:border-primary/20 transition-colors duration-300">
