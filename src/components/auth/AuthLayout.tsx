@@ -54,7 +54,7 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
 
                 {/* Logo (Top Left) */}
                 <div className="absolute top-16 left-16 z-30">
-                    <Link href={FRONTEND_ROUTES.HOME} className="group transition-all duration-300 hover:opacity-80">
+                    <Link href={FRONTEND_ROUTES.HOME} className="group transition-all duration-300 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
                         {mounted && (
                             <Logo className="w-32 sm:w-40 md:w-44" />
                         )}

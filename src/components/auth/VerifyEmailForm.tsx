@@ -99,7 +99,7 @@ export function VerifyEmailForm({
                             type="button"
                             onClick={onResend}
                             disabled={isResending || isVerifying}
-                            className="text-primary font-semibold hover:underline disabled:opacity-50 inline-flex items-center gap-1"
+                            className="text-primary font-semibold hover:underline disabled:opacity-50 inline-flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded px-1"
                         >
                             {isResending ? (
                                 <RefreshCw className="h-3 w-3 animate-spin" />
@@ -110,7 +110,7 @@ export function VerifyEmailForm({
 
                     <Link
                         href={FRONTEND_ROUTES.AUTH.SIGNUP}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1"
+                        className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded px-1"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to Signup

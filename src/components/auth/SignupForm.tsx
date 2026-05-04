@@ -327,7 +327,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                     <Button
                         type="button"
                         variant="outline"
-                        className="w-full"
+                        className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         onClick={onGoogleAuth}
                         disabled={isLoading}
                     >
@@ -359,7 +359,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                 Already have an account?{' '}
                 <Link
                     href={FRONTEND_ROUTES.AUTH.LOGIN}
-                    className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >
                     Sign in
