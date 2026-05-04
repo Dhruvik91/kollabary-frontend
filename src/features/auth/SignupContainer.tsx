@@ -22,14 +22,11 @@ export function SignupContainer() {
     const referralCode = searchParams.get('ref') || undefined;
 
     const handleSubmit = (data: SignupFormData) => {
-        signupMutation.mutate({
-            ...data,
-            referralCode
-        }, {
+        signupMutation.mutate(data, {
             onSuccess: () => {
                 posthog.capture('user_signed_up', {
                     email: data.email,
-                    has_referral: !!referralCode,
+                    has_referral: !!data.referralCode,
                 });
             },
         });
