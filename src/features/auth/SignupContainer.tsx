@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { SignupForm } from '@/components/auth/SignupForm';
 import { useSignup, useGoogleAuth } from '@/hooks/use-auth.hooks';
 import { SignupFormData } from '@/lib/validations/auth.validation';
@@ -24,6 +25,13 @@ export function SignupContainer() {
         signupMutation.mutate({
             ...data,
             referralCode
+        }, {
+            onSuccess: () => {
+                posthog.capture('user_signed_up', {
+                    email: data.email,
+                    has_referral: !!referralCode,
+                });
+            },
         });
     };
 

@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import React, { useState } from 'react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Button } from '@/components/ui/button';
@@ -43,6 +44,10 @@ export const PitchNowModal = ({
                     targetId: brand.user?.id || '',
                     message,
                     workUrl: workUrl.trim() || undefined
+                });
+                posthog.capture('pitch_sent', {
+                    brand_id: brand.user?.id,
+                    has_work_url: !!workUrl.trim(),
                 });
                 triggerConfetti({ numberOfPieces: 500 });
                 onClose();

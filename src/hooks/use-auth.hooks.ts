@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import posthog from 'posthog-js';
 import { authService } from '@/services/auth.service';
 import {
     LoginCredentials,
@@ -96,6 +97,16 @@ export function useLogin() {
                 description: `Welcome back, ${data.user.email}`,
             });
 
+            posthog.identify(data.user.id, {
+                email: data.user.email,
+                role: data.user.role,
+            });
+            posthog.capture('user_logged_in', {
+                email: data.user.email,
+                role: data.user.role,
+                is_new_user: data.isNewUser,
+            });
+
             // Reload to trigger middleware redirection
             window.location.href = data.isNewUser ? '/?showBonus=true' : '/';
         },
@@ -147,6 +158,9 @@ export function useLogout() {
             }
 
             toast.success('Logged out successfully');
+
+            posthog.capture('user_logged_out');
+            posthog.reset();
 
             // Trigger full refresh to clear any state and trigger middleware
             window.location.href = FRONTEND_ROUTES.AUTH.LOGIN;
@@ -244,6 +258,15 @@ export function useVerifyEmail() {
 
             toast.success('Email verified successfully!', {
                 description: 'Welcome to Kollabary',
+            });
+
+            posthog.identify(data.user.id, {
+                email: data.user.email,
+                role: data.user.role,
+            });
+            posthog.capture('email_verified', {
+                email: data.user.email,
+                is_new_user: data.isNewUser,
             });
 
             // Redirect to dashboard

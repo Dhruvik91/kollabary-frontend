@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { BackButton } from '@/components/shared/BackButton';
@@ -25,6 +26,11 @@ export const AuctionCreateContainer = () => {
         executeWithConsent(async () => {
             try {
                 await createAuction(data);
+                posthog.capture('auction_created', {
+                    category: data.category,
+                    min_budget: data.minBudget,
+                    max_budget: data.maxBudget,
+                });
                 triggerConfetti({ numberOfPieces: 500 });
                 // Delay redirect to show confetti
                 setTimeout(() => {

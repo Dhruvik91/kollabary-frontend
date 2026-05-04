@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { useState } from 'react';
 import { useConfetti } from '@/contexts/confetti-context';
 
@@ -134,6 +135,9 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         updateStatus({ status }, {
             onSuccess: () => {
                 if (status === CollaborationStatus.ACCEPTED) {
+                    posthog.capture('collaboration_accepted', {
+                        collaboration_id: id,
+                    });
                     triggerConfetti({ numberOfPieces: 500 });
                 }
             }
@@ -146,6 +150,10 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             proofSubmittedAt: new Date().toISOString()
         }, {
             onSuccess: () => {
+                posthog.capture('collaboration_proof_submitted', {
+                    collaboration_id: id,
+                    proof_count: urls.length,
+                });
                 setIsProofDialogOpen(false);
                 // Also update status to WORK_SUBMITTED if not already
                 if (collaboration.status !== CollaborationStatus.WORK_SUBMITTED) {
@@ -175,7 +183,13 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             collaborationId: collaboration.id,
             ...data
         }, {
-            onSuccess: () => setIsReviewModalOpen(false)
+            onSuccess: () => {
+                posthog.capture('review_submitted', {
+                    collaboration_id: collaboration.id,
+                    rating: data.rating,
+                });
+                setIsReviewModalOpen(false);
+            }
         });
     };
 

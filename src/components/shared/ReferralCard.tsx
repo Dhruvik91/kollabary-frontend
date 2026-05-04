@@ -1,3 +1,4 @@
+import posthog from 'posthog-js';
 import { Users, Copy, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,9 @@ export const ReferralCard = ({
         const url = `${window.location.origin}/auth/signup?ref=${referralCode}`;
         navigator.clipboard.writeText(url);
         setCopied(true);
+        posthog.capture('referral_link_copied', {
+            referral_code: referralCode,
+        });
         toast.success("Referral link copied to clipboard!");
         setTimeout(() => setCopied(false), 2000);
     };

@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,10 @@ export const AuctionEditContainer = ({ id }: AuctionEditContainerProps) => {
     const handleSubmit = async (data: Partial<CreateAuctionDto>) => {
         try {
             await updateAuction(data);
+            posthog.capture('auction_updated', {
+                auction_id: id,
+                category: data.category,
+            });
             router.push(FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(id));
             router.refresh();
         } catch (error) {
