@@ -36,6 +36,7 @@ export const WalletCard = ({
                     className="w-64 h-64 object-contain"
                     width={256}
                     height={256}
+                    loading='eager'
                 />
             </div>
 
@@ -48,6 +49,7 @@ export const WalletCard = ({
                             className="w-full h-full object-contain"
                             width={40}
                             height={40}
+                            loading='eager'
                         />
                     </div>
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">K Balance</p>
