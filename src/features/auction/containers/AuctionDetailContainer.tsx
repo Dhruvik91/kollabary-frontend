@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { useState, useEffect } from 'react';
 import { useConfetti } from '@/contexts/confetti-context';
 import { useRouter } from 'next/navigation';
@@ -87,6 +88,10 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const handlePlaceBid = async (data: CreateBidDto) => {
         executeWithConsent(async () => {
             await placeBidMutation.mutateAsync(data);
+            posthog.capture('bid_submitted', {
+                auction_id: id,
+                bid_amount: data.amount,
+            });
         });
     };
 
@@ -95,6 +100,10 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         if (!auction) return;
         try {
             await acceptBidMutation.mutateAsync(bidId);
+            posthog.capture('bid_accepted', {
+                auction_id: id,
+                bid_id: bidId,
+            });
             triggerConfetti({ numberOfPieces: 500 });
         } catch (error) {
             // Error handled by mutation hook

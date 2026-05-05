@@ -7,9 +7,11 @@ import { PitchList } from '../components/PitchList';
 import { Sparkles, Filter } from 'lucide-react';
 import { PitchStatus } from '@/types/pitch.types';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { useConfetti } from '@/contexts/confetti-context';
 
 export const PitchContainer = () => {
     const { user, isLoading: isAuthLoading } = useAuth();
+    const { triggerConfetti } = useConfetti();
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const isBrand = user?.role === UserRole.USER;
 
@@ -34,6 +36,9 @@ export const PitchContainer = () => {
     const handleUpdateStatus = async (id: string, status: PitchStatus) => {
         try {
             await updatePitch({ id, data: { status } });
+            if (status === PitchStatus.ACCEPTED) {
+                triggerConfetti({ numberOfPieces: 500 });
+            }
         } catch (error) {
             // Error handled by hook
         }

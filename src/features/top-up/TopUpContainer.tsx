@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import { useRef, useEffect, useState } from 'react';
 import Script from 'next/script';
 import { motion } from 'framer-motion';
@@ -46,6 +47,12 @@ export const TopUpContainer = () => {
             const orderData = await initiateTopUp(planId);
             activeOrderIdRef.current = orderData.orderId;
 
+            posthog.capture('topup_initiated', {
+                plan_id: planId,
+                amount: orderData.amount,
+                currency: orderData.currency,
+            });
+
             const options = {
                 key: orderData.key,
                 amount: orderData.amount,
@@ -61,6 +68,11 @@ export const TopUpContainer = () => {
                         razorpaySignature: response.razorpay_signature,
                     }, {
                         onSuccess: () => {
+                            posthog.capture('topup_completed', {
+                                plan_id: planId,
+                                amount: orderData.amount,
+                                currency: orderData.currency,
+                            });
                             triggerConfetti({ numberOfPieces: 500 });
                             toast.success("Payment verified successfully! Your KC coins have been added.");
                         },

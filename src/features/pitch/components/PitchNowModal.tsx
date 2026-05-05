@@ -1,5 +1,6 @@
 'use client';
 
+import posthog from 'posthog-js';
 import React, { useState } from 'react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { ImageUpload } from '@/components/shared/ImageUpload';
 import { useCreatePitch } from '@/hooks/use-pitch.hooks';
 import { useActionConsent } from '@/hooks/use-action-consent';
+import { useConfetti } from '@/contexts/confetti-context';
 import { UserProfile } from '@/services/profile.service';
 import { Send, Sparkles, Loader2 } from 'lucide-react';
 
@@ -25,6 +27,7 @@ export const PitchNowModal = ({
     const [message, setMessage] = useState('');
     const [workUrl, setWorkUrl] = useState('');
     const createPitch = useCreatePitch();
+    const { triggerConfetti } = useConfetti();
 
     const { executeWithConsent, ConsentModalElement } = useActionConsent({
         actionType: 'PITCH_CREATE',
@@ -42,6 +45,11 @@ export const PitchNowModal = ({
                     message,
                     workUrl: workUrl.trim() || undefined
                 });
+                posthog.capture('pitch_sent', {
+                    brand_id: brand.user?.id,
+                    has_work_url: !!workUrl.trim(),
+                });
+                triggerConfetti({ numberOfPieces: 500 });
                 onClose();
                 setMessage('');
                 setWorkUrl('');

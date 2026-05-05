@@ -20,7 +20,8 @@ export function RewardsConfigContainer() {
             KCSettingKey.BID_PLACEMENT_PRICE,
             KCSettingKey.WEEKLY_REWARD_BRAND,
             KCSettingKey.WEEKLY_REWARD_INFLUENCER,
-            KCSettingKey.NEW_ARRIVAL_BONUS_AMOUNT
+            KCSettingKey.NEW_ARRIVAL_BONUS_AMOUNT,
+            KCSettingKey.PITCH_PRICE
         ].includes(s.key)
     );
 

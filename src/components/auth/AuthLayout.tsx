@@ -35,7 +35,7 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
     return (
         <div className="relative min-h-screen flex flex-col lg:grid lg:grid-cols-2 bg-background overflow-hidden font-sans">
             {/* Left Side: Branding Content (Desktop Only) */}
-            <div className="hidden lg:relative lg:flex flex-col items-center justify-center p-16 overflow-hidden border-r border-border/40 bg-muted/5">
+            <div className="hidden lg:relative lg:flex flex-col items-center justify-start pt-[20vh] p-16 overflow-hidden border-r border-border/40 bg-muted/5">
                 {/* Subtle Background Effects (Orbs) */}
                 <div
                     className="pointer-events-none absolute top-1/4 -left-20 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px] animate-pulse z-0"
@@ -54,7 +54,7 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
 
                 {/* Logo (Top Left) */}
                 <div className="absolute top-16 left-16 z-30">
-                    <Link href={FRONTEND_ROUTES.HOME} className="group transition-all duration-300 hover:opacity-80">
+                    <Link href={FRONTEND_ROUTES.HOME} className="group transition-all duration-300 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
                         {mounted && (
                             <Logo className="w-32 sm:w-40 md:w-44" />
                         )}

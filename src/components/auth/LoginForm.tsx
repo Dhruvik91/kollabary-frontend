@@ -67,7 +67,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                         <Label htmlFor="password">Password</Label>
                         <Link
                             href={FRONTEND_ROUTES.AUTH.FORGOT_PASSWORD}
-                            className="text-sm text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                            className="text-sm text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
                             tabIndex={isLoading ? -1 : 0}
                         >
                             Forgot password?
@@ -182,7 +182,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                 Don&apos;t have an account?{' '}
                 <Link
                     href={FRONTEND_ROUTES.AUTH.SIGNUP}
-                    className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >
                     Sign up

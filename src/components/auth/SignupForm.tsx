@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Loader2, Building2, User, Gift } from 'lucide-react';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { UserRole } from '@/types/auth.types';
 import {
     Tooltip,
@@ -44,6 +45,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
         resolver: zodResolver(signupSchema),
         defaultValues: {
             role: UserRole.USER,
+            referralCode: referralCode || '',
         },
     });
 
@@ -246,18 +248,49 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                     )}
                 </div>
 
-                {/* Referral Code (Optional, shown if provided in URL) */}
-                {referralCode && (
-                    <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-between group">
-                        <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Referral Link Applied</p>
-                            <p className="text-sm font-medium text-muted-foreground">You are joining with code <span className="text-foreground font-bold">{referralCode}</span></p>
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                {/* Referral Code (Optional) */}
+                <div className="space-y-2">
+                    <Label htmlFor="referralCode">Referral Code (Optional)</Label>
+                    <div className="relative group">
+                        <Input
+                            id="referralCode"
+                            type="text"
+                            placeholder="Enter referral code"
+                            disabled={isLoading}
+                            className="pr-10 bg-muted/30 focus:bg-background transition-all"
+                            {...register('referralCode')}
+                        />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                             <Gift size={16} />
                         </div>
                     </div>
-                )}
+                    {/* Referral Code Feedback */}
+                    <AnimatePresence mode="wait">
+                        {watch('referralCode') && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
+                                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                            >
+                                <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-between group">
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                                            {referralCode && watch('referralCode') === referralCode ? "Referral Link Applied" : "Referral Code Applied"}
+                                        </p>
+                                        <p className="text-sm font-medium text-muted-foreground">
+                                            You are joining with code <span className="text-foreground font-bold">{watch('referralCode')}</span>
+                                        </p>
+                                    </div>
+                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shadow-sm">
+                                        <Gift size={16} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
 
             {/* Error Alert */}
@@ -294,7 +327,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                     <Button
                         type="button"
                         variant="outline"
-                        className="w-full"
+                        className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         onClick={onGoogleAuth}
                         disabled={isLoading}
                     >
@@ -326,7 +359,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                 Already have an account?{' '}
                 <Link
                     href={FRONTEND_ROUTES.AUTH.LOGIN}
-                    className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >
                     Sign in
