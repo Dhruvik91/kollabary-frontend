@@ -77,7 +77,7 @@ export const PitchList = ({
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
             isLoading={isLoading}
-            gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6"
             renderItem={(pitch) => (
                 <PitchCard
                     key={pitch.id}
@@ -88,7 +88,7 @@ export const PitchList = ({
                 />
             )}
             loader={
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
                     {[1, 2, 3].map((i) => (
                         <div key={i} className="bg-card border border-border/50 rounded-3xl p-6 space-y-6 opacity-50">
                             <Skeleton className="h-[200px] w-full rounded-2xl" />

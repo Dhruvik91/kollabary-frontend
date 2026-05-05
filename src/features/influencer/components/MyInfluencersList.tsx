@@ -142,7 +142,7 @@ export const MyInfluencersList = ({
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
-            gridClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            gridClassName="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"
             loader={
                 <div className="flex items-center gap-3 text-muted-foreground">
                     <Loader2 size={20} className="animate-spin" />
@@ -153,3 +153,4 @@ export const MyInfluencersList = ({
         />
     );
 };
+
