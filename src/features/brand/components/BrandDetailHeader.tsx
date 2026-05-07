@@ -64,10 +64,10 @@ export const BrandDetailHeader = ({
     const handlePitchClick = () => {
         if (isInfluencer) {
             setIsPitchModalOpen(true);
-            // Optionally update URL
+            // Use replace to avoid polluting history stack so back button works as expected
             const params = new URLSearchParams(searchParams);
             params.set('pitch', 'true');
-            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
         }
     };
 
@@ -75,7 +75,8 @@ export const BrandDetailHeader = ({
         setIsPitchModalOpen(false);
         const params = new URLSearchParams(searchParams);
         params.delete('pitch');
-        router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
+        const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+        router.replace(newUrl, { scroll: false });
     };
 
     return (
