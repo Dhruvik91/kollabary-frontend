@@ -122,7 +122,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const handleContactClick = async () => {
         if (!auction) return;
         try {
-            const conversation = await messagingService.getOrCreateConversation(auction.creator.id);
+            const conversation = await messagingService.getOrCreateConversation(auction.creator?.id || '');
             router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
         } catch (error) {
             toast.error('Failed to start conversation. Please try again.');
@@ -149,7 +149,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
         return <AuctionNotFound />;
     }
 
-    const isOwner = user?.id === auction.creator.id;
+    const isOwner = user?.id === auction.creator?.id;
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const hasAlreadyBid = auction.bids?.some(bid => bid.influencer.id === user?.id);
     const isCompleted = auction.status === 'COMPLETED';
@@ -192,10 +192,10 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
                     {/* Brand Information moved here */}
                     <BrandCard
-                        brandId={auction.creator.profile?.id || ''}
-                        brandName={auction.creator.profile?.fullName || 'Brand'}
-                        avatarLetter={auction.creator.profile?.fullName?.charAt(0) || 'B'}
-                        avatarUrl={auction.creator.profile?.avatarUrl}
+                        brandId={auction.creator?.profile?.id || ''}
+                        brandName={auction.creator?.profile?.fullName || 'Brand'}
+                        avatarLetter={auction.creator?.profile?.fullName?.charAt(0) || 'B'}
+                        avatarUrl={auction.creator?.profile?.avatarUrl}
                         onContactClick={handleContactClick}
                         showContactButton={isBidAccepted}
                         className="rounded-[2rem] p-5 sm:p-8 border border-border bg-card shadow-sm"
