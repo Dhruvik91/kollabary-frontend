@@ -45,12 +45,13 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
-import { cn } from '@/lib/utils';
+import { cn, getSocialPlatformIcon } from '@/lib/utils';
 import { ImageUpload } from '@/components/shared/ImageUpload';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
+import { SOCIAL_PLATFORMS } from '@/constants';
 
 const profileSchema = z.object({
     fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
@@ -156,7 +157,7 @@ export const InfluencerProfileForm = ({
         resolver: zodResolver(profileSchema) as any,
         defaultValues: {
             fullName: initialData?.fullName || '',
-            username: initialData?.user?.username || initialData?.username || '',
+            username: initialData?.user?.profile?.username || initialData?.user?.username || initialData?.username || '',
             categories: Array.isArray(initialData?.categories) ? initialData.categories.join(', ') : (typeof initialData?.categories === 'string' ? initialData.categories : ''),
             avatarUrl: initialData?.avatarUrl || '',
             bio: initialData?.bio || '',
@@ -172,7 +173,7 @@ export const InfluencerProfileForm = ({
             maxPrice: initialData?.maxPrice || 0,
             availability: initialData?.availability || AvailabilityStatus.OPEN,
             collaborationTypes: initialData?.collaborationTypes || [],
-            platforms: initialData?.platforms || [{ name: 'Instagram', handle: '', followers: 0, engagementRate: 0 }],
+            platforms: initialData?.platforms || [{ name: 'instagram', handle: '', followers: 0, engagementRate: 0 }],
         },
     });
 
@@ -181,7 +182,7 @@ export const InfluencerProfileForm = ({
         if (initialData) {
             form.reset({
                 fullName: initialData.fullName || '',
-                username: initialData.user?.username || initialData.username || '',
+                username: initialData.user?.profile?.username || initialData.user?.username || initialData.username || '',
                 categories: Array.isArray(initialData.categories) ? initialData.categories.join(', ') : (typeof initialData.categories === 'string' ? initialData.categories : ''),
                 avatarUrl: initialData.avatarUrl || '',
                 bio: initialData.bio || '',
@@ -345,7 +346,7 @@ export const InfluencerProfileForm = ({
                                                         Full Name
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="e.g. John Doe" {...field} className="h-12 rounded-xl bg-background/50" />
+                                                        <Input placeholder="Enter your full name" {...field} className="h-12 rounded-xl bg-background/50" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -364,7 +365,7 @@ export const InfluencerProfileForm = ({
                                                     <FormControl>
                                                         <div className="relative">
                                                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">@</span>
-                                                            <Input placeholder="johndoe" {...field} className="h-12 pl-8 rounded-xl bg-background/50" />
+                                                            <Input placeholder="your_username" {...field} className="h-12 pl-8 rounded-xl bg-background/50" />
                                                         </div>
                                                     </FormControl>
                                                     <FormDescription>Your unique identity. This creates your profile link.</FormDescription>
@@ -387,7 +388,7 @@ export const InfluencerProfileForm = ({
                                                             options={[...INFLUENCER_CATEGORIES]}
                                                             value={typeof field.value === 'string' ? field.value.split(',').map(s => s.trim()).filter(Boolean) : (Array.isArray(field.value) ? field.value : [])}
                                                             onChange={(vals) => field.onChange(vals.join(', '))}
-                                                            placeholder="Select categories"
+                                                            placeholder="Choose Categories"
                                                         />
                                                     </FormControl>
                                                     <FormDescription>Help brands find you by listing relevant categories.</FormDescription>
@@ -485,10 +486,10 @@ export const InfluencerProfileForm = ({
                                                         <Sparkles size={14} className="text-primary" />
                                                         Gender
                                                     </FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="h-12 rounded-xl bg-background/50">
-                                                                <SelectValue placeholder="Select gender" />
+                                                                <SelectValue placeholder="Choose Gender" />
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent className="rounded-2xl">
@@ -554,18 +555,24 @@ export const InfluencerProfileForm = ({
                                                         render={({ field }) => (
                                                             <FormItem>
                                                                 <FormLabel className="text-xs font-bold uppercase tracking-wider">Platform</FormLabel>
-                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                <Select onValueChange={field.onChange} value={field.value}>
                                                                     <FormControl>
                                                                         <SelectTrigger className="h-11 rounded-xl bg-background/50">
-                                                                            <SelectValue placeholder="Select platform" />
+                                                                            <SelectValue placeholder="Choose Platform" />
                                                                         </SelectTrigger>
                                                                     </FormControl>
                                                                     <SelectContent className="rounded-2xl">
-                                                                        <SelectItem value="Instagram">Instagram</SelectItem>
-                                                                        <SelectItem value="YouTube">YouTube</SelectItem>
-                                                                        <SelectItem value="Twitter">Twitter (X)</SelectItem>
-                                                                        <SelectItem value="TikTok">TikTok</SelectItem>
-                                                                        <SelectItem value="Other">Other</SelectItem>
+                                                                        {SOCIAL_PLATFORMS.map((platform) => {
+                                                                            const Icon = getSocialPlatformIcon(platform.value as any);
+                                                                            return (
+                                                                                <SelectItem key={platform.value} value={platform.value}>
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        <Icon size={14} className="text-primary" />
+                                                                                        <span>{platform.label}</span>
+                                                                                    </div>
+                                                                                </SelectItem>
+                                                                            );
+                                                                        })}
                                                                     </SelectContent>
                                                                 </Select>
                                                             </FormItem>
@@ -581,7 +588,7 @@ export const InfluencerProfileForm = ({
                                                                 <FormControl>
                                                                     <div className="relative">
                                                                         <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                                        <Input placeholder="https://..." {...field} className="h-11 pl-9 rounded-xl bg-background/50" />
+                                                                        <Input placeholder="Enter your profile URL (e.g. instagram.com/username)" {...field} className="h-11 pl-9 rounded-xl bg-background/50" />
                                                                     </div>
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -650,7 +657,7 @@ export const InfluencerProfileForm = ({
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => append({ name: 'Instagram', handle: '', followers: 0, engagementRate: 0 })}
+                                            onClick={() => append({ name: 'instagram', handle: '', followers: 0, engagementRate: 0 })}
                                             className="w-full h-12 rounded-xl border-dashed border-2 hover:bg-muted/50 transition-all font-bold gap-2"
                                         >
                                             <Plus size={18} />
@@ -768,10 +775,10 @@ export const InfluencerProfileForm = ({
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="font-bold">Current Availability</FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="h-12 rounded-xl bg-background/50">
-                                                                <SelectValue placeholder="Select status" />
+                                                                <SelectValue placeholder="Choose Status" />
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent className="rounded-2xl">
