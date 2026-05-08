@@ -69,7 +69,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     // Trigger confetti for influencer if their bid is accepted
     useEffect(() => {
         if (auction && user?.role === UserRole.INFLUENCER) {
-            const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);
+            const myBid = auction.bids?.find((bid: any) => bid.influencer?.id === user?.id);
             if (myBid?.status === 'ACCEPTED') {
                 // Use a key in sessionStorage to ensure it only runs once per acceptance
                 const storageKey = `confetti-bid-accepted-${myBid.id}`;
@@ -151,10 +151,10 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
     const isOwner = user?.id === auction.creator?.id;
     const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const hasAlreadyBid = auction.bids?.some(bid => bid.influencer.id === user?.id);
+    const hasAlreadyBid = auction.bids?.some(bid => bid.influencer?.id === user?.id);
     const isCompleted = auction.status === 'COMPLETED';
 
-    const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);
+    const myBid = auction.bids?.find((bid: any) => bid.influencer?.id === user?.id);
     const isBidAccepted = myBid?.status === 'ACCEPTED';
 
     return (
@@ -374,7 +374,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
 
 
 const BidStatusDisplay = ({ auction, user }: { auction: any, user: any }) => {
-    const myBid = auction.bids?.find((bid: any) => bid.influencer.id === user?.id);
+    const myBid = auction.bids?.find((bid: any) => bid.influencer?.id === user?.id);
     const isRejected = myBid?.status === 'REJECTED';
     const isAccepted = myBid?.status === 'ACCEPTED';
 

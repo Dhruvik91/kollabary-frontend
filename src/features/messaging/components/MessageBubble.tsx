@@ -71,12 +71,12 @@ export const MessageBubble = ({
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(message.message);
 
-    const senderName = message.sender.influencerProfile?.fullName || message.sender.profile?.fullName || message.sender.email.split('@')[0];
-    const senderAvatar = message.sender.influencerProfile?.avatarUrl || message.sender.profile?.avatarUrl;
+    const senderName = message.sender?.influencerProfile?.fullName || message.sender?.profile?.fullName || message.sender?.email?.split('@')[0] || 'Deleted User';
+    const senderAvatar = message.sender?.influencerProfile?.avatarUrl || message.sender?.profile?.avatarUrl;
 
-    const initials = senderName
-        ? senderName.split(' ').map(n => n[0]).join('').toUpperCase()
-        : message.sender.email?.[0]?.toUpperCase() || '?';
+    const initials = message.sender 
+        ? (senderName !== 'Deleted User' ? (senderName.split(' ').map(n => n[0]).join('').toUpperCase() || message.sender.email[0].toUpperCase()) : 'DU')
+        : 'DU';
 
     const messageType = getMessageType(message.message);
 

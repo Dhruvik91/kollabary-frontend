@@ -23,18 +23,17 @@ export const CollaborationPartnerCard = ({
     isMessaging = false
 }: CollaborationPartnerCardProps) => {
     const avatarUrl = isInfluencer
-        ? partner.profile?.avatarUrl
-        : partner.avatarUrl || partner.user?.profile?.avatarUrl;
+        ? partner?.profile?.avatarUrl
+        : partner?.avatarUrl || partner?.user?.profile?.avatarUrl;
 
     const partnerName = isInfluencer
-        ? partner.profile?.fullName || partner.email?.split('@')[0]
-        : partner.fullName || partner.user?.profile?.fullName || partner.user?.email?.split('@')[0] || partner.email?.split('@')[0];
+        ? partner?.profile?.fullName || partner?.email?.split('@')[0] || 'Deleted User'
+        : partner?.fullName || partner?.user?.profile?.fullName || partner?.user?.email?.split('@')[0] || partner?.email?.split('@')[0] || 'Deleted User';
 
     const initials = partnerName?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || '?';
 
-    const profileLink = !isInfluencer
-        ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(partner.id)
-        : null;
+    const profileLink = isInfluencer && partner?.id
+        ? (partner?.profile?.id && FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(partner?.profile?.id)) : FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(partner.id)
 
     const PartnerInfo = (
         <div className={cn(
