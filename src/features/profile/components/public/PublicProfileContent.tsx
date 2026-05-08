@@ -16,11 +16,13 @@ import {
 
 interface PublicProfileContentProps {
     bio?: string;
+    brandTone?: string;
     collaborators?: any[];
 }
 
 export const PublicProfileContent = ({
     bio,
+    brandTone,
     collaborators = [],
 }: PublicProfileContentProps) => {
     const [api, setApi] = useState<CarouselApi>();
@@ -51,6 +53,12 @@ export const PublicProfileContent = ({
                     <p className="text-xl text-muted-foreground/90 leading-relaxed font-bold italic">
                         {bio || "This visionary brand is currently focused on crafting their profile."}
                     </p>
+                    {brandTone && (
+                        <div className="pt-4 border-t border-primary/10">
+                            <p className="text-xs font-black uppercase tracking-widest text-primary/60 mb-2">Brand Voice</p>
+                            <p className="text-sm text-muted-foreground font-medium italic">"{brandTone}"</p>
+                        </div>
+                    )}
                 </div>
             </Card>
 

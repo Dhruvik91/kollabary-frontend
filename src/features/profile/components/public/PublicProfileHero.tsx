@@ -16,6 +16,7 @@ interface PublicProfileHeroProps {
     username: string;
     avatarUrl?: string;
     location?: string;
+    categories?: string[];
 }
 
 export const PublicProfileHero = ({
@@ -24,6 +25,7 @@ export const PublicProfileHero = ({
     username,
     avatarUrl,
     location,
+    categories = [],
 }: PublicProfileHeroProps) => {
     return (
         <div className="relative">
@@ -66,6 +68,16 @@ export const PublicProfileHero = ({
                                 {username}
                             </div>
                         </div>
+
+                        {categories.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-2">
+                                {categories.map((cat) => (
+                                    <span key={cat} className="px-2 py-0.5 bg-background/50 backdrop-blur-md border border-border/50 rounded-lg text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                                        {cat}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="flex flex-wrap items-center gap-6 text-muted-foreground font-bold text-base tracking-tight pt-2">
                             {location && (

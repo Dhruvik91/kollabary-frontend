@@ -48,18 +48,17 @@ export const ConversationList = ({
 
             <AnimatePresence initial={false}>
                 {conversations.map((conversation, idx) => {
-                    const partner = conversation.userOne.id === user?.id
-                        ? conversation.userTwo
-                        : conversation.userOne;
+                    const isUserOne = conversation.userOne?.id === user?.id;
+                    const partner = isUserOne ? conversation.userTwo : conversation.userOne;
 
                     const isActive = conversation.id === activeConversationId;
                     
-                    const fullName = partner.influencerProfile?.fullName || partner.profile?.fullName || partner.email.split('@')[0];
-                    const avatarUrl = partner.influencerProfile?.avatarUrl || partner.profile?.avatarUrl;
+                    const fullName = partner?.influencerProfile?.fullName || partner?.profile?.fullName || partner?.email?.split('@')[0] || 'Deleted User';
+                    const avatarUrl = partner?.influencerProfile?.avatarUrl || partner?.profile?.avatarUrl;
                     
-                    const initials = fullName
-                        ? fullName.split(' ').map(n => n[0]).join('').toUpperCase()
-                        : partner.email[0].toUpperCase();
+                    const initials = partner 
+                        ? (fullName.split(' ').map(n => n[0]).join('').toUpperCase() || partner.email[0].toUpperCase())
+                        : 'DU';
 
                     return (
                         <motion.button

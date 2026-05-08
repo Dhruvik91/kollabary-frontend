@@ -25,11 +25,11 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const deleteCollaboration = useDeleteCollaboration();
 
-    const isRequester = user?.id === collaboration.requester.id;
+    const isRequester = user?.id === collaboration.requester?.id;
     const canEdit = isRequester && (collaboration.status === CollaborationStatus.REQUESTED || collaboration.status === CollaborationStatus.ACCEPTED);
     const canDelete = isRequester && collaboration.status === CollaborationStatus.REQUESTED;
 
-    const partner = isInfluencer ? collaboration.requester : collaboration.influencer.user;
+    const partner = isInfluencer ? collaboration.requester : collaboration.influencer?.user;
     const dateRange = collaboration.startDate && collaboration.endDate
         ? `${format(new Date(collaboration.startDate), 'MMM d')} - ${format(new Date(collaboration.endDate), 'MMM d, yyyy')}`
         : 'Request Pending';

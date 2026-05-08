@@ -24,7 +24,7 @@ interface ReviewCardProps {
 
 export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardProps) => {
     const { user } = useAuth();
-    const isOwner = user?.id === review.reviewer.id;
+    const isOwner = user?.id === review.reviewer?.id;
 
     const renderStars = (rating: number) => {
         return Array.from({ length: 5 }).map((_, i) => (
@@ -44,9 +44,9 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
             <CardContent className="p-4 sm:p-5 relative">
                 <div className="flex items-start gap-3 sm:gap-4">
                     <Avatar className="h-10 w-10 sm:h-12 sm:w-12 border-2 border-background shadow-lg shrink-0">
-                        <AvatarImage src={review.reviewer.profile?.avatarUrl} />
+                        <AvatarImage src={review.reviewer?.profile?.avatarUrl} />
                         <AvatarFallback className="bg-primary/5 text-primary font-bold text-xs">
-                            {review.reviewer.profile?.fullName?.[0] || review.reviewer.email[0].toUpperCase()}
+                            {review.reviewer?.profile?.fullName?.[0] || review.reviewer?.email?.[0]?.toUpperCase() || '?'}
                         </AvatarFallback>
                     </Avatar>
 
@@ -54,7 +54,7 @@ export const ReviewCard = ({ review, onEdit, onDelete, className }: ReviewCardPr
                         <div className="flex justify-between items-start">
                             <div className="space-y-0.5">
                                 <h4 className="font-bold text-sm tracking-tight">
-                                    {review.reviewer.profile?.fullName || review.reviewer.email.split('@')[0]}
+                                    {review.reviewer?.profile?.fullName || review.reviewer?.email?.split('@')[0] || 'Deleted User'}
                                 </h4>
                                 <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">
                                     {format(new Date(review.createdAt), 'MMM d, yyyy')}

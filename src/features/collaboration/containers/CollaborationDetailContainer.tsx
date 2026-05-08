@@ -66,9 +66,14 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const handleMessagePartner = () => {
         if (!collaboration) return;
 
-        const partnerId = user?.id === collaboration.requester.id
-            ? collaboration.influencer.user.id
-            : collaboration.requester.id;
+        const partnerId = user?.id === collaboration.requester?.id
+            ? collaboration.influencer?.user?.id
+            : collaboration.requester?.id;
+
+        if (!partnerId) {
+            toast.error('Partner account is no longer available');
+            return;
+        }
 
         startConversation(partnerId, {
             onSuccess: (conversation) => {
@@ -122,7 +127,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
     const hasReviewForThisCollaboration = influencerReviews.some((review) => review.collaboration?.id === collaboration.id);
 
     // Authorization check: Only requester or influencer can view
-    const isAuthorized = user?.id === collaboration.requester.id || user?.id === collaboration.influencer.user.id || user?.role === UserRole.ADMIN;
+    const isAuthorized = user?.id === collaboration.requester?.id || user?.id === collaboration.influencer?.user?.id || user?.role === UserRole.ADMIN;
 
     if (!isAuthorized) {
         return <CollaborationErrorState message="Unauthorized access" />;
@@ -163,7 +168,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
         });
     };
 
-    const isRequester = user?.id === collaboration.requester.id;
+    const isRequester = user?.id === collaboration.requester?.id;
     const canShowProgressActions = (isInfluencer && [
         CollaborationStatus.ACCEPTED,
         CollaborationStatus.IN_PROGRESS
@@ -179,7 +184,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
 
     const handleReviewSubmit = (data: { rating: number; comment: string }) => {
         createReview({
-            influencerId: collaboration.influencer.id,
+            influencerId: collaboration.influencer?.id || '',
             collaborationId: collaboration.id,
             ...data
         }, {
@@ -306,7 +311,7 @@ export const CollaborationDetailContainer = ({ id }: CollaborationDetailContaine
             <ReviewSubmissionModal
                 isOpen={isReviewModalOpen}
                 onClose={() => setIsReviewModalOpen(false)}
-                influencerName={collaboration.influencer.user.profile?.fullName || 'Creator'}
+                influencerName={collaboration.influencer?.user?.profile?.fullName || 'Creator'}
                 onSubmit={handleReviewSubmit}
                 isLoading={isCreatingReview}
             />

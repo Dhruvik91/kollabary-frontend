@@ -64,7 +64,7 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                                 />
                             ) : (
                                 <div className="w-full h-full bg-linear-to-br from-secondary/80 to-secondary flex items-center justify-center text-white text-2xl font-bold">
-                                    {fullName.charAt(0)}
+                                    {fullName?.charAt(0) || '?'}
                                 </div>
                             )}
                         </div>
@@ -74,9 +74,9 @@ export const BrandCard = ({ brand }: BrandCardProps) => {
                     <div className="pb-6 px-6 space-y-4 flex flex-col flex-1">
                         <div className="space-y-1">
                             <h3 className="text-xl font-bold tracking-tight line-clamp-1">
-                                {fullName}
+                                {fullName || 'Unknown Brand'}
                             </h3>
-                            <p className="text-sm text-muted-foreground font-medium">@{username}</p>
+                            <p className="text-sm text-muted-foreground font-medium">@{username || 'unknown'}</p>
                         </div>
 
                         {bio && (

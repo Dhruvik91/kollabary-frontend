@@ -15,6 +15,13 @@ export interface UserProfile {
     updatedAt: string;
     verified?: boolean;
     status?: string;
+    categories?: string[];
+    website?: string;
+    industry?: string;
+    companySize?: string;
+    brandTone?: string;
+    contactEmail?: string;
+    contactPhone?: string;
     stats?: {
         totalAuctions: number;
         activeAuctionsCount: number;
@@ -38,6 +45,13 @@ export interface SaveProfileDto {
     profileImage?: string; // Kept for backward compatibility
     avatarUrl?: string;
     socialLinks?: Record<string, string>;
+    categories?: string[];
+    website?: string;
+    industry?: string;
+    companySize?: string;
+    brandTone?: string;
+    contactEmail?: string;
+    contactPhone?: string;
 }
 
 export interface SearchProfilesParams {

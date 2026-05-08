@@ -49,16 +49,15 @@ export const ChatWindow = ({
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isDeleteConversationModalOpen, setIsDeleteConversationModalOpen] = useState(false);
 
-    const partner = conversation.userOne.id === user?.id
-        ? conversation.userTwo
-        : conversation.userOne;
+    const isUserOne = conversation.userOne?.id === user?.id;
+    const partner = isUserOne ? conversation.userTwo : conversation.userOne;
 
-    const partnerName = partner.influencerProfile?.fullName || partner.profile?.fullName || partner.email.split('@')[0];
-    const partnerAvatar = partner.influencerProfile?.avatarUrl || partner.profile?.avatarUrl;
+    const partnerName = partner?.influencerProfile?.fullName || partner?.profile?.fullName || partner?.email?.split('@')[0] || 'Deleted User';
+    const partnerAvatar = partner?.influencerProfile?.avatarUrl || partner?.profile?.avatarUrl;
 
-    const partnerInitials = partnerName
-        ? partnerName.split(' ').map(n => n[0]).join('').toUpperCase()
-        : partner.email[0].toUpperCase();
+    const partnerInitials = partner 
+        ? (partnerName.split(' ').map(n => n[0]).join('').toUpperCase() || partner.email[0].toUpperCase())
+        : 'DU';
 
     // Auto-scroll to bottom on new messages
     useEffect(() => {
@@ -189,13 +188,13 @@ export const ChatWindow = ({
                         </div>
                     ) : (
                         messages.map((msg, idx) => {
-                            const prevMsg = messages[idx - 1];
-                            const showAvatar = !prevMsg || prevMsg.sender.id !== msg.sender.id;
+                            const prevMsg = idx > 0 ? messages[idx - 1] : null;
+                            const showAvatar = !prevMsg || prevMsg.sender?.id !== msg.sender?.id;
                             return (
                                 <MessageBubble
                                     key={msg.id}
                                     message={msg}
-                                    isOwn={msg.sender.id === user?.id}
+                                    isOwn={msg.sender?.id === user?.id}
                                     showAvatar={showAvatar}
                                     onDelete={onDeleteMessage}
                                     onUpdate={onUpdateMessage}

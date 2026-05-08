@@ -20,6 +20,13 @@ export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
         location,
         socialLinks,
         avatarUrl,
+        categories = [],
+        website,
+        industry,
+        companySize,
+        brandTone,
+        contactEmail,
+        contactPhone,
         stats = { totalAuctions: 0, completedCollaborations: 0 },
         collaborators = []
     } = (profile as any);
@@ -33,6 +40,7 @@ export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
                 username={username}
                 avatarUrl={avatarUrl}
                 location={location}
+                categories={categories}
             />
 
             {/* Content Grid */}
@@ -42,11 +50,17 @@ export const PublicProfileDetail = ({ profile }: PublicProfileDetailProps) => {
                     socialLinks={socialLinks}
                     auctionsCount={stats.totalAuctions}
                     collaborationsCount={stats.completedCollaborations}
+                    website={website}
+                    contactEmail={contactEmail}
+                    contactPhone={contactPhone}
+                    industry={industry}
+                    companySize={companySize}
                 />
 
                 {/* Modular Main Content: About and Collaborators */}
                 <PublicProfileContent
                     bio={bio}
+                    brandTone={brandTone}
                     collaborators={collaborators}
                 />
             </div>

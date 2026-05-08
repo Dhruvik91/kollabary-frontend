@@ -15,9 +15,16 @@ import {
     Plus,
     Trash2,
     Globe,
-    Camera
+    Camera,
+    Briefcase,
+    Phone,
+    Mail,
+    LayoutGrid,
+    Users,
 } from 'lucide-react';
 import { ProfileImageUpload } from './ProfileImageUpload';
+import { MultiSelect } from '@/components/ui/multi-select';
+import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import {
     Form,
     FormControl,
@@ -40,18 +47,8 @@ import {
 } from '@/components/ui/select';
 
 import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
-
-const SOCIAL_PLATFORMS = [
-    { label: 'Instagram', value: 'instagram' },
-    { label: 'YouTube', value: 'youtube' },
-    { label: 'Twitter', value: 'twitter' },
-    { label: 'LinkedIn', value: 'linkedin' },
-    { label: 'TikTok', value: 'tiktok' },
-    { label: 'Twitch', value: 'twitch' },
-    { label: 'Facebook', value: 'facebook' },
-    { label: 'Threads', value: 'threads' },
-    { label: 'Other', value: 'other' },
-];
+import { SOCIAL_PLATFORMS } from '@/constants';
+import { getSocialPlatformIcon } from '@/lib/utils';
 
 const profileSchema = z.object({
     username: z.string().min(3, 'Username must be at least 3 characters').max(30),
@@ -63,6 +60,13 @@ const profileSchema = z.object({
         platform: z.string().min(1, 'Platform name is required'),
         url: z.string().url('Invalid URL format'),
     })),
+    categories: z.array(z.string()).min(1, 'At least one category is required'),
+    website: z.string().url('Invalid URL format').optional().or(z.literal('')),
+    industry: z.string().optional(),
+    companySize: z.string().optional(),
+    brandTone: z.string().optional(),
+    contactEmail: z.string().email('Invalid email format').optional().or(z.literal('')),
+    contactPhone: z.string().optional(),
 });
 
 export type ProfileSchemaType = z.infer<typeof profileSchema>;
@@ -75,6 +79,13 @@ export interface ProfileFormValues {
     avatarUrl?: string;
     profileImage?: string; // Keep for mapping if needed
     socialLinks?: Record<string, string>;
+    categories?: string[];
+    website?: string;
+    industry?: string;
+    companySize?: string;
+    brandTone?: string;
+    contactEmail?: string;
+    contactPhone?: string;
 }
 
 interface ProfileSetupFormProps {
@@ -108,6 +119,13 @@ export const ProfileSetupForm = ({
             location: initialData?.location || '',
             avatarUrl: initialData?.avatarUrl || initialData?.profileImage || '',
             socials: initialSocials,
+            categories: initialData?.categories || [],
+            website: initialData?.website || '',
+            industry: initialData?.industry || '',
+            companySize: initialData?.companySize || '',
+            brandTone: initialData?.brandTone || '',
+            contactEmail: initialData?.contactEmail || '',
+            contactPhone: initialData?.contactPhone || '',
         },
     });
 
@@ -252,6 +270,161 @@ export const ProfileSetupForm = ({
                                 )}
                             />
 
+                            <FormField
+                                control={form.control}
+                                name="categories"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="font-bold flex items-center gap-2">
+                                            <LayoutGrid size={14} className="text-primary" />
+                                            Categories
+                                        </FormLabel>
+                                        <FormControl>
+                                            <MultiSelect
+                                                options={[...INFLUENCER_CATEGORIES]}
+                                                value={field.value || []}
+                                                onChange={field.onChange}
+                                                placeholder="Select categories"
+                                                className="rounded-xl border-border/50 bg-background/50 focus:bg-background transition-all"
+                                            />
+                                        </FormControl>
+                                        <FormDescription className="text-[10px]">Select categories that best describe your brand or niche.</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="pt-6 border-t border-border/50 space-y-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                        <Briefcase size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-black text-lg">Brand Information</h3>
+                                        <p className="text-xs text-muted-foreground">Additional details for business accounts</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="website"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-bold flex items-center gap-2">
+                                                    <Globe size={14} className="text-primary" />
+                                                    Website
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="https://yourbrand.com" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="industry"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-bold flex items-center gap-2">
+                                                    <LayoutGrid size={14} className="text-primary" />
+                                                    Industry
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="e.g. Fashion, Tech" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="companySize"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-bold flex items-center gap-2">
+                                                    <Users size={14} className="text-primary" />
+                                                    Company Size
+                                                </FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                        <SelectTrigger className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all">
+                                                            <SelectValue placeholder="Select size" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="1-10">1-10 employees</SelectItem>
+                                                        <SelectItem value="11-50">11-50 employees</SelectItem>
+                                                        <SelectItem value="51-200">51-200 employees</SelectItem>
+                                                        <SelectItem value="201-500">201-500 employees</SelectItem>
+                                                        <SelectItem value="501+">501+ employees</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="contactEmail"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-bold flex items-center gap-2">
+                                                    <Mail size={14} className="text-primary" />
+                                                    Business Email
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="contact@brand.com" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="contactPhone"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-bold flex items-center gap-2">
+                                                    <Phone size={14} className="text-primary" />
+                                                    Business Phone
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="+1 234 567 890" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <FormField
+                                    control={form.control}
+                                    name="brandTone"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="font-bold flex items-center gap-2">
+                                                <Sparkles size={14} className="text-primary" />
+                                                Brand Tone / Voice
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Describe your brand's voice (e.g. Professional, Fun, Minimalist)..."
+                                                    {...field}
+                                                    className="min-h-[80px] rounded-2xl bg-background/50 border-border/50 focus:bg-background transition-all resize-none px-4 py-3"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
                             <div className="pt-6 border-t border-border/50">
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-3">
@@ -297,11 +470,17 @@ export const ProfileSetupForm = ({
                                                                     </SelectTrigger>
                                                                 </FormControl>
                                                                 <SelectContent>
-                                                                    {SOCIAL_PLATFORMS.map((platform) => (
-                                                                        <SelectItem key={platform.value} value={platform.value}>
-                                                                            {platform.label}
-                                                                        </SelectItem>
-                                                                    ))}
+                                                                    {SOCIAL_PLATFORMS.map((platform) => {
+                                                                        const Icon = getSocialPlatformIcon(platform.value as any);
+                                                                        return (
+                                                                            <SelectItem key={platform.value} value={platform.value}>
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <Icon size={14} className="text-primary" />
+                                                                                    <span>{platform.label}</span>
+                                                                                </div>
+                                                                            </SelectItem>
+                                                                        );
+                                                                    })}
                                                                 </SelectContent>
                                                             </Select>
                                                             <FormMessage className="text-[10px]" />
