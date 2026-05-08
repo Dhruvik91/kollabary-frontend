@@ -23,7 +23,7 @@ export interface Auction {
   deadline: string;
   status: AuctionStatus;
   category?: CollaborationType;
-  creator: User & { profile?: Profile };
+  creator?: User & { profile?: Profile };
   bids?: Bid[];
   createdAt: string;
   updatedAt: string;
