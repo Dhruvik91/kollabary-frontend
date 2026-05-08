@@ -38,7 +38,7 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
     const router = useRouter();
     const { user } = useAuth();
     const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const isOwner = user?.id === creator.id;
+    const isOwner = user?.id === creator?.id;
     const isEditable = status === AuctionStatus.OPEN;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const { mutateAsync: deleteAuction, isPending: isDeleting } = useDeleteAuction();
@@ -156,10 +156,10 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
                         {/* Creator row */}
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
-                                {creator.profile?.avatarUrl ? (
+                                {creator?.profile?.avatarUrl ? (
                                     <Image 
-                                        src={creator.profile.avatarUrl} 
-                                        alt={creator.profile.fullName || 'Avatar'} 
+                                        src={creator?.profile?.avatarUrl || ''} 
+                                        alt={creator?.profile?.fullName || 'Avatar'} 
                                         width={24}
                                         height={24}
                                         loading="lazy"
@@ -170,7 +170,7 @@ export const AuctionCard = ({ auction, readOnly = false }: AuctionCardProps) => 
                                 )}
                             </div>
                             <span className="text-xs font-bold uppercase tracking-wider truncate">
-                                {creator.profile?.fullName || 'Brand'}
+                                {creator?.profile?.fullName || 'Brand'}
                             </span>
                         </div>
                     </div>

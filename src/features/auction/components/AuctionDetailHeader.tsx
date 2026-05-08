@@ -27,7 +27,7 @@ export const AuctionDetailHeader = ({ auction }: AuctionDetailHeaderProps) => {
         <PageHeader
             label="Auction Details"
             title={auction.title}
-            subtitle={`Posted by ${auction.creator.profile?.fullName || 'Brand'} • ${format(new Date(auction.createdAt), 'MMMM dd, yyyy')}`}
+            subtitle={`Posted by ${auction.creator?.profile?.fullName || 'Brand'} • ${format(new Date(auction.createdAt), 'MMMM dd, yyyy')}`}
             icon={Gavel}
             action={
                 <div className="flex items-center gap-3">
