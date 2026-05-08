@@ -13,6 +13,11 @@ import {
     Lock,
     LogOut,
     ShieldCheck,
+    Briefcase,
+    Phone,
+    Mail,
+    LayoutGrid,
+    Sparkles,
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useLogout } from '@/hooks/use-auth.hooks';
@@ -35,7 +40,22 @@ interface ProfileDetailProps {
 }
 
 export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) => {
-    const { fullName, username, bio, location, socialLinks, profileImage, avatarUrl } = profile;
+    const {
+        fullName,
+        username,
+        bio,
+        location,
+        socialLinks,
+        profileImage,
+        avatarUrl,
+        categories,
+        website,
+        industry,
+        companySize,
+        brandTone,
+        contactEmail,
+        contactPhone
+    } = profile;
     const displayImage = avatarUrl || profileImage;
     const changePasswordMutation = useChangePasswordMutation();
     const logoutMutation = useLogout();
@@ -83,6 +103,16 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                                 {username}
                             </div>
                         </div>
+
+                        {categories && categories.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-2">
+                                {categories.map((cat) => (
+                                    <span key={cat} className="px-2 py-0.5 bg-background/50 backdrop-blur-md border border-border/50 rounded-lg text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                                        {cat}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="flex flex-wrap items-center gap-4 text-muted-foreground font-medium">
                             {location && (
@@ -154,8 +184,8 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                     </Card>
                 </div>
 
-                {/* Center/Right: Bio */}
-                <div className="lg:col-span-2">
+                {/* Center/Right: Bio & Brand Info */}
+                <div className="lg:col-span-2 space-y-8">
                     <Card className="rounded-[2rem] border-border/50 bg-card/30 glass-card p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 text-primary">
@@ -169,6 +199,85 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                             </p>
                         </div>
                     </Card>
+
+                    {(website || industry || companySize || contactEmail || contactPhone || brandTone) && (
+                        <Card className="rounded-[2rem] border-border/50 bg-card/30 glass-card overflow-hidden border-none shadow-none ring-1 ring-border/50">
+                            <div className="p-6 border-b border-border/50 glass-section bg-muted/20 flex items-center gap-3">
+                                <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                                    <Briefcase size={18} />
+                                </div>
+                                <h3 className="font-bold">Brand Information</h3>
+                            </div>
+                            <CardContent className="p-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-6">
+                                        {industry && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <LayoutGrid size={10} />
+                                                    Industry
+                                                </p>
+                                                <p className="font-bold text-lg">{industry}</p>
+                                            </div>
+                                        )}
+                                        {companySize && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <MapPin size={10} />
+                                                    Company Size
+                                                </p>
+                                                <p className="font-bold text-lg">{companySize} Employees</p>
+                                            </div>
+                                        )}
+                                        {website && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <Globe size={10} />
+                                                    Website
+                                                </p>
+                                                <a href={website} target="_blank" rel="noopener noreferrer" className="font-bold text-lg text-primary hover:underline flex items-center gap-2">
+                                                    {website.replace(/^https?:\/\/(www\.)?/, '')}
+                                                    <ExternalLink size={14} />
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        {contactEmail && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <Mail size={10} />
+                                                    Business Email
+                                                </p>
+                                                <p className="font-bold text-lg">{contactEmail}</p>
+                                            </div>
+                                        )}
+                                        {contactPhone && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <Phone size={10} />
+                                                    Business Phone
+                                                </p>
+                                                <p className="font-bold text-lg">{contactPhone}</p>
+                                            </div>
+                                        )}
+                                        {brandTone && (
+                                            <div className="space-y-1">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
+                                                    <Sparkles size={10} />
+                                                    Brand Tone
+                                                </p>
+                                                <p className="font-medium text-muted-foreground leading-relaxed italic">
+                                                    "{brandTone}"
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
             </div>
 

@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { bidSchema, BidFormValues } from '@/lib/validations/auction.validation';
 import { CreateBidDto } from '@/types/auction.types';
+import { IndianRupee } from 'lucide-react';
 
 interface BidFormProps {
     onSubmit: (data: CreateBidDto) => void;
@@ -43,10 +44,10 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                 <div className="bg-primary/5 dark:bg-primary/10 p-4 rounded-2xl border border-primary/10 dark:border-primary/20">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Budget Hint</p>
                     <p className="text-sm font-semibold text-foreground/80">
-                        {suggestedMin && suggestedMax 
-                            ? `The brand's budget range is $${suggestedMin} - $${suggestedMax}.`
-                            : suggestedMin ? `The brand's starting budget is $${suggestedMin}.`
-                            : 'This auction has a competitive budget.'}
+                        {suggestedMin && suggestedMax
+                            ? `The brand's budget range is ₹${suggestedMin} - ₹${suggestedMax}.`
+                            : suggestedMin ? `The brand's starting budget is ₹${suggestedMin}.`
+                                : 'This auction has a competitive budget.'}
                     </p>
                 </div>
 
@@ -55,7 +56,7 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                     name="amount"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Bid Amount ($)</FormLabel>
+                            <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Bid Amount ₹</FormLabel>
                             <FormControl>
                                 <Input type="number" placeholder="Enter your rate" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
                             </FormControl>
@@ -71,10 +72,10 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                         <FormItem>
                             <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Pitch</FormLabel>
                             <FormControl>
-                                <Textarea 
-                                    placeholder="Explain why you are the best fit for this collaboration..." 
-                                    className="min-h-32 rounded-xl border-2 focus:border-primary transition-all resize-none" 
-                                    {...field} 
+                                <Textarea
+                                    placeholder="Explain why you are the best fit for this collaboration..."
+                                    className="min-h-32 rounded-xl border-2 focus:border-primary transition-all resize-none"
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -82,8 +83,8 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                     )}
                 />
 
-                <Button 
-                    type="submit" 
+                <Button
+                    type="submit"
                     disabled={isLoading}
                     className="w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 active:scale-95 transition-all"
                 >

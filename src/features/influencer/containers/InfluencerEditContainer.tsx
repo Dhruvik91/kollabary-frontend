@@ -35,6 +35,7 @@ export const InfluencerEditContainer = () => {
 
         return {
             fullName: profileData.fullName || '',
+            username: profileData.user?.profile?.username || profileData.slug || '',
             categories: Array.isArray(profileData.categories) ? profileData.categories.join(', ') : '',
             avatarUrl: profileData.avatarUrl || '',
             bio: profileData.bio || '',

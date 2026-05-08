@@ -193,7 +193,6 @@ export const useAuctionDetail = (id: string) => {
         const updatedBids = [newBid, ...(oldData.bids || [])];
         return { ...oldData, bids: updatedBids };
       });
-      toast.info(`New bid placed: $${newBid.amount}`);
     };
 
     const handleAuctionUpdated = (updatedAuction: any) => {
@@ -201,13 +200,11 @@ export const useAuctionDetail = (id: string) => {
     };
 
     const handleAuctionDeleted = () => {
-      toast.error('This auction has been deleted');
       queryClient.invalidateQueries({ queryKey: auctionKeys.lists() });
     };
 
     const handleBidAccepted = () => {
       queryClient.invalidateQueries({ queryKey: auctionKeys.detail(id) });
-      toast.success('A bid has been accepted!');
     };
 
     socket.on('connect', joinRoom);

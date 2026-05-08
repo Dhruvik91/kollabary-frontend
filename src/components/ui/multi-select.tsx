@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { X, Check, ChevronsUpDown } from 'lucide-react';
+import { X, Check, ChevronsUpDown, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,6 +9,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface MultiSelectProps {
@@ -27,6 +28,7 @@ export function MultiSelect({
     className,
 }: MultiSelectProps) {
     const [open, setOpen] = React.useState(false);
+    const [search, setSearch] = React.useState('');
 
     const handleUnselect = (item: string) => {
         onChange(value.filter((i) => i !== item));
@@ -39,6 +41,10 @@ export function MultiSelect({
             onChange([...value, item]);
         }
     };
+
+    const filteredOptions = options.filter(option =>
+        option.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -75,23 +81,40 @@ export function MultiSelect({
                     <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-0 rounded-2xl border-border/50 shadow-2xl" align="start">
+            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-0 rounded-2xl border-border/50 shadow-2xl overflow-hidden" align="start">
+                <div className="p-2 border-b border-border/50 bg-muted/20">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                        <Input
+                            placeholder="Search categories..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="h-9 pl-9 rounded-lg bg-background border-border/50 text-xs focus-visible:ring-1 focus-visible:ring-primary/50"
+                        />
+                    </div>
+                </div>
                 <div className="max-h-64 overflow-y-auto p-1.5 space-y-0.5">
-                    {options.map((option) => (
-                        <div
-                            key={option}
-                            className={cn(
-                                'flex items-center justify-between px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors',
-                                value.includes(option)
-                                    ? 'bg-primary/10 text-primary font-bold'
-                                    : 'hover:bg-muted/50'
-                            )}
-                            onClick={() => handleSelect(option)}
-                        >
-                            {option}
-                            {value.includes(option) && <Check className="h-4 w-4" />}
+                    {filteredOptions.length > 0 ? (
+                        filteredOptions.map((option) => (
+                            <div
+                                key={option}
+                                className={cn(
+                                    'flex items-center justify-between px-3 py-2 rounded-xl text-sm cursor-pointer transition-colors',
+                                    value.includes(option)
+                                        ? 'bg-primary/10 text-primary font-bold'
+                                        : 'hover:bg-muted/50'
+                                )}
+                                onClick={() => handleSelect(option)}
+                            >
+                                {option}
+                                {value.includes(option) && <Check className="h-4 w-4" />}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="py-6 text-center text-xs text-muted-foreground italic">
+                            No categories found matching "{search}"
                         </div>
-                    ))}
+                    )}
                 </div>
             </PopoverContent>
         </Popover>

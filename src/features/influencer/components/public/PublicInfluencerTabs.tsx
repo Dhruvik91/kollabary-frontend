@@ -11,8 +11,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReviewCard } from '@/features/review/components/ReviewCard';
 import { AudienceInsights } from './AudienceInsights';
-import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { Badge } from '@/components/ui/badge';
+import { getSocialPlatformIcon } from '@/lib/utils';
 import {
     Carousel,
     CarouselContent,
@@ -21,6 +21,7 @@ import {
     CarouselPrevious,
     type CarouselApi,
 } from "@/components/ui/carousel";
+import { formatCollaborationType } from '@/lib/format-collaboration-type';
 
 interface PublicInfluencerTabsProps {
     influencerId: string;
@@ -49,7 +50,7 @@ export const PublicInfluencerTabs = ({
 }: PublicInfluencerTabsProps) => {
     const [portfolioApi, setPortfolioApi] = useState<CarouselApi>();
     const [reviewsApi, setReviewsApi] = useState<CarouselApi>();
-    
+
     const [portfolioCurrent, setPortfolioCurrent] = useState(0);
     const [portfolioCount, setPortfolioCount] = useState(0);
     const [reviewsCurrent, setReviewsCurrent] = useState(0);
@@ -81,22 +82,6 @@ export const PublicInfluencerTabs = ({
         return num.toString();
     };
 
-    const platformIcons: Record<string, any> = {
-        instagram: Instagram,
-        twitter: Twitter,
-        linkedin: Linkedin,
-        youtube: Youtube,
-        facebook: (props: any) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-            </svg>
-        ),
-        tiktok: (props: any) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-            </svg>
-        ),
-    };
 
     return (
         <Tabs defaultValue="about" className="space-y-12">
@@ -165,7 +150,7 @@ export const PublicInfluencerTabs = ({
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {Object.entries(platforms).map(([name, data]) => {
-                            const Icon = platformIcons[name.toLowerCase()] || Globe;
+                            const Icon = getSocialPlatformIcon(name.toLowerCase() as any);
                             return (
                                 <Card key={name} className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card overflow-hidden group hover:scale-[1.02] transition-all duration-500">
                                     <CardContent className="p-8 space-y-8">
@@ -248,10 +233,10 @@ export const PublicInfluencerTabs = ({
                                                 <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
                                                     <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 overflow-hidden relative border-border/50 group-hover/card:border-primary/50 transition-all">
                                                         {brand.avatarUrl ? (
-                                                            <Image 
-                                                                src={brand.avatarUrl} 
-                                                                alt={brand.fullName || 'Brand'} 
-                                                                fill 
+                                                            <Image
+                                                                src={brand.avatarUrl}
+                                                                alt={brand.fullName || 'Brand'}
+                                                                fill
                                                                 className="object-cover"
                                                                 sizes="56px"
                                                             />

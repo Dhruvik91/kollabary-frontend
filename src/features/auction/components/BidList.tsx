@@ -49,12 +49,12 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
     return (
         <div className="space-y-4">
             {bids.map((bid, index) => {
-                const profile = bid.influencer.profile;
-                const influencerProfile = bid.influencer.influencerProfile;
+                const profile = bid.influencer?.profile;
+                const influencerProfile = bid.influencer?.influencerProfile;
 
                 const influencerName = influencerProfile?.fullName || profile?.fullName || profile?.username || 'Anonymous Influencer';
                 const avatarUrl = influencerProfile?.avatarUrl || profile?.avatarUrl;
-                const influencerId = influencerProfile?.id;
+                const influencerId = influencerProfile?.id || profile?.id;
 
                 return (
                     <motion.div
@@ -208,7 +208,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                     {(() => {
                         const bid = bids.find(b => b.id === rejectingBidId);
                         if (!bid) return null;
-                        const name = bid.influencer.influencerProfile?.fullName || bid.influencer.profile?.fullName || 'this influencer';
+                        const name = bid.influencer?.influencerProfile?.fullName || bid.influencer?.profile?.fullName || 'this influencer';
                         return (
                             <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
                                 <p className="text-sm text-foreground/80 leading-relaxed">
