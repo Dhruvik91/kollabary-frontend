@@ -107,8 +107,10 @@ export function useLogin() {
                 is_new_user: data.isNewUser,
             });
 
-            // Reload to trigger middleware redirection
-            window.location.href = data.isNewUser ? '/?showBonus=true' : '/';
+            // Redirect directly to dashboard overview
+            window.location.href = data.isNewUser
+                ? `${FRONTEND_ROUTES.DASHBOARD.OVERVIEW}?showBonus=true`
+                : FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
         },
         onError: (error: Error, variables) => {
             const message = axios.isAxiosError(error)
@@ -269,8 +271,12 @@ export function useVerifyEmail() {
                 is_new_user: data.isNewUser,
             });
 
-            // Redirect to dashboard
-            router.push(data.isNewUser ? '/?showBonus=true' : '/');
+            // Redirect directly to dashboard overview
+            router.push(
+                data.isNewUser
+                    ? `${FRONTEND_ROUTES.DASHBOARD.OVERVIEW}?showBonus=true`
+                    : FRONTEND_ROUTES.DASHBOARD.OVERVIEW
+            );
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

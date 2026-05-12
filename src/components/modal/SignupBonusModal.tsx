@@ -3,16 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import ReactConfetti from 'react-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Coins, X, Check } from 'lucide-react';
+import { X, Check } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useWindowSize } from '@/hooks/use-window-size';
+import { COIN_URL } from '@/constants';
 
-export function SignupBonusModal({ 
-  isOpen, 
-  onClose, 
-  amount = 500 
-}: { 
-  isOpen: boolean; 
+export function SignupBonusModal({
+  isOpen,
+  onClose,
+  amount = 500
+}: {
+  isOpen: boolean;
   onClose: () => void;
   amount?: number;
 }) {
@@ -58,46 +60,53 @@ export function SignupBonusModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative z-[102] w-full max-w-md overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-900/90 p-8 shadow-2xl shadow-indigo-500/20 backdrop-blur-2xl"
+          className="relative z-[102] w-full max-w-md overflow-hidden rounded-[2.5rem] border border-border/50 bg-background/95 p-6 sm:p-8 shadow-2xl shadow-primary/10 backdrop-blur-2xl"
         >
+          {/* Subtle Background Coin Visuals */}
+          <div className="absolute -left-16 -bottom-16 z-0 opacity-20 pointer-events-none select-none transform -rotate-12 scale-125 sm:scale-150">
+            <Image
+              src={COIN_URL}
+              alt=""
+              width={280}
+              height={280}
+              className="object-contain"
+            />
+          </div>
+          <div className="absolute -right-12 top-4 z-0 opacity-20 pointer-events-none select-none transform rotate-45 scale-50">
+            <Image
+              src={COIN_URL}
+              alt=""
+              width={220}
+              height={220}
+              className="object-contain"
+            />
+          </div>
+
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute right-6 top-6 rounded-full bg-white/5 p-2 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+            className="absolute right-6 top-6 z-50 rounded-full bg-muted/50 p-2 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95 cursor-pointer"
           >
             <X size={20} />
           </button>
 
-          {/* Icon/Visual Header */}
-          <div className="relative mb-6 flex justify-center">
-            <div className="absolute inset-0 blur-2xl animate-pulse">
-                <div className="h-20 w-20 mx-auto rounded-full bg-indigo-500/30" />
-            </div>
-            <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/40 transform rotate-12 group">
-              <Coins size={48} className="text-white animate-bounce" />
-              <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 border-4 border-zinc-900 text-white">
-                <Check size={16} strokeWidth={4} />
-              </div>
-            </div>
-          </div>
-
           {/* Text Content */}
-          <div className="text-center">
-            <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+          <div className="relative z-10 text-center">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
               Welcome Bonus!
             </h2>
-            <p className="mt-4 text-lg font-medium text-zinc-400">
+            <p className="mt-3 text-sm sm:text-base font-medium text-muted-foreground leading-relaxed max-w-sm mx-auto">
               You've just received a special arrival gift to kickstart your journey on Kollabary.
             </p>
 
             {/* Bonus Amount Card */}
-            <div className="mt-8 flex items-center justify-center gap-3 rounded-2xl border border-white/5 bg-white/5 p-6">
-              <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500">
+            <div className="mt-6 flex items-center justify-center gap-3 rounded-2xl border border-border/50 bg-muted/40 p-5">
+              <span className="text-4xl sm:text-5xl font-black text-primary">
                 {amount}
               </span>
               <div className="flex flex-col items-start leading-tight">
-                <span className="text-xl font-bold text-white tracking-widest uppercase">K-Coins</span>
-                <span className="text-xs text-zinc-500 font-medium">Added to wallet</span>
+                <span className="text-base sm:text-lg font-bold text-foreground tracking-widest uppercase">K-Coins</span>
+                <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">Added to wallet</span>
               </div>
             </div>
 
@@ -105,12 +114,12 @@ export function SignupBonusModal({
             <Button
               onClick={onClose}
               size="lg"
-              className="mt-8 h-14 w-full rounded-2xl bg-white text-lg font-black text-black hover:bg-white/90 active:scale-95 transition-all shadow-xl shadow-white/10"
+              className="mt-6 h-12 sm:h-14 w-full rounded-2xl text-base sm:text-lg font-black shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
             >
               Start Exploring
             </Button>
-            
-            <p className="mt-4 text-xs font-medium text-zinc-500 uppercase tracking-[0.2em]">
+
+            <p className="mt-4 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.25em]">
               Kollabary • Financial Ecosystem
             </p>
           </div>
