@@ -29,6 +29,7 @@ import { useCreateTopUpPlan, useUpdateTopUpPlan } from '@/hooks/queries/useAdmin
 
 import { ImageUpload } from '@/components/shared/ImageUpload';
 import { COIN_URL } from '@/constants';
+import Image from 'next/image';
 
 const planSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -123,8 +124,8 @@ export const PlanFormDialog = ({ open, onOpenChange, plan }: PlanFormDialogProps
             <DialogContent className="sm:max-w-[425px] rounded-2xl">
                 <DialogHeader>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center p-2">
-                            <img src={COIN_URL} alt="KC" className="w-full h-full object-contain" />
+                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center p-2 relative">
+                            <Image src={COIN_URL} alt="KC" fill className="object-contain p-2" />
                         </div>
                         <div>
                             <DialogTitle>{plan ? 'Edit Top-up Plan' : 'Create Top-up Plan'}</DialogTitle>

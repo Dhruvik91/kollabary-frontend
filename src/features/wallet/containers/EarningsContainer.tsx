@@ -62,7 +62,7 @@ export const EarningsContainer = () => {
                                         alt=""
                                         width={12}
                                         height={12}
-                                        className="w-3 h-3 object-contain"
+                                        className="w-3 h-3 w-auto h-auto object-contain"
                                     />
                                 </div>
                                 <p className="text-[11px] text-muted-foreground leading-relaxed">
