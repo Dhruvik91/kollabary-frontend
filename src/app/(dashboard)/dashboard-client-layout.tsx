@@ -31,13 +31,14 @@ export default function DashboardClientLayout({
     React.useEffect(() => {
         if (searchParams.get('showBonus') === 'true') {
             setIsBonusModalOpen(true);
-            // Clean up URL
+            // Clean up URL without triggering a Next.js navigation
+            // to avoid race conditions with Auth/Profile guards
             const newParams = new URLSearchParams(searchParams.toString());
             newParams.delete('showBonus');
             const cleanPath = `${pathName}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
-            router.replace(cleanPath, { scroll: false });
+            window.history.replaceState(null, '', cleanPath);
         }
-    }, [searchParams, pathName, router]);
+    }, [searchParams, pathName]);
 
     return (
         <AuthGuard>

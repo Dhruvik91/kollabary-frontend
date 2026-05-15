@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { COIN_URL } from '@/constants';
+import Image from 'next/image';
 
 export function AdminTopUpContainer() {
     const { data: plans = [], isLoading, isError, refetch } = useAdminTopUpPlans();
@@ -86,10 +87,12 @@ export function AdminTopUpContainer() {
             cell: ({ row }) => (
                 <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-1.5 font-bold text-primary italic">
-                        <img
+                        <Image
                             src={COIN_URL}
                             alt="KC"
-                            className="w-4 h-4 object-contain animate-pulse-slow"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4 w-auto h-auto object-contain animate-pulse-slow"
                         />
                         {row.original.coins} KC
                     </div>

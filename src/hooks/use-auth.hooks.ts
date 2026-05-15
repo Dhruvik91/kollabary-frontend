@@ -271,12 +271,10 @@ export function useVerifyEmail() {
                 is_new_user: data.isNewUser,
             });
 
-            // Redirect directly to dashboard overview
-            router.push(
-                data.isNewUser
-                    ? `${FRONTEND_ROUTES.DASHBOARD.OVERVIEW}?showBonus=true`
-                    : FRONTEND_ROUTES.DASHBOARD.OVERVIEW
-            );
+            // Redirect directly to dashboard overview with a full page reload to ensure middleware catches the new cookie
+            window.location.href = data.isNewUser
+                ? `${FRONTEND_ROUTES.DASHBOARD.OVERVIEW}?showBonus=true`
+                : FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
         },
         onError: (error: Error) => {
             const message = axios.isAxiosError(error)

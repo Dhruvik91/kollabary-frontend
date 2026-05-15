@@ -33,10 +33,10 @@ export const WalletCard = ({
                 <Image
                     src={COIN_URL}
                     alt="K Coins"
-                    className="w-64 h-64 object-contain"
+                    className="w-64 h-64 w-auto h-auto object-contain"
                     width={256}
                     height={256}
-                    loading='eager'
+                    priority={true}
                 />
             </div>
 
@@ -46,10 +46,10 @@ export const WalletCard = ({
                         <Image
                             src={COIN_URL}
                             alt="K Coins"
-                            className="w-full h-full object-contain"
+                            className="w-full h-full w-auto h-auto object-contain"
                             width={40}
                             height={40}
-                            loading='eager'
+                            priority={true}
                         />
                     </div>
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">K Balance</p>
@@ -74,7 +74,7 @@ export const WalletCard = ({
                         <TooltipContent side="right" className="max-w-[240px] p-4 bg-background/95 backdrop-blur-md border-primary/20">
                             <div className="space-y-2">
                                 <p className="font-bold text-primary flex items-center gap-2">
-                                    <Image src={COIN_URL} alt="K" width={16} height={16} />
+                                    <Image src={COIN_URL} alt="K" width={16} height={16} className="w-4 h-4 w-auto h-auto object-contain" />
                                     K Coins
                                 </p>
                                 <p className="text-xs text-muted-foreground leading-relaxed">

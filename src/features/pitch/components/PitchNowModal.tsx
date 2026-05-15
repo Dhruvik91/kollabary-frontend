@@ -12,6 +12,7 @@ import { useActionConsent } from '@/hooks/use-action-consent';
 import { useConfetti } from '@/contexts/confetti-context';
 import { UserProfile } from '@/services/profile.service';
 import { Send, Sparkles, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface PitchNowModalProps {
     isOpen: boolean;
@@ -82,10 +83,11 @@ export const PitchNowModal = ({
                     <div className="p-4 rounded-2xl bg-muted/30 border border-border/50 flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl overflow-hidden bg-card border border-border/50 relative shrink-0">
                             {brand.avatarUrl || brand.profileImage ? (
-                                <img
+                                <Image
                                     src={brand.avatarUrl || brand.profileImage || ''}
                                     alt={brand.fullName}
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    className="object-cover"
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center font-black italic text-primary bg-primary/5">

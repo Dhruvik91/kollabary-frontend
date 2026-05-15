@@ -86,7 +86,7 @@ export const Hero = () => {
                     transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute top-[15%] right-[10%] w-24 h-24 md:w-40 md:h-40 opacity-20 md:opacity-30"
                 >
-                    <Image src={TIER_IMAGES.ELITE_CREATOR} alt="" fill sizes="(max-width: 768px) 100px, 160px" priority loading="eager" className="object-contain" />
+                    <Image src={TIER_IMAGES.ELITE_CREATOR} alt="" fill sizes="(max-width: 768px) 100px, 160px" priority={true} className="object-contain" />
                 </motion.div>
 
                 <motion.div
@@ -94,7 +94,7 @@ export const Hero = () => {
                     transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                     className="absolute bottom-[10%] left-[5%] w-32 h-32 md:w-56 md:h-56 opacity-15 md:opacity-25"
                 >
-                    <Image src={TIER_IMAGES.KOLLABARY_ICON} alt="" fill sizes="(max-width: 768px) 128px, 224px" priority loading="eager" className="object-contain" />
+                    <Image src={TIER_IMAGES.KOLLABARY_ICON} alt="" fill sizes="(max-width: 768px) 128px, 224px" priority={true} className="object-contain" />
                 </motion.div>
 
                 {/* Medium Floating Badges */}
@@ -103,7 +103,7 @@ export const Hero = () => {
                     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                     className="absolute top-[25%] left-[12%] w-16 h-16 md:w-24 md:h-24 opacity-40 md:opacity-60"
                 >
-                    <Image src={TIER_IMAGES.EMERGING_PARTNER} alt="" fill sizes="(max-width: 768px) 64px, 96px" className="object-contain" />
+                    <Image src={TIER_IMAGES.EMERGING_PARTNER} alt="" fill sizes="(max-width: 768px) 64px, 96px" priority={true} className="object-contain" />
                 </motion.div>
 
                 <motion.div

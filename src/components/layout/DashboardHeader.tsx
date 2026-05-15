@@ -98,7 +98,7 @@ export const DashboardHeader = () => {
                                         width={28}
                                         height={28}
                                         priority={true}
-                                        className="w-full h-full object-contain"
+                                        className="w-full h-full w-auto h-auto object-contain"
                                     />
                                 </div>
                                 {isWalletLoading ? (

@@ -22,8 +22,7 @@ const getPurposeIcon = (purpose: TransactionPurpose) => {
             alt="KC"
             width={14}
             height={14}
-            loading="lazy"
-            className="w-3.5 h-3.5 object-contain"
+            className="w-3.5 h-3.5 w-auto h-auto object-contain"
         />
     );
 
@@ -85,8 +84,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
                         alt="K"
                         width={16}
                         height={16}
-                        loading="lazy"
-                        className="w-4 h-4 object-contain"
+                        className="w-4 h-4 w-auto h-auto object-contain"
                     />
                 </div>
                 <Tooltip delayDuration={300}>
