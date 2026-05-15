@@ -45,7 +45,7 @@ export const PageHeader = ({
                             width={20}
                             height={20}
                             priority={true}
-                            className={cn("w-4 h-4 sm:w-5 sm:h-5 object-contain", iconClassName)} 
+                            className={cn("w-4 h-4 sm:w-5 sm:h-5 w-auto h-auto object-contain", iconClassName)} 
                         />
                     ) : Icon && (
                         <Icon size={12} className="sm:w-[14px] sm:h-[14px]" />

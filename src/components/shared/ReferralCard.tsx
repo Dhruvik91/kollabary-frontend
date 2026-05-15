@@ -79,14 +79,14 @@ export const ReferralCard = ({
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Earned</p>
                         <div className="flex items-center gap-1.5">
                             <p className="text-xl font-black text-primary">{loading ? "-" : totalEarned}</p>
-                            <Image
-                                src={COIN_URL}
-                                alt="KC"
-                                width={16}
-                                height={16}
-                                quality={90}
-                                className="w-4 h-4 object-contain"
-                            />
+                                <Image
+                                    src={COIN_URL}
+                                    alt="KC"
+                                    width={16}
+                                    height={16}
+                                    quality={90}
+                                    className="w-4 h-4 w-auto h-auto object-contain"
+                                />
                         </div>
                     </div>
                 </div>

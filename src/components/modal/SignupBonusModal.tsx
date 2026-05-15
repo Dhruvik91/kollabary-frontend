@@ -69,7 +69,8 @@ export function SignupBonusModal({
               alt=""
               width={280}
               height={280}
-              className="object-contain"
+              priority
+              className="object-contain w-auto h-auto"
             />
           </div>
           <div className="absolute -right-12 top-4 z-0 opacity-20 pointer-events-none select-none transform rotate-45 scale-50">
@@ -78,7 +79,8 @@ export function SignupBonusModal({
               alt=""
               width={220}
               height={220}
-              className="object-contain"
+              priority
+              className="object-contain w-auto h-auto"
             />
           </div>
 
