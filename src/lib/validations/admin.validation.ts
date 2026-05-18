@@ -23,3 +23,20 @@ export const createInfluencerSchema = z
     });
 
 export type CreateInfluencerFormData = z.infer<typeof createInfluencerSchema>;
+
+/**
+ * Admin Top-up Plan form validation schema
+ */
+export const planSchema = z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    amount: z.coerce.number().min(1, 'Amount must be greater than 0'),
+    coins: z.coerce.number().min(1, 'Coins must be greater than 0'),
+    bonusCoins: z.coerce.number().min(0).default(0),
+    description: z.string().optional(),
+    imageUrl: z.string().optional(),
+    isPopular: z.boolean().default(false),
+    isActive: z.boolean().default(true),
+});
+
+export type PlanFormValues = z.infer<typeof planSchema>;
+

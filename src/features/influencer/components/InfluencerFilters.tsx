@@ -39,7 +39,7 @@ const RANKING_TIER_OPTIONS = [
     { label: 'Established Influencer', value: 'Established Influencer' },
     { label: 'Premium Collaborator', value: 'Premium Collaborator' },
     { label: 'Elite Ambassador', value: 'Elite Ambassador' },
-    { label: 'Legendary Icon', value: 'Legendary Icon' },
+    { label: 'Kollabary Icon', value: 'Kollabary Icon' },
 ];
 
 const RATING_OPTIONS = [
