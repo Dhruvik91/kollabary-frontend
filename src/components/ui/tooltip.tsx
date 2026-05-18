@@ -19,9 +19,50 @@ function TooltipProvider({
 }
 
 function Tooltip({
+  open: controlledOpen,
+  onOpenChange,
+  defaultOpen,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+  const [isMobile, setIsMobile] = React.useState(false)
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen || false)
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return
+    const mediaQuery = window.matchMedia("(max-width: 768px)")
+    setIsMobile(mediaQuery.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mediaQuery.addEventListener("change", handler)
+    return () => mediaQuery.removeEventListener("change", handler)
+  }, [])
+
+  const isControlled = controlledOpen !== undefined
+  const currentOpen = isControlled ? controlledOpen : uncontrolledOpen
+
+  const handleOpenChange = (open: boolean) => {
+    if (isMobile) {
+      if (onOpenChange) onOpenChange(false)
+      if (!isControlled) setUncontrolledOpen(false)
+      return
+    }
+
+    if (onOpenChange) {
+      onOpenChange(open)
+    }
+    if (!isControlled) {
+      setUncontrolledOpen(open)
+    }
+  }
+
+  return (
+    <TooltipPrimitive.Root
+      data-slot="tooltip"
+      open={isMobile ? false : currentOpen}
+      onOpenChange={handleOpenChange}
+      defaultOpen={defaultOpen}
+      {...props}
+    />
+  )
 }
 
 function TooltipTrigger({

@@ -18,6 +18,7 @@ import {
     UserCheck,
     Trash2,
     AlertTriangle,
+    Bell,
 } from 'lucide-react';
 import { BackButton } from '@/components/shared/BackButton';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
@@ -38,6 +39,8 @@ import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdate
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserStatus } from '@/types/auth.types';
+import { useAuth } from '@/contexts/auth-context';
+import { usePushNotification } from '@/hooks/use-push-notification';
 import {
     Select,
     SelectContent,
@@ -47,7 +50,7 @@ import {
 } from '@/components/ui/select';
 
 interface InfluencerSettingsViewProps {
-    influencer: InfluencerProfile;
+    influencer: InfluencerProfile | null;
     verificationRequests?: any[];
 }
 
@@ -79,10 +82,21 @@ export const InfluencerSettingsView = ({
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    const { user } = useAuth();
+    const {
+        isSubscribed,
+        permission,
+        loading: isPushLoading,
+        subscribe: subscribePush,
+        unsubscribe: unsubscribePush,
+        isSupported: isPushSupported,
+    } = usePushNotification();
+
     const currentVerification = (verificationRequests as any[])?.[0];
-    const { availability, verified } = influencer;
-    const userStatus = influencer.user?.status;
-    const collaborationTypes = influencer.collaborationTypes || [];
+    const availability = influencer?.availability;
+    const verified = influencer?.verified;
+    const userStatus = influencer?.user?.status || user?.status || UserStatus.ACTIVE;
+    const collaborationTypes = influencer?.collaborationTypes || [];
 
     const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
     const [docUrl, setDocUrl] = useState('');
@@ -164,7 +178,8 @@ export const InfluencerSettingsView = ({
                 className="space-y-6"
             >
                 {/* 1. Availability */}
-                <motion.div variants={item}>
+                {influencer && (
+                    <motion.div variants={item}>
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
                         <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
@@ -180,20 +195,20 @@ export const InfluencerSettingsView = ({
                         <CardContent className="p-6">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div className="flex items-center gap-3">
-                                    <span className={cn("w-3 h-3 rounded-full ring-4 ring-offset-2 ring-offset-background", getAvailabilityColor(availability), {
-                                        'ring-green-500/20': availability === AvailabilityStatus.OPEN,
-                                        'ring-yellow-500/20': availability === AvailabilityStatus.BUSY,
-                                        'ring-red-500/20': availability === AvailabilityStatus.CLOSED,
+                                    <span className={cn("w-3 h-3 rounded-full ring-4 ring-offset-2 ring-offset-background", getAvailabilityColor(influencer.availability), {
+                                        'ring-green-500/20': influencer.availability === AvailabilityStatus.OPEN,
+                                        'ring-yellow-500/20': influencer.availability === AvailabilityStatus.BUSY,
+                                        'ring-red-500/20': influencer.availability === AvailabilityStatus.CLOSED,
                                     })} />
-                                    <span className="text-sm text-muted-foreground">{getAvailabilityLabel(availability)}</span>
+                                    <span className="text-sm text-muted-foreground">{getAvailabilityLabel(influencer.availability)}</span>
                                 </div>
                                 <Select
-                                    value={availability}
+                                    value={influencer.availability}
                                     onValueChange={handleUpdateAvailability}
                                     disabled={updateInfluencer.isPending}
                                 >
                                     <SelectTrigger className="w-[160px] h-10 rounded-xl font-bold text-sm">
-                                        <SelectValue placeholder={availability} />
+                                        <SelectValue placeholder={influencer.availability} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value={AvailabilityStatus.OPEN}>
@@ -220,9 +235,11 @@ export const InfluencerSettingsView = ({
                         </CardContent>
                     </Card>
                 </motion.div>
+                )}
 
                 {/* 2. Collaboration Types */}
-                <motion.div variants={item}>
+                {influencer && (
+                    <motion.div variants={item}>
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
                         <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
@@ -283,9 +300,11 @@ export const InfluencerSettingsView = ({
                         </CardContent>
                     </Card>
                 </motion.div>
+                )}
 
                 {/* 3. Account Verification */}
-                <motion.div variants={item}>
+                {influencer && (
+                    <motion.div variants={item}>
                     <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
                         <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                             <div className="flex items-center gap-3">
@@ -349,6 +368,57 @@ export const InfluencerSettingsView = ({
                                     >
                                         <ShieldCheck size={16} />
                                         Get Verified
+                                    </Button>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </motion.div>
+                )}
+
+                {/* Push Notifications Section */}
+                <motion.div variants={item}>
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                    <Bell size={20} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold tracking-tight">Push Notifications</h3>
+                                    <p className="text-sm text-muted-foreground">Receive real-time alerts about campaigns, transactions, and messages</p>
+                                </div>
+                            </div>
+                        </div>
+                        <CardContent className="p-6">
+                            {!isPushSupported ? (
+                                <div className="p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
+                                    <p className="text-sm text-muted-foreground font-medium">
+                                        Push notifications are not supported on your browser or device.
+                                        Please use a modern browser (like Chrome, Safari, or Firefox) or install the app to enable them.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <p className="font-medium">
+                                            {isSubscribed 
+                                                ? "Push notifications are active on this device." 
+                                                : "Subscribe to receive push notifications on this device."}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {isSubscribed 
+                                                ? "You will get notified about direct messages, campaign status updates, and key platform actions." 
+                                                : "Never miss new collaboration offers or urgent chat updates from brands."}
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant={isSubscribed ? "outline" : "default"}
+                                        onClick={isSubscribed ? unsubscribePush : subscribePush}
+                                        className="rounded-xl font-bold shrink-0 min-w-[160px]"
+                                        disabled={isPushLoading}
+                                    >
+                                        {isPushLoading ? "Processing..." : (isSubscribed ? "Disable Push" : "Enable Push")}
                                     </Button>
                                 </div>
                             )}

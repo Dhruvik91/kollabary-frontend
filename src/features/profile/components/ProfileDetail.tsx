@@ -18,6 +18,7 @@ import {
     Mail,
     LayoutGrid,
     Sparkles,
+    Bell,
 } from 'lucide-react';
 import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { useLogout } from '@/hooks/use-auth.hooks';
@@ -33,6 +34,7 @@ import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { UserRole } from '@/types/auth.types';
 import { VerificationSection } from './VerificationSection';
 import { AccountManagementSection } from './AccountManagementSection';
+import { usePushNotification } from '@/hooks/use-push-notification';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -60,6 +62,14 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
     const changePasswordMutation = useChangePasswordMutation();
     const logoutMutation = useLogout();
     const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
+
+    const {
+        isSubscribed,
+        loading: isPushLoading,
+        subscribe: subscribePush,
+        unsubscribe: unsubscribePush,
+        isSupported: isPushSupported,
+    } = usePushNotification();
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
@@ -285,6 +295,60 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
             {isOwner && (
                 <div className="lg:col-span-3">
                     <VerificationSection profile={profile} />
+                </div>
+            )}
+
+            {/* Push Notifications Section */}
+            {isOwner && (
+                <div className="lg:col-span-3">
+                    <Card className="rounded-[2.5rem] border-border/50 bg-card/30 glass-card p-8 md:p-10 border-none shadow-none ring-1 ring-border/50">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3 text-primary">
+                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                        <Bell size={20} />
+                                    </div>
+                                    <h3 className="text-xl font-black tracking-tight">Push Notifications</h3>
+                                </div>
+                                <p className="text-muted-foreground font-medium">
+                                    Receive real-time alerts about campaigns, transactions, and messages.
+                                </p>
+                            </div>
+                            <div className="md:col-span-2">
+                                {!isPushSupported ? (
+                                    <div className="p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Push notifications are not supported on your browser or device.
+                                            Please use a modern browser (like Chrome, Safari, or Firefox) or install the app to enable them.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 bg-primary/5 border border-primary/10 rounded-2xl">
+                                        <div className="space-y-1">
+                                            <p className="font-bold">
+                                                {isSubscribed
+                                                    ? "Push notifications are active."
+                                                    : "Enable push notifications."}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {isSubscribed
+                                                    ? "You will get notified about direct messages, campaign status updates, and key platform actions."
+                                                    : "Never miss new collaboration offers or urgent chat updates."}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            variant={isSubscribed ? "outline" : "default"}
+                                            onClick={isSubscribed ? unsubscribePush : subscribePush}
+                                            className="rounded-xl font-bold shrink-0 min-w-[160px] h-12"
+                                            disabled={isPushLoading}
+                                        >
+                                            {isPushLoading ? "Processing..." : (isSubscribed ? "Disable Push" : "Enable Push")}
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </Card>
                 </div>
             )}
 

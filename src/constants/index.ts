@@ -144,6 +144,11 @@ export const API_CONFIG = {
             admin: '/pitches/admin',
             status: (id: string) => `/pitches/${id}/status`,
             detail: (id: string) => `/pitches/${id}`,
+        },
+        notifications: {
+            subscribe: '/notifications/subscribe',
+            unsubscribe: '/notifications/unsubscribe',
+            vapidKey: '/notifications/vapid-key',
         }
     }
 }
