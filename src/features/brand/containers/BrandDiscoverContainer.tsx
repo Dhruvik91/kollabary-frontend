@@ -6,6 +6,7 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
+    SheetDescription,
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -91,6 +92,9 @@ export const BrandDiscoverContainer = () => {
                                 <SheetHeader className="px-8 pt-8 pb-4 border-b border-border/50">
                                     <div className="flex items-center justify-between">
                                         <SheetTitle className="text-3xl font-black tracking-tight">Refine</SheetTitle>
+                                        <SheetDescription className="sr-only">
+                                            Adjust your search filters to find the perfect brand partnership.
+                                        </SheetDescription>
                                         <div className="px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-xs font-black uppercase tracking-widest">
                                             {totalCount} Results
                                         </div>

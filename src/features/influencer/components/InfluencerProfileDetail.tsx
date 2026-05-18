@@ -51,6 +51,7 @@ import { Badge } from '@/components/ui/badge';
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
@@ -739,6 +740,9 @@ export const InfluencerProfileDetail = ({
                         <SheetTitle className="text-2xl font-black tracking-tight">
                             All Reviews
                         </SheetTitle>
+                        <SheetDescription className="sr-only">
+                            A list of all reviews and feedback for this creator.
+                        </SheetDescription>
                     </SheetHeader>
                     <div className="overflow-y-auto h-full px-8 py-8 pb-24">
                         <ReviewList

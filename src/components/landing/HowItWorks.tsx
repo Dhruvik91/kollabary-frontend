@@ -47,14 +47,13 @@ export const HowItWorks = () => {
                         <motion.h2
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] md:leading-[0.9] mb-6 md:mb-10"
+                            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] md:leading-[0.9] mb-6 md:mb-10 transform-gpu"
                         >
-                            The Kollabary <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Blueprint</span>
+                            The Strategic <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Blueprint.</span>
                         </motion.h2>
-                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-lg">
-
-                            We've simplified the complex world of creator marketing into a streamlined, automated workflow.
+                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-lg text-balance">
+                            We've engineered the complex world of creator marketing into a streamlined, high-speed automated workflow.
                         </p>
                     </div>
                 </div>

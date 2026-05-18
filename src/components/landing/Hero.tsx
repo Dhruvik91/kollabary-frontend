@@ -154,34 +154,29 @@ export const Hero = () => {
                     </motion.div>
 
                     {/* Massive Kinetic Headline */}
-                    <div className="relative mb-12 overflow-hidden">
+                    <div className="relative mb-12 overflow-hidden py-4">
                         <h1
                             ref={titleRef}
                             aria-label="Forge Elite Connections"
                             className="text-[14vw] sm:text-[10vw] lg:text-[8.5vw] font-black tracking-[-0.04em] leading-[0.85] text-foreground inline-block px-4 pb-2"
                         >
-                            <span className="hero-reveal block">Forge Elite</span>
-                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary pr-4">Connections.</span>
+                            <span className="hero-reveal block transform-gpu">Forge Elite</span>
+                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary pr-4 transform-gpu">Connections.</span>
                         </h1>
                     </div>
 
                     {/* Editorial Subtext */}
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
+                        transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
                         className="text-lg md:text-2xl text-muted-foreground/90 mb-16 max-w-3xl leading-relaxed font-medium text-balance"
                     >
-                        Kollabary transcending the transactional. We bridge the gap between premium brands and world-class creators through a secure, performance-driven ecosystem.
+                        Kollabary transcends the transactional. We bridge the gap between premium brands and world-class creators through a secure, performance-driven ecosystem.
                     </motion.p>
 
                     {/* Ultra-Premium CTAs */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6, delay: 0.5 }}
-                        className="flex flex-col sm:flex-row items-center gap-8 w-full sm:w-auto"
-                    >
+                    <div className="flex flex-col sm:flex-row items-center gap-8 w-full sm:w-auto">
                         <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="hero-cta group relative w-full sm:w-auto" aria-label="Join the Network">
                             <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" aria-hidden="true"></div>
                             <Button size="lg" className="relative rounded-full px-12 h-16 text-lg font-black bg-primary text-white hover:opacity-90 shadow-2xl w-full sm:w-auto border-none transition-all hover:scale-105 active:scale-95 overflow-hidden">
@@ -205,7 +200,7 @@ export const Hero = () => {
                                 </a>
                             </Button>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
 

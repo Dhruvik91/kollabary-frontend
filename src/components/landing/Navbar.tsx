@@ -13,6 +13,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -205,11 +206,14 @@ export const Navbar = () => {
                         </SheetTrigger>
                         <SheetContent side="right" className="w-[85%] sm:max-w-md glass-card-elevated border-l border-white/10 p-0 overflow-hidden flex flex-col">
                             <div className="flex flex-col h-full bg-background/50 backdrop-blur-3xl">
-                                <SheetHeader className="p-8 pb-4 border-b border-white/5">
-                                    <SheetTitle className="text-left">
-                                        <Logo className="w-32" />
-                                    </SheetTitle>
-                                </SheetHeader>
+                                    <SheetHeader className="p-8 pb-4 border-b border-white/5">
+                                        <SheetTitle className="text-left">
+                                            <Logo className="w-32" />
+                                        </SheetTitle>
+                                        <SheetDescription className="sr-only">
+                                            Navigation menu for mobile devices.
+                                        </SheetDescription>
+                                    </SheetHeader>
 
                                 <div className="flex-grow p-4 py-8 space-y-0.5">
                                     <nav className="flex flex-col">

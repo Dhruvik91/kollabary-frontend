@@ -104,7 +104,7 @@ export const AnimatedModal = ({
                         <DialogPrimitive.Content
                             asChild
                             onOpenAutoFocus={(e) => e.preventDefault()}
-                            aria-describedby={description ? undefined : undefined}
+                            aria-describedby={undefined}
                         >
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
                                 <motion.div

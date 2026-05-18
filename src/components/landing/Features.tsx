@@ -70,14 +70,14 @@ export const Features = () => {
                             whileInView={{ opacity: 1 }}
                             className="text-primary font-black tracking-[0.3em] uppercase text-[10px] mb-6 block"
                         >
-                            The Core Engine
+                            The Performance Engine
                         </motion.span>
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9]">
-                            A Performance-Driven <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Ecosystem.</span>
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9] transform-gpu">
+                            Next-Gen Influence <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Architected.</span>
                         </h2>
-                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed">
-                            Kollabary simplifies the complexity of creator partnerships through a transparent, bid-driven marketplace.
+                        <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed text-balance">
+                            Kollabary replaces manual friction with an automated, bid-driven ecosystem where performance is the only currency that matters.
                         </p>
                     </div>
 
