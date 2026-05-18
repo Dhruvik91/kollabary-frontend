@@ -5,6 +5,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import {
     LayoutGrid,
     AtSign,
@@ -220,6 +221,19 @@ export const InfluencerProfileForm = ({
         const isValid = await form.trigger(fieldsToValidate as any);
         if (isValid) {
             setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+        } else {
+            const errors = form.formState.errors;
+            if (errors.username) {
+                toast.error(errors.username.message || 'Please check your username');
+            } else {
+                const firstErrorField = fieldsToValidate.find(field => errors[field as keyof typeof errors]);
+                if (firstErrorField) {
+                    const error = errors[firstErrorField as keyof typeof errors];
+                    toast.error((error as { message?: string })?.message || `Invalid ${firstErrorField}`);
+                } else {
+                    toast.error('Please fill in all required fields correctly before continuing.');
+                }
+            }
         }
     };
 
@@ -251,6 +265,20 @@ export const InfluencerProfileForm = ({
         onSubmit(formattedValues as any);
     };
 
+    const handleInvalidSubmit = (errors: Record<string, { message?: string }>) => {
+        if (errors.username) {
+            toast.error(errors.username.message || 'Please check your username');
+        } else {
+            const firstErrorKey = Object.keys(errors)[0];
+            if (firstErrorKey) {
+                const error = errors[firstErrorKey];
+                toast.error(error?.message || `Invalid ${firstErrorKey}`);
+            } else {
+                toast.error('Please fill in all required fields correctly.');
+            }
+        }
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         // Prevent default Enter behavior (which might submit the form prematurely)
         if (e.key === 'Enter') {
@@ -259,7 +287,7 @@ export const InfluencerProfileForm = ({
                 nextStep();
             } else {
                 // If on final step, manually trigger submission
-                form.handleSubmit(handleFormSubmit)();
+                form.handleSubmit(handleFormSubmit, handleInvalidSubmit)();
             }
         }
     };
@@ -308,7 +336,7 @@ export const InfluencerProfileForm = ({
 
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    onSubmit={form.handleSubmit(handleFormSubmit, handleInvalidSubmit)}
                     onKeyDown={handleKeyDown}
                     className="space-y-8"
                 >

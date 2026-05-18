@@ -5,6 +5,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import {
     User,
     AtSign,
@@ -51,7 +52,10 @@ import { SOCIAL_PLATFORMS } from '@/constants';
 import { getSocialPlatformIcon } from '@/lib/utils';
 
 const profileSchema = z.object({
-    username: z.string().min(3, 'Username must be at least 3 characters').max(30),
+    username: z.string()
+        .min(3, 'Username must be at least 3 characters')
+        .max(30, 'Username must be at most 30 characters')
+        .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores (no spaces or special characters)'),
     fullName: z.string().min(2, 'Full name is required'),
     bio: z.string().max(300, 'Bio must be less than 300 characters').optional(),
     location: z.string().min(2, 'Location is required').optional(),
@@ -154,7 +158,22 @@ export const ProfileSetupForm = ({
     return (
         <div className="max-w-2xl mx-auto">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+                <form
+                    onSubmit={form.handleSubmit(handleFormSubmit, (errors) => {
+                        if (errors.username) {
+                            toast.error(errors.username.message || 'Please check your username');
+                        } else {
+                            const firstErrorKey = Object.keys(errors)[0];
+                            if (firstErrorKey) {
+                                const error = errors[firstErrorKey as keyof typeof errors];
+                                toast.error((error as { message?: string })?.message || `Invalid ${firstErrorKey}`);
+                            } else {
+                                toast.error('Please fill in all required fields correctly.');
+                            }
+                        }
+                    })}
+                    className="space-y-8"
+                >
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

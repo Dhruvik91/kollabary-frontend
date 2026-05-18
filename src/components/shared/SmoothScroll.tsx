@@ -17,6 +17,15 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Only initialize Lenis on the main public landing page (root route)
+    // This prevents Lenis from hijacking scroll on dashboard scrollable containers, setup flow wizard modals, and dialogs
+    if (pathname !== '/') {
+      lenisRef.current = null;
+      // Clean fallback: use native window scroll-to-top on other paths
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      return;
+    }
+
     // Initialize Lenis
     const lenis = new Lenis({
       duration: 1.2,
@@ -30,16 +39,18 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
     });
 
     lenisRef.current = lenis;
+    lenis.scrollTo(0, { immediate: true });
 
     // Animation loop
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
-    // Update Lenis on window resize (handled internally usually, but safe)
+    // Update Lenis on window resize
     const resizeObserver = new ResizeObserver(() => {
       lenis.resize();
     });
@@ -47,15 +58,10 @@ export const SmoothScroll = ({ children }: SmoothScrollProps) => {
 
     return () => {
       lenis.destroy();
+      cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
+      lenisRef.current = null;
     };
-  }, []);
-
-  // Scroll to top on route change
-  useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    }
   }, [pathname]);
 
   return <>{children}</>;
