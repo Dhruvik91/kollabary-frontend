@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import {
     useAdminUsers,
     useBulkUpdateUserStatus,
@@ -50,6 +51,9 @@ import { DataTable } from '@/components/shared/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { UserRole } from '@/types/auth.types';
+import { format, isValid } from 'date-fns';
+import { FRONTEND_ROUTES } from '@/constants';
 
 export const AdminUsersContainer = () => {
     const [page, setPage] = useState(0); // DataTable uses 0-indexed page
@@ -111,23 +115,44 @@ export const AdminUsersContainer = () => {
         {
             id: 'user',
             header: 'User',
-            cell: ({ row }) => (
-                <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border shadow-sm">
-                        <AvatarImage src={row.original.profile?.avatarUrl} />
-                        <AvatarFallback className="bg-primary/5 text-primary">
-                            {row.original.username?.substring(0, 2).toUpperCase() || '??'}
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                        <span className="font-bold text-sm">{row.original.profile?.fullName || row.original.username}</span>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Mail className="w-3 h-3" />
-                            {row.original.email}
-                        </span>
+            cell: ({ row }) => {
+                const isInfluencer = row.original.role === UserRole.INFLUENCER;
+                const isBrand = row.original.role === UserRole.USER;
+                const avatarUrl = isInfluencer ? row.original.influencerProfile?.avatarUrl : row.original.profile?.avatarUrl;
+                const fullName = isInfluencer ? row.original.influencerProfile?.fullName : row.original.profile?.fullName;
+                const displayName = fullName || row.original.username || '??';
+                const profileId = isInfluencer ? row.original.influencerProfile?.id : row.original.profile?.id;
+                const roleType = isInfluencer ? 'influencer' : 'brand';
+                const hasProfile = (isInfluencer || isBrand) && !!profileId;
+
+                const userContent = (
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10 border shadow-sm">
+                            <AvatarImage src={avatarUrl} alt={displayName} />
+                            <AvatarFallback className="bg-primary/5 text-primary">
+                                {displayName.substring(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                            <span className={`font-bold text-sm ${hasProfile ? 'hover:underline text-primary' : ''}`}>{displayName}</span>
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Mail className="w-3 h-3" />
+                                {row.original.email}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            ),
+                );
+
+                if (hasProfile) {
+                    return (
+                        <Link href={`${FRONTEND_ROUTES.DASHBOARD.ADMIN.USER_DETAIL(profileId)}?role=${roleType}`} className="hover:opacity-80 transition-opacity">
+                            {userContent}
+                        </Link>
+                    );
+                }
+
+                return userContent;
+            },
         },
         {
             accessorKey: 'role',
@@ -187,13 +212,17 @@ export const AdminUsersContainer = () => {
         },
         {
             accessorKey: 'createdAt',
-            header: 'Joined Date',
-            cell: ({ row }) => (
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Calendar className="w-3 h-3" />
-                    {new Date(row.original.createdAt).toLocaleDateString()}
-                </div>
-            ),
+            header: 'Joined Date & Time',
+            cell: ({ row }) => {
+                const date = new Date(row.original.createdAt);
+                const formattedDate = isValid(date) ? format(date, 'MMM d, yyyy h:mm a') : 'Invalid Date';
+                return (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Calendar className="w-3 h-3" />
+                        {formattedDate}
+                    </div>
+                );
+            },
         },
         {
             id: 'actions',
@@ -396,7 +425,7 @@ export const AdminUsersContainer = () => {
                     setSelectedUserForCoins(null);
                 }}
                 title="Add K Coins"
-                description={`Directly credit K Coins to ${selectedUserForCoins?.profile?.fullName || selectedUserForCoins?.username}'s wallet.`}
+                description={`Directly credit K Coins to ${(selectedUserForCoins?.role === 'INFLUENCER' ? selectedUserForCoins?.influencerProfile?.fullName : selectedUserForCoins?.profile?.fullName) || selectedUserForCoins?.username}'s wallet.`}
                 size="sm"
             >
                 <div className="space-y-4 py-2">

@@ -205,6 +205,7 @@ export const FRONTEND_ROUTES = {
             FINANCE: '/admin/finance',
             ORDERS: '/admin/orders',
             USERS: '/admin/users',
+            USER_DETAIL: (id: string) => `/admin/users/${id}`,
         },
         TOP_UP: '/top-up',
         ORDERS: '/orders',
