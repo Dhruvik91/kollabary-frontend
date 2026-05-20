@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { LANDING_PAGE_IMAGES_URL } from '@/constants';
-import { GlowCard } from '../shared/GlowCard';
 
 const brandEcosystem = [
     {
@@ -118,6 +117,7 @@ export const Features = () => {
                                     alt="Kollabary Brand Dashboard" 
                                     fill 
                                     className="object-cover"
+                                    priority
                                     sizes="(max-width: 1024px) 100vw, 60vw"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none" />

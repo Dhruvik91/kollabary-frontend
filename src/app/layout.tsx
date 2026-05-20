@@ -10,6 +10,7 @@ import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScroll } from "@/components/shared/SmoothScroll";
+import { CookieConsent } from "@/components/shared/CookieConsent";
 import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google';
 
@@ -92,7 +93,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <Script
         id="schema-org"
         type="application/ld+json"
@@ -120,6 +121,7 @@ export default function RootLayout({
                       {children}
                       <Toaster position="top-right" richColors closeButton />
                       <PWAInstaller />
+                      <CookieConsent />
                     </SmoothScroll>
                   </TooltipProvider>
                 </SocketProvider>

@@ -18,6 +18,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { usePathname } from 'next/navigation';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
@@ -112,6 +113,8 @@ export const Navbar = () => {
         }
     };
 
+    const isHomeRoute = usePathname() === FRONTEND_ROUTES.HOME;
+
     return (
         <nav
             ref={navbarRef}
@@ -145,7 +148,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-1">
+                <div className={cn("hidden md:flex items-center gap-1", isHomeRoute ? "visible" : "invisible")}>
                     {navLinks.map((link) => {
                         const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
                         return (
