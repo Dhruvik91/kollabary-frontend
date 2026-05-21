@@ -36,7 +36,7 @@ export const RankingSystem = () => {
                         <span>Quantifying Creator Excellence</span>
                     </motion.div>
                     <h2 className="text-5xl md:text-7xl font-black mb-10 tracking-tighter">
-                        Data-Driven <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Prestige.</span>
+                        Data-Driven <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Prestige.</span>
                     </h2>
                     <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
                         Our proprietary ranking engine ensures that the most reliable and high-performing creators rise to the top.
@@ -65,7 +65,7 @@ export const RankingSystem = () => {
                                     <div className="mb-8 w-32 h-32 relative flex items-center justify-center filter group-hover:drop-shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] transition-all duration-700">
                                         <Image 
                                             src={tier.image} 
-                                            alt="" 
+                                            alt={`Kollabary Ranking Tier: ${tier.name}`} 
                                             fill 
                                             sizes="(max-width: 768px) 128px, 160px"
                                             className="object-contain"
@@ -94,7 +94,7 @@ export const RankingSystem = () => {
                                     </div>
 
                                     {/* Gamified Background Effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    <div className="absolute inset-0 bg-linear-to-br from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 </motion.div>
                             ))}
                         </div>

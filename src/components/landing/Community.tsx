@@ -15,15 +15,15 @@ export const Community = () => {
                     <div className="order-2 lg:order-1">
                         <div className="relative group">
                             <div className="absolute -inset-10 bg-primary/10 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700" aria-hidden="true" />
-                            <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                            <div className="relative aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                                 <Image 
                                     src={LANDING_PAGE_IMAGES_URL.REVIEWS} 
-                                    alt="Kollabary Community Reviews and Feedback" 
+                                    alt="Kollabary Community Reviews showing platform feedback and user ratings" 
                                     fill 
                                     className="object-cover"
                                     sizes="(max-width: 1024px) 100vw, 50vw"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent pointer-events-none" />
                             </div>
                         </div>
                     </div>
@@ -36,10 +36,10 @@ export const Community = () => {
                         >
                             Social Synergy
                         </motion.span>
-                        <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                            Build Trust Through <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Transparency.</span>
-                        </h2>
+                            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                                Build Trust Through <br />
+                                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Transparency.</span>
+                            </h2>
 
                         <div className="space-y-10 mb-12" role="list">
                             {[

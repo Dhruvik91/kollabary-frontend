@@ -19,8 +19,8 @@ export const Footer = () => {
 
     const contactDetails = [
         { icon: Mail, value: COMPANY_EMAIL, label: 'Email Support' },
-        // { icon: MapPin, value: 'Silicon Valley, CA', label: 'Main Office' },
-        // { icon: PhoneCall, value: '+1 (555) 000-0000', label: 'Business Inquiries' },
+        { icon: Rocket, value: 'Kollabary Technologies Pvt. Ltd.', label: 'Legal Entity' },
+        // { icon: MapPin, value: 'Bangalore, India', label: 'Main Office' },
     ];
 
     return (

@@ -25,7 +25,7 @@ export const KCEconomy = () => {
 
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
                             The KC <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Economy.</span>
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Economy.</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium mb-12 max-w-xl leading-relaxed">
                             A robust, secure economic layer powered by K-Coins (KC). Seamlessly manage earnings, spendings, and top-ups through our integrated financial operations.
@@ -56,16 +56,16 @@ export const KCEconomy = () => {
                     </div>
 
                     <div className="relative group">
-                        <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl rounded-[4rem] opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
-                        <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                        <div className="absolute -inset-4 bg-linear-to-r from-primary/20 to-secondary/20 blur-3xl rounded-[4rem] opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
+                        <div className="relative aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                             <Image
                                 src={LANDING_PAGE_IMAGES_URL.KCOINS}
-                                alt="Kollabary Financial Ecosystem"
+                                alt="Kollabary Financial Ecosystem showing K-Coin wallet and transaction history"
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent pointer-events-none" />
                         </div>
                     </div>
                 </div>

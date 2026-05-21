@@ -73,7 +73,7 @@ export const Features = () => {
                         </motion.span>
                         <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9] transform-gpu">
                             Next-Gen Influence <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Architected.</span>
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic pr-2">Architected.</span>
                         </h2>
                         <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed text-balance">
                             Kollabary replaces manual friction with an automated, bid-driven ecosystem where performance is the only currency that matters.
@@ -111,16 +111,16 @@ export const Features = () => {
 
                         <div className="lg:col-span-7 order-1 lg:order-2 relative group">
                             <div className="absolute -inset-10 bg-primary/10 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none" aria-hidden="true" />
-                            <div className="relative aspect-[16/10] sm:aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                            <div className="relative aspect-16/10 sm:aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                                 <Image 
                                     src={LANDING_PAGE_IMAGES_URL.BRAND} 
-                                    alt="Kollabary Brand Dashboard" 
+                                    alt="Kollabary Brand Dashboard showing influencer campaign management and live auctions" 
                                     fill 
                                     className="object-cover"
                                     priority
                                     sizes="(max-width: 1024px) 100vw, 60vw"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent pointer-events-none" />
                                 <div className="absolute top-8 left-8 glass-chip px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border-white/10 z-10">
                                     Brand Marketplace
                                 </div>
@@ -132,15 +132,15 @@ export const Features = () => {
                     <div id="influencers" className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
                         <div className="lg:col-span-7 relative group">
                             <div className="absolute -inset-10 bg-secondary/10 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none" aria-hidden="true" />
-                            <div className="relative aspect-[16/10] sm:aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                            <div className="relative aspect-16/10 sm:aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                                 <Image 
                                     src={LANDING_PAGE_IMAGES_URL.INFLUENCER} 
-                                    alt="Kollabary Creator Workspace" 
+                                    alt="Kollabary Creator Workspace showing active collaborations and performance metrics" 
                                     fill 
                                     className="object-cover"
                                     sizes="(max-width: 1024px) 100vw, 60vw"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-tr from-secondary/10 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-8 right-8 glass-chip px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border-white/10 z-10">
                                     Creator Workspace
                                 </div>

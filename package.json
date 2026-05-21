@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3006",
+    "dev": "next dev --turbopack",
     "prebuild": "node scripts/update-pwa.js",
-    "build": "next build",
+    "build": "next build && node scripts/indexnow.js",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "submit-indexnow": "node scripts/indexnow.js"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

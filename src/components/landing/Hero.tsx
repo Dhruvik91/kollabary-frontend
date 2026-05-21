@@ -86,7 +86,7 @@ export const Hero = () => {
                     transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute top-[15%] right-[10%] w-24 h-24 md:w-40 md:h-40 opacity-20 md:opacity-30"
                 >
-                    <Image src={TIER_IMAGES.ELITE_CREATOR} alt="" fill sizes="(max-width: 768px) 100px, 160px" priority={true} className="object-contain" />
+                    <Image src={TIER_IMAGES.ELITE_CREATOR} alt="Kollabary Elite Creator Badge" fill sizes="(max-width: 768px) 100px, 160px" priority={true} className="object-contain" />
                 </motion.div>
 
                 <motion.div
@@ -94,7 +94,7 @@ export const Hero = () => {
                     transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                     className="absolute bottom-[10%] left-[5%] w-32 h-32 md:w-56 md:h-56 opacity-15 md:opacity-25"
                 >
-                    <Image src={TIER_IMAGES.KOLLABARY_ICON} alt="" fill sizes="(max-width: 768px) 128px, 224px" priority={true} className="object-contain" />
+                    <Image src={TIER_IMAGES.KOLLABARY_ICON} alt="Kollabary Platform Icon" fill sizes="(max-width: 768px) 128px, 224px" priority={true} className="object-contain" />
                 </motion.div>
 
                 {/* Medium Floating Badges */}
@@ -103,7 +103,7 @@ export const Hero = () => {
                     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                     className="absolute top-[25%] left-[12%] w-16 h-16 md:w-24 md:h-24 opacity-40 md:opacity-60"
                 >
-                    <Image src={TIER_IMAGES.EMERGING_PARTNER} alt="" fill sizes="(max-width: 768px) 64px, 96px" priority={true} className="object-contain" />
+                    <Image src={TIER_IMAGES.EMERGING_PARTNER} alt="Kollabary Emerging Partner Badge" fill sizes="(max-width: 768px) 64px, 96px" priority={true} className="object-contain" />
                 </motion.div>
 
                 <motion.div
@@ -111,7 +111,7 @@ export const Hero = () => {
                     transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
                     className="absolute bottom-[25%] right-[15%] w-14 h-14 md:w-20 md:h-20 opacity-30 md:opacity-50"
                 >
-                    <Image src={TIER_IMAGES.RISING_CREATOR} alt="" fill sizes="(max-width: 768px) 56px, 80px" className="object-contain" />
+                    <Image src={TIER_IMAGES.RISING_CREATOR} alt="Kollabary Rising Creator Badge" fill sizes="(max-width: 768px) 56px, 80px" className="object-contain" />
                 </motion.div>
 
                 {/* Small Floating Coins */}
@@ -120,7 +120,7 @@ export const Hero = () => {
                     transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
                     className="absolute top-[45%] left-[20%] w-8 h-8 md:w-12 md:h-12 opacity-50"
                 >
-                    <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 32px, 48px" className="object-contain" />
+                    <Image src={COIN_URL} alt="Kollabary K-Coin - Platform Currency" fill sizes="(max-width: 768px) 32px, 48px" className="object-contain" />
                 </motion.div>
 
                 <motion.div
@@ -128,7 +128,7 @@ export const Hero = () => {
                     transition={{ duration: 11, repeat: Infinity, ease: "linear", delay: 1.5 }}
                     className="absolute top-[35%] right-[25%] w-6 h-6 md:w-10 md:h-10 opacity-40"
                 >
-                    <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 24px, 40px" className="object-contain" />
+                    <Image src={COIN_URL} alt="Kollabary Platform Currency" fill sizes="(max-width: 768px) 24px, 40px" className="object-contain" />
                 </motion.div>
 
                 <motion.div
@@ -136,7 +136,7 @@ export const Hero = () => {
                     transition={{ duration: 13, repeat: Infinity, ease: "linear", delay: 3 }}
                     className="absolute bottom-[40%] left-[15%] w-10 h-10 md:w-14 md:h-14 opacity-45"
                 >
-                    <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 40px, 56px" className="object-contain" />
+                    <Image src={COIN_URL} alt="Kollabary K-Coin Currency" fill sizes="(max-width: 768px) 40px, 56px" className="object-contain" />
                 </motion.div>
             </div>
 
@@ -157,12 +157,12 @@ export const Hero = () => {
                     <div className="relative mb-12 overflow-hidden py-4">
                         <h1
                             ref={titleRef}
-                            aria-label="Forge Elite Connections"
                             className="text-[14vw] sm:text-[10vw] lg:text-[8.5vw] font-black tracking-[-0.04em] leading-[0.85] text-foreground inline-block px-4 pb-2"
                         >
                             <span className="hero-reveal block transform-gpu">Forge Elite</span>
-                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary pr-4 transform-gpu">Connections.</span>
+                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary pr-4 transform-gpu">Connections.</span>
                         </h1>
+                        <p className="sr-only">Kollabary — The Influencer Marketing Platform for Real Performance and Brand-Creator Campaigns</p>
                     </div>
 
                     {/* Editorial Subtext */}
@@ -178,7 +178,7 @@ export const Hero = () => {
                     {/* Ultra-Premium CTAs */}
                     <div className="flex flex-col sm:flex-row items-center gap-8 w-full sm:w-auto">
                         <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="hero-cta group relative w-full sm:w-auto" aria-label="Join the Network">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" aria-hidden="true"></div>
+                            <div className="absolute -inset-1 bg-linear-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" aria-hidden="true"></div>
                             <Button size="lg" className="relative rounded-full px-12 h-16 text-lg font-black bg-primary text-white hover:opacity-90 shadow-2xl w-full sm:w-auto border-none transition-all hover:scale-105 active:scale-95 overflow-hidden">
                                 <span className="relative z-10 flex items-center gap-3">
                                     Join the Network <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} aria-hidden="true" />
@@ -205,7 +205,7 @@ export const Hero = () => {
             </div>
 
             {/* Bottom Gradient Fade */}
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-background to-transparent pointer-events-none" />
         </section>
     );
 };

@@ -50,7 +50,7 @@ export const HowItWorks = () => {
                             className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] md:leading-[0.9] mb-6 md:mb-10 transform-gpu"
                         >
                             The Strategic <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic pr-2">Blueprint.</span>
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic pr-2">Blueprint.</span>
                         </motion.h2>
                         <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-lg text-balance">
                             We've engineered the complex world of creator marketing into a streamlined, high-speed automated workflow.
@@ -86,14 +86,14 @@ export const HowItWorks = () => {
                             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                             className="absolute -top-10 -left-10 w-32 h-32 md:w-40 md:h-40 opacity-[0.09] group-hover:opacity-[0.08] transition-opacity duration-700"
                         >
-                            <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 128px, 160px" className="object-contain" />
+                            <Image src={COIN_URL} alt="Kollabary K-Coin Decorative" fill sizes="(max-width: 768px) 128px, 160px" className="object-contain" />
                         </motion.div>
                         <motion.div
                             animate={{ y: [0, 20, 0], rotate: [0, -45, 0] }}
                             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                             className="absolute -bottom-10 right-[10%] w-24 h-24 md:w-32 md:h-32 opacity-[0.09] group-hover:opacity-[0.06] transition-opacity duration-700"
                         >
-                            <Image src={COIN_URL} alt="" fill sizes="(max-width: 768px) 96px, 128px" className="object-contain" />
+                            <Image src={COIN_URL} alt="Kollabary Platform Coin Decorative" fill sizes="(max-width: 768px) 96px, 128px" className="object-contain" />
                         </motion.div>
 
                     </div>
