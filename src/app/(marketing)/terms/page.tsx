@@ -36,7 +36,7 @@ export default function TermsPage() {
         <div className="flex min-h-screen flex-col bg-background">
             <Navbar />
 
-            <main className="flex-grow pt-32 pb-24">
+            <main className="grow pt-32 pb-24">
                 <div className="container mx-auto px-6 max-w-4xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ export default function TermsPage() {
                         transition={{ duration: 0.5 }}
                         className="text-center mb-16"
                     >
-                        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+                        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-linear-to-r from-primary to-purple-400">
                             Terms & Conditions
                         </h1>
                         <p className="text-xl text-muted-foreground">

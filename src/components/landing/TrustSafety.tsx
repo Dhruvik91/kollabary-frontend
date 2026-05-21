@@ -18,7 +18,7 @@ export const TrustSafety = () => {
                         <span>Identity & Security Protocols</span>
                     </motion.div>
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-8">
-                        The Standard for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Digital Trust.</span>
+                        The Standard for <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Digital Trust.</span>
                     </h2>
                     <p className="text-lg text-muted-foreground font-medium">
                         Platform security is woven into every layer, from onboarding to final settlement.
@@ -95,7 +95,7 @@ export const TrustSafety = () => {
                         </div>
                     </div>
                     <div className="relative group lg:ml-auto">
-                         <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-gradient-to-br from-primary via-secondary to-primary/50 flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-700">
+                         <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-linear-to-br from-primary via-secondary to-primary/50 flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-700">
                              <Shield size={100} className="text-white" />
                              <div className="absolute inset-0 rounded-full animate-ping bg-primary/20" />
                          </div>

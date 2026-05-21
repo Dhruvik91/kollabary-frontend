@@ -218,7 +218,7 @@ export const Navbar = () => {
                                         </SheetDescription>
                                     </SheetHeader>
 
-                                <div className="flex-grow p-4 py-8 space-y-0.5">
+                                <div className="grow p-4 py-8 space-y-0.5">
                                     <nav className="flex flex-col">
                                         {navLinks.map((link, idx) => {
                                             const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
