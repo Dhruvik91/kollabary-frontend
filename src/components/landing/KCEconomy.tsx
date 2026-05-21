@@ -24,19 +24,19 @@ export const KCEconomy = () => {
                     <div>
 
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                            The KC <br />
-                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Economy.</span>
+                            Payments & <br />
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Coins.</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium mb-12 max-w-xl leading-relaxed">
-                            A robust, secure economic layer powered by K-Coins (KC). Seamlessly manage earnings, spendings, and top-ups through our integrated financial operations.
+                            A safe and easy way to handle money using K-Coins (KC). Manage your earnings, spending, and top-ups all in one place.
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                             {[
-                                { icon: Wallet, title: 'KC Wallet', desc: 'Real-time balance monitoring for all platform participants.' },
-                                { icon: CreditCard, title: 'Razorpay Integration', desc: 'Secure top-ups with multiple conversion plans.' },
-                                { icon: AreaChart, title: 'Earning Analytics', desc: 'Detailed history of spendings and revenue projections.' },
-                                { icon: ArrowUpRight, title: 'Instant Settlement', desc: 'Automated conversion from fiat to platform coin.' },
+                                { icon: Wallet, title: 'Your Wallet', desc: 'Track your balance anytime and see your history.' },
+                                { icon: CreditCard, title: 'Safe Top-ups', desc: 'Securely add coins to your account with multiple options.' },
+                                { icon: AreaChart, title: 'Track Earnings', desc: 'See how much you have earned and what is coming next.' },
+                                { icon: ArrowUpRight, title: 'Instant Payments', desc: 'Easily turn your money into K-Coins and start working.' },
                             ].map((feature, idx) => (
                                 <motion.div
                                     key={feature.title}

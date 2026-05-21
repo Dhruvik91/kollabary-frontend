@@ -14,20 +14,20 @@ import { LANDING_PAGE_IMAGES_URL } from '@/constants';
 
 const brandEcosystem = [
     {
-        title: 'Live Auction Dashboard',
-        description: 'Launch tailored campaigns and watch elite creators compete for your vision in real-time.',
+        title: 'Live Bidding',
+        description: 'Start campaigns and let creators bid for your work in real-time.',
         icon: Gavel,
         color: 'text-[#f05166]',
     },
     {
-        title: 'Authenticity Discovery',
-        description: 'Find partners based on verified performance metrics, not just vanity follower counts.',
+        title: 'Find Real Creators',
+        description: 'Find partners based on their actual work and history, not just follower counts.',
         icon: Search,
         color: 'text-amber-600',
     },
     {
-        title: 'Synergy Hub',
-        description: 'Manage complex multi-tier campaigns with zero friction using our automated workflows.',
+        title: 'Collaboration Tool',
+        description: 'Manage all your partnerships in one place with simple steps.',
         icon: Users,
         color: 'text-sky-500',
     },
@@ -35,20 +35,20 @@ const brandEcosystem = [
 
 const creatorEcosystem = [
     {
-        title: 'Bid Strategy Engine',
-        description: 'Navigate the auction floor and pitch your unique value proposition directly to global brands.',
+        title: 'Smart Bidding',
+        description: 'Talk directly to brands and show them why you are the best fit for their project.',
         icon: Zap,
         color: 'text-secondary',
     },
     {
-        title: 'Proof-of-Value Workflow',
-        description: 'Submit proof of work and secure your revenue with our evidence-based collaboration tools.',
+        title: 'Work Verification',
+        description: 'Submit your work and get paid safely using our built-in tools.',
         icon: Shield,
         color: 'text-emerald-600',
     },
     {
-        title: 'Visibility Multiplier',
-        description: 'Higher-ranked influencers get priority exposure in the discovery library.',
+        title: 'Get Noticed More',
+        description: 'Creators who do great work get shown to more brands automatically.',
         icon: BarChart3,
         color: 'text-rose-600',
     },
@@ -69,14 +69,14 @@ export const Features = () => {
                             whileInView={{ opacity: 1 }}
                             className="text-primary font-black tracking-[0.3em] uppercase text-[10px] mb-6 block"
                         >
-                            The Performance Engine
+                            How it works
                         </motion.span>
                         <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9] transform-gpu">
-                            Next-Gen Influence <br />
-                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic pr-2">Architected.</span>
+                            Collaborate <br />
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic pr-2">Simpler.</span>
                         </h2>
                         <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto leading-relaxed text-balance">
-                            Kollabary replaces manual friction with an automated, bid-driven ecosystem where performance is the only currency that matters.
+                            Kollabary makes working together easy. We use an automated bidding system so you can focus on the work, not the paperwork.
                         </p>
                     </div>
 

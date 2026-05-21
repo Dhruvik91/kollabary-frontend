@@ -47,7 +47,7 @@ export const Footer = () => {
                     </div>
 
                     <div className="lg:col-span-2 space-y-8">
-                        <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary/80">Support & Outreach</h4>
+                        <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary/80">Support</h4>
                         <div className="space-y-6">
                             {contactDetails.map((detail) => (
                                 <div key={detail.value} className="flex items-center gap-4 group cursor-default">
@@ -64,7 +64,7 @@ export const Footer = () => {
                     </div>
 
                     <div className="lg:col-span-2 space-y-8">
-                        <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary/80">Legal Framework</h4>
+                        <h4 className="font-bold text-[10px] uppercase tracking-[0.3em] text-primary/80">Rules & Privacy</h4>
                         <ul className="grid grid-cols-1 gap-3">
                             {legalLinks.map((link) => (
                                 <li key={link.name}>

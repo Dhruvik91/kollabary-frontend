@@ -16,7 +16,7 @@ export default function Home() {
       <main className="grow">
         <div className="flex flex-col">
           <Hero />
-          <TrustedBy />
+          {/* <TrustedBy /> */}
           <Features />
           <HowItWorks />
           <KCEconomy />

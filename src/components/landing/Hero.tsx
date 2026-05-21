@@ -150,7 +150,7 @@ export const Hero = () => {
                         className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full glass-chip border border-primary/10 text-foreground/80 text-[10px] md:text-xs font-bold mb-12 tracking-[0.2em] uppercase"
                     >
                         <Sparkles size={14} className="text-primary animate-pulse" aria-hidden="true" />
-                        <span>The Ethereal Pulse of Influence</span>
+                        <span>Work with the best Creators</span>
                     </motion.div>
 
                     {/* Massive Kinetic Headline */}
@@ -159,8 +159,8 @@ export const Hero = () => {
                             ref={titleRef}
                             className="text-[14vw] sm:text-[10vw] lg:text-[8.5vw] font-black tracking-[-0.04em] leading-[0.85] text-foreground inline-block px-4 pb-2"
                         >
-                            <span className="hero-reveal block transform-gpu">Forge Elite</span>
-                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary pr-4 transform-gpu">Connections.</span>
+                            <span className="hero-reveal block transform-gpu">Make Better</span>
+                            <span className="hero-reveal block italic text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary pr-4 transform-gpu">Partnerships.</span>
                         </h1>
                         <p className="sr-only">Kollabary — The Influencer Marketing Platform for Real Performance and Brand-Creator Campaigns</p>
                     </div>
@@ -172,7 +172,7 @@ export const Hero = () => {
                         transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
                         className="text-lg md:text-2xl text-muted-foreground/90 mb-16 max-w-3xl leading-relaxed font-medium text-balance"
                     >
-                        Kollabary transcends the transactional. We bridge the gap between premium brands and world-class creators through a secure, performance-driven ecosystem.
+                        Kollabary is more than just a place to hire people. We connect great brands with amazing creators through a safe and easy-to-use system that focuses on real results.
                     </motion.p>
 
                     {/* Ultra-Premium CTAs */}

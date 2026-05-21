@@ -15,10 +15,6 @@ const faqs = [
         answer: "Brands create campaign 'auctions' detailing their requirements and budget. Verified creators can then bid on these auctions with their unique value propositions. Brands select the best fit, and the collaboration begins instantly through our secure workspace."
     },
     {
-        question: "How do creators get paid?",
-        answer: "Creators earn K-Coins (KC) for every successful collaboration. Once proof of work is submitted and verified, the coins are released to the creator's wallet. These can then be settled to their bank account in real-time."
-    },
-    {
         question: "What is a K-Coin (KC)?",
         answer: "K-Coin is our platform's internal currency that ensures secure and instant transactions. It simplifies the payment process, especially for international collaborations, and provides a clear history of earnings and spendings."
     },
@@ -61,12 +57,12 @@ export const FAQ = () => {
                             transition={{ delay: idx * 0.1 }}
                             className={cn(
                                 "rounded-[2rem] border border-border overflow-hidden transition-all duration-300",
-                                openIndex === idx ? "bg-card shadow-xl border-primary/20" : "bg-card/50 hover:bg-card/80"
+                                openIndex === idx ? "bg-card border-primary/20" : "bg-card/50 hover:bg-card/80"
                             )}
                         >
                             <button
                                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                                className="w-full px-8 py-7 flex items-center justify-between text-left group"
+                                className="w-full px-8 py-7 flex items-center justify-between text-left group cursor-pointer"
                             >
                                 <span className={cn(
                                     "text-lg font-bold transition-colors",

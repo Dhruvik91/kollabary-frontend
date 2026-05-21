@@ -7,19 +7,19 @@ import { TIER_IMAGES } from '@/constants';
 import Image from 'next/image';
 
 const tiers = [
-    { name: 'Rising Creator', image: TIER_IMAGES.RISING_CREATOR, min: '0 - 10 Collabs', border: 'border-emerald-500/10', bg: 'bg-emerald-500/5', color: 'text-emerald-500', desc: 'Starter tier focusing on initial platform trust and profile verification.' },
-    { name: 'Emerging Partner', image: TIER_IMAGES.EMERGING_PARTNER, min: '11 - 30 Collabs', border: 'border-blue-500/10', bg: 'bg-blue-500/5', color: 'text-blue-500', desc: 'Active contributors demonstrating consistent delivery across multiple campaigns.' },
-    { name: 'Trusted Collaborator', image: TIER_IMAGES.TRUSTED_COLLABORATOR, min: '31 - 75 Collabs', border: 'border-teal-500/10', bg: 'bg-teal-500/5', color: 'text-teal-500', desc: 'Verified partners with a proven track record of 100% collaboration completion.' },
-    { name: 'Pro Influencer', image: TIER_IMAGES.PRO_INFLUENCER, min: '76 - 150 Collabs', border: 'border-purple-500/10', bg: 'bg-purple-500/5', color: 'text-purple-500', desc: 'Professional creators specialized in high-conversion brand partnerships.' },
-    { name: 'Elite Creator', image: TIER_IMAGES.ELITE_CREATOR, min: '151 - 300 Collabs', border: 'border-amber-500/10', bg: 'bg-amber-500/5', color: 'text-amber-500', desc: 'Top 1% earners with priority access to premium, high-budget auctions.' },
-    { name: 'Kollabary Icon', image: TIER_IMAGES.KOLLABARY_ICON, min: '300+ Collabs', border: 'border-primary/20', bg: 'bg-primary/5', color: 'text-primary', desc: 'Legendary status. Trusted at scale by global brands and the platform itself.' },
+    { name: 'Rising Creator', image: TIER_IMAGES.RISING_CREATOR, min: '0 - 10 Projects', border: 'border-emerald-500/10', bg: 'bg-emerald-500/5', color: 'text-emerald-500', desc: 'Starting out and getting your profile verified.' },
+    { name: 'Emerging Partner', image: TIER_IMAGES.EMERGING_PARTNER, min: '11 - 30 Projects', border: 'border-blue-500/10', bg: 'bg-blue-500/5', color: 'text-blue-500', desc: 'Regularly working on projects and delivering on time.' },
+    { name: 'Trusted Collaborator', image: TIER_IMAGES.TRUSTED_COLLABORATOR, min: '31 - 75 Projects', border: 'border-teal-500/10', bg: 'bg-teal-500/5', color: 'text-teal-500', desc: 'Creators with a perfect history of finishing their work.' },
+    { name: 'Pro Influencer', image: TIER_IMAGES.PRO_INFLUENCER, min: '76 - 150 Projects', border: 'border-purple-500/10', bg: 'bg-purple-500/5', color: 'text-purple-500', desc: 'Expert creators who bring great results for brands.' },
+    { name: 'Elite Creator', image: TIER_IMAGES.ELITE_CREATOR, min: '151 - 300 Projects', border: 'border-amber-500/10', bg: 'bg-amber-500/5', color: 'text-amber-500', desc: 'Our best creators with access to high-budget projects.' },
+    { name: 'Kollabary Icon', image: TIER_IMAGES.KOLLABARY_ICON, min: '300+ Projects', border: 'border-primary/20', bg: 'bg-primary/5', color: 'text-primary', desc: 'The most trusted creators on the platform.' },
 ];
 
 const metrics = [
-    { icon: Handshake, label: 'Total Collaborations', desc: 'The primary weight in our engine—active participation is rewarded.' },
-    { icon: Target, label: 'Campaign Success', desc: 'Consistent delivery of high-quality assets across all brand partnerships.' },
-    { icon: Star, label: 'Brand Retention', desc: 'The number of brands that choose to work with you multiple times.' },
-    { icon: ShieldCheck, label: 'Verified Proofs', desc: 'Successful submission of proof-of-work for every single contract.' },
+    { icon: Handshake, label: 'Finished Projects', desc: 'The more you work, the faster you level up.' },
+    { icon: Target, label: 'Project Success', desc: 'Delivering high-quality work for every brand you work with.' },
+    { icon: Star, label: 'Repeat Work', desc: 'How often brands choose to work with you again.' },
+    { icon: ShieldCheck, label: 'Checked Work', desc: 'Sending and getting approval for every project you finish.' },
 ];
 
 export const RankingSystem = () => {
@@ -33,13 +33,13 @@ export const RankingSystem = () => {
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-chip border border-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-8"
                     >
                         <Trophy size={14} />
-                        <span>Quantifying Creator Excellence</span>
+                        <span>Levels and Rewards</span>
                     </motion.div>
                     <h2 className="text-5xl md:text-7xl font-black mb-10 tracking-tighter">
-                        Data-Driven <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Prestige.</span>
+                        Earn Your <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Status.</span>
                     </h2>
                     <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
-                        Our proprietary ranking engine ensures that the most reliable and high-performing creators rise to the top.
+                        Our ranking system makes sure that the most reliable and hardworking creators rise to the top.
                     </p>
                 </div>
 
@@ -102,10 +102,10 @@ export const RankingSystem = () => {
 
                     {/* Metrics Sidebar */}
                     <div className="lg:col-span-12 xl:col-span-4">
-                        <div className="h-full glass-card-elevated rounded-[3rem] p-10 lg:p-12 border-white/5">
+                        <div className="h-full p-8 lg:p-12">
                             <h3 className="text-2xl font-black mb-10 flex items-center gap-3">
                                 <TrendingUp className="text-primary" />
-                                Scoring Metrics
+                                How you level up
                             </h3>
                             <div className="space-y-8">
                                 {metrics.map((metric, idx) => (

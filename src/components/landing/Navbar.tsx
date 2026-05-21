@@ -77,11 +77,11 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Ecosystem', href: '#brands', id: 'brands' },
-        { name: 'Blueprint', href: '#how-it-works', id: 'how-it-works' },
-        { name: 'Economy', href: '#economy', id: 'economy' },
-        { name: 'Ranking', href: '#ranking', id: 'ranking' },
-        { name: 'Community', href: '#community', id: 'community' },
+        { name: 'Features', href: '#brands', id: 'brands' },
+        { name: 'The Plan', href: '#how-it-works', id: 'how-it-works' },
+        { name: 'Payments', href: '#economy', id: 'economy' },
+        { name: 'Status', href: '#ranking', id: 'ranking' },
+        { name: 'Connect', href: '#community', id: 'community' },
     ];
 
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -255,14 +255,14 @@ export const Navbar = () => {
                                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
                                             variant="ghost"
-                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest text-[10px] border-primary/10 hover:bg-primary/5 hover:text-primary"
+                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest border border-primary hover:bg-primary/5 text-primary"
                                         >
                                             Sign In
                                         </Button>
                                     </Link>
                                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="block" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
-                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest text-[10px] bg-primary text-primary-foreground shadow-2xl shadow-primary/20 hover:brightness-110 active:scale-[0.98]"
+                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-2xl shadow-primary/20 hover:brightness-110 active:scale-[0.98]"
                                         >
                                             Join Kollabary
                                         </Button>
