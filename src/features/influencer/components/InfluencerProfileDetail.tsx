@@ -273,12 +273,41 @@ export const InfluencerProfileDetail = ({
                                                     <span className="text-sm font-medium">{displayLocation}</span>
                                                 </div>
                                             )}
-                                            <div className="flex items-center gap-2 group/cat">
-                                                <LayoutGrid size={16} className="text-primary group-hover/cat:scale-110 transition-transform" />
-                                                <span className="text-sm font-medium">
-                                                    {(categories || []).slice(0, 3).join(', ')}
-                                                    {(categories || []).length > 3 ? '...' : ''}
-                                                </span>
+                                            <div className="flex items-center gap-2 group/cat min-w-0">
+                                                <LayoutGrid size={16} className="text-primary shrink-0 group-hover/cat:scale-110 transition-transform" />
+                                                {categories && categories.length > 0 ? (
+                                                    <div className="flex items-center flex-wrap gap-1.5">
+                                                        {categories.slice(0, 3).map((cat, i) => (
+                                                            <span
+                                                                key={i}
+                                                                className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10 dark:bg-primary/15 dark:border-primary/20"
+                                                            >
+                                                                {cat}
+                                                            </span>
+                                                        ))}
+                                                        {categories.length > 3 && (
+                                                            <Tooltip delayDuration={300}>
+                                                                <TooltipTrigger asChild>
+                                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-muted text-muted-foreground border border-border/50 cursor-help hover:bg-muted/80 transition-colors">
+                                                                        +{categories.length - 3}
+                                                                    </span>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent side="top" className="max-w-[280px] flex flex-wrap gap-1.5 p-2.5 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl">
+                                                                    {categories.map((cat, i) => (
+                                                                        <span
+                                                                            key={i}
+                                                                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10 dark:bg-primary/15 dark:border-primary/20"
+                                                                        >
+                                                                            {cat}
+                                                                        </span>
+                                                                    ))}
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-sm font-medium text-muted-foreground">No categories</span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
