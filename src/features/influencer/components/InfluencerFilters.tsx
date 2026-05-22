@@ -15,6 +15,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { MultiSelect } from '@/components/ui/multi-select';
+import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 
 interface InfluencerFiltersProps {
     filters: SearchInfluencersDto;
@@ -78,18 +80,17 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
 
                 {/* Categories (Multi) */}
                 <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1 flex items-center gap-2">
+                        <LayoutGrid size={14} className="text-primary" />
                         Categories
                     </label>
-                    <div className="relative group">
-                        <LayoutGrid className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
-                        <Input
-                            placeholder="Search categories (e.g. Beauty, Tech)"
-                            className="pl-12 h-12 bg-background/50 border-border/50 rounded-2xl focus:ring-primary/20 font-medium"
-                            value={filters.categories?.join(', ') || ''}
-                            onChange={(e) => onFilterChange({ categories: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-                        />
-                    </div>
+                    <MultiSelect
+                        options={[...INFLUENCER_CATEGORIES]}
+                        value={filters.categories || []}
+                        onChange={(val) => onFilterChange({ categories: val })}
+                        placeholder="Select categories"
+                        className="rounded-2xl border-border/50 bg-background/50 focus:bg-background transition-all"
+                    />
                 </div>
 
                 {/* Follower Range */}
@@ -237,7 +238,7 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                         type="button"
                         onClick={() => onFilterChange({ verified: filters.verified ? undefined : true })}
                         className={cn(
-                            "w-full h-12 rounded-2xl border-border/50 border bg-background/50 hover:bg-background/80 transition-all font-medium flex items-center gap-3 px-4",
+                            "w-full h-12 rounded-2xl border-border/50 border bg-background/50 hover:bg-background/80 transition-all font-medium flex items-center gap-3 px-4 hover:cursor-pointer",
                             filters.verified && "bg-primary/10 border-primary/50 text-primary"
                         )}
                     >
