@@ -60,7 +60,7 @@ export function CookieConsent() {
                   </h3>
                   <button
                     onClick={handleDecline}
-                    className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                    className="text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
                     aria-label="Close cookie consent"
                   >
                     <X className="w-4 h-4" />
