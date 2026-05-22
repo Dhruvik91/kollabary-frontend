@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -22,6 +22,9 @@ import {
     Mail,
     LayoutGrid,
     Users,
+    CloudIcon,
+    SaveIcon,
+    AlertCircleIcon,
 } from 'lucide-react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { MultiSelect } from '@/components/ui/multi-select';
@@ -48,8 +51,10 @@ import {
 } from '@/components/ui/select';
 
 import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
-import { SOCIAL_PLATFORMS } from '@/constants';
-import { getSocialPlatformIcon } from '@/lib/utils';
+import { SOCIAL_PLATFORMS, DRAFT_STORAGE_KEYS } from '@/constants';
+import { getSocialPlatformIcon, cn } from '@/lib/utils';
+import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
+
 
 import { profileSchema, ProfileSchemaType } from '@/lib/validations/profile.validation';
 
@@ -117,6 +122,32 @@ export const ProfileSetupForm = ({
         name: "socials",
     });
 
+    // ─── Auto-save draft (setup mode only) ───────────────────────────────────
+    const isSetupMode = !isEdit;
+    const formValues = form.watch();
+
+    const { getDraft, clearDraft, saveStatus } = useAutoSaveDraft({
+        key: DRAFT_STORAGE_KEYS.PROFILE_SETUP,
+        data: formValues,
+        delay: 800,
+        enabled: isSetupMode,
+    });
+
+    // Restore draft on first mount (setup mode, no server data passed in)
+    useEffect(() => {
+        if (!isSetupMode || initialData) return;
+
+        const draft = getDraft();
+        if (!draft) return;
+
+        form.reset(draft as ProfileSchemaType);
+        toast.info('✏️ Draft restored', {
+            description: 'Your unsaved progress has been restored.',
+            duration: 3000,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // intentionally runs only once on mount
+
     const handleFormSubmit = (values: ProfileSchemaType) => {
         // Transform socials array back to object for backend
         const socialLinks: Record<string, string> = {};
@@ -127,6 +158,9 @@ export const ProfileSetupForm = ({
         });
 
         const { socials, ...rest } = values;
+
+        // Clear draft before handing off — parent handles success routing
+        if (isSetupMode) clearDraft();
 
         onSubmit({
             ...rest,
@@ -526,7 +560,30 @@ export const ProfileSetupForm = ({
                             </div>
                         </div>
 
-                        <div className="flex justify-end mt-10">
+                        <div className="flex flex-col items-end gap-2 mt-10">
+                            {/* Draft status indicator */}
+                            {isSetupMode && saveStatus !== 'idle' && (
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={saveStatus}
+                                        initial={{ opacity: 0, y: -4 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 4 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold",
+                                            saveStatus === 'saving' && "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+                                            saveStatus === 'saved' && "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400",
+                                            saveStatus === 'error' && "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+                                        )}
+                                    >
+                                        {saveStatus === 'saving' && <><CloudIcon size={11} className="animate-pulse" /> Saving draft…</>}
+                                        {saveStatus === 'saved' && <><SaveIcon size={11} /> Draft saved</>}
+                                        {saveStatus === 'error' && <><AlertCircleIcon size={11} /> Failed to save</>}
+                                    </motion.div>
+                                </AnimatePresence>
+                            )}
+
                             <Button
                                 type="submit"
                                 disabled={isLoading}

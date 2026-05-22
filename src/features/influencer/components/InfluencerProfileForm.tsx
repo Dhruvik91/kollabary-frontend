@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
+import { DRAFT_STORAGE_KEYS } from '@/constants';
 import {
     LayoutGrid,
     User,
@@ -24,7 +26,10 @@ import {
     Youtube,
     Twitter,
     Globe,
-    Link as LinkIcon
+    Link as LinkIcon,
+    CloudIcon,
+    SaveIcon,
+    AlertCircleIcon
 } from 'lucide-react';
 import {
     Form,
@@ -82,6 +87,7 @@ export const InfluencerProfileForm = ({
     mode = 'setup'
 }: InfluencerProfileFormProps) => {
     const [currentStep, setCurrentStep] = useState(0);
+    const isSetupMode = mode === 'setup';
 
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema) as any,
@@ -106,6 +112,31 @@ export const InfluencerProfileForm = ({
             platforms: initialData?.platforms || [{ name: 'instagram', handle: '', followers: 0, engagementRate: 0 }],
         },
     });
+
+    // ─── Auto-save draft (setup mode only) ───────────────────────────────────
+    const formValues = form.watch();
+
+    const { getDraft, clearDraft, saveStatus } = useAutoSaveDraft({
+        key: DRAFT_STORAGE_KEYS.INFLUENCER_SETUP,
+        data: formValues,
+        delay: 800,
+        enabled: isSetupMode,
+    });
+
+    // Restore draft on first mount (setup mode, no server data passed in)
+    useEffect(() => {
+        if (!isSetupMode || initialData) return;
+
+        const draft = getDraft();
+        if (!draft) return;
+
+        form.reset(draft as ProfileFormValues);
+        toast.info('✏️ Draft restored', {
+            description: 'Your unsaved progress has been restored.',
+            duration: 3000,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);  // intentionally runs only once on mount
 
     // Handle form reset when initialData is loaded
     React.useEffect(() => {
@@ -190,7 +221,10 @@ export const InfluencerProfileForm = ({
             audienceGenderRatio: data.audienceGenderRatio,
             audienceAgeBrackets: data.audienceAgeBrackets,
         };
-        
+
+        // Clear draft before handing off — the parent async submit handles routing
+        if (isSetupMode) clearDraft();
+
         onSubmit(formattedValues as any);
     };
 
@@ -752,6 +786,31 @@ export const InfluencerProfileForm = ({
                             </motion.div>
                         </AnimatePresence>
                     </motion.div>
+
+                    {/* Draft status indicator */}
+                    {isSetupMode && saveStatus !== 'idle' && (
+                        <div className="flex justify-center">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={saveStatus}
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 4 }}
+                                    transition={{ duration: 0.2 }}
+                                    className={cn(
+                                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold",
+                                        saveStatus === 'saving' && "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+                                        saveStatus === 'saved' && "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400",
+                                        saveStatus === 'error' && "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+                                    )}
+                                >
+                                    {saveStatus === 'saving' && <><CloudIcon size={11} className="animate-pulse" /> Saving draft…</>}
+                                    {saveStatus === 'saved' && <><SaveIcon size={11} /> Draft saved</>}
+                                    {saveStatus === 'error' && <><AlertCircleIcon size={11} /> Failed to save</>}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    )}
 
                     {/* Navigation Buttons */}
                     <div className="flex justify-between gap-4 pt-4">

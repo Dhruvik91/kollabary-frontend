@@ -253,6 +253,15 @@ export const CONSENT_STORAGE_KEYS = {
     PITCH_CREATE: 'consent-pitch-create',
 } as const;
 
+/**
+ * localStorage keys used to persist auto-saved form drafts.
+ * Drafts are cleared automatically after a successful submit or after 7 days.
+ */
+export const DRAFT_STORAGE_KEYS = {
+    INFLUENCER_SETUP: 'draft-influencer-setup',
+    PROFILE_SETUP: 'draft-profile-setup',
+} as const;
+
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"
 
 export const BASE_IMAGE_URL = "https://kollabary.s3.ap-south-1.amazonaws.com"
