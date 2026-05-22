@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
@@ -75,7 +74,7 @@ interface InfluencerProfileFormProps {
 const steps = [
     { id: 'basics', title: 'The Basics', icon: Briefcase },
     { id: 'platforms', title: 'Your Reach', icon: Users },
-//  { id: 'demographics', title: 'Demographics', icon: Sparkles },
+    //  { id: 'demographics', title: 'Demographics', icon: Sparkles },
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
 ];
 
@@ -131,11 +130,7 @@ export const InfluencerProfileForm = ({
         if (!draft) return;
 
         form.reset(draft as ProfileFormValues);
-        toast.info('✏️ Draft restored', {
-            description: 'Your unsaved progress has been restored.',
-            duration: 3000,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);  // intentionally runs only once on mount
 
     // Handle form reset when initialData is loaded
@@ -209,7 +204,7 @@ export const InfluencerProfileForm = ({
         const formattedValues = {
             ...data,
             username: data.username, // Explicitly include username
-            categories: typeof data.categories === 'string' 
+            categories: typeof data.categories === 'string'
                 ? data.categories.split(',').map(s => s.trim()).filter(Boolean)
                 : data.categories,
             languages: typeof data.languages === 'string'
@@ -267,27 +262,60 @@ export const InfluencerProfileForm = ({
     return (
         <div className="max-w-2xl mx-auto">
             {/* Step Progress */}
-            <div className="mb-12">
-                <div className="flex justify-between items-center relative">
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-zinc-200 dark:bg-zinc-800 -translate-y-1/2 z-0" />
+            <div className="mb-10">
+                <div className="flex items-start justify-between relative">
+
+                    {/* Connector lines — drawn between icon centres */}
+                    {steps.map((_, idx) => {
+                        if (idx === steps.length - 1) return null;
+                        const isCompleted = idx < currentStep;
+                        return (
+                            <div
+                                key={`connector-${idx}`}
+                                className="absolute top-5 sm:top-6 h-0.5 z-0 transition-all duration-500"
+                                style={{
+                                    left: `calc(${(idx / (steps.length - 1)) * 100}% + 20px)`,
+                                    width: `calc(${(1 / (steps.length - 1)) * 100}% - 40px)`,
+                                    background: isCompleted
+                                        ? 'hsl(var(--primary))'
+                                        : 'hsl(var(--border))',
+                                }}
+                            />
+                        );
+                    })}
+
                     {steps.map((step, idx) => {
                         const Icon = step.icon;
                         const isActive = idx === currentStep;
                         const isCompleted = idx < currentStep;
 
                         return (
-                            <div key={step.id} className="relative z-10 flex flex-col items-center gap-2">
+                            <div
+                                key={step.id}
+                                className="relative z-10 flex flex-col items-center gap-2 flex-1"
+                            >
+                                {/* Icon bubble */}
                                 <div className={cn(
-                                    "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
-                                    isActive ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110" :
-                                        isCompleted ? "bg-green-500 text-white" : "bg-zinc-100 dark:bg-zinc-900 text-muted-foreground"
+                                    "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ring-2",
+                                    isActive
+                                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-110 ring-primary/30"
+                                        : isCompleted
+                                            ? "bg-primary/15 text-primary ring-primary/20"
+                                            : "bg-muted text-muted-foreground ring-border/50"
                                 )}>
-                                    {isCompleted ? <Check size={18} /> : <Icon size={18} className="sm:w-5 sm:h-5" />}
+                                    {isCompleted
+                                        ? <Check size={18} strokeWidth={2.5} />
+                                        : <Icon size={18} />}
                                 </div>
+
+                                {/* Label */}
                                 <span className={cn(
-                                    "text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300",
-                                    isActive ? "text-primary opacity-100" : "text-muted-foreground opacity-50 hidden sm:block",
-                                    !isActive && "hidden xs:hidden"
+                                    "text-[10px] font-bold uppercase tracking-widest text-center transition-all duration-300 leading-tight px-1",
+                                    isActive
+                                        ? "text-primary"
+                                        : isCompleted
+                                            ? "text-primary/60"
+                                            : "text-muted-foreground/50"
                                 )}>
                                     {step.title}
                                 </span>
@@ -305,7 +333,7 @@ export const InfluencerProfileForm = ({
                 >
                     <motion.div
                         layout
-                        className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none overflow-hidden"
+                        className="p-4 md:p-10"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -724,12 +752,12 @@ export const InfluencerProfileForm = ({
                                                     <FormItem>
                                                         <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
                                                         <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
+                                                            <Input
+                                                                type="number"
+                                                                placeholder="0"
+                                                                {...field}
                                                                 onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
+                                                                className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
                                                         <FormDescription>Your starting rate for collaborations.</FormDescription>
@@ -745,12 +773,12 @@ export const InfluencerProfileForm = ({
                                                     <FormItem>
                                                         <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
                                                         <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
+                                                            <Input
+                                                                type="number"
+                                                                placeholder="0"
+                                                                {...field}
                                                                 onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
+                                                                className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
                                                         <FormDescription>Optional: High-end rate.</FormDescription>

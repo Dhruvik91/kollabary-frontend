@@ -48,12 +48,31 @@ export function useAutoSaveDraft<T>({
     const [saveStatus, setSaveStatus] = useState<DraftSaveStatus>('idle');
     const previousSerializedRef = useRef<string>('');
     const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // Prevents overwriting an existing draft with the form's empty defaultValues
+    // on the very first render, before the restore effect has had a chance to run.
+    const isFirstRunRef = useRef(true);
 
     // Debounce the incoming data so we don't write on every keystroke
     const debouncedData = useDebounce(data, delay);
 
     useEffect(() => {
         if (!enabled) return;
+
+        // Always skip the very first execution.
+        // React runs effects in declaration order within a component.
+        // useAutoSaveDraft's effect fires BEFORE the restore useEffect in the
+        // consuming component, so without this guard we would overwrite the
+        // real localStorage draft with the form's empty defaultValues on mount.
+        //
+        // CRITICAL: also seed previousSerializedRef here so that when
+        // useDebounce's timer fires ~800ms later with the same empty values
+        // (a new object reference but identical content), the JSON comparison
+        // below returns equal and we skip the write instead of saving empty values.
+        if (isFirstRunRef.current) {
+            isFirstRunRef.current = false;
+            previousSerializedRef.current = JSON.stringify(debouncedData);
+            return;
+        }
 
         const serialized = JSON.stringify(debouncedData);
 

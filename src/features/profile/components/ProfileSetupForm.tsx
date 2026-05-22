@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import {
@@ -26,7 +25,7 @@ import {
     SaveIcon,
     AlertCircleIcon,
 } from 'lucide-react';
-import { ProfileImageUpload } from './ProfileImageUpload';
+import { ImageUpload } from '@/components/shared/ImageUpload';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import {
@@ -141,11 +140,7 @@ export const ProfileSetupForm = ({
         if (!draft) return;
 
         form.reset(draft as ProfileSchemaType);
-        toast.info('✏️ Draft restored', {
-            description: 'Your unsaved progress has been restored.',
-            duration: 3000,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // intentionally runs only once on mount
 
     const handleFormSubmit = (values: ProfileSchemaType) => {
@@ -190,28 +185,9 @@ export const ProfileSetupForm = ({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none"
+                        className="p-4 md:p-10"
                     >
                         <div className="space-y-10">
-                            {/* Profile Image Section */}
-                            <div className="flex justify-center -mt-20 md:-mt-24 mb-6">
-                                <FormField
-                                    control={form.control}
-                                    name="avatarUrl"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <ProfileImageUpload
-                                                    value={field.value}
-                                                    onChange={field.onChange}
-                                                    disabled={isLoading}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
 
                             <div className="flex items-center gap-4 mb-4">
                                 <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
@@ -258,6 +234,30 @@ export const ProfileSetupForm = ({
                                     )}
                                 />
                             </div>
+
+                            {/* Profile Image */}
+                            <FormField
+                                control={form.control}
+                                name="avatarUrl"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="font-bold flex items-center gap-2">
+                                            <Camera size={14} className="text-primary" />
+                                            Profile Photo
+                                        </FormLabel>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                disabled={isLoading}
+                                                maxSize={5}
+                                                message="JPG, PNG or WebP · max 5 MB"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
                             <FormField
                                 control={form.control}
