@@ -13,10 +13,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { usePathname } from 'next/navigation';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
@@ -75,11 +77,11 @@ export const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'Ecosystem', href: '#brands', id: 'brands' },
-        { name: 'Blueprint', href: '#how-it-works', id: 'how-it-works' },
-        { name: 'Economy', href: '#economy', id: 'economy' },
-        { name: 'Ranking', href: '#ranking', id: 'ranking' },
-        { name: 'Community', href: '#community', id: 'community' },
+        { name: 'Features', href: '#brands', id: 'brands' },
+        { name: 'The Plan', href: '#how-it-works', id: 'how-it-works' },
+        { name: 'Payments', href: '#economy', id: 'economy' },
+        { name: 'Status', href: '#ranking', id: 'ranking' },
+        { name: 'Connect', href: '#community', id: 'community' },
     ];
 
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -110,6 +112,8 @@ export const Navbar = () => {
             }
         }
     };
+
+    const isHomeRoute = usePathname() === FRONTEND_ROUTES.HOME;
 
     return (
         <nav
@@ -144,7 +148,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-1">
+                <div className={cn("hidden md:flex items-center gap-1", isHomeRoute ? "visible" : "invisible")}>
                     {navLinks.map((link) => {
                         const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
                         return (
@@ -205,13 +209,16 @@ export const Navbar = () => {
                         </SheetTrigger>
                         <SheetContent side="right" className="w-[85%] sm:max-w-md glass-card-elevated border-l border-white/10 p-0 overflow-hidden flex flex-col">
                             <div className="flex flex-col h-full bg-background/50 backdrop-blur-3xl">
-                                <SheetHeader className="p-8 pb-4 border-b border-white/5">
-                                    <SheetTitle className="text-left">
-                                        <Logo className="w-32" />
-                                    </SheetTitle>
-                                </SheetHeader>
+                                    <SheetHeader className="p-8 pb-4 border-b border-white/5">
+                                        <SheetTitle className="text-left">
+                                            <Logo className="w-32" />
+                                        </SheetTitle>
+                                        <SheetDescription className="sr-only">
+                                            Navigation menu for mobile devices.
+                                        </SheetDescription>
+                                    </SheetHeader>
 
-                                <div className="flex-grow p-4 py-8 space-y-0.5">
+                                <div className="grow p-4 py-8 space-y-0.5">
                                     <nav className="flex flex-col">
                                         {navLinks.map((link, idx) => {
                                             const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
@@ -248,14 +255,14 @@ export const Navbar = () => {
                                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
                                             variant="ghost"
-                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest text-[10px] border-primary/10 hover:bg-primary/5 hover:text-primary"
+                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest border border-primary hover:bg-primary/5 text-primary"
                                         >
                                             Sign In
                                         </Button>
                                     </Link>
                                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="block" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
-                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest text-[10px] bg-primary text-primary-foreground shadow-2xl shadow-primary/20 hover:brightness-110 active:scale-[0.98]"
+                                            className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-2xl shadow-primary/20 hover:brightness-110 active:scale-[0.98]"
                                         >
                                             Join Kollabary
                                         </Button>

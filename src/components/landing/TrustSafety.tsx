@@ -15,13 +15,13 @@ export const TrustSafety = () => {
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-chip border border-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-6"
                     >
                         <Shield size={14} />
-                        <span>Identity & Security Protocols</span>
+                        <span>Your Safety is Our Priority</span>
                     </motion.div>
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-8">
-                        The Standard for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Digital Trust.</span>
+                        Working with <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Confidence.</span>
                     </h2>
                     <p className="text-lg text-muted-foreground font-medium">
-                        Platform security is woven into every layer, from onboarding to final settlement.
+                        Safety is built into everything we do, from the moment you sign up until you get paid.
                     </p>
                 </div>
 
@@ -29,21 +29,21 @@ export const TrustSafety = () => {
                     {[
                         { 
                             icon: Fingerprint, 
-                            title: 'Multi-Role Auth', 
-                            desc: 'Secure environments for Brands, Influencers, and Administrators with isolated access tiers.',
-                            points: ['OAuth 2.0 Integration', 'Role Isolation', 'Session Control']
+                            title: 'Safe Accounts', 
+                            desc: 'Separate and secure areas for Brands, Creators, and Admins to work safely.',
+                            points: ['Easy Sign-in', 'Private Access', 'Session Safety']
                         },
                         { 
                             icon: Lock, 
-                            title: 'Data Sovereignty', 
-                            desc: 'Encrypted communication and PII protection ensuring absolute confidentiality.',
-                            points: ['AES-256 Encryption', 'PII Hardening', 'GDPR Compliance']
+                            title: 'Data Protection', 
+                            desc: 'We keep your private information safe and follow all the rules to protect you.',
+                            points: ['Strong Encryption', 'Privacy First', 'Data Safety Rules']
                         },
                         { 
                             icon: ShieldAlert, 
-                            title: 'Fraud Mitigation', 
-                            desc: 'Proactive detection systems to identify and eliminate synthetic influence.',
-                            points: ['Bot Detection', 'Real-time Monitoring', 'Anomaly Alerts']
+                            title: 'No Bots or Scams', 
+                            desc: 'We use smart tools to find and remove fake accounts and scammers.',
+                            points: ['Bot Removal', 'Always Watching', 'Safety Alerts']
                         },
                     ].map((feature, idx) => (
                         <motion.div
@@ -80,14 +80,14 @@ export const TrustSafety = () => {
                     <div className="max-w-xl relative x-10">
                         <div className="inline-flex items-center gap-2 mb-6 text-primary">
                             <Eye size={20} />
-                            <span className="font-black text-xs uppercase tracking-widest">Guided Onboarding</span>
+                            <span className="font-black text-xs uppercase tracking-widest">Easy Setup</span>
                         </div>
-                        <h3 className="text-3xl md:text-5xl font-black mb-6">Guided Setup. Secure Start.</h3>
+                        <h3 className="text-3xl md:text-5xl font-black mb-6">Simple Setup. Secure Start.</h3>
                         <p className="text-muted-foreground font-medium leading-relaxed mb-8">
-                            Role-specific setup flows ensure data completeness and security verification before platform interaction begins.
+                            Follow our simple steps for brands and creators to make sure your account is ready and safe to use.
                         </p>
                         <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                            {['Google Auth', 'Email Verification', 'Profile Shield'].map(tag => (
+                            {['Google Sign-in', 'Verified Email', 'Account Shield'].map(tag => (
                                 <span key={tag} className="glass-chip px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border-white/10">
                                     {tag}
                                 </span>
@@ -95,7 +95,7 @@ export const TrustSafety = () => {
                         </div>
                     </div>
                     <div className="relative group lg:ml-auto">
-                         <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-gradient-to-br from-primary via-secondary to-primary/50 flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-700">
+                         <div className="w-48 h-48 lg:w-64 lg:h-64 rounded-full bg-linear-to-br from-primary via-secondary to-primary/50 flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-700">
                              <Shield size={100} className="text-white" />
                              <div className="absolute inset-0 rounded-full animate-ping bg-primary/20" />
                          </div>

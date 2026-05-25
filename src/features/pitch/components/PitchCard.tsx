@@ -61,17 +61,17 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
 
     const statusConfig = {
         [PitchStatus.PENDING]: {
-            color: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+            color: 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border-amber-500/20',
             icon: <Clock size={14} />,
             label: 'Pending'
         },
         [PitchStatus.ACCEPTED]: {
-            color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+            color: 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border-emerald-500/20',
             icon: <CheckCircle2 size={14} />,
             label: 'Accepted'
         },
         [PitchStatus.REJECTED]: {
-            color: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
+            color: 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border-rose-500/20',
             icon: <XCircle size={14} />,
             label: 'Rejected'
         }

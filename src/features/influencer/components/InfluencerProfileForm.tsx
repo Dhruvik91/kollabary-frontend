@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
+import { DRAFT_STORAGE_KEYS } from '@/constants';
 import {
     LayoutGrid,
+    User,
     AtSign,
     Users,
     Plus,
@@ -22,7 +25,10 @@ import {
     Youtube,
     Twitter,
     Globe,
-    Link as LinkIcon
+    Link as LinkIcon,
+    CloudIcon,
+    SaveIcon,
+    AlertCircleIcon
 } from 'lucide-react';
 import {
     Form,
@@ -53,81 +59,9 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
 import { SOCIAL_PLATFORMS } from '@/constants';
 
-const profileSchema = z.object({
-    fullName: z.string().min(2, 'Full name is required').max(100, 'Full name is too long'),
-    username: z.string().min(3, 'Username must be at least 3 characters').max(30, 'Username is too long').regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
-    categories: z.string().min(2, 'At least one category is required'),
-    avatarUrl: z.string(),
-    bio: z.string().min(10, 'Bio should be at least 10 characters').max(500),
-    address: z.string().min(2, 'Address is required'),
-    locationCountry: z.string().min(2, 'Country is required'),
-    locationCity: z.string().min(2, 'City is required'),
-    gender: z.string().optional(),
-    languages: z.string().min(2, 'At least one language is required'),
-    audienceTopCountries: z.string().optional(),
-    audienceGenderRatio: z.object({
-        male: z.coerce.number().min(0).max(100).optional(),
-        female: z.coerce.number().min(0).max(100).optional(),
-        other: z.coerce.number().min(0).max(100).optional(),
-    }).optional(),
-    audienceAgeBrackets: z.object({
-        '13-17': z.coerce.number().min(0).max(100).optional(),
-        '18-24': z.coerce.number().min(0).max(100).optional(),
-        '25-34': z.coerce.number().min(0).max(100).optional(),
-        '35-44': z.coerce.number().min(0).max(100).optional(),
-        '45-54': z.coerce.number().min(0).max(100).optional(),
-        '55-64': z.coerce.number().min(0).max(100).optional(),
-        '65+': z.coerce.number().min(0).max(100).optional(),
-    }).optional(),
-    minPrice: z.coerce.number().min(0, 'Min price must be positive').optional(),
-    maxPrice: z.coerce.number().min(0, 'Max price must be positive').optional(),
-    availability: z.nativeEnum(AvailabilityStatus),
-    collaborationTypes: z.array(z.string()).min(1, 'Select at least one collaboration type'),
-    platforms: z.array(z.object({
-        name: z.string(),
-        handle: z.string().url('Please enter a valid profile URL (e.g. https://instagram.com/username)'),
-        followers: z.coerce.number().min(0, 'Followers must be positive'),
-        engagementRate: z.coerce.number().min(0).max(100, 'Engagement rate must be between 0-100').optional(),
-    })).min(1, 'Add at least one platform'),
-});
+import { influencerProfileSchema as profileSchema, InfluencerProfileSchemaType } from '@/lib/validations/influencer.validation';
 
-interface ProfileFormValues {
-    fullName: string;
-    username: string;
-    categories: string;
-    avatarUrl: string;
-    bio: string;
-    address: string;
-    locationCountry: string;
-    locationCity: string;
-    gender?: string;
-    languages: string;
-    audienceTopCountries?: string;
-    audienceGenderRatio?: {
-        male?: number;
-        female?: number;
-        other?: number;
-    };
-    audienceAgeBrackets?: {
-        '13-17'?: number;
-        '18-24'?: number;
-        '25-34'?: number;
-        '35-44'?: number;
-        '45-54'?: number;
-        '55-64'?: number;
-        '65+'?: number;
-    };
-    minPrice?: number;
-    maxPrice?: number;
-    availability: AvailabilityStatus;
-    collaborationTypes: string[];
-    platforms: {
-        name: string;
-        handle: string;
-        followers: number;
-        engagementRate?: number;
-    }[];
-}
+type ProfileFormValues = InfluencerProfileSchemaType;
 
 interface InfluencerProfileFormProps {
     onSubmit: (data: any) => void;
@@ -140,7 +74,7 @@ interface InfluencerProfileFormProps {
 const steps = [
     { id: 'basics', title: 'The Basics', icon: Briefcase },
     { id: 'platforms', title: 'Your Reach', icon: Users },
-//  { id: 'demographics', title: 'Demographics', icon: Sparkles },
+    //  { id: 'demographics', title: 'Demographics', icon: Sparkles },
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
 ];
 
@@ -152,6 +86,7 @@ export const InfluencerProfileForm = ({
     mode = 'setup'
 }: InfluencerProfileFormProps) => {
     const [currentStep, setCurrentStep] = useState(0);
+    const isSetupMode = mode === 'setup';
 
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema) as any,
@@ -176,6 +111,27 @@ export const InfluencerProfileForm = ({
             platforms: initialData?.platforms || [{ name: 'instagram', handle: '', followers: 0, engagementRate: 0 }],
         },
     });
+
+    // ─── Auto-save draft (setup mode only) ───────────────────────────────────
+    const formValues = form.watch();
+
+    const { getDraft, clearDraft, saveStatus } = useAutoSaveDraft({
+        key: DRAFT_STORAGE_KEYS.INFLUENCER_SETUP,
+        data: formValues,
+        delay: 800,
+        enabled: isSetupMode,
+    });
+
+    // Restore draft on first mount (setup mode, no server data passed in)
+    useEffect(() => {
+        if (!isSetupMode || initialData) return;
+
+        const draft = getDraft();
+        if (!draft) return;
+
+        form.reset(draft as ProfileFormValues);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);  // intentionally runs only once on mount
 
     // Handle form reset when initialData is loaded
     React.useEffect(() => {
@@ -220,6 +176,19 @@ export const InfluencerProfileForm = ({
         const isValid = await form.trigger(fieldsToValidate as any);
         if (isValid) {
             setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+        } else {
+            const errors = form.formState.errors;
+            if (errors.username) {
+                toast.error(errors.username.message || 'Please check your username');
+            } else {
+                const firstErrorField = fieldsToValidate.find(field => errors[field as keyof typeof errors]);
+                if (firstErrorField) {
+                    const error = errors[firstErrorField as keyof typeof errors];
+                    toast.error((error as { message?: string })?.message || `Invalid ${firstErrorField}`);
+                } else {
+                    toast.error('Please fill in all required fields correctly before continuing.');
+                }
+            }
         }
     };
 
@@ -235,7 +204,7 @@ export const InfluencerProfileForm = ({
         const formattedValues = {
             ...data,
             username: data.username, // Explicitly include username
-            categories: typeof data.categories === 'string' 
+            categories: typeof data.categories === 'string'
                 ? data.categories.split(',').map(s => s.trim()).filter(Boolean)
                 : data.categories,
             languages: typeof data.languages === 'string'
@@ -247,8 +216,25 @@ export const InfluencerProfileForm = ({
             audienceGenderRatio: data.audienceGenderRatio,
             audienceAgeBrackets: data.audienceAgeBrackets,
         };
-        
+
+        // Clear draft before handing off — the parent async submit handles routing
+        if (isSetupMode) clearDraft();
+
         onSubmit(formattedValues as any);
+    };
+
+    const handleInvalidSubmit = (errors: Record<string, { message?: string }>) => {
+        if (errors.username) {
+            toast.error(errors.username.message || 'Please check your username');
+        } else {
+            const firstErrorKey = Object.keys(errors)[0];
+            if (firstErrorKey) {
+                const error = errors[firstErrorKey];
+                toast.error(error?.message || `Invalid ${firstErrorKey}`);
+            } else {
+                toast.error('Please fill in all required fields correctly.');
+            }
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -259,7 +245,7 @@ export const InfluencerProfileForm = ({
                 nextStep();
             } else {
                 // If on final step, manually trigger submission
-                form.handleSubmit(handleFormSubmit)();
+                form.handleSubmit(handleFormSubmit, handleInvalidSubmit)();
             }
         }
     };
@@ -276,27 +262,60 @@ export const InfluencerProfileForm = ({
     return (
         <div className="max-w-2xl mx-auto">
             {/* Step Progress */}
-            <div className="mb-12">
-                <div className="flex justify-between items-center relative">
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-zinc-200 dark:bg-zinc-800 -translate-y-1/2 z-0" />
+            <div className="mb-10">
+                <div className="flex items-start justify-between relative">
+
+                    {/* Connector lines — drawn between icon centres */}
+                    {steps.map((_, idx) => {
+                        if (idx === steps.length - 1) return null;
+                        const isCompleted = idx < currentStep;
+                        return (
+                            <div
+                                key={`connector-${idx}`}
+                                className="absolute top-5 sm:top-6 h-0.5 z-0 transition-all duration-500"
+                                style={{
+                                    left: `calc(${(idx / (steps.length - 1)) * 100}% + 20px)`,
+                                    width: `calc(${(1 / (steps.length - 1)) * 100}% - 40px)`,
+                                    background: isCompleted
+                                        ? 'hsl(var(--primary))'
+                                        : 'hsl(var(--border))',
+                                }}
+                            />
+                        );
+                    })}
+
                     {steps.map((step, idx) => {
                         const Icon = step.icon;
                         const isActive = idx === currentStep;
                         const isCompleted = idx < currentStep;
 
                         return (
-                            <div key={step.id} className="relative z-10 flex flex-col items-center gap-2">
+                            <div
+                                key={step.id}
+                                className="relative z-10 flex flex-col items-center gap-2 flex-1"
+                            >
+                                {/* Icon bubble */}
                                 <div className={cn(
-                                    "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
-                                    isActive ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110" :
-                                        isCompleted ? "bg-green-500 text-white" : "bg-zinc-100 dark:bg-zinc-900 text-muted-foreground"
+                                    "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ring-2",
+                                    isActive
+                                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-110 ring-primary/30"
+                                        : isCompleted
+                                            ? "bg-primary/15 text-primary ring-primary/20"
+                                            : "bg-muted text-muted-foreground ring-border/50"
                                 )}>
-                                    {isCompleted ? <Check size={18} /> : <Icon size={18} className="sm:w-5 sm:h-5" />}
+                                    {isCompleted
+                                        ? <Check size={18} strokeWidth={2.5} />
+                                        : <Icon size={18} />}
                                 </div>
+
+                                {/* Label */}
                                 <span className={cn(
-                                    "text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300",
-                                    isActive ? "text-primary opacity-100" : "text-muted-foreground opacity-50 hidden sm:block",
-                                    !isActive && "hidden xs:hidden"
+                                    "text-[10px] font-bold uppercase tracking-widest text-center transition-all duration-300 leading-tight px-1",
+                                    isActive
+                                        ? "text-primary"
+                                        : isCompleted
+                                            ? "text-primary/60"
+                                            : "text-muted-foreground/50"
                                 )}>
                                     {step.title}
                                 </span>
@@ -308,13 +327,13 @@ export const InfluencerProfileForm = ({
 
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    onSubmit={form.handleSubmit(handleFormSubmit, handleInvalidSubmit)}
                     onKeyDown={handleKeyDown}
                     className="space-y-8"
                 >
                     <motion.div
                         layout
-                        className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none overflow-hidden"
+                        className="p-4 md:p-10"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -342,7 +361,7 @@ export const InfluencerProfileForm = ({
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="font-bold flex items-center gap-2">
-                                                        <AtSign size={14} className="text-primary" />
+                                                        <User size={14} className="text-primary" />
                                                         Full Name
                                                     </FormLabel>
                                                     <FormControl>
@@ -733,12 +752,12 @@ export const InfluencerProfileForm = ({
                                                     <FormItem>
                                                         <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
                                                         <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
+                                                            <Input
+                                                                type="number"
+                                                                placeholder="0"
+                                                                {...field}
                                                                 onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
+                                                                className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
                                                         <FormDescription>Your starting rate for collaborations.</FormDescription>
@@ -754,12 +773,12 @@ export const InfluencerProfileForm = ({
                                                     <FormItem>
                                                         <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
                                                         <FormControl>
-                                                            <Input 
-                                                                type="number" 
-                                                                placeholder="0" 
-                                                                {...field} 
+                                                            <Input
+                                                                type="number"
+                                                                placeholder="0"
+                                                                {...field}
                                                                 onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
-                                                                className="h-12 rounded-xl bg-background/50" 
+                                                                className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
                                                         <FormDescription>Optional: High-end rate.</FormDescription>
@@ -795,6 +814,31 @@ export const InfluencerProfileForm = ({
                             </motion.div>
                         </AnimatePresence>
                     </motion.div>
+
+                    {/* Draft status indicator */}
+                    {isSetupMode && saveStatus !== 'idle' && (
+                        <div className="flex justify-center">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={saveStatus}
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 4 }}
+                                    transition={{ duration: 0.2 }}
+                                    className={cn(
+                                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold",
+                                        saveStatus === 'saving' && "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+                                        saveStatus === 'saved' && "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400",
+                                        saveStatus === 'error' && "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+                                    )}
+                                >
+                                    {saveStatus === 'saving' && <><CloudIcon size={11} className="animate-pulse" /> Saving draft…</>}
+                                    {saveStatus === 'saved' && <><SaveIcon size={11} /> Draft saved</>}
+                                    {saveStatus === 'error' && <><AlertCircleIcon size={11} /> Failed to save</>}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    )}
 
                     {/* Navigation Buttons */}
                     <div className="flex justify-between gap-4 pt-4">

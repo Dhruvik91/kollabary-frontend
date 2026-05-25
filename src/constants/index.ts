@@ -144,6 +144,11 @@ export const API_CONFIG = {
             admin: '/pitches/admin',
             status: (id: string) => `/pitches/${id}/status`,
             detail: (id: string) => `/pitches/${id}`,
+        },
+        notifications: {
+            subscribe: '/notifications/subscribe',
+            unsubscribe: '/notifications/unsubscribe',
+            vapidKey: '/notifications/vapid-key',
         }
     }
 }
@@ -200,6 +205,7 @@ export const FRONTEND_ROUTES = {
             FINANCE: '/admin/finance',
             ORDERS: '/admin/orders',
             USERS: '/admin/users',
+            USER_DETAIL: (id: string) => `/admin/users/${id}`,
         },
         TOP_UP: '/top-up',
         ORDERS: '/orders',
@@ -245,6 +251,15 @@ export const CONSENT_STORAGE_KEYS = {
     BID_PLACE: 'consent-bid-place',
     COLLAB_REQUEST: 'consent-collab-request',
     PITCH_CREATE: 'consent-pitch-create',
+} as const;
+
+/**
+ * localStorage keys used to persist auto-saved form drafts.
+ * Drafts are cleared automatically after a successful submit or after 7 days.
+ */
+export const DRAFT_STORAGE_KEYS = {
+    INFLUENCER_SETUP: 'draft-influencer-setup',
+    PROFILE_SETUP: 'draft-profile-setup',
 } as const;
 
 export const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@kollabary.com"

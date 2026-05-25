@@ -6,6 +6,7 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
+    SheetDescription,
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -116,6 +117,9 @@ export const InfluencerDiscoverContainer = () => {
                                 <SheetHeader className="px-8 pt-8 pb-4 border-b border-border/50">
                                     <div className="flex items-center justify-between">
                                         <SheetTitle className="text-3xl font-black tracking-tight">Refine</SheetTitle>
+                                        <SheetDescription className="sr-only">
+                                            Search and filter our creator network to find the right talent for your brand.
+                                        </SheetDescription>
                                         <div className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-black uppercase tracking-widest">
                                             {totalCount} Found
                                         </div>

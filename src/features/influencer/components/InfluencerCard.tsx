@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Star, MapPin, MessageSquare, Eye, Award, ShieldCheck } from 'lucide-react';
+import { Star, MapPin, MessageSquare, Eye, Award, BadgeCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfluencerProfile } from '@/types/influencer.types';
 import { RankTierBadge } from '@/components/shared/RankTierBadge';
@@ -87,30 +87,7 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                                         </div>
                                     )}
                                 </div>
-                                
-                                {/* Verified Stamp on Avatar */}
-                                {verified && (
-                                    <div className="absolute -top-3 -right-3 z-20 animate-in fade-in zoom-in duration-500">
-                                        <Tooltip delayDuration={300}>
-                                            <TooltipTrigger asChild>
-                                                <div className="relative rotate-12 group-hover:rotate-[5deg] group-hover:scale-110 transition-all duration-700 cursor-help">
-                                                    {/* Prismatic Outer Glow */}
-                                                    <div className="absolute inset-[-4px] bg-linear-to-tr from-cyan-500/40 via-blue-500/40 to-purple-500/40 rounded-full blur-lg opacity-60 animate-pulse" />
 
-                                                    {/* Minimalist Glass Seed */}
-                                                    <div className="relative w-10 h-10 bg-slate-950/60 backdrop-blur-xl border border-white/30 rounded-xl flex items-center justify-center shadow-xl">
-                                                        <ShieldCheck size={14} className="text-white fill-blue-400/20" />
-                                                        {/* Corner Accent */}
-                                                        <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-blue-400 rounded-tr-sm opacity-60" />
-                                                    </div>
-                                                </div>
-                                            </TooltipTrigger>
-                                            <TooltipContent side="top" className="font-bold">
-                                                Verified Creator
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </div>
-                                )}
                                 {/* Status Indicator */}
                                 <Tooltip delayDuration={500}>
                                     <TooltipTrigger asChild>
@@ -136,22 +113,52 @@ export const InfluencerCard = ({ influencer }: InfluencerCardProps) => {
                     {/* Content Section */}
                     <div className="pb-6 px-6 space-y-5 flex flex-col flex-1">
                         <div className="space-y-1.5">
-                            <h3 className="text-xl font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300">
+                            <h3 className="text-xl font-black tracking-tight line-clamp-1 group-hover:text-primary transition-colors duration-300 flex items-center gap-1.5">
                                 {fullName || profile?.fullName || 'Unknown Creator'}
+                                {verified && (
+                                    <Tooltip delayDuration={300}>
+                                        <TooltipTrigger asChild>
+                                            <BadgeCheck
+                                                size={18}
+                                                className="shrink-0 text-primary fill-primary/15 dark:fill-primary/25 cursor-help"
+                                                aria-label="Verified Creator"
+                                            />
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top" className="font-bold text-xs">
+                                            Verified Creator
+                                        </TooltipContent>
+                                    </Tooltip>
+                                )}
                             </h3>
 
-                            {/* Tags / Badges */}
-                            <div className="flex flex-wrap gap-1.5">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10">
-                                    {(categories && categories[0]) || 'Creator'}
-                                </span>
-                                {(influencer.address || profile?.location) && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-zinc-400 border border-transparent">
-                                        <MapPin size={10} className="text-primary/60" />
+                            {/* Categories row — up to 3 pills + overflow count */}
+                            {categories && categories.length > 0 && (
+                                <div className="flex items-center flex-wrap gap-1.5">
+                                    {categories.slice(0, 3).map((cat, i) => (
+                                        <span
+                                            key={i}
+                                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/10 dark:bg-primary/15 dark:border-primary/20"
+                                        >
+                                            {cat}
+                                        </span>
+                                    ))}
+                                    {categories.length > 3 && (
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-muted text-muted-foreground border border-border/50">
+                                            +{categories.length - 3}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Address row */}
+                            {(influencer.address || profile?.location) && (
+                                <div className="flex items-center gap-1 mt-1">
+                                    <MapPin size={11} className="text-primary/60 shrink-0" />
+                                    <span className="text-[11px] font-medium text-muted-foreground truncate">
                                         {influencer.address || profile?.location}
                                     </span>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Stats Grid - Modern Layout */}

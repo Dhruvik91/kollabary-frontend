@@ -15,15 +15,15 @@ export const Community = () => {
                     <div className="order-2 lg:order-1">
                         <div className="relative group">
                             <div className="absolute -inset-10 bg-primary/10 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700" aria-hidden="true" />
-                            <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                            <div className="relative aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                                 <Image 
                                     src={LANDING_PAGE_IMAGES_URL.REVIEWS} 
-                                    alt="Kollabary Community Reviews and Feedback" 
+                                    alt="Kollabary Community Reviews showing platform feedback and user ratings" 
                                     fill 
                                     className="object-cover"
                                     sizes="(max-width: 1024px) 100vw, 50vw"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent pointer-events-none" />
                             </div>
                         </div>
                     </div>
@@ -34,29 +34,29 @@ export const Community = () => {
                             whileInView={{ opacity: 1 }}
                             className="text-primary font-black tracking-[0.3em] uppercase text-[10px] mb-6 block"
                         >
-                            Social Synergy
+                            Work Together
                         </motion.span>
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                            Build Trust Through <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Transparency.</span>
+                            Work with <br />
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Confidence.</span>
                         </h2>
 
                         <div className="space-y-10 mb-12" role="list">
                             {[
                                 {
                                     icon: MessageSquare,
-                                    title: 'Integrated Messaging',
-                                    desc: 'Direct communication channels for real-time collaboration and campaign refinement.'
+                                    title: 'Easy Chat',
+                                    desc: 'Talk directly with your partners to make sure every project goes perfectly.'
                                 },
                                 {
                                     icon: Star,
-                                    title: 'Multi-Directional Feedback',
-                                    desc: 'Review and rating system that builds mutual authority and trust within the network.'
+                                    title: 'Reviews & Ratings',
+                                    desc: 'Share your experience and see what others say to build trust in the network.'
                                 },
                                 {
                                     icon: Share2,
-                                    title: 'Influential Referrals',
-                                    desc: 'Incentivized growth through unique sharing links for brands and creators.'
+                                    title: 'Invite Friends',
+                                    desc: 'Grow the community and earn rewards by inviting brands and creators you know.'
                                 },
                             ].map((item, idx) => (
                                 <motion.div
@@ -85,10 +85,10 @@ export const Community = () => {
                             </div>
                             <h4 className="text-lg font-black mb-4 flex items-center gap-2">
                                 <CheckCircle className="text-secondary" size={20} aria-hidden="true" />
-                                Verified Growth Program
+                                Referral Program
                             </h4>
                             <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-                                Invite your network and earn KC rewards for every successful verified onboarding.
+                                Invite people you know and earn KC rewards when they join and verify their account.
                             </p>
                         </div>
                     </div>

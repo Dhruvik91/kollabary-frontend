@@ -47,29 +47,31 @@ export const InfluencerSettingsContainer = () => {
         );
     }
 
-    if (isError || !influencer) {
-        if ((error as any)?.statusCode !== 404) {
-            return (
-                <div className="max-w-2xl mx-auto py-20 text-center space-y-6">
-                    <div className="w-20 h-20 bg-red-100 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto text-red-500">
-                        <AlertCircle size={40} />
+    if (isInfluencer) {
+        if (isError || !influencer) {
+            if ((error as any)?.statusCode !== 404) {
+                return (
+                    <div className="max-w-2xl mx-auto py-20 text-center space-y-6">
+                        <div className="w-20 h-20 bg-red-100 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto text-red-500">
+                            <AlertCircle size={40} />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-3xl font-black">Something went wrong</h2>
+                            <p className="text-muted-foreground text-lg">
+                                We couldn&apos;t load your settings. Please try again or contact support.
+                            </p>
+                        </div>
+                        <Button
+                            onClick={() => window.location.reload()}
+                            className="px-8 h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+                        >
+                            Try Again
+                        </Button>
                     </div>
-                    <div className="space-y-2">
-                        <h2 className="text-3xl font-black">Something went wrong</h2>
-                        <p className="text-muted-foreground text-lg">
-                            We couldn&apos;t load your settings. Please try again or contact support.
-                        </p>
-                    </div>
-                    <Button
-                        onClick={() => window.location.reload()}
-                        className="px-8 h-12 bg-primary text-primary-foreground rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
-                    >
-                        Try Again
-                    </Button>
-                </div>
-            );
+                );
+            }
+            return null;
         }
-        return null;
     }
 
     return (
@@ -79,7 +81,7 @@ export const InfluencerSettingsContainer = () => {
             transition={{ duration: 0.5 }}
         >
             <InfluencerSettingsView
-                influencer={influencer}
+                influencer={influencer || null}
                 verificationRequests={verificationRequests}
             />
         </motion.div>

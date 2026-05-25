@@ -168,7 +168,7 @@ export const DashboardOverviewContainer = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         {/* Core Metrics Bento Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-4 sm:gap-6">
                             <MetricCard
                                 label="Completed Collaborations"
                                 value={ranking?.completedCollaborations?.count || 0}
@@ -228,7 +228,7 @@ export const DashboardOverviewContainer = () => {
             ) : (
                 <div className="space-y-8">
                     {/* USER Metrics Bento Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         <MetricCard
                             label="Total Collaborations"
                             value={totalCollabs}

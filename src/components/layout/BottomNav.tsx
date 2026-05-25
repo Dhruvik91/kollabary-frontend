@@ -38,6 +38,7 @@ import { FRONTEND_ROUTES } from '@/constants';
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -190,6 +191,9 @@ export const BottomNav = () => {
                             <SheetHeader className="pt-6 pb-2">
                                 <div className="w-12 h-1.5 bg-muted rounded-full mx-auto mb-4" />
                                 <SheetTitle className="text-center text-lg font-bold">Quick Navigation</SheetTitle>
+                                <SheetDescription className="sr-only">
+                                    Additional navigation options for quick access.
+                                </SheetDescription>
                             </SheetHeader>
                             <div className="grid grid-cols-3 gap-2 p-6 pb-12">
                                 {overflowItems.map((item) => {

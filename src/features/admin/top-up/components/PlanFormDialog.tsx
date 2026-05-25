@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { planSchema, PlanFormValues } from '@/lib/validations/admin.validation';
 import {
     Dialog,
     DialogContent,
@@ -31,18 +31,6 @@ import { ImageUpload } from '@/components/shared/ImageUpload';
 import { COIN_URL } from '@/constants';
 import Image from 'next/image';
 
-const planSchema = z.object({
-    name: z.string().min(2, 'Name must be at least 2 characters'),
-    amount: z.coerce.number().min(1, 'Amount must be greater than 0'),
-    coins: z.coerce.number().min(1, 'Coins must be greater than 0'),
-    bonusCoins: z.coerce.number().min(0).default(0),
-    description: z.string().optional(),
-    imageUrl: z.string().optional(),
-    isPopular: z.boolean().default(false),
-    isActive: z.boolean().default(true),
-});
-
-type PlanFormValues = z.infer<typeof planSchema>;
 
 interface PlanFormDialogProps {
     open: boolean;
