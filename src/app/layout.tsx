@@ -9,6 +9,8 @@ import { ConfettiProvider } from '@/contexts/confetti-context';
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SmoothScroll } from "@/components/shared/SmoothScroll";
+import { CookieConsent } from "@/components/shared/CookieConsent";
 import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google';
 
@@ -21,9 +23,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.kollabary.com"),
   title: {
     template: "%s | Kollabary",
-    default: "Kollabary - Enterprise Influencer Collaboration Platform",
+    default: "Kollabary — Influencer Marketing Platform for Brand-Creator Campaigns",
   },
-  description: "Scale your brand through authentic human connections. The next generation influencer management platform for seamless collaborations.",
+  description: "Kollabary connects premium brands with verified creators through a bid-driven marketplace. Launch campaigns, track performance, and settle in real-time. Join free.",
   keywords: ["influencer marketing", "brand collaboration", "influencer management", "creators", "enterprise marketing", "Kollabary"],
   authors: [{ name: "Kollabary Team" }],
   creator: "Kollabary",
@@ -65,16 +67,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Kollabary",
-    title: "Kollabary - Enterprise Influencer Collaboration Platform",
-    description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    title: "Kollabary — Influencer Marketing Platform for Brand-Creator Campaigns",
+    description: "Kollabary connects premium brands with verified creators through a bid-driven marketplace. Launch campaigns, track performance, and settle in real-time.",
     images: [{ url: "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary_preview_image.jpg", width: 1200, height: 630 }],
     locale: "en_US",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kollabary - Enterprise Influencer Collaboration Platform",
-    description: "Scale your brand through authentic human connections. The next generation influencer management platform.",
+    title: "Kollabary — Influencer Marketing Platform for Brand-Creator Campaigns",
+    description: "Kollabary connects premium brands with verified creators through a bid-driven marketplace. Launch campaigns, track performance, and settle in real-time.",
     images: [{ url: "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary_preview_image.jpg", width: 1200, height: 630 }],
     site: "@kollabary",
     creator: "@kollabary",
@@ -96,13 +98,49 @@ export default function RootLayout({
         id="schema-org"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Kollabary",
-            "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"],
-            "url": "https://www.kollabary.com"
-          }),
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Kollabary",
+              "alternateName": ["Kollabary Platform", "Kollabary Influencer Platform"],
+              "url": "https://www.kollabary.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.kollabary.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Kollabary",
+              "url": "https://www.kollabary.com",
+              "logo": "https://kollabary.s3.ap-south-1.amazonaws.com/kollabary_logo.png",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "support@kollabary.com",
+                "contactType": "customer service"
+              },
+              "sameAs": [
+                "https://twitter.com/kollabary",
+                "https://www.linkedin.com/company/kollabary",
+                "https://www.instagram.com/kollabary"
+              ]
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Kollabary",
+              "operatingSystem": "Web",
+              "applicationCategory": "BusinessApplication",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              }
+            }
+          ]),
         }}
       />
       <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-549HSQ8R'} />
@@ -115,9 +153,12 @@ export default function RootLayout({
               <ConfettiProvider>
                 <SocketProvider>
                   <TooltipProvider>
-                    {children}
-                    <Toaster position="top-right" richColors closeButton />
-                    <PWAInstaller />
+                    <SmoothScroll>
+                      {children}
+                      <Toaster position="top-right" richColors closeButton />
+                      <PWAInstaller />
+                      <CookieConsent />
+                    </SmoothScroll>
                   </TooltipProvider>
                 </SocketProvider>
               </ConfettiProvider>

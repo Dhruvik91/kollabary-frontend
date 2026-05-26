@@ -2,10 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FRONTEND_ROUTES } from '@/constants';
 import { Logo } from '../shared/Logo';
 
@@ -20,17 +17,12 @@ interface AuthLayoutProps {
  * Provides a premium split-screen layout for authentication pages
  */
 export function AuthLayout({ children, title, description }: AuthLayoutProps) {
-    const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     // Prevent hydration mismatch
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    const logoSrc = mounted && resolvedTheme === 'dark'
-        ? '/logo/dark_mode_logo.png'
-        : '/logo/light_mode_logo.png';
 
     return (
         <div className="relative min-h-screen flex flex-col lg:grid lg:grid-cols-2 bg-background overflow-hidden font-sans">
@@ -116,15 +108,25 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="w-full max-w-md relative z-10"
                 >
-                    <Card className="backdrop-blur-3xl bg-card/60 lg:bg-card/40 border-border/40 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] ring-1 ring-white/10 dark:ring-white/5 rounded-[2.5rem] overflow-hidden">
-                        <CardHeader className="space-y-3 text-center pb-6 pt-10 px-8">
-                            <CardTitle className="text-4xl font-black tracking-tight text-foreground leading-tight">{title}</CardTitle>
+                    <div className="space-y-8">
+                        {/* Mobile Logo */}
+                        <div className="flex justify-center lg:hidden mb-2">
+                            <Link href={FRONTEND_ROUTES.HOME} className="group transition-all duration-300 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
+                                {mounted && (
+                                    <Logo className="w-32 sm:w-36" />
+                                )}
+                            </Link>
+                        </div>
+
+                        <div className="space-y-3 text-center">
+                            <h2 className="text-4xl font-black tracking-tight text-foreground leading-tight">{title}</h2>
                             {description && (
-                                <CardDescription className="text-lg text-muted-foreground/90 font-medium">{description}</CardDescription>
+                                <p className="text-lg text-muted-foreground/80 font-medium">{description}</p>
                             )}
-                        </CardHeader>
-                        <CardContent className="pb-10 px-8 md:px-10">{children}</CardContent>
-                    </Card>
+                        </div>
+
+                        <div className="px-1">{children}</div>
+                    </div>
 
                     {/* Footnote */}
                     <div className="mt-10 flex flex-col items-center gap-4">

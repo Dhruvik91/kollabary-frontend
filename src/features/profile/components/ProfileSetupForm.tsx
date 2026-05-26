@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import {
     User,
     AtSign,
@@ -21,8 +21,11 @@ import {
     Mail,
     LayoutGrid,
     Users,
+    CloudIcon,
+    SaveIcon,
+    AlertCircleIcon,
 } from 'lucide-react';
-import { ProfileImageUpload } from './ProfileImageUpload';
+import { ImageUpload } from '@/components/shared/ImageUpload';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import {
@@ -47,29 +50,13 @@ import {
 } from '@/components/ui/select';
 
 import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
-import { SOCIAL_PLATFORMS } from '@/constants';
-import { getSocialPlatformIcon } from '@/lib/utils';
+import { SOCIAL_PLATFORMS, DRAFT_STORAGE_KEYS } from '@/constants';
+import { getSocialPlatformIcon, cn } from '@/lib/utils';
+import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
 
-const profileSchema = z.object({
-    username: z.string().min(3, 'Username must be at least 3 characters').max(30),
-    fullName: z.string().min(2, 'Full name is required'),
-    bio: z.string().max(300, 'Bio must be less than 300 characters').optional(),
-    location: z.string().min(2, 'Location is required').optional(),
-    avatarUrl: z.string().optional(),
-    socials: z.array(z.object({
-        platform: z.string().min(1, 'Platform name is required'),
-        url: z.string().url('Invalid URL format'),
-    })),
-    categories: z.array(z.string()).min(1, 'At least one category is required'),
-    website: z.string().url('Invalid URL format').optional().or(z.literal('')),
-    industry: z.string().optional(),
-    companySize: z.string().optional(),
-    brandTone: z.string().optional(),
-    contactEmail: z.string().email('Invalid email format').optional().or(z.literal('')),
-    contactPhone: z.string().optional(),
-});
 
-export type ProfileSchemaType = z.infer<typeof profileSchema>;
+import { profileSchema, ProfileSchemaType } from '@/lib/validations/profile.validation';
+
 
 export interface ProfileFormValues {
     username: string;
@@ -134,6 +121,28 @@ export const ProfileSetupForm = ({
         name: "socials",
     });
 
+    // ─── Auto-save draft (setup mode only) ───────────────────────────────────
+    const isSetupMode = !isEdit;
+    const formValues = form.watch();
+
+    const { getDraft, clearDraft, saveStatus } = useAutoSaveDraft({
+        key: DRAFT_STORAGE_KEYS.PROFILE_SETUP,
+        data: formValues,
+        delay: 800,
+        enabled: isSetupMode,
+    });
+
+    // Restore draft on first mount (setup mode, no server data passed in)
+    useEffect(() => {
+        if (!isSetupMode || initialData) return;
+
+        const draft = getDraft();
+        if (!draft) return;
+
+        form.reset(draft as ProfileSchemaType);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // intentionally runs only once on mount
+
     const handleFormSubmit = (values: ProfileSchemaType) => {
         // Transform socials array back to object for backend
         const socialLinks: Record<string, string> = {};
@@ -145,6 +154,9 @@ export const ProfileSetupForm = ({
 
         const { socials, ...rest } = values;
 
+        // Clear draft before handing off — parent handles success routing
+        if (isSetupMode) clearDraft();
+
         onSubmit({
             ...rest,
             socialLinks
@@ -154,32 +166,28 @@ export const ProfileSetupForm = ({
     return (
         <div className="max-w-2xl mx-auto">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+                <form
+                    onSubmit={form.handleSubmit(handleFormSubmit, (errors) => {
+                        if (errors.username) {
+                            toast.error(errors.username.message || 'Please check your username');
+                        } else {
+                            const firstErrorKey = Object.keys(errors)[0];
+                            if (firstErrorKey) {
+                                const error = errors[firstErrorKey as keyof typeof errors];
+                                toast.error((error as { message?: string })?.message || `Invalid ${firstErrorKey}`);
+                            } else {
+                                toast.error('Please fill in all required fields correctly.');
+                            }
+                        }
+                    })}
+                    className="space-y-8"
+                >
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-card/50 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-zinc-200/50 dark:shadow-none"
+                        className="p-4 md:p-10"
                     >
                         <div className="space-y-10">
-                            {/* Profile Image Section */}
-                            <div className="flex justify-center -mt-20 md:-mt-24 mb-6">
-                                <FormField
-                                    control={form.control}
-                                    name="avatarUrl"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <ProfileImageUpload
-                                                    value={field.value}
-                                                    onChange={field.onChange}
-                                                    disabled={isLoading}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
 
                             <div className="flex items-center gap-4 mb-4">
                                 <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
@@ -226,6 +234,30 @@ export const ProfileSetupForm = ({
                                     )}
                                 />
                             </div>
+
+                            {/* Profile Image */}
+                            <FormField
+                                control={form.control}
+                                name="avatarUrl"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="font-bold flex items-center gap-2">
+                                            <Camera size={14} className="text-primary" />
+                                            Profile Photo
+                                        </FormLabel>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                disabled={isLoading}
+                                                maxSize={5}
+                                                message="JPG, PNG or WebP · max 5 MB"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
                             <FormField
                                 control={form.control}
@@ -528,7 +560,30 @@ export const ProfileSetupForm = ({
                             </div>
                         </div>
 
-                        <div className="flex justify-end mt-10">
+                        <div className="flex flex-col items-end gap-2 mt-10">
+                            {/* Draft status indicator */}
+                            {isSetupMode && saveStatus !== 'idle' && (
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={saveStatus}
+                                        initial={{ opacity: 0, y: -4 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 4 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold",
+                                            saveStatus === 'saving' && "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+                                            saveStatus === 'saved' && "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400",
+                                            saveStatus === 'error' && "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+                                        )}
+                                    >
+                                        {saveStatus === 'saving' && <><CloudIcon size={11} className="animate-pulse" /> Saving draft…</>}
+                                        {saveStatus === 'saved' && <><SaveIcon size={11} /> Draft saved</>}
+                                        {saveStatus === 'error' && <><AlertCircleIcon size={11} /> Failed to save</>}
+                                    </motion.div>
+                                </AnimatePresence>
+                            )}
+
                             <Button
                                 type="submit"
                                 disabled={isLoading}

@@ -40,13 +40,13 @@ export const PWAInstaller = () => {
     const standalone = checkStandalone();
     const ios = checkIOS();
 
+    // Register service worker unconditionally for push notifications & caching
+    registerServiceWorker();
+    listenForSWUpdates();
+
     if (standalone || isDismissedRecently()) {
       return;
     }
-
-    // Register service worker
-    registerServiceWorker();
-    listenForSWUpdates();
 
     // Show prompt for iOS users after a short delay
     if (ios && !standalone) {

@@ -62,7 +62,7 @@ export function AdminReportsContainer() {
             cell: ({ row }) => (
                 <div className="flex items-center gap-2">
                     <UserIcon size={14} className="text-muted-foreground" />
-                    <span className="text-sm truncate max-w-[150px]">{row.original.reporter.email}</span>
+                    <span className="text-sm truncate max-w-[150px]">{row.original.reporter?.email || 'Unknown User'}</span>
                 </div>
             ),
         },

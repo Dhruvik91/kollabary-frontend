@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kollabary-v1778588126934';
+const CACHE_NAME = 'kollabary-v1779431782681';
 const urlsToCache = [
   '/',
   '/offline',
@@ -30,6 +30,15 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
+  // Bypass caching and interception in local development
+  if (
+    self.location.hostname === 'localhost' || 
+    self.location.hostname === '127.0.0.1' || 
+    self.location.hostname.startsWith('192.168.')
+  ) {
+    return;
+  }
+
   // Only handle GET requests and avoid caching browser extensions etc
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
     return;
@@ -67,6 +76,51 @@ self.addEventListener('fetch', (event) => {
             }
             return null;
           });
+      })
+  );
+});
+
+// Push event listener - show notification
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  try {
+    const payload = event.data.json();
+    const title = payload.title || 'Kollabary';
+    const options = {
+      body: payload.body || '',
+      icon: payload.icon || '/icons/icon-192x192.png',
+      badge: '/icons/badge-96x96.png',
+      data: {
+        url: payload.url || '/messages',
+      },
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+  } catch (error) {
+    console.error('Error handling push event:', error);
+  }
+});
+
+// Notification click listener - open corresponding URL
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const targetUrl = event.notification.data?.url || '/messages';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // If window is already open, focus it and navigate
+        for (const client of clientList) {
+          if (client.url.endsWith(targetUrl) && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // Otherwise, open a new window
+        if (clients.openWindow) {
+          return clients.openWindow(targetUrl);
+        }
       })
   );
 });

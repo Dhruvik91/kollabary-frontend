@@ -24,19 +24,19 @@ export const KCEconomy = () => {
                     <div>
 
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
-                            The KC <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary italic">Economy.</span>
+                            Payments & <br />
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-secondary italic">Coins.</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium mb-12 max-w-xl leading-relaxed">
-                            A robust, secure economic layer powered by K-Coins (KC). Seamlessly manage earnings, spendings, and top-ups through our integrated financial operations.
+                            A safe and easy way to handle money using K-Coins (KC). Manage your earnings, spending, and top-ups all in one place.
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                             {[
-                                { icon: Wallet, title: 'KC Wallet', desc: 'Real-time balance monitoring for all platform participants.' },
-                                { icon: CreditCard, title: 'Razorpay Integration', desc: 'Secure top-ups with multiple conversion plans.' },
-                                { icon: AreaChart, title: 'Earning Analytics', desc: 'Detailed history of spendings and revenue projections.' },
-                                { icon: ArrowUpRight, title: 'Instant Settlement', desc: 'Automated conversion from fiat to platform coin.' },
+                                { icon: Wallet, title: 'Your Wallet', desc: 'Track your balance anytime and see your history.' },
+                                { icon: CreditCard, title: 'Safe Top-ups', desc: 'Securely add coins to your account with multiple options.' },
+                                { icon: AreaChart, title: 'Track Earnings', desc: 'See how much you have earned and what is coming next.' },
+                                { icon: ArrowUpRight, title: 'Instant Payments', desc: 'Easily turn your money into K-Coins and start working.' },
                             ].map((feature, idx) => (
                                 <motion.div
                                     key={feature.title}
@@ -56,16 +56,16 @@ export const KCEconomy = () => {
                     </div>
 
                     <div className="relative group">
-                        <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl rounded-[4rem] opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
-                        <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
+                        <div className="absolute -inset-4 bg-linear-to-r from-primary/20 to-secondary/20 blur-3xl rounded-[4rem] opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
+                        <div className="relative aspect-4/3 rounded-[3rem] overflow-hidden transition-transform duration-700 group-hover:scale-[1.02]">
                             <Image
                                 src={LANDING_PAGE_IMAGES_URL.KCOINS}
-                                alt="Kollabary Financial Ecosystem"
+                                alt="Kollabary Financial Ecosystem showing K-Coin wallet and transaction history"
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent pointer-events-none" />
                         </div>
                     </div>
                 </div>

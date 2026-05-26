@@ -26,13 +26,14 @@ interface SignupFormProps {
     error?: string;
     onGoogleAuth?: () => void;
     referralCode?: string;
+    role?: UserRole;
 }
 
 /**
  * Signup Form Component (Dumb Component)
  * Pure presentational component for user registration
  */
-export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralCode }: SignupFormProps) {
+export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralCode, role: initialRole }: SignupFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const {
@@ -44,7 +45,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
     } = useForm<SignupFormData>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
-            role: UserRole.USER,
+            role: initialRole || UserRole.USER,
             referralCode: referralCode || '',
         },
     });

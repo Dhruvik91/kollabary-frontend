@@ -12,27 +12,45 @@ export default function PrivacyPage() {
             lastUpdated="February 24, 2026"
         >
             <StaticSection title="1. Information We Collect" icon={<Shield className="w-6 h-6 text-primary" />} index={0}>
-                <p>We collect information you provide directly to us when you create an account, update your profile, or communicate with other users. This includes your name, email address, profile photos, and social media handles.</p>
-                <p>We also automatically collect certain technical information when you use our platform, such as your IP address, browser type, and usage patterns.</p>
+                <p>We collect information you provide directly to us when you create an account, update your profile, or communicate with other users. This includes:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                    <li><strong>Personal Identifiers:</strong> Name, email address, phone number, and social media handles.</li>
+                    <li><strong>Professional Information:</strong> Portfolio links, niche categories, and collaboration history.</li>
+                    <li><strong>Financial Information:</strong> Payment details and transaction history processed via our secure partners (e.g., Razorpay).</li>
+                    <li><strong>Communication Data:</strong> Messages and content shared within the platform.</li>
+                </ul>
+                <p className="mt-4">We also automatically collect technical information such as IP addresses, browser types, device identifiers, and usage patterns via cookies and similar technologies.</p>
             </StaticSection>
 
             <StaticSection title="2. How We Use Your Information" icon={<Eye className="w-6 h-6 text-primary" />} index={1}>
-                <p>We use the information we collect to:</p>
+                <p>Kollabary uses your data to power the bid-driven marketplace and ensure platform integrity:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                    <li>Provide, maintain, and improve the Kollabary platform.</li>
-                    <li>Facilitate connections between brands and influencers.</li>
-                    <li>Personalize your experience and content.</li>
-                    <li>Communicate with you about products, services, and events.</li>
-                    <li>Monitor and analyze trends and usage.</li>
+                    <li><strong>Marketplace Operations:</strong> Facilitating auctions, bids, and collaborations between brands and creators.</li>
+                    <li><strong>Performance Ranking:</strong> Calculating creator prestige scores based on verified collaboration data.</li>
+                    <li><strong>Verification & Security:</strong> Verifying identities and preventing fraudulent activity.</li>
+                    <li><strong>Financial Settlements:</strong> Processing payments and managing K-Coin balances.</li>
+                    <li><strong>Personalization:</strong> Recommending relevant partners and opportunities.</li>
                 </ul>
             </StaticSection>
 
-            <StaticSection title="3. Data Security" icon={<Lock className="w-6 h-6 text-primary" />} index={2}>
-                <p>We take reasonable measures to help protect information about you from loss, theft, misuse, and unauthorized access, disclosure, alteration, and destruction.</p>
+            <StaticSection title="3. Data Sharing & Third Parties" icon={<Lock className="w-6 h-6 text-primary" />} index={2}>
+                <p>We do not sell your personal data. We share information only in the following contexts:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                    <li><strong>Between Users:</strong> Profile data is visible to potential collaboration partners.</li>
+                    <li><strong>Service Providers:</strong> Sharing with trusted partners like payment processors (Razorpay) and analytics providers (PostHog).</li>
+                    <li><strong>Legal Compliance:</strong> When required by law or to protect our users and platform.</li>
+                </ul>
             </StaticSection>
 
-            <StaticSection title="4. Your Rights" icon={<FileText className="w-6 h-6 text-primary" />} index={3}>
-                <p>You have the right to access, update, or delete your personal information at any time through your account settings. You may also request a copy of the data we hold about you or ask us to restrict the processing of your data in certain circumstances.</p>
+            <StaticSection title="4. Data Retention & Your Rights" icon={<FileText className="w-6 h-6 text-primary" />} index={3}>
+                <p>We retain your information as long as your account is active or as needed to provide services. Under applicable laws (including GDPR and India IT Act), you have the right to:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                    <li><strong>Access & Portability:</strong> Request a copy of your personal data.</li>
+                    <li><strong>Correction:</strong> Update inaccurate or incomplete information.</li>
+                    <li><strong>Deletion:</strong> Request removal of your data ("Right to be Forgotten").</li>
+                    <li><strong>Restriction:</strong> Limit how we process your data in specific scenarios.</li>
+                </ul>
+                <p className="mt-4">To exercise these rights, please contact our Data Protection Officer at support@kollabary.com.</p>
             </StaticSection>
         </StaticPageLayout>
     );
