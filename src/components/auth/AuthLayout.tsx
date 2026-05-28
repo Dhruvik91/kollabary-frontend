@@ -127,13 +127,6 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
 
                         <div className="px-1">{children}</div>
                     </div>
-
-                    {/* Footnote */}
-                    <div className="mt-10 flex flex-col items-center gap-4">
-                        <p className="text-xs text-muted-foreground/50 font-semibold uppercase tracking-widest">
-                            © {new Date().getFullYear()} Kollabary Platform
-                        </p>
-                    </div>
                 </motion.div>
             </div>
         </div>

@@ -26,9 +26,6 @@ import {
     Twitter,
     Globe,
     Link as LinkIcon,
-    CloudIcon,
-    SaveIcon,
-    AlertCircleIcon,
     Camera
 } from 'lucide-react';
 import {
@@ -50,7 +47,6 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn, getSocialPlatformIcon } from '@/lib/utils';
 import ProfileImageStep from '@/components/shared/ProfileImageStep';
@@ -631,7 +627,7 @@ export const InfluencerProfileForm = ({
                                                                         placeholder="e.g. 4.5"
                                                                         {...field}
                                                                         value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
-                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : (parseFloat(e.target.value) || 0))}
+                                                                        onChange={e => field.onChange(e.target.value)}
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
@@ -830,31 +826,6 @@ export const InfluencerProfileForm = ({
                             </motion.div>
                         </AnimatePresence>
                     </motion.div>
-
-                    {/* Draft status indicator */}
-                    {isSetupMode && saveStatus !== 'idle' && (
-                        <div className="flex justify-center">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={saveStatus}
-                                    initial={{ opacity: 0, y: -4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 4 }}
-                                    transition={{ duration: 0.2 }}
-                                    className={cn(
-                                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold",
-                                        saveStatus === 'saving' && "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
-                                        saveStatus === 'saved' && "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400",
-                                        saveStatus === 'error' && "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
-                                    )}
-                                >
-                                    {saveStatus === 'saving' && <><CloudIcon size={11} className="animate-pulse" /> Saving draft…</>}
-                                    {saveStatus === 'saved' && <><SaveIcon size={11} /> Draft saved</>}
-                                    {saveStatus === 'error' && <><AlertCircleIcon size={11} /> Failed to save</>}
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    )}
 
                     {/* Navigation Buttons */}
                     <div className="flex justify-between gap-4 pt-4">

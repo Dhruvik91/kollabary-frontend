@@ -87,7 +87,7 @@ export function useUpdateInfluencerProfile() {
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
             queryClient.invalidateQueries({ queryKey: influencerKeys.all });
             queryClient.invalidateQueries({ queryKey: profileKeys.me() });
-            toast.success('Influencer profile updated successfully');
+            toast.success('Profile updated successfully');
         },
         onError: (error: any) => {
             toast.error('Failed to update profile', {
