@@ -41,7 +41,12 @@ export const influencerProfileSchema = z.object({
         name: z.string(),
         handle: z.string().url('Please enter a valid profile URL (e.g. https://instagram.com/username)'),
         followers: z.coerce.number().min(0, 'Followers must be positive'),
-        engagementRate: z.coerce.number().min(0).max(100, 'Engagement rate must be between 0-100').optional(),
+        engagementRate: z.union([
+            z.literal(''),
+            z.null(),
+            z.undefined(),
+            z.coerce.number().min(0).max(100, 'Engagement rate must be between 0-100')
+        ]).transform(val => (val === '' || val === null ? undefined : val)).optional(),
     })).min(1, 'Add at least one platform'),
 });
 
