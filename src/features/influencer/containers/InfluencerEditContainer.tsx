@@ -85,7 +85,6 @@ export const InfluencerEditContainer = () => {
 
         updateProfile(submissionData, {
             onSuccess: () => {
-                toast.success('Profile updated successfully!');
                 router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_PROFILE);
             },
             onError: (error: any) => {
