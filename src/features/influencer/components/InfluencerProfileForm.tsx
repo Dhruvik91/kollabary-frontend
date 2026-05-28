@@ -28,7 +28,8 @@ import {
     Link as LinkIcon,
     CloudIcon,
     SaveIcon,
-    AlertCircleIcon
+    AlertCircleIcon,
+    Camera
 } from 'lucide-react';
 import {
     Form,
@@ -52,7 +53,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { AvailabilityStatus, CollaborationType } from '@/types/influencer.types';
 import { cn, getSocialPlatformIcon } from '@/lib/utils';
-import { ImageUpload } from '@/components/shared/ImageUpload';
+import ProfileImageStep from '@/components/shared/ProfileImageStep';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import { MultiSelect } from '@/components/ui/multi-select';
@@ -74,8 +75,8 @@ interface InfluencerProfileFormProps {
 const steps = [
     { id: 'basics', title: 'The Basics', icon: Briefcase },
     { id: 'platforms', title: 'Your Reach', icon: Users },
-    //  { id: 'demographics', title: 'Demographics', icon: Sparkles },
     { id: 'preferences', title: 'Preferences', icon: LayoutGrid },
+    { id: 'avatar', title: 'Profile Photo', icon: Camera },
 ];
 
 export const InfluencerProfileForm = ({
@@ -168,10 +169,12 @@ export const InfluencerProfileForm = ({
         if (e) e.preventDefault();
 
         const fieldsToValidate = currentStep === 0
-            ? ['fullName', 'username', 'categories', 'avatarUrl', 'bio', 'address', 'locationCountry', 'locationCity', 'gender']
+            ? ['fullName', 'username', 'categories', 'bio', 'address', 'locationCountry', 'locationCity', 'gender']
             : currentStep === 1
                 ? ['platforms']
-                : ['collaborationTypes', 'availability'];
+                : currentStep === 2
+                    ? ['collaborationTypes', 'availability']
+                    : ['avatarUrl'];
 
         const isValid = await form.trigger(fieldsToValidate as any);
         if (isValid) {
@@ -416,28 +419,7 @@ export const InfluencerProfileForm = ({
                                             )}
                                         />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="avatarUrl"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="font-bold flex items-center gap-2">
-                                                        <AtSign size={14} className="text-primary" />
-                                                        Profile Picture
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <ImageUpload
-                                                            value={field.value}
-                                                            onChange={field.onChange}
-                                                            onRemove={() => field.onChange('')}
-                                                            maxSize={5}
-                                                        />
-                                                    </FormControl>
-                                                    <FormDescription>Upload your profile picture (max 5MB)</FormDescription>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <FormField
@@ -626,7 +608,8 @@ export const InfluencerProfileForm = ({
                                                                         type="number"
                                                                         placeholder="e.g. 50000"
                                                                         {...field}
-                                                                        onChange={e => field.onChange(parseInt(e.target.value) || 0)}
+                                                                        value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                        onChange={e => field.onChange(e.target.value === '' ? 0 : (parseInt(e.target.value) || 0))}
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
@@ -647,8 +630,8 @@ export const InfluencerProfileForm = ({
                                                                         step="0.1"
                                                                         placeholder="e.g. 4.5"
                                                                         {...field}
-                                                                        value={field.value ?? ''}
-                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : parseFloat(e.target.value))}
+                                                                        value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : (parseFloat(e.target.value) || 0))}
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
@@ -756,7 +739,8 @@ export const InfluencerProfileForm = ({
                                                                 type="number"
                                                                 placeholder="0"
                                                                 {...field}
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                onChange={e => field.onChange(e.target.value === '' ? 0 : (parseFloat(e.target.value) || 0))}
                                                                 className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
@@ -777,7 +761,8 @@ export const InfluencerProfileForm = ({
                                                                 type="number"
                                                                 placeholder="0"
                                                                 {...field}
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                onChange={e => field.onChange(e.target.value === '' ? 0 : (parseFloat(e.target.value) || 0))}
                                                                 className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
@@ -806,6 +791,37 @@ export const InfluencerProfileForm = ({
                                                             <SelectItem value={AvailabilityStatus.CLOSED}>Not Accepting Requests</SelectItem>
                                                         </SelectContent>
                                                     </Select>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                )}
+
+                                {currentStep === 3 && (
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-3 mb-6">
+                                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                                <Camera size={20} />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-2xl font-black tracking-tight">Profile Photo</h2>
+                                                <p className="text-sm text-muted-foreground">Upload and crop your profile photo so brands can recognize you.</p>
+                                            </div>
+                                        </div>
+
+                                        <FormField
+                                            control={form.control}
+                                            name="avatarUrl"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-col items-center justify-center">
+                                                    <FormControl>
+                                                        <ProfileImageStep
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                            disabled={isLoading}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
