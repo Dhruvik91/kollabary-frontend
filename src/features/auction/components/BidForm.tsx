@@ -58,7 +58,14 @@ export const BidForm = ({ onSubmit, isLoading, suggestedMin, suggestedMax }: Bid
                         <FormItem>
                             <FormLabel className="text-xs font-black uppercase tracking-widest text-muted-foreground">Your Bid Amount ₹</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="Enter your rate" {...field} className="rounded-xl border-2 h-12 focus:border-primary transition-all" />
+                                <Input
+                                    type="number"
+                                    placeholder="Enter your rate"
+                                    {...field}
+                                    value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                    onChange={e => field.onChange(e.target.value === '' ? 0 : (parseInt(e.target.value) || 0))}
+                                    className="rounded-xl border-2 h-12 focus:border-primary transition-all"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

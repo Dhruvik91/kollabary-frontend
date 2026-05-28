@@ -608,7 +608,8 @@ export const InfluencerProfileForm = ({
                                                                         type="number"
                                                                         placeholder="e.g. 50000"
                                                                         {...field}
-                                                                        onChange={e => field.onChange(parseInt(e.target.value) || 0)}
+                                                                        value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                        onChange={e => field.onChange(e.target.value === '' ? 0 : (parseInt(e.target.value) || 0))}
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
@@ -629,8 +630,8 @@ export const InfluencerProfileForm = ({
                                                                         step="0.1"
                                                                         placeholder="e.g. 4.5"
                                                                         {...field}
-                                                                        value={field.value ?? ''}
-                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : parseFloat(e.target.value))}
+                                                                        value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                        onChange={e => field.onChange(e.target.value === '' ? undefined : (parseFloat(e.target.value) || 0))}
                                                                         className="h-11 rounded-xl bg-background/50"
                                                                     />
                                                                 </FormControl>
@@ -738,7 +739,8 @@ export const InfluencerProfileForm = ({
                                                                 type="number"
                                                                 placeholder="0"
                                                                 {...field}
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                onChange={e => field.onChange(e.target.value === '' ? 0 : (parseFloat(e.target.value) || 0))}
                                                                 className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
@@ -759,7 +761,8 @@ export const InfluencerProfileForm = ({
                                                                 type="number"
                                                                 placeholder="0"
                                                                 {...field}
-                                                                onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                                                value={field.value === 0 || field.value === undefined || field.value === null ? '' : field.value}
+                                                                onChange={e => field.onChange(e.target.value === '' ? 0 : (parseFloat(e.target.value) || 0))}
                                                                 className="h-12 rounded-xl bg-background/50"
                                                             />
                                                         </FormControl>
