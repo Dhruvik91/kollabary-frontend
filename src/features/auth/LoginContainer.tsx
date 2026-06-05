@@ -10,20 +10,20 @@ import { LoginFormData } from '@/lib/validations/auth.validation';
  */
 export function LoginContainer() {
     const loginMutation = useLogin();
-    const { initiateGoogleAuth } = useGoogleAuth();
+    const googleAuthMutation = useGoogleAuth();
 
     const handleSubmit = (data: LoginFormData) => {
         loginMutation.mutate(data);
     };
 
     const handleGoogleAuth = () => {
-        initiateGoogleAuth();
+        googleAuthMutation.mutate(undefined);
     };
 
     return (
         <LoginForm
             onSubmit={handleSubmit}
-            isLoading={loginMutation.isPending}
+            isLoading={loginMutation.isPending || googleAuthMutation.isPending}
             error={loginMutation.error?.message}
             onGoogleAuth={handleGoogleAuth}
         />

@@ -83,6 +83,14 @@ export const authService = {
     },
 
     /**
+     * Login or register user with Firebase ID Token
+     */
+    async loginWithFirebase(idToken: string, role?: string): Promise<AuthResponse> {
+        const response = await httpService.post<AuthResponse>(API_CONFIG.path.auth.firebaseLogin, { idToken, role });
+        return response.data;
+    },
+
+    /**
      * Initiate Google OAuth flow
      */
     initiateGoogleAuth(): void {

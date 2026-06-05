@@ -19,7 +19,7 @@ import { UserRole } from '@/types/auth.types';
 
 export function SignupContainer() {
     const signupMutation = useSignup();
-    const { initiateGoogleAuth } = useGoogleAuth();
+    const googleAuthMutation = useGoogleAuth();
     const searchParams = useSearchParams();
     const referralCode = searchParams.get('ref') || undefined;
     
@@ -42,15 +42,15 @@ export function SignupContainer() {
         });
     };
 
-    const handleGoogleAuth = () => {
-        initiateGoogleAuth();
+    const handleGoogleAuth = (selectedRole: UserRole) => {
+        googleAuthMutation.mutate({ role: selectedRole });
     };
 
     return (
         <SignupForm
             onSubmit={handleSubmit}
-            isLoading={signupMutation.isPending}
-            error={signupMutation.error?.message}
+            isLoading={signupMutation.isPending || googleAuthMutation.isPending}
+            error={signupMutation.error?.message || googleAuthMutation.error?.message}
             onGoogleAuth={handleGoogleAuth}
             referralCode={referralCode}
             role={role}
