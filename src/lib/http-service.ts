@@ -113,11 +113,13 @@ class HttpService {
               FRONTEND_ROUTES.AUTH.RESET_PASSWORD,
               FRONTEND_ROUTES.AUTH.VERIFY_EMAIL,
               FRONTEND_ROUTES.AUTH.CALLBACK,
+              FRONTEND_ROUTES.PRIVACY,
+              FRONTEND_ROUTES.TERMS
             ];
 
-            const isPublicRoute = 
-              publicRoutes.includes(currentPath) || 
-              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER_PREFIX) || 
+            const isPublicRoute =
+              publicRoutes.includes(currentPath) ||
+              currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.INFLUENCER_PREFIX) ||
               currentPath.startsWith(FRONTEND_ROUTES.PUBLIC_SHAREABLE.BRAND_PREFIX);
 
             if (!isPublicRoute) {

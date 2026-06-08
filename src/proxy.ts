@@ -30,6 +30,8 @@ export function proxy(request: NextRequest) {
         FRONTEND_ROUTES.AUTH.FORGOT_PASSWORD,
         FRONTEND_ROUTES.AUTH.RESET_PASSWORD,
         FRONTEND_ROUTES.AUTH.VERIFY_EMAIL,
+        FRONTEND_ROUTES.PRIVACY,
+        FRONTEND_ROUTES.TERMS
     ];
 
     // Check if the current route is an auth route
