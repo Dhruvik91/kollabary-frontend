@@ -222,6 +222,40 @@ export const InfluencerProfileForm = ({
         onSubmit(formattedValues as any);
     };
 
+    const handleFinishLater = async (e?: React.MouseEvent) => {
+        if (e) e.preventDefault();
+
+        // Validate only basic fields (fullName and username)
+        const isValid = await form.trigger(['fullName', 'username']);
+        if (!isValid) {
+            toast.error('Please enter your full name and username to save your profile.');
+            return;
+        }
+
+        const data = form.getValues();
+
+        // Convert comma-separated strings back to arrays for the parent onSubmit
+        const formattedValues = {
+            ...data,
+            username: data.username,
+            categories: typeof data.categories === 'string'
+                ? data.categories.split(',').map(s => s.trim()).filter(Boolean)
+                : data.categories || [],
+            languages: typeof data.languages === 'string'
+                ? data.languages.split(',').map(s => s.trim()).filter(Boolean)
+                : data.languages || [],
+            audienceTopCountries: typeof data.audienceTopCountries === 'string'
+                ? data.audienceTopCountries.split(',').map(s => s.trim()).filter(Boolean)
+                : [],
+            audienceGenderRatio: data.audienceGenderRatio,
+            audienceAgeBrackets: data.audienceAgeBrackets,
+        };
+
+        if (isSetupMode) clearDraft();
+
+        onSubmit(formattedValues as any);
+    };
+
     const handleInvalidSubmit = (errors: Record<string, { message?: string }>) => {
         if (errors.username) {
             toast.error(errors.username.message || 'Please check your username');
@@ -829,16 +863,30 @@ export const InfluencerProfileForm = ({
 
                     {/* Navigation Buttons */}
                     <div className="flex justify-between gap-4 pt-4">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={prevStep}
-                            disabled={currentStep === 0 || isLoading}
-                            className="h-12 px-8 rounded-2xl font-bold gap-2 text-muted-foreground hover:text-foreground"
-                        >
-                            <ArrowLeft size={18} />
-                            Back
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={prevStep}
+                                disabled={currentStep === 0 || isLoading}
+                                className="h-12 px-8 rounded-2xl font-bold gap-2 text-muted-foreground hover:text-foreground"
+                            >
+                                <ArrowLeft size={18} />
+                                Back
+                            </Button>
+
+                            {isSetupMode && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleFinishLater}
+                                    disabled={isLoading}
+                                    className="h-12 px-6 rounded-2xl font-bold border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+                                >
+                                    Finish Later
+                                </Button>
+                            )}
+                        </div>
 
                         {currentStep === steps.length - 1 ? (
                             <Button
@@ -853,7 +901,7 @@ export const InfluencerProfileForm = ({
                             <Button
                                 type="button"
                                 onClick={nextStep}
-                                className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2 ml-auto"
+                                className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2"
                             >
                                 Continue
                                 <ArrowRight size={18} />

@@ -37,6 +37,7 @@ import { useReferralStats } from '@/hooks/queries/useReferralQueries';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { WalletCard } from '@/components/shared/WalletCard';
 import { ReferralCard } from '@/components/shared/ReferralCard';
+import { ProfileCompletionWidget } from '../components/ProfileCompletionWidget';
 
 export const DashboardOverviewContainer = () => {
     const { user, isLoading: isAuthLoading } = useAuth();
@@ -163,6 +164,8 @@ export const DashboardOverviewContainer = () => {
                     )
                 }
             />
+            
+            <ProfileCompletionWidget user={user} influencerProfile={profile} />
 
             {isInfluencer ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
