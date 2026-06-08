@@ -29,6 +29,7 @@ import { useCreateCollaboration } from '@/hooks/use-collaboration.hooks';
 import { CreateCollaborationDto } from '@/types/collaboration.types';
 import { useActionConsent } from '@/hooks/use-action-consent';
 import { useConfetti } from '@/contexts/confetti-context';
+import { useProfileCompletion } from '@/contexts/profile-completion-context';
 
 
 import { collaborationSchema, CollaborationFormValues } from '@/lib/validations/collaboration.validation';
@@ -53,6 +54,14 @@ export const CollaborationRequestDialog = ({
         actionName: 'Send Request',
     });
     const { triggerConfetti } = useConfetti();
+    const { checkActionAllowed } = useProfileCompletion();
+
+    const handleTriggerClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (checkActionAllowed('collab')) {
+            setOpen(true);
+        }
+    };
 
 
     const form = useForm<CollaborationFormValues>({
@@ -94,7 +103,7 @@ export const CollaborationRequestDialog = ({
 
     return (
         <>
-            <div onClick={() => setOpen(true)} className="cursor-pointer">
+            <div onClick={handleTriggerClick} className="cursor-pointer">
                 {children}
             </div>
 
