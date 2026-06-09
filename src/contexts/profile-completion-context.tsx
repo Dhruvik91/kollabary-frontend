@@ -89,7 +89,7 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
                 {
                     key: 'basic',
                     label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!profile?.username,
+                    completed: !!profile?.fullName && !!(profile?.user?.username || user?.username || profile?.username),
                     weight: 30,
                     icon: User,
                 },

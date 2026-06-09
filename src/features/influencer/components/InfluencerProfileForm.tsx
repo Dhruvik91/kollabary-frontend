@@ -216,10 +216,34 @@ export const InfluencerProfileForm = ({
             audienceAgeBrackets: data.audienceAgeBrackets,
         };
 
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedValues: Record<string, any> = {};
+        Object.entries(formattedValues).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedValues[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedValues[key] = null;
+            } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                const subEntries = Object.entries(val);
+                const hasActualValues = subEntries.some(([_, v]) => (v as any) !== '' && v !== null && v !== undefined);
+                if (!hasActualValues) {
+                    cleanedValues[key] = null;
+                } else {
+                    const cleanedSub: Record<string, any> = {};
+                    subEntries.forEach(([subKey, subVal]) => {
+                        cleanedSub[subKey] = (subVal as any) === '' ? null : subVal;
+                    });
+                    cleanedValues[key] = cleanedSub;
+                }
+            } else {
+                cleanedValues[key] = val;
+            }
+        });
+
         // Clear draft before handing off — the parent async submit handles routing
         if (isSetupMode) clearDraft();
 
-        onSubmit(formattedValues as any);
+        onSubmit(cleanedValues as any);
     };
 
     const handleFinishLater = async (e?: React.MouseEvent) => {
@@ -251,9 +275,33 @@ export const InfluencerProfileForm = ({
             audienceAgeBrackets: data.audienceAgeBrackets,
         };
 
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedValues: Record<string, any> = {};
+        Object.entries(formattedValues).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedValues[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedValues[key] = null;
+            } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                const subEntries = Object.entries(val);
+                const hasActualValues = subEntries.some(([_, v]) => (v as any) !== '' && v !== null && v !== undefined);
+                if (!hasActualValues) {
+                    cleanedValues[key] = null;
+                } else {
+                    const cleanedSub: Record<string, any> = {};
+                    subEntries.forEach(([subKey, subVal]) => {
+                        cleanedSub[subKey] = (subVal as any) === '' ? null : subVal;
+                    });
+                    cleanedValues[key] = cleanedSub;
+                }
+            } else {
+                cleanedValues[key] = val;
+            }
+        });
+
         if (isSetupMode) clearDraft();
 
-        onSubmit(formattedValues as any);
+        onSubmit(cleanedValues as any);
     };
 
     const handleInvalidSubmit = (errors: Record<string, { message?: string }>) => {

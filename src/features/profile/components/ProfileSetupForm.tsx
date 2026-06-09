@@ -206,13 +206,25 @@ export const ProfileSetupForm = ({
 
         const { socials, ...rest } = values;
 
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedRest: Record<string, any> = {};
+        Object.entries(rest).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedRest[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedRest[key] = null;
+            } else {
+                cleanedRest[key] = val;
+            }
+        });
+
         // Clear draft before handing off — parent handles success routing
         if (isSetupMode) clearDraft();
 
         onSubmit({
-            ...rest,
+            ...cleanedRest,
             socialLinks
-        });
+        } as any);
     };
 
     const handleFinishLater = async (e?: React.MouseEvent) => {
@@ -237,12 +249,24 @@ export const ProfileSetupForm = ({
 
         const { socials, ...rest } = values;
 
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedRest: Record<string, any> = {};
+        Object.entries(rest).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedRest[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedRest[key] = null;
+            } else {
+                cleanedRest[key] = val;
+            }
+        });
+
         if (isSetupMode) clearDraft();
 
         onSubmit({
-            ...rest,
+            ...cleanedRest,
             socialLinks
-        });
+        } as any);
     };
 
     return (

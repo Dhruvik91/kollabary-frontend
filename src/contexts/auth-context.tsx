@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const fallbackProfile = {
                 id: influencerProfile.id,
                 fullName: influencerProfile?.fullName || user.email.split('@')[0], // Fallback name
-                username: user.email.split('@')[0],
+                username: influencerProfile.user?.username || user.username || user.email.split('@')[0],
                 avatarUrl: influencerProfile.avatarUrl,
                 ...nestedProfile
             };

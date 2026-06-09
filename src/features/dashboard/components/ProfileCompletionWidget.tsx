@@ -41,7 +41,7 @@ export const ProfileCompletionWidget = ({ user, influencerProfile }: ProfileComp
             return [
                 {
                     label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!profile?.username,
+                    completed: !!profile?.fullName && !!(profile?.user?.username || user?.username || profile?.username),
                     weight: 30, // 15% fullName + 15% username
                     icon: User,
                 },
