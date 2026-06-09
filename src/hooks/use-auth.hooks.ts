@@ -322,14 +322,15 @@ export function useGoogleAuth() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (variables?: { role?: string }) => {
+        mutationFn: async (variables?: { role?: string; referralCode?: string }) => {
             const role = variables?.role;
+            const referralCode = variables?.referralCode;
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
             
             const result = await signInWithPopup(auth, provider);
             const idToken = await result.user.getIdToken();
-            return authService.loginWithFirebase(idToken, role);
+            return authService.loginWithFirebase(idToken, role, referralCode);
         },
         onSuccess: (data: AuthResponse) => {
             // Invalidate and refetch user data

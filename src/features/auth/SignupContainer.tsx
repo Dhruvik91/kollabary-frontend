@@ -43,7 +43,7 @@ export function SignupContainer() {
     };
 
     const handleGoogleAuth = (selectedRole: UserRole) => {
-        googleAuthMutation.mutate({ role: selectedRole });
+        googleAuthMutation.mutate({ role: selectedRole, referralCode });
     };
 
     return (
