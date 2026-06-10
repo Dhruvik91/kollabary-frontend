@@ -26,6 +26,7 @@ import {
 import { PitchNowModal } from '@/features/pitch/components/PitchNowModal';
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useProfileCompletion } from '@/contexts/profile-completion-context';
 
 interface BrandDetailHeaderProps {
     brand: UserProfile;
@@ -48,12 +49,20 @@ export const BrandDetailHeader = ({
     const isOwner = user?.id === brand.user?.id;
     const isInfluencer = user?.role === UserRole.INFLUENCER;
     const [isPitchModalOpen, setIsPitchModalOpen] = useState(false);
+    const { checkActionAllowed } = useProfileCompletion();
 
     useEffect(() => {
         if (searchParams.get('pitch') === 'true' && isInfluencer && !isOwner) {
-            setIsPitchModalOpen(true);
+            if (checkActionAllowed('pitch')) {
+                setIsPitchModalOpen(true);
+            } else {
+                const params = new URLSearchParams(searchParams);
+                params.delete('pitch');
+                const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+                router.replace(newUrl, { scroll: false });
+            }
         }
-    }, [searchParams, isInfluencer, isOwner]);
+    }, [searchParams, isInfluencer, isOwner, checkActionAllowed]);
 
     const stats = brand.stats || {
         totalAuctions: 0,
@@ -63,6 +72,9 @@ export const BrandDetailHeader = ({
 
     const handlePitchClick = () => {
         if (isInfluencer) {
+            if (!checkActionAllowed('pitch')) {
+                return;
+            }
             setIsPitchModalOpen(true);
             // Use replace to avoid polluting history stack so back button works as expected
             const params = new URLSearchParams(searchParams);

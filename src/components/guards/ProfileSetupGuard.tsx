@@ -65,7 +65,7 @@ export function ProfileSetupGuard({ children }: ProfileSetupGuardProps) {
 
     // If we're authenticated but missing a profile, don't render children while redirect is pending
     const needsProfile = user?.role === UserRole.INFLUENCER || user?.role === UserRole.USER;
-    const hasProfile = !!user?.profile;
+    const hasProfile = !!user?.profile || !!user?.influencerProfile;
     const isSetupPage = pathname === FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP || pathname === FRONTEND_ROUTES.DASHBOARD.PROFILE_SETUP;
 
     if (isAuthenticated && needsProfile && !hasProfile && !isSetupPage) {

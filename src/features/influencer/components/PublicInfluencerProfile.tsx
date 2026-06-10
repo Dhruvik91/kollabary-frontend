@@ -29,7 +29,7 @@ export const PublicInfluencerProfile = ({
     // Destructure with safety and fallbacks
     const profile = user?.profile;
     const fullName = influencer.fullName || profile?.fullName || 'Creator';
-    const username = profile?.username || 'user';
+    const username = user?.username || profile?.username || 'user';
     const avatarUrl = influencer.avatarUrl || profile?.avatarUrl;
     const bio = influencer.bio || profile?.bio;
     const location = profile?.location || (influencer.locationCity ? `${influencer.locationCity}, ${influencer.locationCountry}` : influencer.locationCountry);

@@ -16,13 +16,17 @@ export const InfluencerSetupContainer = () => {
     const handleProfileSubmit = useCallback(async (data: any) => {
         // Transform platforms array to record for backend
         const platformsRecord: Record<string, { handle: string; followers: number; engagementRate?: number }> = {};
-        data.platforms.forEach((p: any) => {
-            platformsRecord[p.name] = {
-                handle: p.handle,
-                followers: p.followers,
-                ...(p.engagementRate !== undefined && { engagementRate: p.engagementRate })
-            };
-        });
+        if (Array.isArray(data.platforms)) {
+            data.platforms.forEach((p: any) => {
+                if (p.handle && p.handle.trim() !== '') {
+                    platformsRecord[p.name] = {
+                        handle: p.handle,
+                        followers: p.followers || 0,
+                        ...(p.engagementRate !== undefined && { engagementRate: p.engagementRate })
+                    };
+                }
+            });
+        }
 
         const submissionData = {
             ...data,

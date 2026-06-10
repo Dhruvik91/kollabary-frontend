@@ -3,6 +3,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import posthog from 'posthog-js';
 import { authService } from '@/services/auth.service';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 import {
     LoginCredentials,
     SignupCredentials,
@@ -314,10 +316,72 @@ export function useResendOtp() {
 }
 
 /**
- * Hook to initiate Google OAuth
+ * Hook to handle Google login via Firebase
  */
 export function useGoogleAuth() {
-    return {
-        initiateGoogleAuth: authService.initiateGoogleAuth,
-    };
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (variables?: { role?: string; referralCode?: string }) => {
+            const role = variables?.role;
+            const referralCode = variables?.referralCode;
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
+            return authService.loginWithFirebase(idToken, role, referralCode);
+        },
+        onSuccess: (data: AuthResponse) => {
+            // Invalidate and refetch user data
+            queryClient.invalidateQueries({ queryKey: authKeys.me() });
+
+            // Set role cookie for middleware (accessible by JS)
+            document.cookie = `${AUTH_STORAGE_KEYS.USER_ROLE}=${data.user.role}; path=/; max-age=604800; samesite=lax`;
+
+            // Persist JWT for header-based auth
+            if (typeof window !== 'undefined') {
+                try {
+                    window.localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, data.access_token);
+                } catch {
+                    // Ignore storage errors
+                }
+            }
+
+            toast.success('Login successful!', {
+                description: `Welcome back, ${data.user.email}`,
+            });
+
+            posthog.identify(data.user.id, {
+                email: data.user.email,
+                role: data.user.role,
+            });
+            posthog.capture('user_logged_in', {
+                email: data.user.email,
+                role: data.user.role,
+                is_new_user: data.isNewUser,
+                auth_method: 'google_firebase',
+            });
+
+            // Redirect directly to dashboard overview
+            window.location.href = data.isNewUser
+                ? `${FRONTEND_ROUTES.DASHBOARD.OVERVIEW}?showBonus=true`
+                : FRONTEND_ROUTES.DASHBOARD.OVERVIEW;
+        },
+        onError: (error: Error) => {
+            if ((error as any).code === 'auth/popup-closed-by-user') {
+                toast.info('Google sign-in canceled');
+                return;
+            }
+
+            const message = axios.isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : error.message || 'Failed to authenticate with Google. Please try again.';
+
+            toast.error('Google sign-in failed', {
+                description: message,
+            });
+            return message;
+        },
+    });
 }

@@ -24,7 +24,7 @@ interface SignupFormProps {
     onSubmit: (data: SignupFormData) => void;
     isLoading: boolean;
     error?: string;
-    onGoogleAuth?: () => void;
+    onGoogleAuth?: (role: UserRole) => void;
     referralCode?: string;
     role?: UserRole;
 }
@@ -314,7 +314,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
             </Button>
 
             {/* Divider */}
-            {/* {onGoogleAuth && (
+            {onGoogleAuth && (
                 <>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -329,7 +329,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                         type="button"
                         variant="outline"
                         className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                        onClick={onGoogleAuth}
+                        onClick={() => onGoogleAuth?.(role)}
                         disabled={isLoading}
                     >
                         <svg className="mr-2 h-4 w-4" aria-hidden="true" viewBox="0 0 24 24">
@@ -353,7 +353,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                         Google
                     </Button>
                 </>
-            )} */}
+            )}
 
             {/* Login Link */}
             <p className="text-center text-sm text-muted-foreground">
