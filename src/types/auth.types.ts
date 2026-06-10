@@ -32,6 +32,7 @@ export interface User {
     updatedAt: string;
     profile?: Profile;
     influencerProfile?: { id: string, fullName: string, avatarUrl?: string };
+    username?: string;
 }
 
 export interface AuthResponse {

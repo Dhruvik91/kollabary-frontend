@@ -206,13 +206,67 @@ export const ProfileSetupForm = ({
 
         const { socials, ...rest } = values;
 
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedRest: Record<string, any> = {};
+        Object.entries(rest).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedRest[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedRest[key] = null;
+            } else {
+                cleanedRest[key] = val;
+            }
+        });
+
         // Clear draft before handing off — parent handles success routing
         if (isSetupMode) clearDraft();
 
         onSubmit({
-            ...rest,
+            ...cleanedRest,
             socialLinks
+        } as any);
+    };
+
+    const handleFinishLater = async (e?: React.MouseEvent) => {
+        if (e) e.preventDefault();
+
+        // Validate only basic fields (fullName and username)
+        const isValid = await form.trigger(['fullName', 'username']);
+        if (!isValid) {
+            toast.error('Please enter your full name and username to save your profile.');
+            return;
+        }
+
+        const values = form.getValues();
+        
+        // Transform socials array back to object for backend
+        const socialLinks: Record<string, string> = {};
+        (values.socials || []).forEach(item => {
+            if (item.platform && item.url) {
+                socialLinks[item.platform.toLowerCase()] = item.url;
+            }
         });
+
+        const { socials, ...rest } = values;
+
+        // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
+        const cleanedRest: Record<string, any> = {};
+        Object.entries(rest).forEach(([key, val]) => {
+            if (val === '') {
+                cleanedRest[key] = null;
+            } else if (Array.isArray(val) && val.length === 0) {
+                cleanedRest[key] = null;
+            } else {
+                cleanedRest[key] = val;
+            }
+        });
+
+        if (isSetupMode) clearDraft();
+
+        onSubmit({
+            ...cleanedRest,
+            socialLinks
+        } as any);
     };
 
     return (
@@ -701,16 +755,30 @@ export const ProfileSetupForm = ({
 
                     {/* Navigation Buttons */}
                     <div className="flex justify-between gap-4 pt-4">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={prevStep}
-                            disabled={currentStep === 0 || isLoading}
-                            className="h-12 px-8 rounded-2xl font-bold gap-2 text-muted-foreground hover:text-foreground"
-                        >
-                            <ChevronLeft size={18} />
-                            Back
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={prevStep}
+                                disabled={currentStep === 0 || isLoading}
+                                className="h-12 px-8 rounded-2xl font-bold gap-2 text-muted-foreground hover:text-foreground"
+                            >
+                                <ChevronLeft size={18} />
+                                Back
+                            </Button>
+
+                            {isSetupMode && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleFinishLater}
+                                    disabled={isLoading}
+                                    className="h-12 px-6 rounded-2xl font-bold border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+                                >
+                                    Finish Later
+                                </Button>
+                            )}
+                        </div>
 
                         {currentStep === steps.length - 1 ? (
                             <Button
@@ -725,7 +793,7 @@ export const ProfileSetupForm = ({
                             <Button
                                 type="button"
                                 onClick={nextStep}
-                                className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2 ml-auto"
+                                className="h-12 px-10 rounded-2xl font-black bg-primary text-primary-foreground shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all gap-2"
                             >
                                 Continue
                                 <ChevronRight size={18} />

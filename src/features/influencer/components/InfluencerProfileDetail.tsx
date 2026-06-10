@@ -709,7 +709,7 @@ export const InfluencerProfileDetail = ({
             <ReviewSubmissionModal
                 isOpen={!!editingReview}
                 onClose={() => setEditingReview(null)}
-                influencerName={influencerUser?.profile?.fullName || 'the Influencer'}
+                influencerName={influencer.fullName || influencerUser?.profile?.fullName || 'the Influencer'}
                 onSubmit={handleUpdateReview}
                 isLoading={updateReview.isPending}
                 initialData={editingReview ? { rating: editingReview.rating, comment: editingReview.comment } : undefined}
@@ -746,7 +746,7 @@ export const InfluencerProfileDetail = ({
             >
                 <div className="py-4">
                     <p className="text-muted-foreground">
-                        Your review and rating for <span className="text-foreground font-bold">@{profile?.username}</span> will be permanently removed.
+                        Your review and rating for <span className="text-foreground font-bold">@{influencerUser?.username || profile?.username || 'the Influencer'}</span> will be permanently removed.
                     </p>
                 </div>
             </AnimatedModal>
@@ -757,7 +757,7 @@ export const InfluencerProfileDetail = ({
                 onClose={() => setIsReportModalOpen(false)}
                 targetId={influencer.id}
                 targetType="influencer"
-                targetName={profile?.fullName || 'the Influencer'}
+                targetName={influencer.fullName || profile?.fullName || 'the Influencer'}
             />
 
             <Sheet open={isAllReviewsOpen && !isDesktop} onOpenChange={setIsAllReviewsOpen}>

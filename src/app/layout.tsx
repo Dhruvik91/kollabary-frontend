@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
+import { ProfileCompletionProvider } from "@/contexts/profile-completion-context";
 import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { ConfettiProvider } from '@/contexts/confetti-context';
@@ -150,18 +151,20 @@ export default function RootLayout({
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AuthProvider>
-              <ConfettiProvider>
-                <SocketProvider>
-                  <TooltipProvider>
-                    <SmoothScroll>
-                      {children}
-                      <Toaster position="top-right" richColors closeButton />
-                      <PWAInstaller />
-                      <CookieConsent />
-                    </SmoothScroll>
-                  </TooltipProvider>
-                </SocketProvider>
-              </ConfettiProvider>
+              <ProfileCompletionProvider>
+                <ConfettiProvider>
+                  <SocketProvider>
+                    <TooltipProvider>
+                      <SmoothScroll>
+                        {children}
+                        <Toaster position="top-right" richColors closeButton />
+                        <PWAInstaller />
+                        <CookieConsent />
+                      </SmoothScroll>
+                    </TooltipProvider>
+                  </SocketProvider>
+                </ConfettiProvider>
+              </ProfileCompletionProvider>
             </AuthProvider>
           </ThemeProvider>
         </QueryProvider>

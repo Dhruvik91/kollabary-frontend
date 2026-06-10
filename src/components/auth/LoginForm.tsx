@@ -136,7 +136,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
             </Button>
 
             {/* Divider */}
-            {/* {onGoogleAuth && (
+            {onGoogleAuth && (
                 <>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -175,7 +175,7 @@ export function LoginForm({ onSubmit, isLoading, error, onGoogleAuth }: LoginFor
                         Google
                     </Button>
                 </>
-            )} */}
+            )}
 
             {/* Sign Up Link */}
             <p className="text-center text-sm text-muted-foreground">

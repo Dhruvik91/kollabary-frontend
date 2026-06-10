@@ -32,6 +32,7 @@ import { AuctionDetailHeader } from '../components/AuctionDetailHeader';
 import { AuctionInfoGrid } from '../components/AuctionInfoGrid';
 import { BrandCard } from '../components/BrandCard';
 import { useActionConsent } from '@/hooks/use-action-consent';
+import { useProfileCompletion } from '@/contexts/profile-completion-context';
 
 import { messagingService } from '@/services/messaging.service';
 import { toast } from 'sonner';
@@ -44,6 +45,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const { user } = useAuth();
     const router = useRouter();
     const { triggerConfetti } = useConfetti();
+    const { checkActionAllowed } = useProfileCompletion();
 
     const { data: auction, isLoading, isError } = useAuctionDetail(id);
     const [api, setApi] = useState<CarouselApi>();
@@ -86,6 +88,9 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
     const rejectBidMutation = useRejectBid(id);
 
     const handlePlaceBid = async (data: CreateBidDto) => {
+        if (!checkActionAllowed('bid')) {
+            return;
+        }
         executeWithConsent(async () => {
             await placeBidMutation.mutateAsync(data);
             posthog.capture('bid_submitted', {

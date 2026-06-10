@@ -4,10 +4,11 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FRONTEND_ROUTES, COMPANY_EMAIL, COIN_URL, TIER_IMAGES } from '@/constants';
-import { ArrowRight, Sparkles, Play, ShieldCheck, Zap } from 'lucide-react';
+import { FRONTEND_ROUTES, COIN_URL, TIER_IMAGES } from '@/constants';
+import { ArrowRight, Sparkles, Play } from 'lucide-react';
 import Image from 'next/image';
 import gsap from 'gsap';
+import { CalendlyModal } from './CalendlyModal';
 
 /**
  * Premium Hero section with "Radiant Flux" aesthetic
@@ -187,18 +188,22 @@ export const Hero = () => {
                         </Link>
                         
                         <div className="hero-cta w-full sm:w-auto">
-                            <Button 
-                                size="lg" 
-                                variant="outline" 
-                                aria-label="Book a Demo"
-                                className="rounded-full px-12 h-16 text-lg font-bold glass-card-elevated border-primary/10 text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all hover:scale-105 active:scale-95"
-                                asChild
-                            >
-                                <a href={`mailto:${COMPANY_EMAIL}`} className="flex items-center gap-3">
-                                    <Play size={18} fill="currentColor" aria-hidden="true" />
-                                    Book a Demo
-                                </a>
-                            </Button>
+                            <CalendlyModal>
+                                {(openCalendly) => (
+                                    <Button
+                                        size="lg"
+                                        variant="outline"
+                                        aria-label="Book a Demo"
+                                        onClick={openCalendly}
+                                        className="rounded-full px-12 h-16 text-lg font-bold glass-card-elevated border-primary/10 text-foreground hover:bg-muted/50 w-full sm:w-auto transition-all hover:scale-105 active:scale-95"
+                                    >
+                                        <span className="flex items-center gap-3">
+                                            <Play size={18} fill="currentColor" aria-hidden="true" />
+                                            Book a Demo
+                                        </span>
+                                    </Button>
+                                )}
+                            </CalendlyModal>
                         </div>
                     </div>
                 </div>

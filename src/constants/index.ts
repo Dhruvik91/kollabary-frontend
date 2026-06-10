@@ -17,6 +17,7 @@ export const API_CONFIG = {
             google: '/user-auth/google',
             googleCallback: '/user-auth/google/callback',
             createInfluencer: '/user-auth/admin/create-influencer',
+            firebaseLogin: '/user-auth/firebase-login',
         },
         collaboration: {
             base: '/collaboration',
