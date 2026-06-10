@@ -3,8 +3,8 @@
 import React, { useState, useCallback } from 'react';
 import { PopupModal } from 'react-calendly';
 
-const CALENDLY_URL =
-    'https://calendly.com/dhruvikgondaliya91/30min?primary_color=ff0074';
+const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL
+    || 'https://calendly.com/dhruvikgondaliya91/30min?primary_color=ff0074';
 
 interface CalendlyModalProps {
     /** Render prop — receives an `open` callback to trigger the modal */
