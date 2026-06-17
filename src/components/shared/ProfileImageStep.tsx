@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import ImageCropModal from "./ImageCropModal";
 import { uploadService } from "@/services/upload.service";
 import { cn } from "@/lib/utils";
+import { MAX_UPLOAD_SIZE_BYTES, MAX_UPLOAD_SIZE_MB } from "@/constants";
 
 type ProfileImageStepProps = {
   value?: string;
@@ -48,12 +49,12 @@ export default function ProfileImageStep({
       return;
     }
 
-    // Validate size (must be under 5MB)
-    const maxSizeBytes = 5 * 1024 * 1024;
-    if (file.size > maxSizeBytes) {
-      setError("File is too large. Image must be under 5MB.");
+    // Validate size (must be under 30MB)
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      setError(`File is too large. Image must be under ${MAX_UPLOAD_SIZE_MB}MB.`);
       return;
     }
+
 
     // Revoke previous object URL if any
     if (selectedImage) {
@@ -239,7 +240,7 @@ export default function ProfileImageStep({
         ) : (
           <div className="flex items-center justify-center gap-1.5 text-muted-foreground text-xs font-medium">
             <ShieldCheck className="h-4 w-4 text-emerald-500" />
-            <span>Optimal sizes under 5MB (JPEG, PNG, WebP)</span>
+            <span>Optimal sizes under {MAX_UPLOAD_SIZE_MB}MB (JPEG, PNG, WebP)</span>
           </div>
         )}
 

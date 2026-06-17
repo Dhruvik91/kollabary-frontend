@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useUploadFile } from '@/hooks/queries/useUploadQueries';
+import { MAX_UPLOAD_SIZE_BYTES, MAX_UPLOAD_SIZE_MB } from '@/constants';
 
 const MotionImage = motion(Image);
 
@@ -29,9 +30,9 @@ export const ProfileImageUpload = ({
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validation (Max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            alert('File is too large. Max size is 5MB.');
+        // Validation (Max 30MB)
+        if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+            alert(`File is too large. Max size is ${MAX_UPLOAD_SIZE_MB}MB.`);
             return;
         }
 
@@ -135,9 +136,10 @@ export const ProfileImageUpload = ({
             <div className="text-center">
                 <p className="text-sm font-bold tracking-tight">Profile Photo</p>
                 <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mt-1">
-                    Up to 5MB • PNG, JPG, WebP
+                    Up to {MAX_UPLOAD_SIZE_MB}MB • PNG, JPG, WebP
                 </p>
             </div>
+
 
             <input
                 type="file"

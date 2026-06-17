@@ -12,9 +12,10 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { useUploadFile } from '@/hooks/queries/useUploadQueries';
+import { MAX_UPLOAD_SIZE_BYTES, MAX_UPLOAD_SIZE_MB } from '@/constants';
 import { toast } from 'sonner';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per APIS.md
+const MAX_FILE_SIZE = MAX_UPLOAD_SIZE_BYTES;
 const ACCEPTED_TYPES = 'image/*,.pdf,.doc,.docx,.txt';
 
 interface MessageInputProps {
@@ -54,7 +55,7 @@ export const MessageInput = ({
 
         if (file.size > MAX_FILE_SIZE) {
             toast.error('File too large', {
-                description: 'Maximum file size is 5MB.',
+                description: `Maximum file size is ${MAX_UPLOAD_SIZE_MB}MB.`,
             });
             return;
         }
@@ -167,7 +168,7 @@ export const MessageInput = ({
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="top" className="font-bold">
-                        Attach File (Max 5MB)
+                        Attach File (Max {MAX_UPLOAD_SIZE_MB}MB)
                     </TooltipContent>
                 </Tooltip>
 
