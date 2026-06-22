@@ -141,6 +141,7 @@ export const BottomNav = () => {
                         <Link
                             key={item.href}
                             href={item.href}
+                            prefetch={true}
                             className={cn(
                                 'relative flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors duration-200',
                                 active
@@ -203,6 +204,7 @@ export const BottomNav = () => {
                                         <Link
                                             key={item.href}
                                             href={item.href}
+                                            prefetch={false}
                                             className={cn(
                                                 "flex flex-col items-center justify-center p-4 rounded-2xl transition-all duration-300 gap-2",
                                                 active

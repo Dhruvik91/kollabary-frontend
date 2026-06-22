@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { forgotPasswordSchema, ForgotPasswordFormData } from '@/lib/validations/auth.validation';
 import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';

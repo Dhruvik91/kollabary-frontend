@@ -141,6 +141,7 @@ export const Navbar = () => {
                 <div className="flex items-center">
                     <Link
                         href="/"
+                        prefetch={true}
                         className="active:scale-95 transition-transform hover:opacity-80"
                     >
                         <Logo className="w-32 sm:w-40 md:w-44" />
@@ -156,6 +157,7 @@ export const Navbar = () => {
                                 key={link.name}
                                 href={link.href}
                                 scroll={false}
+                                prefetch={false}
                                 onClick={(e) => scrollToSection(e, link.href)}
                                 className="relative group px-4 py-2"
                             >
@@ -175,7 +177,7 @@ export const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex items-center gap-4">
-                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN}>
+                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} prefetch={true}>
                         <Button
                             variant="ghost"
                             size="sm"
@@ -184,7 +186,7 @@ export const Navbar = () => {
                             Sign In
                         </Button>
                     </Link>
-                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
+                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} prefetch={true}>
                         <Button
                             size="sm"
                             className="rounded-full px-8 font-black uppercase tracking-[0.15em] text-[10px] bg-primary text-primary-foreground hover:brightness-110 shadow-xl shadow-primary/20 border-none h-11 transition-all hover:scale-105 active:scale-95"
@@ -227,6 +229,7 @@ export const Navbar = () => {
                                                     key={link.name}
                                                     href={link.href}
                                                     scroll={false}
+                                                    prefetch={false}
                                                     className="group flex flex-col px-6 py-3.5 rounded-2xl hover:bg-primary/5 transition-all relative overflow-hidden"
                                                     onClick={(e) => {
                                                         scrollToSection(e, link.href);
@@ -252,7 +255,7 @@ export const Navbar = () => {
                                 </div>
 
                                 <div className="p-8 pt-4 border-t border-white/5 space-y-4">
-                                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block" prefetch={true} onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
                                             variant="ghost"
                                             className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest border border-primary hover:bg-primary/5 text-primary"
@@ -260,7 +263,7 @@ export const Navbar = () => {
                                             Sign In
                                         </Button>
                                     </Link>
-                                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="block" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="block" prefetch={true} onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
                                             className="w-full h-14 rounded-[2rem] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-2xl shadow-primary/20 hover:brightness-110 active:scale-[0.98]"
                                         >

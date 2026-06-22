@@ -48,6 +48,7 @@ export const DashboardHeader = () => {
             <div className="flex items-center gap-4">
                 <Link
                     href={profileHref}
+                    prefetch={false}
                     className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl hover:bg-accent/50 transition-all shrink-0"
                 >
                     <Avatar className="h-9 w-9 border border-border/50 shrink-0 shadow-sm">
@@ -89,7 +90,7 @@ export const DashboardHeader = () => {
 
                 <Tooltip delayDuration={300}>
                     <TooltipTrigger asChild>
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} className="flex-shrink-0">
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} prefetch={false} className="flex-shrink-0">
                             <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all cursor-pointer group">
                                 <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center p-1 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                                     <Image
@@ -150,6 +151,7 @@ export const DashboardHeader = () => {
                     <TooltipTrigger asChild>
                         <Link
                             href={FRONTEND_ROUTES.DASHBOARD.MESSAGES}
+                            prefetch={true}
                             className="relative inline-flex items-center justify-center h-10 w-10 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors group block lg:hidden"
                             aria-label="Messages"
                         >

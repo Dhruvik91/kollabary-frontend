@@ -96,7 +96,7 @@ export const PublicProfileHero = ({
 
                 <div className="md:pb-8 flex flex-col gap-3">
                     <div className="flex gap-3">
-                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="flex-1">
+                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="flex-1" prefetch={true}>
                             <Button size="lg" className="w-full rounded-2xl h-14 bg-primary text-primary-foreground font-black shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all text-base gap-3 border-none group">
                                 <Zap size={20} className="group-hover:animate-bounce" />
                                 Join Kollabary

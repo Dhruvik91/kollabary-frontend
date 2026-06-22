@@ -145,7 +145,7 @@ export const AdminUsersContainer = () => {
 
                 if (hasProfile) {
                     return (
-                        <Link href={`${FRONTEND_ROUTES.DASHBOARD.ADMIN.USER_DETAIL(profileId)}?role=${roleType}`} className="hover:opacity-80 transition-opacity">
+                        <Link href={`${FRONTEND_ROUTES.DASHBOARD.ADMIN.USER_DETAIL(profileId)}?role=${roleType}`} className="hover:opacity-80 transition-opacity" prefetch={false}>
                             {userContent}
                         </Link>
                     );
