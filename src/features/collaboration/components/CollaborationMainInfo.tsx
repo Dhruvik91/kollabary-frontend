@@ -77,7 +77,7 @@ export const CollaborationMainInfo = ({
                                 <div className="space-y-1">
                                     {(collaboration.agreedTerms as any).bidAmount && (
                                         <div className="text-primary font-bold text-base mb-1">
-                                            ${(collaboration.agreedTerms as any).bidAmount}
+                                            ₹{(collaboration.agreedTerms as any).bidAmount}
                                         </div>
                                     )}
                                     <div className="opacity-90">
