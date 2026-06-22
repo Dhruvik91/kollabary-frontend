@@ -1,15 +1,15 @@
-// const cspHeader = `
-//   default-src 'self';
-//   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://apis.google.com https://*.firebaseapp.com https://*.google.com https://*.posthog.com;
-//   style-src 'self' 'unsafe-inline';
-//   img-src 'self' data: blob: https://kollabary.s3.ap-south-1.amazonaws.com https://*.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.posthog.com https://lh3.googleusercontent.com https://assets.calendly.com;
-//   font-src 'self' data:;
-//   connect-src 'self' http://localhost:3008 ws://localhost:3008 https://*.kollabary.com wss://*.kollabary.com https://*.googleapis.com https://*.firebaseapp.com https://*.google-analytics.com https://*.googletagmanager.com https://*.posthog.com;
-//   frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com;
-//   object-src 'none';
-//   base-uri 'self';
-//   form-action 'self';
-// `.replace(/\s{2,}/g, ' ').trim();
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://apis.google.com https://*.firebaseapp.com https://*.google.com https://*.posthog.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: blob: https://kollabary.s3.ap-south-1.amazonaws.com https://*.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.posthog.com https://lh3.googleusercontent.com https://assets.calendly.com;
+  font-src 'self' data:;
+  connect-src 'self' http://localhost:3008 ws://localhost:3008 https://*.kollabary.com wss://*.kollabary.com https://*.googleapis.com https://*.firebaseapp.com https://*.google-analytics.com https://*.googletagmanager.com https://*.posthog.com;
+  frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+`.replace(/\s{2,}/g, ' ').trim();
 
 const permissionsPolicyHeader = "camera=(), microphone=(), geolocation=(), interest-cohort=()";
 
