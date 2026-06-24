@@ -64,7 +64,7 @@ export const CollaborationListContainer = () => {
                 icon={Handshake}
                 action={
                     !isInfluencer && (
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS}>
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS} prefetch={true}>
                             <Button className="h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
                                 <span className="uppercase tracking-widest text-xs">Find Partners</span>
                                 <ArrowUpRight size={20} className="stroke-[3]" />

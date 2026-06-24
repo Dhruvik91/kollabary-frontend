@@ -109,7 +109,7 @@ export const HowItWorks = () => {
                         whileTap={{ scale: 0.95 }}
                         className="relative z-10"
                     >
-                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP}>
+                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} prefetch={true}>
                             <button className="bg-primary text-primary-foreground font-black px-8 py-4 md:px-12 md:py-6 rounded-full shadow-2xl shadow-primary/20 text-base md:text-lg uppercase tracking-wider md:tracking-widest hover:brightness-110 transition-all whitespace-nowrap">
                                 Get Started Now
                             </button>

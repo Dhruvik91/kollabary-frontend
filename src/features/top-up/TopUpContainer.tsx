@@ -125,7 +125,7 @@ export const TopUpContainer = () => {
                 icon={Coins}
                 className="relative z-10"
                 action={
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS} prefetch={false}>
                         <Button className="h-14 px-8 rounded-2xl bg-gradient-to-r from-secondary to-secondary/80 hover:scale-105 active:scale-95 text-white font-black transition-all gap-3 border-none shadow-xl shadow-secondary/20">
                             <span className="uppercase tracking-[0.2em] text-[11px]">Invite & Earn </span>
                             <ArrowUpRight size={20} />

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Bid, BidStatus } from '@/types/auction.types';
 import { Button } from '@/components/ui/button';
-import { Check, X, User, IndianRupee, MessageCircle, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Check, X, User, IndianRupee, AlertTriangle, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -26,6 +26,7 @@ interface BidListProps {
 export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = true }: BidListProps) => {
     const router = useRouter();
     const [rejectingBidId, setRejectingBidId] = useState<string | null>(null);
+    const [expandedBids, setExpandedBids] = useState<Record<string, boolean>>({});
 
     if (bids.length === 0) {
         return (
@@ -46,6 +47,13 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
         }
     };
 
+    const toggleExpanded = (bidId: string) => {
+        setExpandedBids(prev => ({
+            ...prev,
+            [bidId]: !prev[bidId]
+        }));
+    };
+
     return (
         <div className="space-y-4">
             {bids.map((bid, index) => {
@@ -55,6 +63,9 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                 const influencerName = influencerProfile?.fullName || profile?.fullName || profile?.username || 'Anonymous Influencer';
                 const avatarUrl = influencerProfile?.avatarUrl || profile?.avatarUrl;
                 const influencerId = influencerProfile?.id || profile?.id;
+                
+                const isExpanded = !!expandedBids[bid.id];
+                const isLongProposal = bid.proposal && bid.proposal.length > 60;
 
                 return (
                     <motion.div
@@ -72,7 +83,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                             }`} />
 
                         <div className="flex flex-col gap-5 relative z-10">
-                            {/* Header: Avatar, Info, Status */}
+                            {/* Header: Avatar, Info */}
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex items-center gap-4">
                                     <div
@@ -99,7 +110,7 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                         >
                                             {influencerName}
                                         </h4>
-                                        <div className="flex items-center gap-2 mt-1">
+                                        <div className="flex flex-wrap items-center gap-2 mt-1">
                                             <Tooltip delayDuration={300}>
                                                 <TooltipTrigger asChild>
                                                     <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 border border-primary/20 cursor-help">
@@ -111,23 +122,33 @@ export const BidList = ({ bids, onAccept, onReject, isProcessing, showActions = 
                                                     Proposed budget for this collaboration
                                                 </TooltipContent>
                                             </Tooltip>
+
+                                            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] border transition-all duration-300 ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500/10 text-green-600 border-green-500/10' :
+                                                bid.status === BidStatus.REJECTED ? 'bg-red-500/10 text-red-600 border-red-500/10' :
+                                                    'bg-zinc-100/50 dark:bg-zinc-800/50 text-muted-foreground/80 border-border/10'
+                                                }`}>
+                                                <div className={`h-1.5 w-1.5 rounded-full ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500 animate-pulse' : bid.status === BidStatus.PENDING ? 'bg-primary/50' : 'bg-muted-foreground/30'}`} />
+                                                {bid.status}
+                                            </div>
+
+                                            {isLongProposal && (
+                                                <button
+                                                    onClick={() => toggleExpanded(bid.id)}
+                                                    className="flex items-center px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 active:scale-95 transition-all duration-300"
+                                                >
+                                                    {isExpanded ? 'Read Less' : 'Read More'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
-                                </div>
-                                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.15em] border-2 backdrop-blur-md transition-all duration-300 overflow-hidden ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500/10 text-green-600 border-green-500/10' :
-                                    bid.status === BidStatus.REJECTED ? 'bg-red-500/10 text-red-600 border-red-500/10' :
-                                        'bg-zinc-100/50 dark:bg-zinc-800/50 text-muted-foreground/80 border-border/10'
-                                    }`}>
-                                    <div className={`h-1.5 w-1.5 rounded-full ${bid.status === BidStatus.ACCEPTED ? 'bg-green-500 animate-pulse' : bid.status === BidStatus.PENDING ? 'bg-primary/50' : 'bg-muted-foreground/30'}`} />
-                                    {bid.status}
                                 </div>
                             </div>
 
                             {/* Proposal Body */}
                             <div className="relative group/proposal">
                                 <div className="absolute -left-3 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/40 to-transparent rounded-full opacity-40 group-hover:opacity-100 transition-all duration-300" />
-                                <p className="text-xs text-foreground/80 leading-relaxed font-medium italic pl-4 line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
-                                    "{bid.proposal}"
+                                <p className={`text-xs text-foreground/80 leading-relaxed font-medium italic pl-4 transition-all duration-500 ${isExpanded ? 'line-clamp-none' : 'line-clamp-3'}`}>
+                                    &quot;{bid.proposal}&quot;
                                 </p>
                             </div>
 

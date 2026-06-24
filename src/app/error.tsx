@@ -61,7 +61,7 @@ export default function Error({
                     </Button>
 
                     <Button asChild variant="ghost" className="w-full h-15 rounded-2xl hover:bg-muted transition-all">
-                        <Link href="/">
+                        <Link href="/" prefetch={false}>
                             <Home className="mr-2 w-5 h-5" />
                             Back to Safety
                         </Link>

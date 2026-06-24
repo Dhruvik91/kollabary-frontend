@@ -93,7 +93,7 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                     </div>
                 </CardContent>
                 <CardFooter className="pt-2">
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATION_DETAIL(collaboration.id)} className="w-full">
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.COLLABORATION_DETAIL(collaboration.id)} className="w-full" prefetch={false}>
                         <Button size="sm" className="w-full justify-between group">
                             View Details
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

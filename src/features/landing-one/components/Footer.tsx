@@ -27,7 +27,7 @@ export function Footer() {
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12">
                 {/* Branding Block */}
                 <div className="md:col-span-5 flex flex-col items-start text-left gap-4">
-                    <Link href="/" className="flex items-center group focus-visible:outline-none mb-2">
+                    <Link href="/" prefetch={true} className="flex items-center group focus-visible:outline-none mb-2">
                         <Logo className="w-32 sm:w-40" />
                     </Link>
                     <p className="text-xs md:text-sm text-muted-foreground font-semibold max-w-sm leading-relaxed">
@@ -85,7 +85,7 @@ export function Footer() {
                     <ul className="flex flex-col gap-2">
                         {legalLinks.map((link) => (
                             <li key={link.name}>
-                                <Link href={link.href} className="text-xs md:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
+                                <Link href={link.href} prefetch={false} className="text-xs md:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
                                     {link.name}
                                 </Link>
                             </li>

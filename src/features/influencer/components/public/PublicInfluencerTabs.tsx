@@ -229,7 +229,7 @@ export const PublicInfluencerTabs = ({
                                 <CarouselContent className="-ml-4">
                                     {brandPartners.map((brand: any) => (
                                         <CarouselItem key={brand.id} className="pl-4 basis-full sm:basis-1/2 md:basis-1/3">
-                                            <Link href={`/b/${brand.id}`} className="block h-full group/card">
+                                            <Link href={`/b/${brand.id}`} className="block h-full group/card" prefetch={false}>
                                                 <div className="flex items-center gap-4 p-5 bg-card/30 border border-border/50 rounded-[2.2rem] glass-card hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 hover:scale-[1.02]">
                                                     <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 overflow-hidden relative border-border/50 group-hover/card:border-primary/50 transition-all">
                                                         {brand.avatarUrl ? (

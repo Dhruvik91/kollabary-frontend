@@ -63,7 +63,7 @@ export const CollaborationPartnerCard = ({
             </CardHeader>
             <CardContent className="space-y-4">
                 {profileLink ? (
-                    <Link href={profileLink} className="block group/partner">
+                    <Link href={profileLink} className="block group/partner" prefetch={false}>
                         {PartnerInfo}
                     </Link>
                 ) : (

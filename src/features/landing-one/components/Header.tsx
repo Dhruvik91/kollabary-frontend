@@ -59,6 +59,7 @@ export function Header() {
                 {/* Desktop Brand Logo */}
                 <Link
                     href="/"
+                    prefetch={true}
                     className="active:scale-95 transition-transform hover:opacity-80"
                 >
                     <Logo className="w-32 sm:w-40 md:w-44" />
@@ -83,7 +84,7 @@ export function Header() {
                 {/* Desktop CTAs & Theme Toggle (Login / Signup) */}
                 <div className="hidden md:flex items-center gap-4">
                     <ThemeToggle />
-                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} passHref>
+                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} passHref prefetch={true}>
                         <Button
                             variant="ghost"
                             size="sm"
@@ -92,7 +93,7 @@ export function Header() {
                             Sign In
                         </Button>
                     </Link>
-                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} passHref>
+                    <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} passHref prefetch={true}>
                         <Button
                             size="sm"
                             className="rounded-full px-8 font-black uppercase tracking-[0.15em] text-[10px] bg-primary text-primary-foreground hover:brightness-110 shadow-xl shadow-primary/20 border-none h-11 transition-all hover:scale-105 active:scale-95 cursor-pointer"
@@ -144,7 +145,7 @@ export function Header() {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col gap-3">
-                            <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref className="w-full">
+                            <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref prefetch={true} className="w-full">
                                 <Button
                                     variant="outline"
                                     onClick={() => setIsMobileMenuOpen(false)}
@@ -154,7 +155,7 @@ export function Header() {
                                     Join as Brand
                                 </Button>
                             </Link>
-                            <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref className="w-full">
+                            <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref prefetch={true} className="w-full">
                                 <Button
                                     variant="default"
                                     onClick={() => setIsMobileMenuOpen(false)}

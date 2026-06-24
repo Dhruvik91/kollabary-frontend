@@ -77,7 +77,7 @@ export const BrandAuctionList = ({ auctions }: BrandAuctionListProps) => {
                                 </div>
                             </div>
 
-                            <Link href={FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(auction.id)} className="block pt-2">
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.AUCTION_DETAIL(auction.id)} className="block pt-2" prefetch={false}>
                                 <Button>
                                     View Details
                                     <ChevronRight size={18} />

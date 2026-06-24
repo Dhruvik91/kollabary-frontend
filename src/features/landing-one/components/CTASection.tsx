@@ -44,7 +44,7 @@ export function CTASection() {
 
                     {/* Twin CTA Actions */}
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref className="w-full sm:w-auto">
+                        <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref prefetch={true} className="w-full sm:w-auto">
                             <Button
                                 variant="default"
                                 className="w-full sm:w-auto font-extrabold bg-gradient-to-r from-primary to-primary-hover hover:scale-[1.02] text-white rounded-xl shadow-lg shadow-primary/20 py-6 px-8 text-base flex items-center justify-center gap-2 cursor-pointer transition-all duration-300"
@@ -54,7 +54,7 @@ export function CTASection() {
                             </Button>
                         </Link>
                         
-                        <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref className="w-full sm:w-auto">
+                        <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref prefetch={true} className="w-full sm:w-auto">
                             <Button
                                 variant="outline"
                                 className="w-full sm:w-auto font-extrabold border-2 border-border/80 hover:border-primary/40 hover:bg-primary/5 hover:scale-[1.02] rounded-xl py-6 px-8 text-base flex items-center justify-center gap-2 cursor-pointer transition-all duration-300"

@@ -178,7 +178,7 @@ export const Hero = () => {
 
                     {/* Ultra-Premium CTAs */}
                     <div className="flex flex-col sm:flex-row items-center gap-8 w-full sm:w-auto">
-                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} className="hero-cta group relative w-full sm:w-auto" aria-label="Join the Network">
+                        <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} prefetch={true} className="hero-cta group relative w-full sm:w-auto" aria-label="Join the Network">
                             <div className="absolute -inset-1 bg-linear-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" aria-hidden="true"></div>
                             <Button size="lg" className="relative rounded-full px-12 h-16 text-lg font-black bg-primary text-white hover:opacity-90 shadow-2xl w-full sm:w-auto border-none transition-all hover:scale-105 active:scale-95 overflow-hidden">
                                 <span className="relative z-10 flex items-center gap-3">
