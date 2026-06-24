@@ -126,7 +126,7 @@ export const PublicInfluencerHero = ({
                 {/* Actions Section */}
                 <div className="md:border-l border-border/50 md:pl-12 flex flex-col gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="flex-1">
+                        <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="flex-1" prefetch={true}>
                             <Button size="lg" className="w-full rounded-2xl h-16 bg-primary text-primary-foreground font-black shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all text-base gap-3 group relative overflow-hidden px-8">
                                 <Zap size={20} className="group-hover:fill-current transition-all" />
                                 <span className="relative z-10">Start Collaboration</span>

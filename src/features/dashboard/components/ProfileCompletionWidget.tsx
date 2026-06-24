@@ -170,7 +170,7 @@ export const ProfileCompletionWidget = ({ user, influencerProfile }: ProfileComp
                             </div>
                         </div>
 
-                        <Link href={editUrl}>
+                        <Link href={editUrl} prefetch={false}>
                             <Button className="h-12 px-6 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 group mt-2">
                                 Resume Profile Setup
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

@@ -52,7 +52,7 @@ export function ForBrands() {
                     </ul>
 
                     {/* CTA */}
-                    <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref>
+                    <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=brand`} passHref prefetch={true}>
                         <Button
                             variant="default"
                             className="font-bold bg-primary hover:bg-primary/95 text-white rounded-xl shadow-lg shadow-primary/15 py-5 px-7 flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.02]"

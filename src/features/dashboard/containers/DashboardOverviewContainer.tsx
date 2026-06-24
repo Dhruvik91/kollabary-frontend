@@ -148,14 +148,14 @@ export const DashboardOverviewContainer = () => {
                 icon={Trophy}
                 action={
                     isInfluencer ? (
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.BRANDS} className="w-full sm:w-auto">
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.BRANDS} className="w-full sm:w-auto" prefetch={true}>
                             <Button className="w-full sm:w-auto h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
                                 <span className="uppercase tracking-widest text-xs">Explore Brands</span>
                                 <Rocket size={20} className="stroke-[3]" />
                             </Button>
                         </Link>
                     ) : (
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS} className="w-full sm:w-auto">
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS} className="w-full sm:w-auto" prefetch={true}>
                             <Button className="w-full sm:w-auto h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
                                 <span className="uppercase tracking-widest text-xs">Explore Creators</span>
                                 <ArrowUpRight size={20} className="stroke-[3]" />
@@ -208,10 +208,10 @@ export const DashboardOverviewContainer = () => {
 
                         {/* Wallet & Referral Cards Row */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS}>
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} prefetch={false}>
                                 <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                             </Link>
-                            <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                            <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS} prefetch={false}>
                                 <ReferralCard
                                     referralCode={referralStats?.referralCode || ''}
                                     totalReferrals={referralStats?.totalReferrals || 0}
@@ -268,10 +268,10 @@ export const DashboardOverviewContainer = () => {
 
                     {/* Wallet & Referral Cards Row for USER */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS}>
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.EARNINGS} prefetch={false}>
                             <WalletCard balance={wallet?.balance || 0} loading={isWalletLoading} className="h-full" />
                         </Link>
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS}>
+                        <Link href={FRONTEND_ROUTES.DASHBOARD.REFERRALS} prefetch={false}>
                             <ReferralCard
                                 referralCode={referralStats?.referralCode || ''}
                                 totalReferrals={referralStats?.totalReferrals || 0}
@@ -292,7 +292,7 @@ export const DashboardOverviewContainer = () => {
                         <CardContent className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {quickActions.map((action) => (
-                                    <Link key={action.href} href={action.href}>
+                                    <Link key={action.href} href={action.href} prefetch={false}>
                                         <motion.div
                                             whileHover={{ y: -4, scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}

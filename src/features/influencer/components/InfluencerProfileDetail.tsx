@@ -315,13 +315,13 @@ export const InfluencerProfileDetail = ({
                                     <div className="w-full md:w-auto flex items-center gap-3 sm:gap-4 self-end md:self-auto">
                                         {isOwner ? (
                                             <>
-                                                <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT} className="flex-1 md:flex-none">
+                                                <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCER_EDIT} className="flex-1 md:flex-none" prefetch={false}>
                                                     <Button className="w-full md:w-auto px-6 sm:px-8 h-12 sm:h-14 bg-primary text-primary-foreground rounded-2xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
                                                         <AlignLeft size={18} />
                                                         Edit Profile
                                                     </Button>
                                                 </Link>
-                                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                                <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS} prefetch={false}>
                                                     <Button
                                                         variant="outline"
                                                         className="h-12 sm:h-14 w-12 sm:w-14 rounded-2xl border-border/50 hover:bg-primary/5 hover:border-primary/30 transition-all flex items-center justify-center"

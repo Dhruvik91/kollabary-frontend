@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kollabary-v1781074052261';
+const CACHE_NAME = 'kollabary-v1782112708160';
 const urlsToCache = [
   '/',
   '/offline',

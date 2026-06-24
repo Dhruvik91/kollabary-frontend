@@ -98,7 +98,7 @@ const NavItem = ({ href, icon: Icon, label, isCollapsed, isActive, badge }: NavI
     );
 
     return (
-        <Link href={href} className="block group">
+        <Link href={href} className="block group" prefetch={true}>
             {isCollapsed ? (
                 <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
@@ -213,7 +213,7 @@ export const Sidebar = ({
         <div className="flex flex-col h-full overflow-hidden">
             {/* Sidebar Header */}
             <div className="h-28 flex items-center justify-center border-b border-border/50 shrink-0 px-3">
-                <Link href="/overview" className="active:scale-95 transition-transform">
+                <Link href="/overview" className="active:scale-95 transition-transform" prefetch={true}>
                     {isCollapsed ? (
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
@@ -313,7 +313,7 @@ export const Sidebar = ({
                             className="w-56 p-2 rounded-2xl border-border/50 bg-background/95 backdrop-blur-sm shadow-xl"
                         >
                             <div className="space-y-1">
-                                <Link href={profilePath}>
+                                <Link href={profilePath} prefetch={false}>
                                     <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                                         <User size={18} className="text-muted-foreground" />
                                         Profile
@@ -321,7 +321,7 @@ export const Sidebar = ({
                                 </Link>
                                 {
                                     (user.role === UserRole.INFLUENCER) && (
-                                        <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS}>
+                                        <Link href={FRONTEND_ROUTES.DASHBOARD.SETTINGS} prefetch={false}>
                                             <div className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                                                 <Settings size={18} className="text-muted-foreground" />
                                                 Settings

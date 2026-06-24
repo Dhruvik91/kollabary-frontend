@@ -323,7 +323,7 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
                             >
                                 Cancel
                             </Button>
-                            <Link href={editUrl} className="flex-1">
+                            <Link href={editUrl} className="flex-1" prefetch={false}>
                                 <Button 
                                     onClick={() => setModalState({ isOpen: false, action: null })}
                                     className="h-12 w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] transition-all gap-2"

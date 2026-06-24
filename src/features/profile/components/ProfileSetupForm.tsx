@@ -131,7 +131,7 @@ export const ProfileSetupForm = ({
         const fieldsToValidate = currentStep === 0
             ? ['fullName', 'username', 'location', 'bio', 'categories']
             : currentStep === 1
-                ? ['website', 'industry', 'companySize', 'contactEmail', 'contactPhone', 'brandTone']
+                ? ['website', 'companySize', 'contactEmail', 'contactPhone']
                 : currentStep === 2
                     ? ['socials']
                     : ['avatarUrl'];
@@ -512,22 +512,7 @@ export const ProfileSetupForm = ({
                                                 )}
                                             />
 
-                                            <FormField
-                                                control={form.control}
-                                                name="industry"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="font-bold flex items-center gap-2">
-                                                            <LayoutGrid size={14} className="text-primary" />
-                                                            Industry
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="e.g. Fashion, Tech" {...field} className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all" />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
+
 
                                             <FormField
                                                 control={form.control}
@@ -592,26 +577,7 @@ export const ProfileSetupForm = ({
                                             />
                                         </div>
 
-                                        <FormField
-                                            control={form.control}
-                                            name="brandTone"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="font-bold flex items-center gap-2">
-                                                        <Sparkles size={14} className="text-primary" />
-                                                        Brand Tone / Voice
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Textarea
-                                                            placeholder="Describe your brand's voice (e.g. Professional, Fun, Minimalist)..."
-                                                            {...field}
-                                                            className="min-h-[80px] rounded-2xl bg-background/50 border-border/50 focus:bg-background transition-all resize-none px-4 py-3"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+
                                     </div>
                                 )}
 

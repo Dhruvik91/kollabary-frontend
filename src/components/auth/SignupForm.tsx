@@ -360,6 +360,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                 Already have an account?{' '}
                 <Link
                     href={FRONTEND_ROUTES.AUTH.LOGIN}
+                    prefetch={true}
                     className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
                     tabIndex={isLoading ? -1 : 0}
                 >

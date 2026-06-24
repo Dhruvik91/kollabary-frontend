@@ -48,7 +48,7 @@ export const BrandCard = ({ brandId, brandName, avatarLetter, avatarUrl, onConta
                 </div>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                    <Link href={FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(brandId)} className="w-full sm:w-auto">
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(brandId)} className="w-full sm:w-auto" prefetch={false}>
                         <Button 
                             variant="outline" 
                             className="w-full sm:w-auto border-2 border-border text-foreground hover:bg-muted flex items-center gap-2 rounded-xl h-12 px-6 font-black uppercase text-xs tracking-widest transition-all active:scale-95 group shadow-sm bg-background"

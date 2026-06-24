@@ -106,7 +106,7 @@ export const AuctionCreateContainer = () => {
                             <ClipboardCheck size={16} />
                             View Requirements
                         </Button>
-                        <Link href="/profile/edit">
+                        <Link href="/profile/edit" prefetch={false}>
                             <Button className="h-12 rounded-xl px-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 w-full">
                                 Complete Profile
                             </Button>

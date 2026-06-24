@@ -140,7 +140,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
 
                     {isOwner && (
                         <div className="md:pb-4 flex items-center gap-3">
-                            <Link href="/profile/edit">
+                            <Link href="/profile/edit" prefetch={false}>
                                 <Button className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-bold shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all gap-2">
                                     <PencilLine size={18} />
                                     Edit Profile

@@ -30,7 +30,7 @@ export const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-16 mb-24">
                     <div className="lg:col-span-2 space-y-8">
                         <div className="flex items-center">
-                            <Link href="/" className="active:scale-95 transition-transform">
+                            <Link href="/" className="active:scale-95 transition-transform" prefetch={true}>
                                 <Logo className="w-32 sm:w-40 md:w-44" />
                             </Link>
                         </div>
@@ -68,7 +68,7 @@ export const Footer = () => {
                         <ul className="grid grid-cols-1 gap-3">
                             {legalLinks.map((link) => (
                                 <li key={link.name}>
-                                    <Link href={link.href} className="flex items-center justify-between px-5 py-4 rounded-2xl glass-chip border-transparent hover:border-primary/10 hover:bg-primary/5 transition-all group">
+                                    <Link href={link.href} prefetch={false} className="flex items-center justify-between px-5 py-4 rounded-2xl glass-chip border-transparent hover:border-primary/10 hover:bg-primary/5 transition-all group">
                                         <span className="font-bold text-xs tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">{link.name}</span>
                                         <div className="w-6 h-6 rounded-lg bg-primary/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
                                             <Rocket size={12} className="text-primary" />

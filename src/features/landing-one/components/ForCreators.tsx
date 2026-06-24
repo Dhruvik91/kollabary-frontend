@@ -114,7 +114,7 @@ export function ForCreators() {
                     </ul>
 
                     {/* CTA */}
-                    <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref>
+                    <Link href={`${FRONTEND_ROUTES.AUTH.SIGNUP}?role=creator`} passHref prefetch={true}>
                         <Button
                             variant="default"
                             className="font-bold bg-primary hover:bg-primary/95 text-white rounded-xl shadow-lg shadow-primary/15 py-5 px-7 flex items-center gap-2 cursor-pointer transition-transform hover:scale-[1.02]"

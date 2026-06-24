@@ -81,7 +81,7 @@ export const PublicInfluencerSidebar = ({
                         </div>
                     </div>
 
-                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block group/btn">
+                    <Link href={FRONTEND_ROUTES.AUTH.LOGIN} className="block group/btn" prefetch={true}>
                         <Button className="w-full rounded-[1.5rem] h-14 font-black uppercase tracking-widest text-xs gap-3 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden">
                             <Zap size={16} className="group-hover/btn:rotate-12 transition-transform" />
                             Request Collaboration
