@@ -1,10 +1,42 @@
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://apis.google.com https://*.firebaseapp.com https://*.google.com https://*.posthog.com;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline'
+    https://*.googletagmanager.com
+    https://*.google-analytics.com
+    https://apis.google.com
+    https://*.firebaseapp.com
+    https://*.google.com
+    https://*.posthog.com
+    https://googleads.g.doubleclick.net
+    https://www.googleadservices.com;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob: https://kollabary.s3.ap-south-1.amazonaws.com https://*.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.posthog.com https://lh3.googleusercontent.com https://assets.calendly.com;
+  img-src 'self' data: blob:
+    https://kollabary.s3.ap-south-1.amazonaws.com
+    https://*.googletagmanager.com
+    https://*.google-analytics.com
+    https://*.google.com
+    https://*.posthog.com
+    https://lh3.googleusercontent.com
+    https://assets.calendly.com
+    https://googleads.g.doubleclick.net
+    https://www.googleadservices.com
+    https://ad.doubleclick.net;
   font-src 'self' data:;
-  connect-src 'self' http://localhost:3008 ws://localhost:3008 https://*.kollabary.com wss://*.kollabary.com https://*.googleapis.com https://*.firebaseapp.com https://*.google-analytics.com https://*.googletagmanager.com https://*.posthog.com;
+  connect-src 'self'
+    http://localhost:3008
+    ws://localhost:3008
+    https://*.kollabary.com
+    wss://*.kollabary.com
+    https://*.googleapis.com
+    https://*.firebaseapp.com
+    https://*.google-analytics.com
+    https://*.googletagmanager.com
+    https://*.posthog.com
+    https://www.google.com
+    https://ad.doubleclick.net
+    https://googleads.g.doubleclick.net
+    https://www.googleadservices.com
+    https://kollabary.s3.ap-south-1.amazonaws.com;
   frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com;
   object-src 'none';
   base-uri 'self';
