@@ -8,6 +8,7 @@ import { SocketProvider } from "@/contexts/socket-context";
 import { Toaster } from "sonner";
 import { ConfettiProvider } from '@/contexts/confetti-context';
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
+import { PushNotificationPrompt } from "@/components/pwa/PushNotificationPrompt";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScroll } from "@/components/shared/SmoothScroll";
@@ -159,6 +160,7 @@ export default function RootLayout({
                         {children}
                         <Toaster position="top-right" richColors closeButton />
                         <PWAInstaller />
+                        <PushNotificationPrompt />
                         <CookieConsent />
                       </SmoothScroll>
                     </TooltipProvider>

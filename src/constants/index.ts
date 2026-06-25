@@ -245,6 +245,8 @@ export const AUTH_STORAGE_KEYS = {
 export const PWA_STORAGE_KEYS = {
     INSTALL_DISMISSED: 'pwa-install-dismissed',
     INSTALLED: 'pwa-installed',
+    PUSH_PROMPT_DISMISSED: 'push-prompt-dismissed',
+    PUSH_SUBSCRIBED: 'push-subscribed',
 } as const;
 
 export const CONSENT_STORAGE_KEYS = {
