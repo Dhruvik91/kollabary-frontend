@@ -53,7 +53,6 @@ import ProfileImageStep from '@/components/shared/ProfileImageStep';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { INFLUENCER_CATEGORIES } from '@/constants/influencer.constants';
 import { MultiSelect } from '@/components/ui/multi-select';
-import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
 import { SOCIAL_PLATFORMS } from '@/constants';
 
 import { influencerProfileSchema as profileSchema, InfluencerProfileSchemaType } from '@/lib/validations/influencer.validation';
@@ -544,11 +543,11 @@ export const InfluencerProfileForm = ({
                                                         Full Address
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <LocationAutocomplete
-                                                            value={field.value}
-                                                            onChange={field.onChange}
-                                                            disabled={isLoading}
+                                                        <Input
                                                             placeholder="e.g. 123 Main St, San Francisco, CA"
+                                                            {...field}
+                                                            disabled={isLoading}
+                                                            className="h-12 rounded-xl bg-background/50"
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
