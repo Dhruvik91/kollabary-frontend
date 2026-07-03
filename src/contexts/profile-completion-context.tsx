@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useAuth } from '@/contexts/auth-context';
 import { useMyInfluencerProfile } from '@/hooks/queries/useInfluencerQueries';
+import { useMyProfile } from '@/hooks/queries/useProfileQueries';
 import { UserRole } from '@/types/auth.types';
 import { 
     User, 
@@ -28,6 +29,14 @@ export type ActionType = 'pitch' | 'bid' | 'collab' | 'createAuction';
 
 interface ProfileCompletionContextType {
     percentage: number;
+    tasks: {
+        key: string;
+        label: string;
+        completed: boolean;
+        weight: number;
+        icon: any;
+    }[];
+    isInfluencer: boolean;
     checkActionAllowed: (action: ActionType) => boolean;
     showGatingModal: (action: ActionType) => void;
 }
@@ -67,7 +76,10 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
     
     // Fetch detailed profile for influencers
     const { data: influencerProfile } = useMyInfluencerProfile(isInfluencer && !!user);
-    const profile = (isInfluencer ? influencerProfile : user?.profile) as any;
+    // Fetch detailed profile for brand/regular users
+    const { data: brandProfile } = useMyProfile(!isInfluencer && !!user);
+    
+    const profile = (isInfluencer ? influencerProfile : (brandProfile || user?.profile)) as any;
 
     const [modalState, setModalState] = useState<{
         isOpen: boolean;
@@ -81,36 +93,38 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
         if (!user) return [];
 
         if (isInfluencer) {
-            const hasPlatforms = profile?.platforms && Object.values(profile.platforms).some(
-                (p: any) => p && p.handle && p.handle.trim() !== ''
+            const hasPlatforms = profile?.platforms && (
+                Array.isArray(profile.platforms) 
+                    ? profile.platforms.some((p: any) => p && p.handle && typeof p.handle === 'string' && p.handle.trim() !== '')
+                    : Object.values(profile.platforms).some((p: any) => p && p.handle && typeof p.handle === 'string' && p.handle.trim() !== '')
             );
 
             return [
                 {
                     key: 'basic',
                     label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!(profile?.user?.username || user?.username || profile?.username),
+                    completed: !!profile?.fullName?.trim() && !!(profile?.user?.username || user?.username || profile?.username)?.trim(),
                     weight: 30,
                     icon: User,
                 },
                 {
                     key: 'photo',
                     label: 'Profile Photo',
-                    completed: !!profile?.avatarUrl,
+                    completed: !!profile?.avatarUrl?.trim(),
                     weight: 15,
                     icon: Image,
                 },
                 {
                     key: 'bio',
                     label: 'Bio',
-                    completed: !!profile?.bio,
+                    completed: !!profile?.bio?.trim(),
                     weight: 15,
                     icon: FileText,
                 },
                 {
                     key: 'location',
                     label: 'Location',
-                    completed: !!profile?.locationCity || !!profile?.locationCountry,
+                    completed: !!profile?.locationCity?.trim() && !!profile?.locationCountry?.trim() && !!profile?.address?.trim(),
                     weight: 10,
                     icon: MapPin,
                 },
@@ -141,28 +155,28 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
                 {
                     key: 'basic',
                     label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!profile?.username,
+                    completed: !!profile?.fullName?.trim() && !!(profile?.user?.username || user?.username || profile?.username)?.trim(),
                     weight: 40,
                     icon: User,
                 },
                 {
                     key: 'photo',
                     label: 'Profile Photo',
-                    completed: !!profile?.avatarUrl || !!profile?.profileImage,
+                    completed: !!profile?.avatarUrl?.trim() || !!profile?.profileImage?.trim(),
                     weight: 15,
                     icon: Image,
                 },
                 {
                     key: 'bio',
                     label: 'Bio',
-                    completed: !!profile?.bio,
+                    completed: !!profile?.bio?.trim(),
                     weight: 15,
                     icon: FileText,
                 },
                 {
                     key: 'location',
                     label: 'Location',
-                    completed: !!profile?.location,
+                    completed: !!profile?.location?.trim(),
                     weight: 10,
                     icon: MapPin,
                 },
@@ -176,7 +190,7 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
                 {
                     key: 'website',
                     label: 'Website',
-                    completed: !!profile?.website,
+                    completed: !!profile?.website?.trim(),
                     weight: 10,
                     icon: Globe,
                 },
@@ -244,7 +258,7 @@ export const ProfileCompletionProvider = ({ children }: { children: React.ReactN
     const editUrl = isInfluencer ? '/influencer/profile/edit' : '/profile/edit';
 
     return (
-        <ProfileCompletionContext.Provider value={{ percentage, checkActionAllowed, showGatingModal }}>
+        <ProfileCompletionContext.Provider value={{ percentage, tasks, isInfluencer, checkActionAllowed, showGatingModal }}>
             {children}
 
             <AnimatedModal

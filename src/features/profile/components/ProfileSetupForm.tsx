@@ -237,7 +237,7 @@ export const ProfileSetupForm = ({
         }
 
         const values = form.getValues();
-        
+
         // Transform socials array back to object for backend
         const socialLinks: Record<string, string> = {};
         (values.socials || []).forEach(item => {

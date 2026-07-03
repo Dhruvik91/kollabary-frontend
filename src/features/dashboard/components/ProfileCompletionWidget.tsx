@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { UserRole } from '@/types/auth.types';
+import { useProfileCompletion } from '@/contexts/profile-completion-context';
 
 interface ProfileCompletionWidgetProps {
     user: any;
@@ -27,108 +27,9 @@ interface ProfileCompletionWidgetProps {
 }
 
 export const ProfileCompletionWidget = ({ user, influencerProfile }: ProfileCompletionWidgetProps) => {
-    const isInfluencer = user?.role === UserRole.INFLUENCER;
-    const profile = isInfluencer ? influencerProfile : user?.profile;
-
-    const tasks = useMemo(() => {
-        if (!user) return [];
-
-        if (isInfluencer) {
-            const hasPlatforms = profile?.platforms && Object.values(profile.platforms).some(
-                (p: any) => p && p.handle && p.handle.trim() !== ''
-            );
-
-            return [
-                {
-                    label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!(profile?.user?.username || user?.username || profile?.username),
-                    weight: 30, // 15% fullName + 15% username
-                    icon: User,
-                },
-                {
-                    label: 'Profile Photo',
-                    completed: !!profile?.avatarUrl,
-                    weight: 15,
-                    icon: Image,
-                },
-                {
-                    label: 'Bio',
-                    completed: !!profile?.bio,
-                    weight: 15,
-                    icon: FileText,
-                },
-                {
-                    label: 'Location',
-                    completed: !!profile?.locationCity || !!profile?.locationCountry,
-                    weight: 10,
-                    icon: MapPin,
-                },
-                {
-                    label: 'Creator Categories',
-                    completed: Array.isArray(profile?.categories) && profile.categories.length > 0,
-                    weight: 10,
-                    icon: Tag,
-                },
-                {
-                    label: 'Social Platforms',
-                    completed: !!hasPlatforms,
-                    weight: 10,
-                    icon: Share2,
-                },
-                {
-                    label: 'Collaboration Types',
-                    completed: Array.isArray(profile?.collaborationTypes) && profile.collaborationTypes.length > 0,
-                    weight: 10,
-                    icon: Layers,
-                },
-            ];
-        } else {
-            return [
-                {
-                    label: 'Basic Info (Name & Username)',
-                    completed: !!profile?.fullName && !!profile?.username,
-                    weight: 40, // 20% fullName + 20% username
-                    icon: User,
-                },
-                {
-                    label: 'Profile Photo',
-                    completed: !!profile?.avatarUrl || !!profile?.profileImage,
-                    weight: 15,
-                    icon: Image,
-                },
-                {
-                    label: 'Bio',
-                    completed: !!profile?.bio,
-                    weight: 15,
-                    icon: FileText,
-                },
-                {
-                    label: 'Location',
-                    completed: !!profile?.location,
-                    weight: 10,
-                    icon: MapPin,
-                },
-                {
-                    label: 'Brand Categories',
-                    completed: Array.isArray(profile?.categories) && profile.categories.length > 0,
-                    weight: 10,
-                    icon: Tag,
-                },
-                {
-                    label: 'Website',
-                    completed: !!profile?.website,
-                    weight: 10,
-                    icon: Globe,
-                },
-            ];
-        }
-    }, [user, profile, isInfluencer]);
-
-    const percentage = useMemo(() => {
-        return Math.round(
-            tasks.reduce((sum, task) => sum + (task.completed ? task.weight : 0), 0)
-        );
-    }, [tasks]);
+    // We optionally keep user and influencerProfile props for backward compatibility,
+    // but the context provides the reactive state.
+    const { percentage, tasks, isInfluencer } = useProfileCompletion();
 
     // Don't show if profile is 100% complete
     if (percentage >= 100) return null;
