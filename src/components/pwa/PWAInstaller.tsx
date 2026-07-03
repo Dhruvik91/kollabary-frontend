@@ -17,8 +17,8 @@ export const PWAInstaller = () => {
     const dismissed = localStorage.getItem(PWA_STORAGE_KEYS.INSTALL_DISMISSED);
     if (!dismissed) return false;
     const dismissedTime = parseInt(dismissed);
-    const fifteenDays = 15 * 24 * 60 * 60 * 1000;
-    return (Date.now() - dismissedTime < fifteenDays);
+    const twoDays = 2 * 24 * 60 * 60 * 1000;
+    return (Date.now() - dismissedTime < twoDays);
   };
 
   useEffect(() => {

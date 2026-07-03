@@ -49,7 +49,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import { LocationAutocomplete } from '@/components/ui/location-autocomplete';
 import { SOCIAL_PLATFORMS, DRAFT_STORAGE_KEYS } from '@/constants';
 import { getSocialPlatformIcon, cn } from '@/lib/utils';
 import { useAutoSaveDraft } from '@/hooks/use-auto-save-draft';
@@ -238,7 +237,7 @@ export const ProfileSetupForm = ({
         }
 
         const values = form.getValues();
-        
+
         // Transform socials array back to object for backend
         const socialLinks: Record<string, string> = {};
         (values.socials || []).forEach(item => {
@@ -423,11 +422,11 @@ export const ProfileSetupForm = ({
                                                         Location
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <LocationAutocomplete
-                                                            value={field.value}
-                                                            onChange={field.onChange}
+                                                        <Input
+                                                            placeholder="e.g. San Francisco, CA"
+                                                            {...field}
                                                             disabled={isLoading}
-                                                            placeholder="Search and select your location..."
+                                                            className="h-12 rounded-xl bg-background/50 border-border/50 focus:bg-background transition-all"
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
