@@ -256,6 +256,19 @@ export const CONSENT_STORAGE_KEYS = {
     PITCH_CREATE: 'consent-pitch-create',
 } as const;
 
+
+export const NOTIFICATIONS_STORAGE_KEYS = (trigger: string | number | null) => `kollabary-prompt-dismissed-${trigger}`;
+
+export const NOTIFICATIONS_TRIGGERS = {
+    DEFAULT: 'default',
+    MESSAGES: 'messages',
+    AUCTIONS: 'auctions',
+    BRANDS: 'brands',
+    COLLABORATIONS: 'collaborations',
+    PITCHES: 'pitches',
+} as const;
+
+
 /**
  * localStorage keys used to persist auto-saved form drafts.
  * Drafts are cleared automatically after a successful submit or after 7 days.

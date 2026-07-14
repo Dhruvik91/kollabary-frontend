@@ -34,7 +34,7 @@ import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { UserRole } from '@/types/auth.types';
 import { VerificationSection } from './VerificationSection';
 import { AccountManagementSection } from './AccountManagementSection';
-import { usePushNotification } from '@/hooks/use-push-notification';
+import { useNotification } from '@/contexts/notification-context';
 
 interface ProfileDetailProps {
     profile: UserProfile;
@@ -66,10 +66,10 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
     const {
         isSubscribed,
         loading: isPushLoading,
-        subscribe: subscribePush,
+        openPermissionModal,
         unsubscribe: unsubscribePush,
         isSupported: isPushSupported,
-    } = usePushNotification();
+    } = useNotification();
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
@@ -338,7 +338,7 @@ export const ProfileDetail = ({ profile, isOwner = false }: ProfileDetailProps) 
                                         </div>
                                         <Button
                                             variant={isSubscribed ? "outline" : "default"}
-                                            onClick={isSubscribed ? unsubscribePush : subscribePush}
+                                            onClick={isSubscribed ? unsubscribePush : () => openPermissionModal()}
                                             className="rounded-xl font-bold shrink-0 min-w-[160px] h-12"
                                             disabled={isPushLoading}
                                         >

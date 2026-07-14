@@ -5,10 +5,12 @@ import { QueryProvider } from "@/lib/query-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ProfileCompletionProvider } from "@/contexts/profile-completion-context";
 import { SocketProvider } from "@/contexts/socket-context";
+import { NotificationProvider } from "@/contexts/notification-context";
 import { Toaster } from "sonner";
 import { ConfettiProvider } from '@/contexts/confetti-context';
 import { PWAInstaller } from "@/components/pwa/PWAInstaller";
 import { PushNotificationPrompt } from "@/components/pwa/PushNotificationPrompt";
+import { Notifications } from "@/components/shared/Notifications";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScroll } from "@/components/shared/SmoothScroll";
@@ -155,15 +157,18 @@ export default function RootLayout({
               <ProfileCompletionProvider>
                 <ConfettiProvider>
                   <SocketProvider>
-                    <TooltipProvider>
-                      <SmoothScroll>
-                        {children}
-                        <Toaster position="top-right" richColors closeButton />
-                        <PWAInstaller />
-                        <PushNotificationPrompt />
-                        <CookieConsent />
-                      </SmoothScroll>
-                    </TooltipProvider>
+                    <NotificationProvider>
+                      <TooltipProvider>
+                        <SmoothScroll>
+                          {children}
+                          <Toaster position="top-right" richColors closeButton />
+                          <PWAInstaller />
+                          <PushNotificationPrompt />
+                          <Notifications />
+                          <CookieConsent />
+                        </SmoothScroll>
+                      </TooltipProvider>
+                    </NotificationProvider>
                   </SocketProvider>
                 </ConfettiProvider>
               </ProfileCompletionProvider>
