@@ -186,22 +186,6 @@ export const MessageInput = ({
 
                 {/* Action buttons */}
                 <div className="flex items-center gap-1 shrink-0 pb-0.5">
-
-                    <Tooltip delayDuration={300}>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-10 w-10 text-muted-foreground hover:text-amber-500 rounded-xl transition-colors hover:bg-amber-500/10"
-                            >
-                                <Smile size={18} />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="top" className="font-bold">
-                            Insert Emoji
-                        </TooltipContent>
-                    </Tooltip>
-
                     <Button
                         onClick={handleSend}
                         disabled={!message.trim() || isLoading || disabled}
