@@ -12,11 +12,13 @@ import {
     ExternalLink,
     Eye,
 } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FRONTEND_ROUTES } from '@/constants';
 import { useStartConversation } from '@/hooks/use-messaging.hooks';
+import { useState } from 'react';
 
 interface PitchCardProps {
     pitch: Pitch;
@@ -30,6 +32,13 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
     const isSent = type === 'sent';
     const router = useRouter();
     const { mutateAsync: startConversation, isPending: isStartingChat } = useStartConversation();
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Only show Read More if message is long enough to be truncated (> ~120 chars)
+    const MESSAGE_THRESHOLD = 120;
+    const isLongMessage = pitch.message && pitch.message.length > MESSAGE_THRESHOLD;
+    const previewText = isLongMessage ? pitch.message.slice(0, MESSAGE_THRESHOLD) : pitch.message;
+    const remainingText = isLongMessage ? pitch.message.slice(MESSAGE_THRESHOLD) : '';
 
     const handleMessage = async () => {
         // partner is the other side of the pitch
@@ -83,9 +92,9 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="group relative bg-card border border-border/50 rounded-3xl overflow-hidden hover:border-primary/30 transition-all duration-300 h-full flex flex-col"
+            className="group relative bg-card border border-border/50 rounded-3xl overflow-hidden hover:border-primary/30 transition-all duration-300 min-h-[340px] flex flex-col"
         >
-            <div className="p-6 space-y-6 flex flex-col h-full">
+            <div className="p-6 space-y-6 flex flex-col flex-1">
                 {/* Header: User Info & Status */}
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div
@@ -120,12 +129,40 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
                 </div>
 
                 {/* Message Content */}
-                <div className="space-y-4 flex-1 flex flex-col">
-                    <div className="relative min-h-[80px]">
+                <div className="space-y-3 flex-1 flex flex-col">
+                    <div className="relative">
                         <div className="absolute -left-2 top-0 bottom-0 w-1 bg-primary/10 rounded-full" />
-                        <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 line-clamp-3 group-hover:line-clamp-none transition-all duration-500 italic">
-                            "{pitch.message}"
-                        </p>
+
+                        {isLongMessage ? (
+                            <Accordion
+                                type="single"
+                                collapsible
+                                value={isExpanded ? 'message' : ''}
+                                onValueChange={(val) => setIsExpanded(val === 'message')}
+                                className="w-full"
+                            >
+                                <AccordionItem value="message" className="border-none">
+                                    <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 italic">
+                                        "{previewText}{!isExpanded && '...'}"
+                                    </p>
+                                    <AccordionContent className="pb-0 pt-1 pl-4">
+                                        <p className="text-sm font-medium leading-relaxed text-foreground/80 italic">
+                                            {remainingText}
+                                        </p>
+                                    </AccordionContent>
+                                    <AccordionTrigger 
+                                        className="w-fit py-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary/80 pl-4 transition-colors gap-1.5 flex items-center cursor-pointer mt-1 hover:no-underline border-none p-0 focus-visible:ring-0 [&>svg]:text-primary [&>svg]:size-3.5 [&>svg]:translate-y-0 bg-transparent hover:bg-transparent shadow-none"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        {isExpanded ? 'Read Less' : 'Read More'}
+                                    </AccordionTrigger>
+                                </AccordionItem>
+                            </Accordion>
+                        ) : (
+                            <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 italic">
+                                "{pitch.message}"
+                            </p>
+                        )}
                     </div>
 
                     {pitch.workUrl && (

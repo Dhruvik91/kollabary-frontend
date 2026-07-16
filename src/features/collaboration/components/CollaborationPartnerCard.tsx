@@ -31,8 +31,13 @@ export const CollaborationPartnerCard = ({
 
     const initials = partnerName?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || '?';
 
-    const profileLink = isInfluencer && partner?.id
-        ? (partner?.profile?.id && FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(partner?.profile?.id)) : FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(partner.id)
+    const profileLink = isInfluencer
+        ? (partner?.id && partner?.profile?.id
+            ? FRONTEND_ROUTES.DASHBOARD.BRAND_DETAIL(partner.profile.id)
+            : null)
+        : (partner?.id
+            ? FRONTEND_ROUTES.DASHBOARD.INFLUENCER_DETAIL(partner.id)
+            : null);
 
     const PartnerInfo = (
         <div className={cn(

@@ -40,7 +40,7 @@ import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserStatus } from '@/types/auth.types';
 import { useAuth } from '@/contexts/auth-context';
-import { usePushNotification } from '@/hooks/use-push-notification';
+import { useNotification } from '@/contexts/notification-context';
 import {
     Select,
     SelectContent,
@@ -87,10 +87,10 @@ export const InfluencerSettingsView = ({
         isSubscribed,
         permission,
         loading: isPushLoading,
-        subscribe: subscribePush,
+        openPermissionModal,
         unsubscribe: unsubscribePush,
         isSupported: isPushSupported,
-    } = usePushNotification();
+    } = useNotification();
 
     const currentVerification = (verificationRequests as any[])?.[0];
     const availability = influencer?.availability;
@@ -414,7 +414,7 @@ export const InfluencerSettingsView = ({
                                     </div>
                                     <Button
                                         variant={isSubscribed ? "outline" : "default"}
-                                        onClick={isSubscribed ? unsubscribePush : subscribePush}
+                                        onClick={isSubscribed ? unsubscribePush : () => openPermissionModal()}
                                         className="rounded-xl font-bold shrink-0 min-w-[160px]"
                                         disabled={isPushLoading}
                                     >
