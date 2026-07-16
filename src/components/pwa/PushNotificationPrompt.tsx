@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePushNotification } from '@/hooks/use-push-notification';
+import { useNotification } from '@/contexts/notification-context';
 import { useAuth } from '@/contexts/auth-context';
 import { PWA_STORAGE_KEYS } from '@/constants';
 
@@ -36,7 +36,7 @@ function isDismissedRecently(): boolean {
  */
 export const PushNotificationPrompt = () => {
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    const { isSupported, isSubscribed, permission, subscribe, loading: isPushLoading } = usePushNotification();
+    const { isSupported, isSubscribed, permission, subscribe, loading: isPushLoading } = useNotification();
 
     const [show, setShow] = useState(false);
     const [isEnabling, setIsEnabling] = useState(false);

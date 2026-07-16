@@ -183,9 +183,9 @@ export const InfluencerFilters = ({ filters, onFilterChange, onReset, className 
                             </SelectTrigger>
                             <SelectContent className="rounded-xl">
                                 <SelectItem value="all">Any</SelectItem>
-                                <SelectItem value="Male">Male</SelectItem>
-                                <SelectItem value="Female">Female</SelectItem>
-                                <SelectItem value="Non-binary">Non-binary</SelectItem>
+                                <SelectItem value="male">Male</SelectItem>
+                                <SelectItem value="female">Female</SelectItem>
+                                <SelectItem value="non-binary">Non-binary</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

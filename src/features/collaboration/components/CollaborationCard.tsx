@@ -42,9 +42,9 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
 
     return (
         <>
-            <Card className="glass-card border-border overflow-hidden relative rounded-2xl transition-shadow duration-300">
+            <Card className="glass-card border-border overflow-hidden relative rounded-2xl transition-all duration-300 flex flex-col h-full hover:shadow-lg hover:shadow-primary/5">
                 <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex justify-between items-center mb-2 h-8">
                         <CollaborationStatusBadge status={collaboration.status} />
                         <div className="flex items-center gap-2">
                             {canEdit && (
@@ -80,12 +80,12 @@ export const CollaborationCard = ({ collaboration, isInfluencer }: Collaboration
                         {collaboration.title}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-4">
+                <CardContent className="pb-4 flex-grow flex flex-col justify-between">
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-4 h-10">
                         {collaboration.description || 'No description provided.'}
                     </p>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 mt-auto">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Calendar size={14} />
                             <span>{dateRange}</span>
