@@ -72,9 +72,9 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
     try {
       setIsUploading(true);
       setUploadProgress(20); // initial start fake progress indicator
-      
+
       const response = await uploadService.uploadFile(file);
-      
+
       setUploadProgress(100);
       form.setValue('videoUrl', response.url, { shouldValidate: true });
       toast.success('Video uploaded successfully!');
@@ -93,7 +93,7 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
-        
+
         {/* Title Field */}
         <FormField
           control={form.control}
@@ -125,7 +125,7 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
                 Video File
               </FormLabel>
               <div className="space-y-4">
-                
+
                 {/* Drag Drop File Input Zone */}
                 <div className="relative border-2 border-dashed border-border/60 hover:border-primary/50 transition-colors rounded-2xl p-6 flex flex-col items-center justify-center bg-muted/30 dark:bg-muted/10 group">
                   {isUploading ? (
@@ -209,21 +209,17 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
           render={({ field }) => (
             <FormItem className="text-left">
               <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                Asking Price ($)
+                Asking Price (₹)
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <CircleDollarSign
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60"
-                    size={16}
-                  />
                   <Input
                     type="number"
                     min="0"
                     placeholder="e.g., 250"
                     {...field}
                     onChange={(e) => field.onChange(e.target.value)}
-                    className="pl-12 rounded-xl h-11 border-border/50 focus:border-primary transition-all placeholder:text-[13px] sm:placeholder:text-sm"
+                    className="rounded-xl h-11 border-border/50 focus:border-primary transition-all placeholder:text-[13px] sm:placeholder:text-sm"
                   />
                 </div>
               </FormControl>

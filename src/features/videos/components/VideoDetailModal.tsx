@@ -12,7 +12,7 @@ import {
 import { VideoForSale } from '@/types/video.types';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, CircleDollarSign, Tag, Film, User, X } from 'lucide-react';
+import { Calendar, CircleDollarSign, Tag, Film, User, X, IndianRupee } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface VideoDetailModalProps {
@@ -85,8 +85,7 @@ export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalPro
 
                   {/* Price Tag */}
                   <div className="flex items-center gap-2 text-primary font-black text-lg sm:text-xl">
-                    <CircleDollarSign size={20} className="text-primary" />
-                    <span>{video.price !== undefined ? `$${Number(video.price).toLocaleString()}` : 'Contact for Price'}</span>
+                    <span>{video.price !== undefined ? `₹${Number(video.price).toLocaleString()}` : 'Contact for Price'}</span>
                   </div>
                 </div>
               </div>
