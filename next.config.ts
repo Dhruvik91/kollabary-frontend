@@ -37,6 +37,7 @@ const cspHeader = `
     https://googleads.g.doubleclick.net
     https://www.googleadservices.com
     https://kollabary.s3.ap-south-1.amazonaws.com;
+  media-src 'self' blob: data: https://kollabary.s3.ap-south-1.amazonaws.com;
   frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com;
   object-src 'none';
   base-uri 'self';

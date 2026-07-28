@@ -53,13 +53,14 @@ export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalPro
           <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden border-b border-border/30">
             <video
               key={video.videoUrl}
-              src={video.videoUrl}
               controls
               autoPlay
               playsInline
               className="w-full h-full object-contain"
-              poster=""
-            />
+            >
+              <source src={video.videoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
             {/* Circular Custom Close Button overlaying the video player */}
             <DialogClose className="absolute top-4 right-4 z-50 rounded-full w-9 h-9 flex items-center justify-center bg-black/50 hover:bg-black/75 backdrop-blur-md border border-white/10 text-white/90 hover:text-white transition-all active:scale-95 cursor-pointer">
               <X size={16} />
