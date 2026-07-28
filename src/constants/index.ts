@@ -150,6 +150,11 @@ export const API_CONFIG = {
             subscribe: '/notifications/subscribe',
             unsubscribe: '/notifications/unsubscribe',
             vapidKey: '/notifications/vapid-key',
+        },
+        videoForSale: {
+            base: '/videos-for-sale',
+            my: '/videos-for-sale/my',
+            detail: (id: string) => `/videos-for-sale/${id}`,
         }
     }
 }
@@ -190,6 +195,8 @@ export const FRONTEND_ROUTES = {
         AUCTION_DETAIL: (id: string) => `/auctions/${id}`,
         AUCTION_CREATE: '/auctions/create',
         AUCTION_EDIT: (id: string) => `/auctions/${id}/edit`,
+        VIDEOS: '/videos',
+        VIDEO_POST: '/videos/post',
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',
