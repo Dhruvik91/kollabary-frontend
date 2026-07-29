@@ -60,6 +60,10 @@ const SETTING_LABELS: Record<KCSettingKey, { label: string; description: string 
         label: 'Pitch Price',
         description: 'Amount of K Coins deducted when an influencer pitches for a collaboration.'
     },
+    [KCSettingKey.VIDEO_PRICE]: {
+        label: 'Video Upload Price',
+        description: 'Amount of K Coins deducted when an influencer uploads a new video for sale.'
+    },
 };
 
 export function KCSettingsForm({

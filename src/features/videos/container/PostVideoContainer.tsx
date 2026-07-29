@@ -13,6 +13,7 @@ import { VideoFormValues } from '@/lib/validations/video.validation';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ShieldAlert } from 'lucide-react';
 import { FRONTEND_ROUTES } from '@/constants';
+import { useActionConsent } from '@/hooks/use-action-consent';
 
 export const PostVideoContainer = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -20,6 +21,12 @@ export const PostVideoContainer = () => {
   const isInfluencer = user?.role === UserRole.INFLUENCER;
 
   const { mutateAsync: createVideo, isPending } = useCreateVideo();
+
+  const { executeWithConsent, ConsentModalElement } = useActionConsent({
+    actionType: 'VIDEO_UPLOAD',
+    title: 'Confirm Video Upload',
+    actionName: 'Post Video',
+  });
 
   // Redirect if not authorized once auth loading completes
   useEffect(() => {
@@ -29,18 +36,20 @@ export const PostVideoContainer = () => {
   }, [user, isAuthLoading, router]);
 
   const handleSubmit = async (values: VideoFormValues) => {
-    try {
-      await createVideo({
-        title: values.title,
-        description: values.description,
-        videoUrl: values.videoUrl,
-        price: values.price,
-        categories: values.categories,
-      });
-      router.push(FRONTEND_ROUTES.DASHBOARD.VIDEOS);
-    } catch (error) {
-      // Error handled by hook toast
-    }
+    executeWithConsent(async () => {
+      try {
+        await createVideo({
+          title: values.title,
+          description: values.description,
+          videoUrl: values.videoUrl,
+          price: values.price,
+          categories: values.categories,
+        });
+        router.push(FRONTEND_ROUTES.DASHBOARD.VIDEOS);
+      } catch (error) {
+        // Error handled by hook toast
+      }
+    });
   };
 
   if (isAuthLoading) {
@@ -91,6 +100,7 @@ export const PostVideoContainer = () => {
           <VideoForm onSubmit={handleSubmit} isLoading={isPending} />
         </div>
       </div>
+      {ConsentModalElement}
     </div>
   );
 };

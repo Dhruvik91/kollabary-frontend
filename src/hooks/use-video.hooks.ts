@@ -8,6 +8,7 @@ import {
   PaginatedResponse,
 } from '@/types/video.types';
 import { toast } from 'sonner';
+import { WALLET_QUERY_KEYS, TRANSACTION_QUERY_KEYS } from '@/hooks/queries/useWalletQueries';
 
 export const videoKeys = {
   all: ['videos-for-sale'] as const,
@@ -71,6 +72,8 @@ export const useCreateVideo = () => {
     mutationFn: (data: CreateVideoForSaleDto) => videoService.createVideo(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: videoKeys.all });
+      queryClient.invalidateQueries({ queryKey: WALLET_QUERY_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEYS.all });
       toast.success('Video for sale posted successfully!');
     },
     onError: (error: any) => {

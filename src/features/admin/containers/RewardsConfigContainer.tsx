@@ -21,7 +21,8 @@ export function RewardsConfigContainer() {
             KCSettingKey.WEEKLY_REWARD_BRAND,
             KCSettingKey.WEEKLY_REWARD_INFLUENCER,
             KCSettingKey.NEW_ARRIVAL_BONUS_AMOUNT,
-            KCSettingKey.PITCH_PRICE
+            KCSettingKey.PITCH_PRICE,
+            KCSettingKey.VIDEO_PRICE
         ].includes(s.key)
     );
 

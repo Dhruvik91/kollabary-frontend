@@ -261,6 +261,7 @@ export const CONSENT_STORAGE_KEYS = {
     BID_PLACE: 'consent-bid-place',
     COLLAB_REQUEST: 'consent-collab-request',
     PITCH_CREATE: 'consent-pitch-create',
+    VIDEO_UPLOAD: 'consent-video-upload',
 } as const;
 
 
