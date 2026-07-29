@@ -150,6 +150,11 @@ export const API_CONFIG = {
             subscribe: '/notifications/subscribe',
             unsubscribe: '/notifications/unsubscribe',
             vapidKey: '/notifications/vapid-key',
+        },
+        videoForSale: {
+            base: '/videos-for-sale',
+            my: '/videos-for-sale/my',
+            detail: (id: string) => `/videos-for-sale/${id}`,
         }
     }
 }
@@ -190,6 +195,8 @@ export const FRONTEND_ROUTES = {
         AUCTION_DETAIL: (id: string) => `/auctions/${id}`,
         AUCTION_CREATE: '/auctions/create',
         AUCTION_EDIT: (id: string) => `/auctions/${id}/edit`,
+        VIDEOS: '/videos',
+        VIDEO_POST: '/videos/post',
         ADMIN: {
             OVERVIEW: '/admin/overview',
             REPORTS: '/admin/reports',
@@ -254,6 +261,7 @@ export const CONSENT_STORAGE_KEYS = {
     BID_PLACE: 'consent-bid-place',
     COLLAB_REQUEST: 'consent-collab-request',
     PITCH_CREATE: 'consent-pitch-create',
+    VIDEO_UPLOAD: 'consent-video-upload',
 } as const;
 
 
@@ -335,4 +343,13 @@ export const SOCIAL_PLATFORMS = [
 export const MAX_UPLOAD_SIZE_MB = 30;
 export const MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024;
 
-
+export const VIDEOS_CATEGORIES = [
+    'UGC Content',
+    'Product Review',
+    'Unboxing',
+    'Tutorial / How-to',
+    'Short-form Ads',
+    'Vlog',
+    'Sponsored Segment',
+    'Social Media Reel / TikTok',
+];
