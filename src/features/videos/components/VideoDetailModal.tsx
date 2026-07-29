@@ -12,8 +12,14 @@ import {
 import { VideoForSale } from '@/types/video.types';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, CircleDollarSign, Tag, Film, User, X, IndianRupee } from 'lucide-react';
+import { Calendar, CircleDollarSign, Tag, Film, User, X, IndianRupee, MessageCircle } from 'lucide-react';
 import { format } from 'date-fns';
+import { useAuth } from '@/contexts/auth-context';
+import { UserRole } from '@/types/auth.types';
+import { useStartConversation } from '@/hooks/use-messaging.hooks';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { FRONTEND_ROUTES } from '@/constants';
 
 interface VideoDetailModalProps {
   video: VideoForSale | null;
@@ -22,6 +28,10 @@ interface VideoDetailModalProps {
 }
 
 export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalProps) => {
+  const { user: currentUser } = useAuth();
+  const { mutate: startConversation, isPending: isStartingChat } = useStartConversation();
+  const router = useRouter();
+
   if (!video) return null;
 
   const publisherName =
@@ -138,6 +148,29 @@ export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalPro
                 </div>
               )}
             </div>
+
+            {/* Contact Button */}
+            {currentUser?.role === UserRole.USER && (
+              <div className="pt-2">
+                <Button
+                  className="w-full h-12 bg-primary text-primary-foreground rounded-2xl font-black text-xs uppercase tracking-widest gap-2 shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center cursor-pointer font-sans"
+                  disabled={isStartingChat}
+                  onClick={() => {
+                    const recipientId = video.influencer?.id || video.influencerId;
+                    if (recipientId) {
+                      startConversation(recipientId, {
+                        onSuccess: (conversation) => {
+                          router.push(`${FRONTEND_ROUTES.DASHBOARD.MESSAGES}?id=${conversation.id}`);
+                        },
+                      });
+                    }
+                  }}
+                >
+                  <MessageCircle size={16} />
+                  {isStartingChat ? 'Connecting...' : 'Contact Influencer'}
+                </Button>
+              </div>
+            )}
 
             {/* Footer / Meta Details */}
             <div className="pt-4 border-t border-border/30 flex items-center justify-between text-muted-foreground text-xs font-semibold">

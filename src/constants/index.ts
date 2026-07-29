@@ -342,4 +342,13 @@ export const SOCIAL_PLATFORMS = [
 export const MAX_UPLOAD_SIZE_MB = 30;
 export const MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024;
 
-
+export const VIDEOS_CATEGORIES = [
+    'UGC Content',
+    'Product Review',
+    'Unboxing',
+    'Tutorial / How-to',
+    'Short-form Ads',
+    'Vlog',
+    'Sponsored Segment',
+    'Social Media Reel / TikTok',
+];

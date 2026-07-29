@@ -18,24 +18,15 @@ import {
 } from '@/components/ui/form';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { uploadService } from '@/services/upload.service';
-import { Film, CircleDollarSign, Loader2, UploadCloud, CheckCircle } from 'lucide-react';
+import { Film, Loader2, UploadCloud, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { VIDEOS_CATEGORIES } from '@/constants';
 
 interface VideoFormProps {
   onSubmit: (data: VideoFormValues) => void;
   isLoading?: boolean;
 }
 
-const CATEGORIES = [
-  'UGC Content',
-  'Product Review',
-  'Unboxing',
-  'Tutorial / How-to',
-  'Short-form Ads',
-  'Vlog',
-  'Sponsored Segment',
-  'Social Media Reel / TikTok',
-];
 
 export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -263,7 +254,7 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
               </FormLabel>
               <FormControl>
                 <MultiSelect
-                  options={CATEGORIES}
+                  options={VIDEOS_CATEGORIES}
                   value={field.value || []}
                   onChange={field.onChange}
                   placeholder="Select video categories..."

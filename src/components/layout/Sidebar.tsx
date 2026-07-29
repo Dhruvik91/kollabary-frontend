@@ -185,6 +185,7 @@ export const Sidebar = ({
         { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
         { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
         { href: FRONTEND_ROUTES.DASHBOARD.ORDERS, icon: Package, label: 'Orders' },
+        { href: FRONTEND_ROUTES.DASHBOARD.VIDEOS, icon: Video, label: 'Videos' },
     ];
 
     const getLinksByRole = () => {

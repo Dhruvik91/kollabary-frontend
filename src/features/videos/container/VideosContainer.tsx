@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useDebounce } from '@/hooks/use-debounce';
 import { useAuth } from '@/contexts/auth-context';
 import { UserRole } from '@/types/auth.types';
 import {
@@ -16,7 +17,6 @@ import { VideoFilters } from '../components/VideoFilters';
 import { VideoList } from '../components/VideoList';
 import { VideoDetailModal } from '../components/VideoDetailModal';
 import { VideoForSale, SearchVideosForSaleDto } from '@/types/video.types';
-import { toast } from 'sonner';
 import { FRONTEND_ROUTES } from '@/constants';
 
 export const VideosContainer = () => {
@@ -24,7 +24,6 @@ export const VideosContainer = () => {
   const isInfluencer = user?.role === UserRole.INFLUENCER;
 
   // State Management
-  const [activeTab, setActiveTab] = useState<'marketplace' | 'my-videos'>('marketplace');
   const [selectedVideo, setSelectedVideo] = useState<VideoForSale | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -37,13 +36,37 @@ export const VideosContainer = () => {
     categories: undefined,
   });
 
+  // Debounce search and price values to avoid excessive API requests
+  const debouncedSearch = useDebounce(filters.search, 500);
+  const debouncedMinPrice = useDebounce(filters.minPrice, 500);
+  const debouncedMaxPrice = useDebounce(filters.maxPrice, 500);
+
+  // Combine static and debounced filters for querying
+  const debouncedFilters = useMemo(
+    () => ({
+      ...filters,
+      search: debouncedSearch,
+      minPrice: debouncedMinPrice,
+      maxPrice: debouncedMaxPrice,
+    }),
+    [
+      filters.page,
+      filters.limit,
+      filters.categories,
+      filters.influencerId,
+      debouncedSearch,
+      debouncedMinPrice,
+      debouncedMaxPrice,
+    ]
+  );
+
   // Queries
-  const marketplaceQuery = useInfiniteVideos(filters, {
-    enabled: activeTab === 'marketplace',
+  const marketplaceQuery = useInfiniteVideos(debouncedFilters, {
+    enabled: !isInfluencer,
   });
 
   const myVideosQuery = useInfiniteMyVideos(12, {
-    enabled: activeTab === 'my-videos' && isInfluencer,
+    enabled: isInfluencer,
   });
 
   // Delete Mutation
@@ -100,8 +123,8 @@ export const VideosContainer = () => {
   const marketplaceVideos = marketplaceQuery.data?.pages.flatMap((page) => page.items) || [];
   const myVideos = myVideosQuery.data?.pages.flatMap((page) => page.items) || [];
 
-  const currentVideos = activeTab === 'marketplace' ? marketplaceVideos : myVideos;
-  const currentQuery = activeTab === 'marketplace' ? marketplaceQuery : myVideosQuery;
+  const currentVideos = isInfluencer ? myVideos : marketplaceVideos;
+  const currentQuery = isInfluencer ? myVideosQuery : marketplaceQuery;
 
   const hasActiveFilters =
     !!filters.search ||
@@ -134,17 +157,12 @@ export const VideosContainer = () => {
       <div className="space-y-8">
 
         {/* Filters and Tabs */}
-        <VideoFilters
-          filters={filters}
-          onFilterChange={setFilters}
-          activeTab={activeTab}
-          onTabChange={(tab) => {
-            setActiveTab(tab);
-            handleResetFilters();
-          }}
-          isInfluencer={isInfluencer}
-          userRole={user?.role}
-        />
+        {!isInfluencer && (
+          <VideoFilters
+            filters={filters}
+            onFilterChange={setFilters}
+          />
+        )}
 
         {/* Listings Grid */}
         <VideoList
@@ -156,14 +174,14 @@ export const VideosContainer = () => {
           isFetchingNextPage={currentQuery.isFetchingNextPage}
           fetchNextPage={currentQuery.fetchNextPage}
           onPreview={handlePreview}
-          onDelete={activeTab === 'my-videos' ? handleDelete : undefined}
+          onDelete={isInfluencer ? handleDelete : undefined}
           deletingId={deletingId}
           currentUserId={user?.id}
           currentUserRole={user?.role}
           hasActiveFilters={hasActiveFilters}
           onResetFilters={handleResetFilters}
           emptyMessage={
-            activeTab === 'my-videos'
+            isInfluencer
               ? "You haven't posted any videos for sale yet."
               : 'No videos are available in the marketplace.'
           }
