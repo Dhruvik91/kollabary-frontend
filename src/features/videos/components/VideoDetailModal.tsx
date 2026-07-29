@@ -34,6 +34,8 @@ export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalPro
 
   if (!video) return null;
 
+  const isOwner = currentUser?.id === video.influencerId;
+
   const publisherName =
     video.influencer?.profile?.fullName ||
     video.influencer?.influencerProfile?.fullName ||
@@ -101,18 +103,20 @@ export const VideoDetailModal = ({ video, isOpen, onClose }: VideoDetailModalPro
               </div>
 
               {/* Creator Card */}
-              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-muted/40 border border-border/50">
-                <Avatar className="h-10 w-10 border border-border/30">
-                  <AvatarImage src={avatarUrl} alt={publisherName} />
-                  <AvatarFallback className="bg-muted text-muted-foreground">
-                    <User size={16} />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-foreground leading-tight">{publisherName}</span>
-                  <span className="text-xs text-muted-foreground">@{publisherUsername}</span>
+              {!isOwner && (
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-muted/40 border border-border/50">
+                  <Avatar className="h-10 w-10 border border-border/30">
+                    <AvatarImage src={avatarUrl} alt={publisherName} />
+                    <AvatarFallback className="bg-muted text-muted-foreground">
+                      <User size={16} />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col text-left">
+                    <span className="text-sm font-bold text-foreground leading-tight">{publisherName}</span>
+                    <span className="text-xs text-muted-foreground">@{publisherUsername}</span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Description */}
               {video.description && (

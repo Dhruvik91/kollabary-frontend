@@ -54,7 +54,7 @@ export const PostVideoContainer = () => {
 
   if (isAuthLoading) {
     return (
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto">
         <div className="animate-pulse space-y-8 max-w-2xl mx-auto">
           <div className="h-10 bg-muted/20 w-32 rounded-xl" />
           <div className="h-40 bg-muted/20 rounded-[40px]" />
@@ -81,7 +81,7 @@ export const PostVideoContainer = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-6 sm:space-y-8 pb-20">
+    <div className="sm:space-y-8">
       <div className="flex items-center justify-start">
         <BackButton />
       </div>

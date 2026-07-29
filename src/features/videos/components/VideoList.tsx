@@ -34,7 +34,7 @@ export const VideoList = ({
   onRetry,
   hasNextPage,
   isFetchingNextPage = false,
-  fetchNextPage = () => {},
+  fetchNextPage = () => { },
   onPreview,
   onDelete,
   deletingId = null,
@@ -90,9 +90,9 @@ export const VideoList = ({
           action={
             hasActiveFilters && onResetFilters
               ? {
-                  label: 'Clear Filters',
-                  onClick: onResetFilters,
-                }
+                label: 'Clear Filters',
+                onClick: onResetFilters,
+              }
               : undefined
           }
         />

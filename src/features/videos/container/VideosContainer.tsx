@@ -133,7 +133,7 @@ export const VideosContainer = () => {
     (filters.categories && filters.categories.length > 0);
 
   return (
-    <div className="container mx-auto py-8 space-y-12">
+    <div className="space-y-12">
 
       {/* Page Header */}
       <PageHeader

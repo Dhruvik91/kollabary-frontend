@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { VideoForSale } from '@/types/video.types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,9 +13,11 @@ import {
   CircleDollarSign,
   Tag,
   Loader2,
+  AlertTriangle,
 } from 'lucide-react';
 import { UserRole } from '@/types/auth.types';
 import { motion } from 'framer-motion';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 
 interface VideoCardProps {
   video: VideoForSale;
@@ -34,9 +36,9 @@ export const VideoCard = ({
   isDeleting = false,
   currentUserId,
   currentUserRole,
-  index = 0,
 }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const publisherName =
     video.influencer?.profile?.fullName ||
@@ -107,18 +109,41 @@ export const VideoCard = ({
                 </div>
               </div>
 
-              {/* Floating Price Tag */}
-              <div className="absolute bottom-3 left-3 bg-zinc-950/80 backdrop-blur-md border border-border/20 px-3 py-1 rounded-full text-xs font-black text-white flex items-center gap-1">
-                <CircleDollarSign size={12} className="text-primary" />
-                <span>
-                  {video.price !== undefined ? `$${Number(video.price).toLocaleString()}` : 'Contact'}
-                </span>
-              </div>
+              {/* Price Tag Overlay */}
+              {video.price !== undefined && (
+                <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-black/60 text-white border border-white/10 shadow-lg backdrop-blur-md text-[11px] font-black uppercase tracking-wider">
+                    ₹{Number(video.price).toLocaleString()}
+                  </span>
+                </div>
+              )}
+
+              {/* Delete Button Overlay */}
+              {canDelete && (
+                <div className="absolute top-3 right-3 z-10">
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    disabled={isDeleting}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsDeleteModalOpen(true);
+                    }}
+                    className="h-8 w-8 rounded-xl bg-black/60 hover:bg-red-500 text-white border border-white/10 shadow-lg backdrop-blur-md active:scale-95 transition-all duration-300"
+                  >
+                    {isDeleting ? (
+                      <Loader2 className="animate-spin" size={14} />
+                    ) : (
+                      <Trash2 size={14} />
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
 
-            {/* Info Header / Creator details */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            {/* Info Header / Creator details (Only shown if not owner) */}
+            {!isOwner && (
+              <div className="flex items-center gap-2 pb-1 border-b border-border/5">
                 <Avatar className="h-8 w-8 border border-border/30">
                   <AvatarImage src={avatarUrl} alt={publisherName} />
                   <AvatarFallback className="bg-muted text-muted-foreground text-xs">
@@ -134,26 +159,7 @@ export const VideoCard = ({
                   </span>
                 </div>
               </div>
-
-              {canDelete && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={isDeleting}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (video.id) onDelete(video.id);
-                  }}
-                  className="h-8 w-8 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 active:scale-95 transition-all rounded-lg"
-                >
-                  {isDeleting ? (
-                    <Loader2 className="animate-spin" size={14} />
-                  ) : (
-                    <Trash2 size={14} />
-                  )}
-                </Button>
-              )}
-            </div>
+            )}
 
             {/* Video Meta Info */}
             <div className="space-y-1.5 text-left">
@@ -200,6 +206,62 @@ export const VideoCard = ({
           </div>
         </CardContent>
       </Card>
+
+      {canDelete && (
+        <AnimatedModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            if (!isDeleting) setIsDeleteModalOpen(false);
+          }}
+          title={
+            <div className="flex items-center gap-3 text-red-500">
+              <AlertTriangle className="h-6 w-6" />
+              <span>Delete Video?</span>
+            </div>
+          }
+          description="Are you sure you want to delete this video? This action cannot be undone."
+          size="sm"
+          showCloseButton={!isDeleting}
+          footer={
+            <div className="flex flex-col sm:flex-row justify-end gap-3 w-full">
+              <Button
+                variant="outline"
+                disabled={isDeleting}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDeleteModalOpen(false);
+                }}
+                className="rounded-xl font-bold uppercase text-[10px] tracking-widest w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                disabled={isDeleting}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (video.id) onDelete(video.id);
+                }}
+                className="rounded-xl font-black uppercase text-[10px] tracking-widest px-8 bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20 w-full sm:w-auto flex items-center justify-center gap-1.5"
+              >
+                {isDeleting ? (
+                  <Loader2 className="animate-spin h-3 w-3" />
+                ) : null}
+                {isDeleting ? 'Deleting...' : 'Delete Forever'}
+              </Button>
+            </div>
+          }
+        >
+          <div className="py-4">
+            <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
+              <p className="text-sm text-foreground/80 leading-relaxed text-left">
+                You are about to permanently delete <span className="font-bold text-foreground">"{video.title}"</span>.
+                This will remove the video from the marketplace and your library forever.
+              </p>
+            </div>
+          </div>
+        </AnimatedModal>
+      )}
     </motion.div>
   );
 };

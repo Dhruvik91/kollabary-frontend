@@ -53,10 +53,10 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
       return;
     }
 
-    // Limit to 30MB
-    const maxBytes = 30 * 1024 * 1024;
+    // Limit to 200MB
+    const maxBytes = 200 * 1024 * 1024;
     if (file.size > maxBytes) {
-      toast.error('Video file size exceeds the 30MB limit.');
+      toast.error('Video file size exceeds the 200MB limit.');
       return;
     }
 
@@ -162,7 +162,7 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
                       />
                       <span className="text-sm font-bold text-foreground">Click to select video file</span>
                       <span className="text-xs text-muted-foreground">
-                        Supports MP4, MOV, WEBM (Max 30MB)
+                        Supports MP4, MOV, WEBM (Max 200MB)
                       </span>
                       <input
                         type="file"
@@ -172,20 +172,6 @@ export const VideoForm = ({ onSubmit, isLoading = false }: VideoFormProps) => {
                       />
                     </label>
                   )}
-                </div>
-
-                {/* Direct URL Input Fallback */}
-                <div className="space-y-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block">
-                    Or paste direct Video URL
-                  </span>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., https://my-portfolio.com/video.mp4"
-                      {...field}
-                      className="rounded-xl border-border/50 h-11 focus:border-primary transition-all placeholder:text-[13px] sm:placeholder:text-sm"
-                    />
-                  </FormControl>
                 </div>
               </div>
               <FormMessage />

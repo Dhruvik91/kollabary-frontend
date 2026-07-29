@@ -113,7 +113,7 @@ export const VideoFilters = ({
                   </span>
                   <Input
                     type="number"
-                    placeholder="Min Price"
+                    placeholder="Min"
                     min="0"
                     value={filters.minPrice !== undefined ? filters.minPrice : ''}
                     onChange={(e) => handlePriceChange('minPrice', e.target.value)}
@@ -127,7 +127,7 @@ export const VideoFilters = ({
                   </span>
                   <Input
                     type="number"
-                    placeholder="Max Price"
+                    placeholder="Max"
                     min="0"
                     value={filters.maxPrice !== undefined ? filters.maxPrice : ''}
                     onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
