@@ -34,11 +34,19 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
     const { mutateAsync: startConversation, isPending: isStartingChat } = useStartConversation();
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // Only show Read More if message is long enough to be truncated (> ~120 chars)
+    // Truncate at word boundaries for long messages
     const MESSAGE_THRESHOLD = 120;
-    const isLongMessage = pitch.message && pitch.message.length > MESSAGE_THRESHOLD;
-    const previewText = isLongMessage ? pitch.message.slice(0, MESSAGE_THRESHOLD) : pitch.message;
-    const remainingText = isLongMessage ? pitch.message.slice(MESSAGE_THRESHOLD) : '';
+    const isLongMessage = !!(pitch.message && pitch.message.length > MESSAGE_THRESHOLD);
+
+    let previewText = pitch.message || '';
+    let remainingText = '';
+
+    if (isLongMessage && pitch.message) {
+        const lastSpaceIndex = pitch.message.lastIndexOf(' ', MESSAGE_THRESHOLD);
+        const splitIndex = lastSpaceIndex > 0 ? lastSpaceIndex : MESSAGE_THRESHOLD;
+        previewText = pitch.message.slice(0, splitIndex).trimEnd();
+        remainingText = pitch.message.slice(splitIndex).trimStart();
+    }
 
     const handleMessage = async () => {
         // partner is the other side of the pitch
@@ -143,14 +151,14 @@ export const PitchCard = ({ pitch, type, onUpdateStatus, isUpdating }: PitchCard
                             >
                                 <AccordionItem value="message" className="border-none">
                                     <p className="text-sm font-medium leading-relaxed text-foreground/80 pl-4 italic">
-                                        "{previewText}{!isExpanded && '...'}"
+                                        "{previewText}{!isExpanded ? '..."' : ''}
                                     </p>
                                     <AccordionContent className="pb-0 pt-1 pl-4">
                                         <p className="text-sm font-medium leading-relaxed text-foreground/80 italic">
-                                            {remainingText}
+                                            {remainingText}"
                                         </p>
                                     </AccordionContent>
-                                    <AccordionTrigger 
+                                    <AccordionTrigger
                                         className="w-fit py-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary/80 pl-4 transition-colors gap-1.5 flex items-center cursor-pointer mt-1 hover:no-underline border-none p-0 focus-visible:ring-0 [&>svg]:text-primary [&>svg]:size-3.5 [&>svg]:translate-y-0 bg-transparent hover:bg-transparent shadow-none"
                                         onClick={(e) => e.stopPropagation()}
                                     >
