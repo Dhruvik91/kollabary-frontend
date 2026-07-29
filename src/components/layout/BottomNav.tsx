@@ -29,7 +29,8 @@ import {
     Zap,
     Wallet,
     UserCog,
-    Sparkles
+    Sparkles,
+    Video
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/auth-context';
@@ -74,6 +75,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
                 { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
+                { href: FRONTEND_ROUTES.DASHBOARD.VIDEOS, icon: Video, label: 'Videos' },
                 { href: FRONTEND_ROUTES.DASHBOARD.MY_INFLUENCERS, icon: User, label: 'My Influencers' },
                 { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
                 { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
@@ -89,6 +91,7 @@ export const BottomNav = () => {
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
                 { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
+                { href: FRONTEND_ROUTES.DASHBOARD.VIDEOS, icon: Video, label: 'Videos' },
                 { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
                 { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
                 { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
