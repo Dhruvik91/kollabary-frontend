@@ -78,10 +78,10 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         <FormItem>
                             <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Detailed Description</FormLabel>
                             <FormControl>
-                                <Textarea 
-                                    placeholder="Explain your requirements, deliverables, and specific goals..." 
-                                    className="min-h-24 rounded-xl border-border/50 focus:border-primary transition-all resize-none placeholder:text-[13px] sm:placeholder:text-sm" 
-                                    {...field} 
+                                <Textarea
+                                    placeholder="Explain your requirements, deliverables, and specific goals..."
+                                    className="min-h-24 rounded-xl border-border/50 focus:border-primary transition-all resize-none placeholder:text-[13px] sm:placeholder:text-sm"
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -95,13 +95,13 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         name="minBudget"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Min Budget ($)</FormLabel>
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Min Budget (₹)</FormLabel>
                                 <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
+                                    <Input
+                                        type="number"
+                                        {...field}
                                         value={field.value ?? ''}
-                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" 
+                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -113,13 +113,13 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                         name="maxBudget"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Max Budget ($)</FormLabel>
+                                <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Max Budget (₹)</FormLabel>
                                 <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
+                                    <Input
+                                        type="number"
+                                        {...field}
                                         value={field.value ?? ''}
-                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all" 
+                                        className="rounded-xl border-border/50 h-11 focus:border-primary transition-all"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -194,8 +194,8 @@ export const AuctionForm = ({ initialData, onSubmit, isLoading }: AuctionFormPro
                     />
                 </div>
 
-                <Button 
-                    type="submit" 
+                <Button
+                    type="submit"
                     disabled={isLoading}
                     className="w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest bg-primary hover:bg-primary/90 shadow-lg shadow-primary/10 active:scale-[0.98] transition-all mt-2"
                 >
