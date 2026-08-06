@@ -44,6 +44,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Only handle requests to our own origin or our S3 bucket (bypass analytics, ads, razorpay, etc)
+  const requestUrl = new URL(event.request.url);
+  if (
+    requestUrl.origin !== self.location.origin && 
+    requestUrl.hostname !== 'kollabary.s3.ap-south-1.amazonaws.com'
+  ) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
@@ -74,7 +83,8 @@ self.addEventListener('fetch', (event) => {
             if (event.request.mode === 'navigate') {
               return caches.match('/offline');
             }
-            return null;
+            // Return a valid offline error response instead of null to prevent TypeError
+            return new Response('Network error', { status: 408, statusText: 'Network Error' });
           });
       })
   );
