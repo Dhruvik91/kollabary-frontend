@@ -21,9 +21,6 @@ import {
     ArrowRight,
     ArrowLeft,
     Sparkles,
-    Instagram,
-    Youtube,
-    Twitter,
     Globe,
     Link as LinkIcon,
     Camera
@@ -327,15 +324,6 @@ export const InfluencerProfileForm = ({
                 // If on final step, manually trigger submission
                 form.handleSubmit(handleFormSubmit, handleInvalidSubmit)();
             }
-        }
-    };
-
-    const getStepIcon = (platform: string) => {
-        switch (platform.toLowerCase()) {
-            case 'instagram': return <Instagram size={18} />;
-            case 'youtube': return <Youtube size={18} />;
-            case 'twitter': return <Twitter size={18} />;
-            default: return <Globe size={18} />;
         }
     };
 
@@ -810,7 +798,7 @@ export const InfluencerProfileForm = ({
                                                 name="minPrice"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
+                                                        <FormLabel className="font-bold">Minimum Rate (₹)</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"
@@ -832,7 +820,7 @@ export const InfluencerProfileForm = ({
                                                 name="maxPrice"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
+                                                        <FormLabel className="font-bold">Maximum Rate (₹)</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"
