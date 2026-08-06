@@ -61,6 +61,7 @@ interface BottomNavItem {
 export const BottomNav = () => {
     const pathname = usePathname();
     const { user } = useAuth();
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const getNavItems = (): BottomNavItem[] => {
         const profileHref =
@@ -176,7 +177,7 @@ export const BottomNav = () => {
 
                 {/* More Menu */}
                 {overflowItems.length > 0 && (
-                    <Sheet>
+                    <Sheet open={isOpen} onOpenChange={setIsOpen}>
                         <SheetTrigger asChild>
                             <button
                                 className={cn(
@@ -208,6 +209,7 @@ export const BottomNav = () => {
                                             key={item.href}
                                             href={item.href}
                                             prefetch={false}
+                                            onClick={() => setIsOpen(false)}
                                             className={cn(
                                                 "flex flex-col items-center justify-center p-4 rounded-2xl transition-all duration-300 gap-2",
                                                 active
