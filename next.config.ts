@@ -8,7 +8,8 @@ const cspHeader = `
     https://*.google.com
     https://*.posthog.com
     https://googleads.g.doubleclick.net
-    https://www.googleadservices.com;
+    https://www.googleadservices.com
+    https://checkout.razorpay.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob:
     https://kollabary.s3.ap-south-1.amazonaws.com
@@ -20,7 +21,8 @@ const cspHeader = `
     https://assets.calendly.com
     https://googleads.g.doubleclick.net
     https://www.googleadservices.com
-    https://ad.doubleclick.net;
+    https://ad.doubleclick.net
+    https://*.razorpay.com;
   font-src 'self' data:;
   connect-src 'self'
     http://localhost:3008
@@ -33,12 +35,15 @@ const cspHeader = `
     https://*.googletagmanager.com
     https://*.posthog.com
     https://www.google.com
+    https://*.google.com
+    https://analytics.google.com
     https://ad.doubleclick.net
     https://googleads.g.doubleclick.net
     https://www.googleadservices.com
-    https://kollabary.s3.ap-south-1.amazonaws.com;
+    https://kollabary.s3.ap-south-1.amazonaws.com
+    https://*.razorpay.com;
   media-src 'self' blob: data: https://kollabary.s3.ap-south-1.amazonaws.com;
-  frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com;
+  frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com https://*.razorpay.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';

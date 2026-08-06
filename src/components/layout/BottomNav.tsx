@@ -61,6 +61,7 @@ interface BottomNavItem {
 export const BottomNav = () => {
     const pathname = usePathname();
     const { user } = useAuth();
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const getNavItems = (): BottomNavItem[] => {
         const profileHref =
@@ -87,11 +88,11 @@ export const BottomNav = () => {
         if (user?.role === UserRole.INFLUENCER) {
             return [
                 { href: FRONTEND_ROUTES.DASHBOARD.OVERVIEW, icon: LayoutDashboard, label: 'Home' },
-                { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
+                // { href: FRONTEND_ROUTES.DASHBOARD.BRANDS, icon: Rocket, label: 'Brands' },
                 { href: FRONTEND_ROUTES.DASHBOARD.COLLABORATIONS, icon: Handshake, label: 'Collabs' },
                 { href: FRONTEND_ROUTES.DASHBOARD.AUCTIONS, icon: Gavel, label: 'Auctions' },
-                { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
                 { href: FRONTEND_ROUTES.DASHBOARD.VIDEOS, icon: Video, label: 'Videos' },
+                { href: FRONTEND_ROUTES.DASHBOARD.PITCHES, icon: Sparkles, label: 'Pitches' },
                 { href: FRONTEND_ROUTES.DASHBOARD.EARNINGS, icon: CreditCard, label: 'Earnings' },
                 { href: FRONTEND_ROUTES.DASHBOARD.REFERRALS, icon: UserPlus, label: 'Referrals' },
                 { href: FRONTEND_ROUTES.DASHBOARD.TOP_UP, icon: Coins, label: 'Top Up' },
@@ -176,7 +177,7 @@ export const BottomNav = () => {
 
                 {/* More Menu */}
                 {overflowItems.length > 0 && (
-                    <Sheet>
+                    <Sheet open={isOpen} onOpenChange={setIsOpen}>
                         <SheetTrigger asChild>
                             <button
                                 className={cn(
@@ -208,6 +209,7 @@ export const BottomNav = () => {
                                             key={item.href}
                                             href={item.href}
                                             prefetch={false}
+                                            onClick={() => setIsOpen(false)}
                                             className={cn(
                                                 "flex flex-col items-center justify-center p-4 rounded-2xl transition-all duration-300 gap-2",
                                                 active

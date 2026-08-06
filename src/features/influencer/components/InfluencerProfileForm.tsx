@@ -21,9 +21,6 @@ import {
     ArrowRight,
     ArrowLeft,
     Sparkles,
-    Instagram,
-    Youtube,
-    Twitter,
     Globe,
     Link as LinkIcon,
     Camera
@@ -218,24 +215,38 @@ export const InfluencerProfileForm = ({
         // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
         const cleanedValues: Record<string, any> = {};
         Object.entries(formattedValues).forEach(([key, val]) => {
-            if (val === '') {
+            let processedVal = val;
+            if (typeof val === 'string') {
+                processedVal = val.trim();
+            } else if (Array.isArray(val) && key === 'platforms') {
+                processedVal = (val as any[]).map(p => ({
+                    ...p,
+                    handle: typeof p.handle === 'string' ? p.handle.trim() : p.handle
+                }));
+            }
+
+            if (processedVal === '') {
                 cleanedValues[key] = null;
-            } else if (Array.isArray(val) && val.length === 0) {
+            } else if (Array.isArray(processedVal) && processedVal.length === 0) {
                 cleanedValues[key] = null;
-            } else if (val && typeof val === 'object' && !Array.isArray(val)) {
-                const subEntries = Object.entries(val);
+            } else if (processedVal && typeof processedVal === 'object' && !Array.isArray(processedVal)) {
+                const subEntries = Object.entries(processedVal);
                 const hasActualValues = subEntries.some(([_, v]) => (v as any) !== '' && v !== null && v !== undefined);
                 if (!hasActualValues) {
                     cleanedValues[key] = null;
                 } else {
                     const cleanedSub: Record<string, any> = {};
                     subEntries.forEach(([subKey, subVal]) => {
-                        cleanedSub[subKey] = (subVal as any) === '' ? null : subVal;
+                        let processedSubVal: any = subVal;
+                        if (typeof subVal === 'string') {
+                            processedSubVal = (subVal as string).trim();
+                        }
+                        cleanedSub[subKey] = processedSubVal === '' ? null : processedSubVal;
                     });
                     cleanedValues[key] = cleanedSub;
                 }
             } else {
-                cleanedValues[key] = val;
+                cleanedValues[key] = processedVal;
             }
         });
 
@@ -277,24 +288,38 @@ export const InfluencerProfileForm = ({
         // Clean values: convert empty strings and empty arrays to null to avoid backend validation errors
         const cleanedValues: Record<string, any> = {};
         Object.entries(formattedValues).forEach(([key, val]) => {
-            if (val === '') {
+            let processedVal = val;
+            if (typeof val === 'string') {
+                processedVal = val.trim();
+            } else if (Array.isArray(val) && key === 'platforms') {
+                processedVal = (val as any[]).map(p => ({
+                    ...p,
+                    handle: typeof p.handle === 'string' ? p.handle.trim() : p.handle
+                }));
+            }
+
+            if (processedVal === '') {
                 cleanedValues[key] = null;
-            } else if (Array.isArray(val) && val.length === 0) {
+            } else if (Array.isArray(processedVal) && processedVal.length === 0) {
                 cleanedValues[key] = null;
-            } else if (val && typeof val === 'object' && !Array.isArray(val)) {
-                const subEntries = Object.entries(val);
+            } else if (processedVal && typeof processedVal === 'object' && !Array.isArray(processedVal)) {
+                const subEntries = Object.entries(processedVal);
                 const hasActualValues = subEntries.some(([_, v]) => (v as any) !== '' && v !== null && v !== undefined);
                 if (!hasActualValues) {
                     cleanedValues[key] = null;
                 } else {
                     const cleanedSub: Record<string, any> = {};
                     subEntries.forEach(([subKey, subVal]) => {
-                        cleanedSub[subKey] = (subVal as any) === '' ? null : subVal;
+                        let processedSubVal: any = subVal;
+                        if (typeof subVal === 'string') {
+                            processedSubVal = (subVal as string).trim();
+                        }
+                        cleanedSub[subKey] = processedSubVal === '' ? null : processedSubVal;
                     });
                     cleanedValues[key] = cleanedSub;
                 }
             } else {
-                cleanedValues[key] = val;
+                cleanedValues[key] = processedVal;
             }
         });
 
@@ -327,15 +352,6 @@ export const InfluencerProfileForm = ({
                 // If on final step, manually trigger submission
                 form.handleSubmit(handleFormSubmit, handleInvalidSubmit)();
             }
-        }
-    };
-
-    const getStepIcon = (platform: string) => {
-        switch (platform.toLowerCase()) {
-            case 'instagram': return <Instagram size={18} />;
-            case 'youtube': return <Youtube size={18} />;
-            case 'twitter': return <Twitter size={18} />;
-            default: return <Globe size={18} />;
         }
     };
 
@@ -810,7 +826,7 @@ export const InfluencerProfileForm = ({
                                                 name="minPrice"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="font-bold">Minimum Rate ($)</FormLabel>
+                                                        <FormLabel className="font-bold">Minimum Rate (₹)</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"
@@ -832,7 +848,7 @@ export const InfluencerProfileForm = ({
                                                 name="maxPrice"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="font-bold">Maximum Rate ($)</FormLabel>
+                                                        <FormLabel className="font-bold">Maximum Rate (₹)</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"

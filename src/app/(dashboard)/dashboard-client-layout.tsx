@@ -66,7 +66,8 @@ export default function DashboardClientLayout({
                             !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-6 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                         )}>
                             <div className={cn(
-                                "h-full w-full mx-auto",
+                                "w-full mx-auto",
+                                isMessagesPage ? "h-full" : "min-h-full flex flex-col",
                                 !isMessagesPage && "max-w-[1600px]"
                             )}>
                                 {children}
@@ -100,7 +101,8 @@ export default function DashboardClientLayout({
                                 !isMessagesPage ? 'px-4 pt-4 pb-20 md:px-6 md:pt-8 lg:px-10 lg:pt-10 lg:pb-0 overflow-y-auto' : 'overflow-hidden h-full'
                             )}>
                                 <div className={cn(
-                                    "h-full w-full mx-auto",
+                                    "w-full mx-auto",
+                                    isMessagesPage ? "h-full" : "min-h-full flex flex-col",
                                     !isMessagesPage && "max-w-[1600px]"
                                 )}>
                                     {children}
