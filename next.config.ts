@@ -9,7 +9,7 @@ const cspHeader = `
     https://*.posthog.com
     https://googleads.g.doubleclick.net
     https://www.googleadservices.com
-    https://checkout.razorpay.com;
+    https://*.razorpay.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob:
     https://kollabary.s3.ap-south-1.amazonaws.com
