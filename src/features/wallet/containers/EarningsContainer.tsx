@@ -75,6 +75,12 @@ export const EarningsContainer = () => {
                                     Earn KC by referring friends, participating in platform events, or receiving daily allowances based on your activity tier.
                                 </p>
                             </div>
+                            <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10">
+                                <p className="text-xs font-bold text-amber-500 uppercase mb-1">Weekly Rewards</p>
+                                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                    Please note that weekly rewards coins have a limited usage period and will expire if not used.
+                                </p>
+                            </div>
                         </div>
                     </Card>
                 </div>
