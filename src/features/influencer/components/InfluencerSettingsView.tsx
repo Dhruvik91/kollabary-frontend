@@ -19,6 +19,7 @@ import {
     Trash2,
     AlertTriangle,
     Bell,
+    CreditCard,
 } from 'lucide-react';
 import { BackButton } from '@/components/shared/BackButton';
 import { useSubmitVerification } from '@/hooks/queries/useVerificationQueries';
@@ -34,13 +35,15 @@ import { InfluencerProfile, AvailabilityStatus, CollaborationType } from '@/type
 import { cn } from '@/lib/utils';
 import { formatCollaborationType } from '@/lib/format-collaboration-type';
 import { useUpdateInfluencerProfile, useUpdateUserStatus, useDeleteAccount } from '@/hooks/queries/useInfluencerQueries';
-import { FRONTEND_ROUTES } from '@/constants';
 import { PasswordUpdateForm } from '@/features/profile/components/PasswordUpdateForm';
 import { useChangePasswordMutation } from '@/hooks/queries/useProfileQueries';
 import { useLogout } from '@/hooks/use-auth.hooks';
 import { UserStatus } from '@/types/auth.types';
 import { useAuth } from '@/contexts/auth-context';
 import { useNotification } from '@/contexts/notification-context';
+import { useCancelSubscription } from '@/hooks/queries/useSubscriptionQueries';
+import { useRouter } from 'next/navigation';
+import { FRONTEND_ROUTES } from '@/constants';
 import {
     Select,
     SelectContent,
@@ -77,10 +80,13 @@ export const InfluencerSettingsView = ({
     const logoutMutation = useLogout();
     const updateStatusMutation = useUpdateUserStatus();
     const deleteAccountMutation = useDeleteAccount();
-    
+    const cancelSubscriptionMutation = useCancelSubscription();
+    const router = useRouter();
+
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     const { user } = useAuth();
     const {
@@ -154,6 +160,14 @@ export const InfluencerSettingsView = ({
         });
     };
 
+    const handleCancelSubscription = () => {
+        cancelSubscriptionMutation.mutate(undefined, {
+            onSuccess: () => {
+                setIsCancelModalOpen(false);
+            }
+        });
+    };
+
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 md:px-0">
             <BackButton label="Back to Profile" className="p-0" />
@@ -180,200 +194,200 @@ export const InfluencerSettingsView = ({
                 {/* 1. Availability */}
                 {influencer && (
                     <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
-                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500">
-                                    <Radio size={20} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold tracking-tight">Availability Status</h3>
-                                    <p className="text-sm text-muted-foreground">Control whether you appear available for collaborations</p>
-                                </div>
-                            </div>
-                        </div>
-                        <CardContent className="p-6">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                            <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
                                 <div className="flex items-center gap-3">
-                                    <span className={cn("w-3 h-3 rounded-full ring-4 ring-offset-2 ring-offset-background", getAvailabilityColor(influencer.availability), {
-                                        'ring-green-500/20': influencer.availability === AvailabilityStatus.OPEN,
-                                        'ring-yellow-500/20': influencer.availability === AvailabilityStatus.BUSY,
-                                        'ring-red-500/20': influencer.availability === AvailabilityStatus.CLOSED,
-                                    })} />
-                                    <span className="text-sm text-muted-foreground">{getAvailabilityLabel(influencer.availability)}</span>
+                                    <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500">
+                                        <Radio size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold tracking-tight">Availability Status</h3>
+                                        <p className="text-sm text-muted-foreground">Control whether you appear available for collaborations</p>
+                                    </div>
                                 </div>
-                                <Select
-                                    value={influencer.availability}
-                                    onValueChange={handleUpdateAvailability}
-                                    disabled={updateInfluencer.isPending}
-                                >
-                                    <SelectTrigger className="w-[160px] h-10 rounded-xl font-bold text-sm">
-                                        <SelectValue placeholder={influencer.availability} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value={AvailabilityStatus.OPEN}>
-                                            <div className="flex items-center gap-2">
-                                                <span className="w-2 h-2 rounded-full bg-green-500" />
-                                                Open
-                                            </div>
-                                        </SelectItem>
-                                        <SelectItem value={AvailabilityStatus.BUSY}>
-                                            <div className="flex items-center gap-2">
-                                                <span className="w-2 h-2 rounded-full bg-yellow-500" />
-                                                Busy
-                                            </div>
-                                        </SelectItem>
-                                        <SelectItem value={AvailabilityStatus.CLOSED}>
-                                            <div className="flex items-center gap-2">
-                                                <span className="w-2 h-2 rounded-full bg-red-500" />
-                                                Closed
-                                            </div>
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
                             </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                            <CardContent className="p-6">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className={cn("w-3 h-3 rounded-full ring-4 ring-offset-2 ring-offset-background", getAvailabilityColor(influencer.availability), {
+                                            'ring-green-500/20': influencer.availability === AvailabilityStatus.OPEN,
+                                            'ring-yellow-500/20': influencer.availability === AvailabilityStatus.BUSY,
+                                            'ring-red-500/20': influencer.availability === AvailabilityStatus.CLOSED,
+                                        })} />
+                                        <span className="text-sm text-muted-foreground">{getAvailabilityLabel(influencer.availability)}</span>
+                                    </div>
+                                    <Select
+                                        value={influencer.availability}
+                                        onValueChange={handleUpdateAvailability}
+                                        disabled={updateInfluencer.isPending}
+                                    >
+                                        <SelectTrigger className="w-[160px] h-10 rounded-xl font-bold text-sm">
+                                            <SelectValue placeholder={influencer.availability} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value={AvailabilityStatus.OPEN}>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-green-500" />
+                                                    Open
+                                                </div>
+                                            </SelectItem>
+                                            <SelectItem value={AvailabilityStatus.BUSY}>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                                                    Busy
+                                                </div>
+                                            </SelectItem>
+                                            <SelectItem value={AvailabilityStatus.CLOSED}>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                                                    Closed
+                                                </div>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
                 )}
 
                 {/* 2. Collaboration Types */}
                 {influencer && (
                     <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
-                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                    <Calendar size={20} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold tracking-tight">Collaboration Types</h3>
-                                    <p className="text-sm text-muted-foreground">Define what types of collaborations you&apos;re open to</p>
+                        <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                            <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                        <Calendar size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold tracking-tight">Collaboration Types</h3>
+                                        <p className="text-sm text-muted-foreground">Define what types of collaborations you&apos;re open to</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <CardContent className="p-6">
-                            <div className="flex flex-wrap gap-2">
-                                {collaborationTypes.length > 0 ? (
-                                    collaborationTypes.map((type) => (
-                                        <Badge
-                                            key={type}
-                                            className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold flex items-center gap-2 shadow-none hover:bg-primary/10 transition-colors"
-                                        >
-                                            {formatCollaborationType(type)}
-                                            <button
-                                                onClick={() => handleRemoveCollabType(type)}
-                                                className="hover:text-destructive transition-colors"
-                                                disabled={updateInfluencer.isPending}
-                                                aria-label={`Remove ${formatCollaborationType(type)}`}
+                            <CardContent className="p-6">
+                                <div className="flex flex-wrap gap-2">
+                                    {collaborationTypes.length > 0 ? (
+                                        collaborationTypes.map((type) => (
+                                            <Badge
+                                                key={type}
+                                                className="px-4 py-2 bg-primary/5 border border-primary/10 text-primary rounded-xl text-sm font-bold flex items-center gap-2 shadow-none hover:bg-primary/10 transition-colors"
                                             >
-                                                <X size={14} />
-                                            </button>
-                                        </Badge>
-                                    ))
-                                ) : (
-                                    <p className="text-sm text-muted-foreground italic">No collaboration types configured yet.</p>
-                                )}
+                                                {formatCollaborationType(type)}
+                                                <button
+                                                    onClick={() => handleRemoveCollabType(type)}
+                                                    className="hover:text-destructive transition-colors"
+                                                    disabled={updateInfluencer.isPending}
+                                                    aria-label={`Remove ${formatCollaborationType(type)}`}
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </Badge>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground italic">No collaboration types configured yet.</p>
+                                    )}
 
-                                <Select
-                                    key={`collab-type-${collaborationTypes.length}`}
-                                    onValueChange={(val) => handleAddCollabType(val as CollaborationType)}
-                                    disabled={updateInfluencer.isPending}
-                                >
-                                    <SelectTrigger className="w-fit h-9 rounded-xl border-dashed border-2 px-3 text-xs font-bold">
-                                        <div className="flex items-center gap-2">
-                                            <Plus size={14} />
-                                            <SelectValue placeholder="Add Type" />
-                                        </div>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {Object.values(CollaborationType)
-                                            .filter(t => !collaborationTypes.includes(t as any))
-                                            .map(t => (
-                                                <SelectItem key={t} value={t}>
-                                                    {formatCollaborationType(t)}
-                                                </SelectItem>
-                                            ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                                    <Select
+                                        key={`collab-type-${collaborationTypes.length}`}
+                                        onValueChange={(val) => handleAddCollabType(val as CollaborationType)}
+                                        disabled={updateInfluencer.isPending}
+                                    >
+                                        <SelectTrigger className="w-fit h-9 rounded-xl border-dashed border-2 px-3 text-xs font-bold">
+                                            <div className="flex items-center gap-2">
+                                                <Plus size={14} />
+                                                <SelectValue placeholder="Add Type" />
+                                            </div>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Object.values(CollaborationType)
+                                                .filter(t => !collaborationTypes.includes(t as any))
+                                                .map(t => (
+                                                    <SelectItem key={t} value={t}>
+                                                        {formatCollaborationType(t)}
+                                                    </SelectItem>
+                                                ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
                 )}
 
                 {/* 3. Account Verification */}
                 {influencer && (
                     <motion.div variants={item}>
-                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
-                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
-                                    <ShieldCheck size={20} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold tracking-tight">Account Verification</h3>
-                                    <p className="text-sm text-muted-foreground">Get the verified badge on your profile</p>
-                                </div>
-                            </div>
-                        </div>
-                        <CardContent className="p-6">
-                            {verified ? (
-                                <div className="flex items-center gap-3 p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
-                                    <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500">
+                        <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                            <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
                                         <ShieldCheck size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-blue-600 dark:text-blue-400">Verified Creator</p>
-                                        <p className="text-sm text-muted-foreground">Your account has been verified successfully.</p>
+                                        <h3 className="font-bold tracking-tight">Account Verification</h3>
+                                        <p className="text-sm text-muted-foreground">Get the verified badge on your profile</p>
                                     </div>
                                 </div>
-                            ) : currentVerification?.status === VerificationStatus.PENDING ? (
-                                <div className="flex items-center gap-3 p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
-                                    <div className="w-10 h-10 bg-yellow-500/10 rounded-full flex items-center justify-center text-yellow-600">
-                                        <Clock size={20} />
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-yellow-600 dark:text-yellow-400">Verification Pending</p>
-                                        <p className="text-sm text-muted-foreground">Your verification request is being reviewed by our team.</p>
-                                    </div>
-                                </div>
-                            ) : currentVerification?.status === VerificationStatus.REJECTED ? (
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div className="flex items-center gap-3 p-4 bg-red-500/5 border border-red-500/10 rounded-2xl flex-1">
-                                        <div className="w-10 h-10 bg-red-500/10 rounded-full flex items-center justify-center text-red-500">
-                                            <Flag size={20} />
+                            </div>
+                            <CardContent className="p-6">
+                                {verified ? (
+                                    <div className="flex items-center gap-3 p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
+                                        <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500">
+                                            <ShieldCheck size={20} />
                                         </div>
                                         <div>
-                                            <p className="font-bold text-red-600 dark:text-red-400">Verification Rejected</p>
-                                            <p className="text-sm text-muted-foreground">Your previous request was not approved. You can submit a new one.</p>
+                                            <p className="font-bold text-blue-600 dark:text-blue-400">Verified Creator</p>
+                                            <p className="text-sm text-muted-foreground">Your account has been verified successfully.</p>
                                         </div>
                                     </div>
-                                    <Button
-                                        onClick={() => setIsVerificationModalOpen(true)}
-                                        className="rounded-xl font-bold shrink-0"
-                                    >
-                                        Try Again
-                                    </Button>
-                                </div>
-                            ) : (
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div>
-                                        <p className="font-medium">Request profile verification to build trust with brands.</p>
-                                        <p className="text-sm text-muted-foreground mt-1">You&apos;ll need to provide proof of identity or social media influence.</p>
+                                ) : currentVerification?.status === VerificationStatus.PENDING ? (
+                                    <div className="flex items-center gap-3 p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl">
+                                        <div className="w-10 h-10 bg-yellow-500/10 rounded-full flex items-center justify-center text-yellow-600">
+                                            <Clock size={20} />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-yellow-600 dark:text-yellow-400">Verification Pending</p>
+                                            <p className="text-sm text-muted-foreground">Your verification request is being reviewed by our team.</p>
+                                        </div>
                                     </div>
-                                    <Button
-                                        onClick={() => setIsVerificationModalOpen(true)}
-                                        className="rounded-xl font-bold shrink-0 gap-2"
-                                    >
-                                        <ShieldCheck size={16} />
-                                        Get Verified
-                                    </Button>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                                ) : currentVerification?.status === VerificationStatus.REJECTED ? (
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                        <div className="flex items-center gap-3 p-4 bg-red-500/5 border border-red-500/10 rounded-2xl flex-1">
+                                            <div className="w-10 h-10 bg-red-500/10 rounded-full flex items-center justify-center text-red-500">
+                                                <Flag size={20} />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-red-600 dark:text-red-400">Verification Rejected</p>
+                                                <p className="text-sm text-muted-foreground">Your previous request was not approved. You can submit a new one.</p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            onClick={() => setIsVerificationModalOpen(true)}
+                                            className="rounded-xl font-bold shrink-0"
+                                        >
+                                            Try Again
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                        <div>
+                                            <p className="font-medium">Request profile verification to build trust with brands.</p>
+                                            <p className="text-sm text-muted-foreground mt-1">You&apos;ll need to provide proof of identity or social media influence.</p>
+                                        </div>
+                                        <Button
+                                            onClick={() => setIsVerificationModalOpen(true)}
+                                            className="rounded-xl font-bold shrink-0 gap-2"
+                                        >
+                                            <ShieldCheck size={16} />
+                                            Get Verified
+                                        </Button>
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </motion.div>
                 )}
 
                 {/* Push Notifications Section */}
@@ -402,13 +416,13 @@ export const InfluencerSettingsView = ({
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                     <div className="space-y-1">
                                         <p className="font-medium">
-                                            {isSubscribed 
-                                                ? "Push notifications are active on this device." 
+                                            {isSubscribed
+                                                ? "Push notifications are active on this device."
                                                 : "Subscribe to receive push notifications on this device."}
                                         </p>
                                         <p className="text-xs text-muted-foreground">
-                                            {isSubscribed 
-                                                ? "You will get notified about direct messages, campaign status updates, and key platform actions." 
+                                            {isSubscribed
+                                                ? "You will get notified about direct messages, campaign status updates, and key platform actions."
                                                 : "Never miss new collaboration offers or urgent chat updates from brands."}
                                         </p>
                                     </div>
@@ -419,6 +433,82 @@ export const InfluencerSettingsView = ({
                                         disabled={isPushLoading}
                                     >
                                         {isPushLoading ? "Processing..." : (isSubscribed ? "Disable Push" : "Enable Push")}
+                                    </Button>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
+                {/* Subscription Management */}
+                <motion.div variants={item}>
+                    <Card className="rounded-[2rem] border-border/50 bg-card/50 glass-card overflow-hidden">
+                        <div className="p-6 border-b border-border/50 glass-section bg-muted/30">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                    <CreditCard size={20} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold tracking-tight">Subscription Plan</h3>
+                                    <p className="text-sm text-muted-foreground">Manage your creator plan and billing details</p>
+                                </div>
+                            </div>
+                        </div>
+                        <CardContent className="p-6">
+                            {user?.subscription ? (
+                                <div className="space-y-4">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-extrabold text-lg text-primary">
+                                                    {user.subscription.plan?.name || 'FREE'} Plan
+                                                </span>
+                                                <Badge variant="outline" className={cn("rounded-md px-2 py-0.5 text-xs font-bold capitalize",
+                                                    user.subscription.status === 'ACTIVE' ? "border-green-500 text-green-500 bg-green-500/5" : "border-yellow-500 text-yellow-500 bg-yellow-500/5"
+                                                )}>
+                                                    {user.subscription.status.toLowerCase()}
+                                                </Badge>
+                                            </div>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                {user.subscription.plan?.price && Number(user.subscription.plan.price) > 0 
+                                                    ? `₹${user.subscription.plan.price} / ${user.subscription.plan.billingPeriod || 'monthly'}` 
+                                                    : 'Free tier'}
+                                            </p>
+                                            {user.subscription.currentPeriodEnd && (
+                                                <p className="text-xs text-muted-foreground mt-1">
+                                                    Next billing date: {new Date(user.subscription.currentPeriodEnd).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                                                </p>
+                                            )}
+                                            {user.subscription.cancelledAt && (
+                                                <p className="text-xs text-destructive font-bold mt-1">
+                                                    Cancelled on: {new Date(user.subscription.cancelledAt).toLocaleDateString(undefined, { dateStyle: 'medium' })} (Access active until period end)
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {user.subscription.status === 'ACTIVE' && !user.subscription.cancelledAt && user.subscription.plan?.name !== 'FREE' && (
+                                            <Button
+                                                variant="destructive"
+                                                onClick={() => setIsCancelModalOpen(true)}
+                                                className="rounded-xl font-bold px-6 shadow-lg shadow-red-500/10 hover:bg-red-600 transition-all shrink-0"
+                                                disabled={cancelSubscriptionMutation.isPending}
+                                            >
+                                                Cancel Subscription
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <p className="font-bold text-lg text-muted-foreground">No active subscription plan</p>
+                                        <p className="text-xs text-muted-foreground">You are currently running on a default/legacy plan. Please pick a plan to access all premium features.</p>
+                                    </div>
+                                    <Button
+                                        onClick={() => router.push(FRONTEND_ROUTES.DASHBOARD.INFLUENCER_SETUP)}
+                                        className="rounded-xl font-bold shrink-0"
+                                    >
+                                        Choose Plan
                                     </Button>
                                 </div>
                             )}
@@ -469,7 +559,7 @@ export const InfluencerSettingsView = ({
                             {/* Inactive / Active Toggle */}
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-zinc-500/5 border border-zinc-500/10 rounded-2xl">
                                 <div className="flex items-center gap-3">
-                                    <div className={cn("w-10 h-10 rounded-full flex items-center justify-center", 
+                                    <div className={cn("w-10 h-10 rounded-full flex items-center justify-center",
                                         userStatus === UserStatus.ACTIVE ? "bg-green-500/10 text-green-500" : "bg-zinc-500/10 text-zinc-500"
                                     )}>
                                         {userStatus === UserStatus.ACTIVE ? <UserCheck size={20} /> : <UserX size={20} />}
@@ -477,8 +567,8 @@ export const InfluencerSettingsView = ({
                                     <div>
                                         <p className="font-bold">Account Visibility</p>
                                         <p className="text-sm text-muted-foreground">
-                                            {userStatus === UserStatus.ACTIVE 
-                                                ? "Your profile is visible to brands and other users." 
+                                            {userStatus === UserStatus.ACTIVE
+                                                ? "Your profile is visible to brands and other users."
                                                 : "Your profile is currently hidden from search and brands."}
                                         </p>
                                     </div>
@@ -610,22 +700,22 @@ export const InfluencerSettingsView = ({
                 isOpen={isStatusModalOpen}
                 onClose={() => setIsStatusModalOpen(false)}
                 title={userStatus === UserStatus.ACTIVE ? "Deactivate Account?" : "Activate Account?"}
-                description={userStatus === UserStatus.ACTIVE 
-                    ? "Your profile will be hidden from search results and you won't receive new collaboration requests. You can reactivate anytime." 
+                description={userStatus === UserStatus.ACTIVE
+                    ? "Your profile will be hidden from search results and you won't receive new collaboration requests. You can reactivate anytime."
                     : "Your profile will become visible again and you can start receiving collaboration requests."}
                 size="sm"
             >
                 <div className="flex flex-col gap-3">
                     <Button
                         size="lg"
-                        className={cn("w-full rounded-2xl font-bold h-12 shadow-lg", 
+                        className={cn("w-full rounded-2xl font-bold h-12 shadow-lg",
                             userStatus === UserStatus.ACTIVE ? "bg-zinc-800 text-white shadow-zinc-500/20" : "bg-primary text-primary-foreground shadow-primary/20"
                         )}
                         onClick={handleToggleStatus}
                         disabled={updateStatusMutation.isPending}
                     >
-                        {updateStatusMutation.isPending 
-                            ? "Updating..." 
+                        {updateStatusMutation.isPending
+                            ? "Updating..."
                             : (userStatus === UserStatus.ACTIVE ? "Yes, Deactivate" : "Yes, Activate")}
                     </Button>
                     <Button
@@ -706,6 +796,36 @@ export const InfluencerSettingsView = ({
                         onClick={() => setIsLogoutModalOpen(false)}
                     >
                         Cancel
+                    </Button>
+                </div>
+            </AnimatedModal>
+
+            {/* Cancel Subscription Confirmation Modal */}
+            <AnimatedModal
+                isOpen={isCancelModalOpen}
+                onClose={() => setIsCancelModalOpen(false)}
+                title="Cancel Your Subscription?"
+                description="Are you sure you want to cancel your subscription? You will still have access to your paid features until the end of your billing cycle."
+                size="sm"
+            >
+                <div className="flex flex-col gap-3">
+                    <Button
+                        variant="destructive"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12 shadow-lg shadow-red-500/20"
+                        onClick={handleCancelSubscription}
+                        disabled={cancelSubscriptionMutation.isPending}
+                    >
+                        {cancelSubscriptionMutation.isPending ? "Cancelling..." : "Yes, Cancel Subscription"}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        className="w-full rounded-2xl font-bold h-12"
+                        onClick={() => setIsCancelModalOpen(false)}
+                        disabled={cancelSubscriptionMutation.isPending}
+                    >
+                        Keep My Plan
                     </Button>
                 </div>
             </AnimatedModal>

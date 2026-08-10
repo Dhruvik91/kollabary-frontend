@@ -99,6 +99,9 @@ export const API_CONFIG = {
         },
         subscription: {
             plans: '/subscription/plans',
+            initiate: '/subscription/initiate',
+            verify: '/subscription/verify',
+            cancel: '/subscription/cancel',
         },
         auction: {
             base: '/auctions',

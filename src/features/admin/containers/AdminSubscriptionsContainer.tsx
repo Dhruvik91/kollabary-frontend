@@ -3,15 +3,12 @@
 import React, { useState } from 'react';
 import {
     Zap,
-    ShieldCheck,
-    Settings2,
     Plus,
     CreditCard,
     AlertCircle,
-    Check,
     Trash2,
     Edit2,
-    CheckCircle2
+    X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -25,29 +22,12 @@ import {
 } from '@/hooks/use-admin.hooks';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { cn } from '@/lib/utils';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+import { AnimatedModal } from '@/components/modal/AnimatedModal';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-
-const getIconForPlan = (name: string, index: number) => {
-    const icons = [Zap, ShieldCheck, Settings2];
-    return icons[index % icons.length];
-};
-
-const getColorForPlan = (index: number, popular?: boolean) => {
-    if (popular) return 'bg-blue-600 text-white';
-    const colors = ['bg-zinc-100 text-zinc-600', 'bg-indigo-900 text-white', 'bg-emerald-600 text-white'];
-    return colors[index % colors.length];
-};
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ImageUpload } from '@/components/shared/ImageUpload';
 
 
 export function AdminSubscriptionsContainer() {
@@ -56,13 +36,70 @@ export function AdminSubscriptionsContainer() {
     const deletePlan = useDeleteSubscriptionPlan();
 
     const [isAdding, setIsAdding] = useState(false);
-    const [newPlan, setNewPlan] = useState({
+    const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
+    const [currentFeature, setCurrentFeature] = useState('');
+    const [deletingPlan, setDeletingPlan] = useState<any | null>(null);
+    const [newPlan, setNewPlan] = useState<{
+        name: string;
+        price: string;
+        description: string;
+        isPopular: boolean;
+        isActive: boolean;
+        features: string[];
+        imageUrl: string;
+    }>({
         name: '',
         price: '',
         description: '',
         isPopular: false,
-        isActive: true
+        isActive: true,
+        features: [],
+        imageUrl: ''
     });
+
+    const resetForm = () => {
+        setNewPlan({
+            name: '',
+            price: '',
+            description: '',
+            isPopular: false,
+            isActive: true,
+            features: [],
+            imageUrl: ''
+        });
+        setEditingPlanId(null);
+        setCurrentFeature('');
+    };
+
+    const handleEditClick = (plan: any) => {
+        setNewPlan({
+            name: plan.name,
+            price: plan.price.toString(),
+            description: plan.description || '',
+            isPopular: plan.isPopular || false,
+            isActive: plan.isActive ?? true,
+            features: Array.isArray(plan.features) ? plan.features : [],
+            imageUrl: plan.imageUrl || ''
+        });
+        setEditingPlanId(plan.id);
+        setIsAdding(true);
+    };
+
+    const handleAddFeature = () => {
+        if (!currentFeature.trim()) return;
+        setNewPlan(prev => ({
+            ...prev,
+            features: [...prev.features, currentFeature.trim()]
+        }));
+        setCurrentFeature('');
+    };
+
+    const handleRemoveFeature = (indexToRemove: number) => {
+        setNewPlan(prev => ({
+            ...prev,
+            features: prev.features.filter((_, index) => index !== indexToRemove)
+        }));
+    };
 
     const handleAddPlan = () => {
         if (!newPlan.name || !newPlan.price) return;
@@ -74,25 +111,24 @@ export function AdminSubscriptionsContainer() {
                 description: newPlan.description,
                 isPopular: newPlan.isPopular,
                 isActive: newPlan.isActive,
-                features: [],
+                features: newPlan.features,
+                imageUrl: newPlan.imageUrl || undefined,
             },
             {
                 onSuccess: () => {
                     setIsAdding(false);
-                    setNewPlan({
-                        name: '',
-                        price: '',
-                        description: '',
-                        isPopular: false,
-                        isActive: true
-                    });
+                    resetForm();
                 },
             }
         );
     };
 
-    const handleDelete = (id: string) => {
-        deletePlan.mutate(id);
+    const handleDelete = (plan: any) => {
+        deletePlan.mutate(plan.id, {
+            onSuccess: () => {
+                setDeletingPlan(null);
+            }
+        });
     };
 
     const columns: ColumnDef<any>[] = [
@@ -167,14 +203,19 @@ export function AdminSubscriptionsContainer() {
             meta: { headerAlign: 'right' },
             cell: ({ row }) => (
                 <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary"
+                        onClick={() => handleEditClick(row.original)}
+                    >
                         <Edit2 size={16} />
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
                         className="h-9 w-9 rounded-xl text-rose-500 hover:bg-rose-500/10 hover:text-rose-600"
-                        onClick={() => handleDelete(row.original.id)}
+                        onClick={() => setDeletingPlan(row.original)}
                     >
                         <Trash2 size={16} />
                     </Button>
@@ -202,29 +243,65 @@ export function AdminSubscriptionsContainer() {
                 subtitle="Define pricing and feature limits for the platform."
                 icon={CreditCard}
                 action={
-                    <Dialog open={isAdding} onOpenChange={setIsAdding}>
-                        <DialogTrigger asChild>
-                            <Button className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all">
-                                <Plus size={18} />
-                                New Plan
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="rounded-2xl sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>Create New Plan</DialogTitle>
-                                <DialogDescription>
-                                    Add a new subscription tier to the platform.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div className="py-4 space-y-4">
+                    <>
+                        <Button
+                            className="rounded-xl gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all"
+                            onClick={() => {
+                                resetForm();
+                                setIsAdding(true);
+                            }}
+                        >
+                            <Plus size={18} />
+                            New Plan
+                        </Button>
+                        <AnimatedModal
+                            isOpen={isAdding}
+                            onClose={() => {
+                                setIsAdding(false);
+                                resetForm();
+                            }}
+                            title={editingPlanId ? 'Edit Plan' : 'Create New Plan'}
+                            description={editingPlanId ? 'Update this subscription tier details.' : 'Add a new subscription tier to the platform.'}
+                            size="md"
+                            footer={
+                                <div className="flex justify-end gap-3">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                            setIsAdding(false);
+                                            resetForm();
+                                        }}
+                                        className="rounded-xl"
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        onClick={handleAddPlan}
+                                        className="rounded-xl"
+                                        disabled={createPlan.isPending}
+                                    >
+                                        {editingPlanId ? 'Save Changes' : 'Create Plan'}
+                                    </Button>
+                                </div>
+                            }
+                        >
+                            <div className="py-2 space-y-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Plan Name</label>
-                                    <Input
-                                        placeholder="e.g. Pro, Professional, Enterprise"
+                                    <Select
                                         value={newPlan.name}
-                                        onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
-                                        className="rounded-xl"
-                                    />
+                                        onValueChange={(val) => setNewPlan({ ...newPlan, name: val })}
+                                        disabled={!!editingPlanId}
+                                    >
+                                        <SelectTrigger className="rounded-xl">
+                                            <SelectValue placeholder="Select Plan Name" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl">
+                                            <SelectItem value="FREE">FREE</SelectItem>
+                                            <SelectItem value="PRO">PRO</SelectItem>
+                                            <SelectItem value="ELITE">ELITE</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Monthly Price (₹)</label>
@@ -245,6 +322,59 @@ export function AdminSubscriptionsContainer() {
                                         className="rounded-xl resize-none"
                                     />
                                 </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Plan Image</label>
+                                    <ImageUpload
+                                        value={newPlan.imageUrl}
+                                        onChange={(url) => setNewPlan({ ...newPlan, imageUrl: url })}
+                                        onRemove={() => setNewPlan({ ...newPlan, imageUrl: '' })}
+                                        crop={true}
+                                        maxSize={5}
+                                        message="Upload and crop image (Max 5MB)"
+                                        className="w-full"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium">Plan Features</label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            placeholder="e.g. 0% platform service fees"
+                                            value={currentFeature}
+                                            onChange={(e) => setCurrentFeature(e.target.value)}
+                                            className="rounded-xl"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleAddFeature();
+                                                }
+                                            }}
+                                        />
+                                        <Button
+                                            type="button"
+                                            onClick={handleAddFeature}
+                                            variant="secondary"
+                                            className="rounded-xl shrink-0"
+                                        >
+                                            Add
+                                        </Button>
+                                    </div>
+                                    {newPlan.features.length > 0 && (
+                                        <div className="mt-2 space-y-1.5 max-h-36 overflow-y-auto p-1 border border-border/50 rounded-xl">
+                                            {newPlan.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-center justify-between bg-muted/30 px-3 py-1.5 rounded-lg border border-border/20">
+                                                    <span className="text-xs font-medium text-foreground truncate max-w-[320px]">{feature}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveFeature(idx)}
+                                                        className="text-muted-foreground hover:text-rose-500 transition-colors p-1"
+                                                    >
+                                                        <X size={14} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="flex items-center justify-between p-3 border border-border/50 rounded-xl">
                                     <label className="text-sm font-medium">Popular Plan</label>
                                     <Switch
@@ -260,24 +390,8 @@ export function AdminSubscriptionsContainer() {
                                     />
                                 </div>
                             </div>
-                            <DialogFooter>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setIsAdding(false)}
-                                    className="rounded-xl"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    onClick={handleAddPlan}
-                                    className="rounded-xl"
-                                    disabled={createPlan.isPending}
-                                >
-                                    Create Plan
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+                        </AnimatedModal>
+                    </>
                 }
             />
 
@@ -297,35 +411,46 @@ export function AdminSubscriptionsContainer() {
                 }
             />
 
-            {/* Quick Stats section */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="rounded-3xl border border-border/50 bg-card/40 glass-card backdrop-blur-xl p-8 shadow-2xl shadow-black/5 flex flex-col md:flex-row items-center justify-between gap-8 mt-12"
+            {/* Delete Confirmation Modal */}
+            <AnimatedModal
+                isOpen={!!deletingPlan}
+                onClose={() => setDeletingPlan(null)}
+                title="Delete Subscription Plan"
+                description={
+                    deletingPlan ? (
+                        <span>
+                            Are you sure you want to delete the <span className="font-bold text-foreground">{deletingPlan.name}</span> plan? This action cannot be undone.
+                        </span>
+                    ) : ''
+                }
+                size="sm"
+                footer={
+                    <div className="flex justify-end gap-3">
+                        <Button
+                            variant="outline"
+                            onClick={() => setDeletingPlan(null)}
+                            className="rounded-xl"
+                            disabled={deletePlan.isPending}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => deletingPlan && handleDelete(deletingPlan)}
+                            className="rounded-xl bg-rose-600 hover:bg-rose-700 text-white"
+                            disabled={deletePlan.isPending}
+                        >
+                            {deletePlan.isPending ? 'Deleting...' : 'Delete Plan'}
+                        </Button>
+                    </div>
+                }
             >
-                <div>
-                    <h3 className="text-lg font-black uppercase tracking-tight flex items-center gap-2">
-                        <CreditCard size={20} className="text-primary" />
-                        Subscription Health
-                    </h3>
-                    <p className="mt-1 text-sm text-muted-foreground font-medium max-w-md">
-                        Monitoring global revenue and renewal rates across all defined tiers.
+                <div className="py-2 flex items-center gap-3 text-sm text-muted-foreground bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl">
+                    <AlertCircle className="text-amber-500 shrink-0" size={20} />
+                    <p>
+                        Deleting this plan will prevent any new users from signing up for it. Active subscribers on this tier will still maintain access until they cancel.
                     </p>
                 </div>
-
-                <div className="flex gap-8">
-                    <div className="text-center">
-                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Retention Rate</p>
-                        <p className="text-2xl font-black mt-1 text-emerald-600 tabular-nums italic">94.2%</p>
-                    </div>
-                    <div className="h-10 w-px bg-border shrink-0 self-center" />
-                    <div className="text-center">
-                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Avg. Revenue/User</p>
-                        <p className="text-2xl font-black mt-1 text-blue-600 tabular-nums italic">₹42.10</p>
-                    </div>
-                </div>
-            </motion.div>
+            </AnimatedModal>
         </div>
     );
 }

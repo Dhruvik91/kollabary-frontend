@@ -6,6 +6,7 @@ import { X, Loader2, ImageIcon, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { uploadService } from '@/services/upload.service';
+import ImageCropModal from './ImageCropModal';
 
 interface ImageUploadProps {
     value?: string;
@@ -15,6 +16,7 @@ interface ImageUploadProps {
     maxSize?: number; // in MB
     className?: string;
     message?: string;
+    crop?: boolean;
 }
 
 export const ImageUpload = ({
@@ -24,12 +26,15 @@ export const ImageUpload = ({
     disabled = false,
     maxSize = 100,
     className,
-    message = `Images or Videos up to ${maxSize}MB`
+    message = `Images or Videos up to ${maxSize}MB`,
+    crop = false
 }: ImageUploadProps) => {
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(value || null);
     const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [isCropping, setIsCropping] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Detect file type from initial value
@@ -37,8 +42,59 @@ export const ImageUpload = ({
         if (value) {
             const isVideo = value.match(/\.(mp4|mov|avi|mkv|webm)$|video/i);
             setFileType(isVideo ? 'video' : 'image');
+            setPreview(value);
+        } else {
+            setPreview(null);
         }
     }, [value]);
+
+    React.useEffect(() => {
+        return () => {
+            if (selectedImage) {
+                URL.revokeObjectURL(selectedImage);
+            }
+        };
+    }, [selectedImage]);
+
+    const uploadCroppedFile = async (croppedFile: File) => {
+        setIsUploading(true);
+        setError(null);
+        setFileType('image');
+
+        try {
+            // Create preview for cropped image
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
+            };
+            reader.readAsDataURL(croppedFile);
+
+            // Upload file using service
+            const data = await uploadService.uploadFile(croppedFile);
+            onChange(data.url);
+        } catch (err) {
+            setError('Failed to upload cropped image. Please try again.');
+            setPreview(null);
+            console.error('Upload error:', err);
+        } finally {
+            setIsUploading(false);
+            if (selectedImage) {
+                URL.revokeObjectURL(selectedImage);
+                setSelectedImage(null);
+            }
+        }
+    };
+
+    const handleCropCancel = () => {
+        setIsCropping(false);
+        if (selectedImage) {
+            URL.revokeObjectURL(selectedImage);
+            setSelectedImage(null);
+        }
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -62,6 +118,14 @@ export const ImageUpload = ({
 
         setError(null);
         setFileType(isImage ? 'image' : 'video');
+
+        if (isImage && crop) {
+            const objectUrl = URL.createObjectURL(file);
+            setSelectedImage(objectUrl);
+            setIsCropping(true);
+            return;
+        }
+
         setIsUploading(true);
 
         try {
@@ -202,6 +266,17 @@ export const ImageUpload = ({
                     <X size={16} className="text-destructive shrink-0" />
                     <p className="text-xs font-medium text-destructive">{error}</p>
                 </div>
+            )}
+
+            {isCropping && selectedImage && (
+                <ImageCropModal
+                    image={selectedImage}
+                    onClose={handleCropCancel}
+                    onCropDone={(croppedFile: File) => {
+                        setIsCropping(false);
+                        uploadCroppedFile(croppedFile);
+                    }}
+                />
             )}
         </div>
     );

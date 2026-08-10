@@ -1,3 +1,5 @@
+import { SubscriptionPlan } from '@/services/subscription.service';
+
 export enum UserRole {
     USER = 'USER',
     INFLUENCER = 'INFLUENCER',
@@ -22,6 +24,21 @@ export interface Profile {
     lastName?: string;
 }
 
+export interface UserSubscription {
+    id: string;
+    userId: string;
+    planId: string;
+    plan?: SubscriptionPlan;
+    razorpaySubscriptionId?: string | null;
+    status: 'PENDING' | 'ACTIVE' | 'HALTED' | 'CANCELLED' | 'EXPIRED';
+    currentPeriodStart?: string | null;
+    currentPeriodEnd?: string | null;
+    cancelledAt?: string | null;
+    metadata?: any;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface User {
     id: string;
     email: string;
@@ -33,6 +50,7 @@ export interface User {
     profile?: Profile;
     influencerProfile?: { id: string, fullName: string, avatarUrl?: string };
     username?: string;
+    subscription?: UserSubscription;
 }
 
 export interface AuthResponse {
