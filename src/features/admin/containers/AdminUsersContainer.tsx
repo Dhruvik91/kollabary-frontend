@@ -6,7 +6,8 @@ import {
     useAdminUsers,
     useBulkUpdateUserStatus,
     useModerateUser,
-    useAdminAddCoins
+    useAdminAddCoins,
+    useAdminRemoveCoins
 } from '@/hooks/use-admin.hooks';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -64,6 +65,7 @@ export const AdminUsersContainer = () => {
     const [isBulkConfirmOpen, setIsBulkConfirmOpen] = useState(false);
     const [bulkAction, setBulkAction] = useState<'ACTIVE' | 'SUSPENDED' | null>(null);
     const [isAddCoinsOpen, setIsAddCoinsOpen] = useState(false);
+    const [isDeleteCoinsOpen, setIsDeleteCoinsOpen] = useState(false);
     const [selectedUserForCoins, setSelectedUserForCoins] = useState<any>(null);
     const [coinAmount, setCoinAmount] = useState<string>('');
 
@@ -78,6 +80,7 @@ export const AdminUsersContainer = () => {
     const { mutate: bulkStatusUpdate, isPending: isBulkUpdating } = useBulkUpdateUserStatus();
     const { mutate: moderateUser } = useModerateUser();
     const { mutate: addCoins, isPending: isAddingCoins } = useAdminAddCoins();
+    const { mutate: removeCoins, isPending: isRemovingCoins } = useAdminRemoveCoins();
 
     const handleSelectAll = (checked: boolean) => {
         if (checked && data?.items) {
@@ -173,6 +176,21 @@ export const AdminUsersContainer = () => {
                     <Badge variant="destructive" className="bg-red-500/10 text-red-500 border-none">Banned</Badge>
                 )
             ),
+        },
+        {
+            id: 'walletBalance',
+            header: 'Wallet Balance',
+            cell: ({ row }) => {
+                const balance = row.original.wallet?.balance;
+                return (
+                    <div className="flex items-center gap-1.5 font-medium text-sm">
+                        <Coins className="w-4 h-4 text-amber-500" />
+                        <span>
+                            {balance !== undefined && balance !== null ? `${Number(balance).toLocaleString()}` : '0'}
+                        </span>
+                    </div>
+                );
+            },
         },
         {
             id: 'verified',
@@ -281,6 +299,16 @@ export const AdminUsersContainer = () => {
                                     }}>
                                         <Coins className="w-4 h-4 mr-2" />
                                         Add K Coins
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => {
+                                            setSelectedUserForCoins(row.original);
+                                            setIsDeleteCoinsOpen(true);
+                                        }}
+                                        className="text-red-500 focus:text-red-500"
+                                    >
+                                        <Coins className="w-4 h-4 mr-2" />
+                                        Delete K Coins
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -467,6 +495,68 @@ export const AdminUsersContainer = () => {
                             }}
                         >
                             {isAddingCoins ? 'Processing...' : 'Confirm Addition'}
+                        </Button>
+                    </div>
+                </div>
+            </AnimatedModal>
+
+            {/* Delete Coins Modal */}
+            <AnimatedModal
+                isOpen={isDeleteCoinsOpen}
+                onClose={() => {
+                    setIsDeleteCoinsOpen(false);
+                    setCoinAmount('');
+                    setSelectedUserForCoins(null);
+                }}
+                title="Delete K Coins"
+                description={`Directly deduct K Coins from ${(selectedUserForCoins?.role === 'INFLUENCER' ? selectedUserForCoins?.influencerProfile?.fullName : selectedUserForCoins?.profile?.fullName) || selectedUserForCoins?.username}'s wallet. Current balance: ${selectedUserForCoins?.wallet?.balance || 0} KC.`}
+                size="sm"
+            >
+                <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="delete-amount">Coin Amount</Label>
+                        <Input
+                            id="delete-amount"
+                            type="number"
+                            placeholder="Enter amount to deduct"
+                            value={coinAmount}
+                            onChange={(e) => setCoinAmount(e.target.value)}
+                            className="text-lg font-bold h-12"
+                        />
+                        {coinAmount && parseFloat(coinAmount) > (selectedUserForCoins?.wallet?.balance || 0) && (
+                            <p className="text-xs text-red-500 font-medium">
+                                Cannot deduct more than current balance ({selectedUserForCoins?.wallet?.balance || 0} KC).
+                            </p>
+                        )}
+                    </div>
+                    <div className="pt-4 flex gap-3">
+                        <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => setIsDeleteCoinsOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            className="flex-1"
+                            disabled={!coinAmount || parseFloat(coinAmount) <= 0 || parseFloat(coinAmount) > (selectedUserForCoins?.wallet?.balance || 0) || isRemovingCoins}
+                            onClick={() => {
+                                if (selectedUserForCoins && coinAmount) {
+                                    removeCoins({
+                                        userId: selectedUserForCoins.id,
+                                        amount: parseFloat(coinAmount)
+                                    }, {
+                                        onSuccess: () => {
+                                            setIsDeleteCoinsOpen(false);
+                                            setCoinAmount('');
+                                            setSelectedUserForCoins(null);
+                                        }
+                                    });
+                                }
+                            }}
+                        >
+                            {isRemovingCoins ? 'Processing...' : 'Confirm Deletion'}
                         </Button>
                     </div>
                 </div>

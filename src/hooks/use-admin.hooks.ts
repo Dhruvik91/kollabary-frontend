@@ -98,6 +98,26 @@ export function useAdminAddCoins() {
 }
 
 /**
+ * Hook for removing/deleting coins from a user wallet
+ */
+export function useAdminRemoveCoins() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ userId, amount }: { userId: string; amount: number }) =>
+            adminService.removeCoinsFromUser(userId, amount),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+            toast.success('K Coins removed successfully');
+        },
+        onError: (error: any) => {
+            const message = error.response?.data?.message || 'Failed to remove K coins';
+            toast.error(message);
+        },
+    });
+}
+
+/**
  * Hook to fetch platform statistics
  */
 export function useAdminStats(range: string = 'TODAY') {

@@ -196,6 +196,14 @@ export const adminService = {
     },
 
     /**
+     * Remove/delete coins from user wallet
+     */
+    removeCoinsFromUser: async (userId: string, amount: number): Promise<any> => {
+        const response = await httpService.delete(API_CONFIG.path.admin.userDeleteCoins(userId), { data: { amount } });
+        return response.data;
+    },
+
+    /**
      * Create influencer account
      */
     createInfluencer: async (data: any): Promise<any> => {
