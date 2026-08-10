@@ -24,6 +24,7 @@ export default function EarningsLoading() {
                         <div className="space-y-4">
                             <Skeleton className="h-24 w-full rounded-2xl" />
                             <Skeleton className="h-24 w-full rounded-2xl" />
+                            <Skeleton className="h-24 w-full rounded-2xl" />
                         </div>
                     </Card>
                 </div>
