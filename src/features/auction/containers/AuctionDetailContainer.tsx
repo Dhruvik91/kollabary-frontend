@@ -312,7 +312,7 @@ export const AuctionDetailContainer = ({ id }: AuctionDetailContainerProps) => {
                 {/* Right Column: Bids & Actions (Large Desktop only) */}
                 <div className="hidden xl:block space-y-8">
                     {isOwner && (
-                        <div className="bg-card border border-border rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-sm sticky top-8 flex flex-col max-h-[calc(100vh-120px)] transition-all duration-500 xl:block">
+                        <div className="bg-card border border-border rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-sm sticky top-8 flex flex-col max-h-[calc(100vh-120px)] transition-all duration-500 xl:flex">
                             <div className="p-6 border-b border-border space-y-2 bg-card/80 backdrop-blur-md z-10">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
