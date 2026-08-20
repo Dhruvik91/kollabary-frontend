@@ -12,7 +12,7 @@ import { COIN_URL } from '@/constants';
 export function SignupBonusModal({
   isOpen,
   onClose,
-  amount = 500
+  amount = 300
 }: {
   isOpen: boolean;
   onClose: () => void;
