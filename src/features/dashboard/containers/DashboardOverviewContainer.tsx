@@ -147,24 +147,16 @@ export const DashboardOverviewContainer = () => {
                     : "Discover creators, manage collaborations, and grow your brand."}
                 icon={Trophy}
                 action={
-                    isInfluencer ? (
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.BRANDS} className="w-full sm:w-auto" prefetch={true}>
-                            <Button className="w-full sm:w-auto h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
-                                <span className="uppercase tracking-widest text-xs">Explore Brands</span>
-                                <Rocket size={20} className="stroke-[3]" />
-                            </Button>
-                        </Link>
-                    ) : (
-                        <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS} className="w-full sm:w-auto" prefetch={true}>
-                            <Button className="w-full sm:w-auto h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
-                                <span className="uppercase tracking-widest text-xs">Explore Creators</span>
-                                <ArrowUpRight size={20} className="stroke-[3]" />
-                            </Button>
-                        </Link>
-                    )
+                    !isInfluencer &&
+                    <Link href={FRONTEND_ROUTES.DASHBOARD.INFLUENCERS} className="w-full sm:w-auto" prefetch={true}>
+                        <Button className="w-full sm:w-auto h-14 px-8 rounded-[1.5rem] bg-secondary hover:bg-secondary/90 text-white font-bold shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2 border-none">
+                            <span className="uppercase tracking-widest text-xs">Explore Creators</span>
+                            <ArrowUpRight size={20} className="stroke-[3]" />
+                        </Button>
+                    </Link>
                 }
             />
-            
+
             <ProfileCompletionWidget user={user} influencerProfile={profile} />
 
             {isInfluencer ? (
