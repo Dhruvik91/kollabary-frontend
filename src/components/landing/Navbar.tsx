@@ -149,7 +149,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <div className={cn("hidden md:flex items-center gap-1", isHomeRoute ? "visible" : "invisible")}>
+                <div className={cn("hidden lg:flex items-center gap-1 xl:gap-2", isHomeRoute ? "visible" : "invisible")}>
                     {navLinks.map((link) => {
                         const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
                         return (
@@ -159,16 +159,16 @@ export const Navbar = () => {
                                 scroll={false}
                                 prefetch={false}
                                 onClick={(e) => scrollToSection(e, link.href)}
-                                className="relative group px-4 py-2"
+                                className="relative group px-2.5 xl:px-4 py-2 whitespace-nowrap"
                             >
                                 <span className={cn(
-                                    "text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500",
+                                    "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] xl:tracking-[0.2em] transition-all duration-500",
                                     isActive ? "text-primary" : "text-foreground group-hover:text-primary/80"
                                 )}>
                                     {link.name}
                                 </span>
                                 <span className={cn(
-                                    "absolute bottom-1 left-4 right-4 h-px bg-primary transition-all duration-500 ease-out origin-center",
+                                    "absolute bottom-1 left-2.5 right-2.5 xl:left-4 xl:right-4 h-px bg-primary transition-all duration-500 ease-out origin-center",
                                     isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                                 )} />
                             </Link>
@@ -176,12 +176,12 @@ export const Navbar = () => {
                     })}
                 </div>
 
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden lg:flex items-center gap-2 xl:gap-4">
                     <Link href={FRONTEND_ROUTES.AUTH.LOGIN} prefetch={true}>
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="font-black uppercase tracking-widest text-[10px] hover:bg-primary/5 rounded-full px-6 text-foreground/80 hover:text-primary transition-colors"
+                            className="font-black uppercase tracking-widest text-[10px] hover:bg-primary/5 rounded-full px-4 xl:px-6 text-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
                         >
                             Sign In
                         </Button>
@@ -189,7 +189,7 @@ export const Navbar = () => {
                     <Link href={FRONTEND_ROUTES.AUTH.SIGNUP} prefetch={true}>
                         <Button
                             size="sm"
-                            className="rounded-full px-8 font-black uppercase tracking-[0.15em] text-[10px] bg-primary text-primary-foreground hover:brightness-110 shadow-xl shadow-primary/20 border-none h-11 transition-all hover:scale-105 active:scale-95"
+                            className="rounded-full px-6 xl:px-8 font-black uppercase tracking-[0.15em] text-[10px] bg-primary text-primary-foreground hover:brightness-110 shadow-xl shadow-primary/20 border-none h-10 xl:h-11 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
                         >
                             Get Started
                         </Button>
@@ -197,7 +197,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu */}
-                <div className="md:hidden flex items-center gap-4">
+                <div className="lg:hidden flex items-center gap-4">
                     <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                         <SheetTrigger asChild>
                             <Button
