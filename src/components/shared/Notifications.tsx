@@ -133,7 +133,7 @@ export const Notifications = () => {
             case NOTIFICATIONS_TRIGGERS.COLLABORATIONS:
                 return {
                     title: 'Collaboration Tracking',
-                    description: 'Keep tabs on ongoing campaign deliverables, content approvals, and escrow milestones.',
+                    description: 'Keep tabs on ongoing campaign deliverables, content approvals, and payment milestones.',
                     features: [
                         {
                             icon: <Handshake size={18} />,
@@ -149,7 +149,7 @@ export const Notifications = () => {
                         },
                         {
                             icon: <Sparkles size={18} />,
-                            title: 'Escrow Release Alerts',
+                            title: 'Payment Release Alerts',
                             description: 'Stay updated when funding milestones are completed and ready for payout.',
                             colorClass: 'bg-amber-500/10 text-amber-500',
                         }
@@ -199,7 +199,7 @@ export const Notifications = () => {
                         },
                         {
                             icon: <Clock size={18} />,
-                            title: 'Escrow & Payment Milestone Updates',
+                            title: 'Payment & Milestone Updates',
                             description: 'Stay informed on funding status, milestones, and payout receipts.',
                             colorClass: 'bg-orange-500/10 text-orange-500',
                         }

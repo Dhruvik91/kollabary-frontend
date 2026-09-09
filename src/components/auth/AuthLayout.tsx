@@ -85,7 +85,7 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
             </div>
 
             {/* Right Side: Authentication Form */}
-            <div className="relative flex flex-col items-center justify-center p-6 lg:p-12 min-h-screen lg:min-h-0 bg-background">
+            <div className="relative flex flex-col items-center justify-center p-4 sm:p-6 lg:p-12 min-h-screen lg:min-h-0 bg-background py-8 sm:py-12">
 
                 {/* Mobile Background Effects */}
                 <div className="lg:hidden">
@@ -108,24 +108,24 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="w-full max-w-md relative z-10"
                 >
-                    <div className="space-y-8">
+                    <div className="space-y-6 sm:space-y-8">
                         {/* Mobile Logo */}
                         <div className="flex justify-center lg:hidden mb-2">
                             <Link href={FRONTEND_ROUTES.HOME} prefetch={true} className="group transition-all duration-300 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
                                 {mounted && (
-                                    <Logo className="w-32 sm:w-36" />
+                                    <Logo className="w-28 sm:w-36" />
                                 )}
                             </Link>
                         </div>
 
-                        <div className="space-y-3 text-center">
-                            <h2 className="text-4xl font-black tracking-tight text-foreground leading-tight">{title}</h2>
+                        <div className="space-y-1.5 sm:space-y-3 text-center">
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-foreground leading-tight">{title}</h2>
                             {description && (
-                                <p className="text-lg text-muted-foreground/80 font-medium">{description}</p>
+                                <p className="text-sm sm:text-base lg:text-lg text-muted-foreground/80 font-medium">{description}</p>
                             )}
                         </div>
 
-                        <div className="px-1">{children}</div>
+                        <div className="px-0 sm:px-1">{children}</div>
                     </div>
                 </motion.div>
             </div>

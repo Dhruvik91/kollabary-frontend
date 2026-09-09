@@ -1,34 +1,58 @@
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline'
+    https://pagead2.googlesyndication.com
+    https://*.googlesyndication.com
+    https://adservice.google.com
+    https://*.doubleclick.net
+    https://googleads.g.doubleclick.net
+    https://www.googleadservices.com
+    https://*.googleadservices.com
+    https://*.googletagservices.com
     https://*.googletagmanager.com
     https://*.google-analytics.com
     https://apis.google.com
     https://*.firebaseapp.com
     https://*.google.com
+    https://www.google.com
+    https://*.google
+    https://*.adtrafficquality.google
     https://*.posthog.com
+    https://*.razorpay.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' data: blob:
+    https://pagead2.googlesyndication.com
+    https://*.googlesyndication.com
+    https://*.doubleclick.net
     https://googleads.g.doubleclick.net
     https://www.googleadservices.com
-    https://*.razorpay.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data: blob:
+    https://ad.doubleclick.net
+    https://*.gstatic.com
     https://kollabary.s3.ap-south-1.amazonaws.com
     https://*.googletagmanager.com
     https://*.google-analytics.com
     https://*.google.com
+    https://*.google
+    https://*.adtrafficquality.google
     https://*.posthog.com
     https://lh3.googleusercontent.com
     https://assets.calendly.com
-    https://googleads.g.doubleclick.net
-    https://www.googleadservices.com
-    https://ad.doubleclick.net
     https://*.razorpay.com;
-  font-src 'self' data:;
+  font-src 'self' data: https://fonts.gstatic.com;
   connect-src 'self'
     http://localhost:3008
     ws://localhost:3008
     https://*.kollabary.com
     wss://*.kollabary.com
+    https://pagead2.googlesyndication.com
+    https://*.googlesyndication.com
+    https://*.doubleclick.net
+    https://googleads.g.doubleclick.net
+    https://ad.doubleclick.net
+    https://www.googleadservices.com
+    https://*.googleadservices.com
+    https://*.googletagservices.com
+    https://*.gstatic.com
     https://*.googleapis.com
     https://*.firebaseapp.com
     https://*.google-analytics.com
@@ -36,14 +60,26 @@ const cspHeader = `
     https://*.posthog.com
     https://www.google.com
     https://*.google.com
+    https://*.google
+    https://*.adtrafficquality.google
     https://analytics.google.com
-    https://ad.doubleclick.net
-    https://googleads.g.doubleclick.net
-    https://www.googleadservices.com
     https://kollabary.s3.ap-south-1.amazonaws.com
     https://*.razorpay.com;
   media-src 'self' blob: data: https://kollabary.s3.ap-south-1.amazonaws.com;
-  frame-src 'self' https://*.firebaseapp.com https://*.google.com https://calendly.com https://*.razorpay.com;
+  frame-src 'self'
+    https://pagead2.googlesyndication.com
+    https://*.googlesyndication.com
+    https://tpc.googlesyndication.com
+    https://googleads.g.doubleclick.net
+    https://*.doubleclick.net
+    https://www.googleadservices.com
+    https://*.googleadservices.com
+    https://*.firebaseapp.com
+    https://*.google.com
+    https://www.google.com
+    https://*.google
+    https://calendly.com
+    https://*.razorpay.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
