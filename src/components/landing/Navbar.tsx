@@ -76,18 +76,22 @@ export const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const pathname = usePathname();
+    const isHomeRoute = pathname === FRONTEND_ROUTES.HOME;
+
     const navLinks = [
-        { name: 'Features', href: '#brands', id: 'brands' },
-        { name: 'The Plan', href: '#how-it-works', id: 'how-it-works' },
-        { name: 'Payments', href: '#economy', id: 'economy' },
-        { name: 'Status', href: '#ranking', id: 'ranking' },
-        { name: 'Connect', href: '#community', id: 'community' },
+        { name: 'Home', href: FRONTEND_ROUTES.HOME, id: 'hero' },
+        { name: 'Features', href: FRONTEND_ROUTES.FEATURES, id: 'features' },
+        { name: 'About', href: FRONTEND_ROUTES.ABOUT, id: 'about' },
+        // { name: 'FAQ', href: FRONTEND_ROUTES.FAQ, id: 'faq' },
+        { name: 'Blog', href: FRONTEND_ROUTES.BLOG, id: 'blog' },
+        { name: 'Contact', href: FRONTEND_ROUTES.CONTACT, id: 'contact' },
     ];
 
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        if (href.startsWith('#') || href.startsWith('/#')) {
+        if (isHomeRoute && (href.startsWith('#') || href.startsWith('/#') || href === '/')) {
             e.preventDefault();
-            const targetId = href.replace('/#', '').replace('#', '');
+            const targetId = href === '/' ? 'hero' : href.replace('/#', '').replace('#', '');
             const target = document.getElementById(targetId);
 
             if (target) {
@@ -105,15 +109,13 @@ export const Navbar = () => {
                     overwrite: 'auto'
                 });
 
-                window.history.pushState(null, '', `/#${targetId}`);
+                window.history.pushState(null, '', href === '/' ? '/' : `/#${targetId}`);
                 setActiveSection(targetId);
             } else {
-                window.location.href = `/${href.replace('#', '')}`;
+                window.location.href = href;
             }
         }
     };
-
-    const isHomeRoute = usePathname() === FRONTEND_ROUTES.HOME;
 
     return (
         <nav
@@ -149,9 +151,11 @@ export const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <div className={cn("hidden lg:flex items-center gap-1 xl:gap-2", isHomeRoute ? "visible" : "invisible")}>
+                <div className="hidden lg:flex items-center gap-1 xl:gap-1.5">
                     {navLinks.map((link) => {
-                        const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
+                        const isActive = isHomeRoute
+                            ? (activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers'))
+                            : (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)));
                         return (
                             <Link
                                 key={link.name}
@@ -159,16 +163,16 @@ export const Navbar = () => {
                                 scroll={false}
                                 prefetch={false}
                                 onClick={(e) => scrollToSection(e, link.href)}
-                                className="relative group px-2.5 xl:px-4 py-2 whitespace-nowrap"
+                                className="relative group px-2.5 xl:px-3 py-2"
                             >
                                 <span className={cn(
-                                    "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] xl:tracking-[0.2em] transition-all duration-500",
+                                    "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] xl:tracking-[0.2em] transition-all duration-500 whitespace-nowrap",
                                     isActive ? "text-primary" : "text-foreground group-hover:text-primary/80"
                                 )}>
                                     {link.name}
                                 </span>
                                 <span className={cn(
-                                    "absolute bottom-1 left-2.5 right-2.5 xl:left-4 xl:right-4 h-px bg-primary transition-all duration-500 ease-out origin-center",
+                                    "absolute bottom-1 left-2.5 right-2.5 xl:left-3 xl:right-3 h-px bg-primary transition-all duration-500 ease-out origin-center",
                                     isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                                 )} />
                             </Link>
@@ -211,19 +215,21 @@ export const Navbar = () => {
                         </SheetTrigger>
                         <SheetContent side="right" className="w-[85%] sm:max-w-md glass-card-elevated border-l border-white/10 p-0 overflow-hidden flex flex-col">
                             <div className="flex flex-col h-full bg-background/50 backdrop-blur-3xl">
-                                    <SheetHeader className="p-8 pb-4 border-b border-white/5">
-                                        <SheetTitle className="text-left">
-                                            <Logo className="w-32" />
-                                        </SheetTitle>
-                                        <SheetDescription className="sr-only">
-                                            Navigation menu for mobile devices.
-                                        </SheetDescription>
-                                    </SheetHeader>
+                                <SheetHeader className="p-8 pb-4 border-b border-white/5">
+                                    <SheetTitle className="text-left">
+                                        <Logo className="w-32" />
+                                    </SheetTitle>
+                                    <SheetDescription className="sr-only">
+                                        Navigation menu for mobile devices.
+                                    </SheetDescription>
+                                </SheetHeader>
 
                                 <div className="grow p-4 py-8 space-y-0.5">
                                     <nav className="flex flex-col">
                                         {navLinks.map((link, idx) => {
-                                            const isActive = activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers');
+                                            const isActive = isHomeRoute
+                                                ? (activeSection === link.id || (link.id === 'brands' && activeSection === 'influencers'))
+                                                : (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)));
                                             return (
                                                 <Link
                                                     key={link.name}
