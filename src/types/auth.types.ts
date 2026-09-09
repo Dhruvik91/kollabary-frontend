@@ -52,6 +52,7 @@ export interface SignupCredentials {
     confirmPassword: string;
     role: UserRole;
     referralCode?: string;
+    acceptTerms?: boolean;
 }
 
 export interface ForgotPasswordData {

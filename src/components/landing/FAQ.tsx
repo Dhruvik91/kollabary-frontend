@@ -24,7 +24,7 @@ const faqs = [
     },
     {
         question: "Is Kollabary free for influencers?",
-        answer: "Yes, joining the Kollabary network as a creator is completely free. We take a small service fee only when you successfully complete a paid collaboration, ensuring we only succeed when you do."
+        answer: "Yes, joining the Kollabary network as a creator is completely free."
     }
 ];
 
@@ -77,7 +77,7 @@ export const FAQ = () => {
                                     {openIndex === idx ? <Minus size={18} /> : <Plus size={18} />}
                                 </div>
                             </button>
-                            
+
                             <AnimatePresence>
                                 {openIndex === idx && (
                                     <motion.div

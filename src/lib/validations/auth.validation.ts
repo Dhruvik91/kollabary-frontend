@@ -36,6 +36,9 @@ export const signupSchema = z
             .min(6, 'Confirm password must be at least 6 characters long'),
         role: z.nativeEnum(UserRole),
         referralCode: z.string().optional(),
+        acceptTerms: z.boolean().refine((val) => val === true, {
+            message: 'You must accept the Terms and Conditions and Privacy Policy',
+        }),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',

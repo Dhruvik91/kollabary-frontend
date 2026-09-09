@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signupSchema, SignupFormData } from '@/lib/validations/auth.validation';
@@ -8,6 +8,7 @@ import { FRONTEND_ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Loader2, Building2, User, Gift } from 'lucide-react';
 import { useState } from 'react';
@@ -41,12 +42,14 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
         handleSubmit,
         watch,
         setValue,
+        control,
         formState: { errors },
     } = useForm<SignupFormData>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
             role: initialRole || UserRole.USER,
             referralCode: referralCode || '',
+            acceptTerms: false,
         },
     });
 
@@ -77,45 +80,45 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
             <div className="space-y-4">
                 {/* Role Selection */}
-                <div className="space-y-2 mb-6">
-                    <Label className="text-sm font-medium">I am a...</Label>
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 mb-4 sm:mb-6">
+                    <Label className="text-xs sm:text-sm font-medium">I am a...</Label>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
                         <button
                             type="button"
                             onClick={() => setValue('role', UserRole.USER)}
                             className={cn(
-                                "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 gap-2 cursor-pointer",
+                                "flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 gap-1.5 sm:gap-2 cursor-pointer",
                                 role === UserRole.USER
                                     ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10"
                                     : "border-border/50 hover:border-primary/30 text-muted-foreground hover:bg-muted/50"
                             )}
                         >
                             <div className={cn(
-                                "p-2 rounded-xl transition-colors",
+                                "p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-colors",
                                 role === UserRole.USER ? "bg-primary/20" : "bg-muted"
                             )}>
-                                <Building2 size={24} />
+                                <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
                             </div>
-                            <span className="font-bold text-sm">Brand</span>
+                            <span className="font-bold text-xs sm:text-sm">Brand</span>
                         </button>
 
                         <button
                             type="button"
                             onClick={() => setValue('role', UserRole.INFLUENCER)}
                             className={cn(
-                                "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 gap-2 cursor-pointer",
+                                "flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 gap-1.5 sm:gap-2 cursor-pointer",
                                 role === UserRole.INFLUENCER
                                     ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10"
                                     : "border-border/50 hover:border-primary/30 text-muted-foreground hover:bg-muted/50"
                             )}
                         >
                             <div className={cn(
-                                "p-2 rounded-xl transition-colors",
+                                "p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-colors",
                                 role === UserRole.INFLUENCER ? "bg-primary/20" : "bg-muted"
                             )}>
-                                <User size={24} />
+                                <User className="w-5 h-5 sm:w-6 sm:h-6" />
                             </div>
-                            <span className="font-bold text-sm">Influencer</span>
+                            <span className="font-bold text-xs sm:text-sm">Influencer</span>
                         </button>
                     </div>
                 </div>
@@ -291,6 +294,54 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                             </motion.div>
                         )}
                     </AnimatePresence>
+                </div>
+
+                {/* Terms and Privacy Policy Checkbox */}
+                <div className="space-y-1.5 pt-1">
+                    <div className="flex items-start gap-2.5 sm:gap-3">
+                        <Controller
+                            name="acceptTerms"
+                            control={control}
+                            render={({ field }) => (
+                                <Checkbox
+                                    id="acceptTerms"
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    disabled={isLoading}
+                                    aria-invalid={!!errors.acceptTerms}
+                                    className="h-3.5 w-3.5 sm:h-4 sm:w-4 mt-0.5 shrink-0 aspect-square"
+                                />
+                            )}
+                        />
+                        <label
+                            htmlFor="acceptTerms"
+                            className="text-xs sm:text-sm font-normal leading-normal text-muted-foreground cursor-pointer select-none"
+                        >
+                            I agree to the{' '}
+                            <Link
+                                href={FRONTEND_ROUTES.TERMS}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                            >
+                                Terms and Conditions
+                            </Link>{' '}
+                            and{' '}
+                            <Link
+                                href={FRONTEND_ROUTES.PRIVACY}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                            >
+                                Privacy Policy
+                            </Link>
+                        </label>
+                    </div>
+                    {errors.acceptTerms && (
+                        <p id="accept-terms-error" className="text-xs text-destructive" role="alert">
+                            {errors.acceptTerms.message}
+                        </p>
+                    )}
                 </div>
             </div>
 

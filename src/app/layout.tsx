@@ -105,14 +105,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
-        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
+        <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-3831930426569586"} />
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-3831930426569586'}`}
+          crossOrigin="anonymous"
+        />
       </head>
       <Script
         id="schema-org"
