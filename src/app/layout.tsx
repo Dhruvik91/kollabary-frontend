@@ -95,6 +95,9 @@ export const metadata: Metadata = {
   verification: {
     google: "oULfLngOS9DM_WJH4Ca6k1r6-fmWlFrt08RbCxrn5ZE",
   },
+  other: {
+    "google-adsense-account": process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-3831930426569586",
+  },
 };
 
 export default function RootLayout({
@@ -105,10 +108,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
-        <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-3831930426569586"} />
-        <script
+        <Script
+          id="google-adsense"
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-3831930426569586'}`}
+          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
       </head>

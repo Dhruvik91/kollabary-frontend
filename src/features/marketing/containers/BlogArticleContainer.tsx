@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { FRONTEND_ROUTES } from '@/constants';
+import { AdSenseUnit } from '@/components/shared/AdSenseUnit';
 
 interface BlogArticleContainerProps {
   article: {
@@ -84,7 +85,9 @@ export const BlogArticleContainer = ({ article }: BlogArticleContainerProps) => 
         {article.contentHtml}
       </article>
 
-      <div className="mt-16 pt-8 border-t border-border/50 flex items-center justify-between">
+      <AdSenseUnit className="my-10" />
+
+      <div className="mt-12 pt-8 border-t border-border/50 flex items-center justify-between">
         <Link href={FRONTEND_ROUTES.BLOG}>
           <Button variant="outline" className="rounded-full gap-2">
             <ArrowLeft size={16} />
