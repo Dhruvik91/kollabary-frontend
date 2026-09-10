@@ -1,0 +1,95 @@
+# Kollabary — Complete Platform Documentation & Context
+
+> Kollabary is an AI-powered influencer marketing platform that serves as a direct bridge connecting verified digital creators with brands for campaign discovery, dynamic bidding, pitching, video asset sales, and real-time collaboration.
+
+---
+
+## Core Architecture & Financial Model
+
+- **Platform Role**: Kollabary operates strictly as the bridge/marketplace connecting brands and creators.
+- **Direct Financial Agreements**: Financial terms, budgets, and actual payouts for campaign deliverables are negotiated and handled directly between brands and creators themselves. Kollabary does **not** hold funds, run an escrow system, or manage user-to-user cash payouts.
+- **KC Coins (In-Platform Credit Utility)**: KC Coins are Kollabary's native in-platform digital credits used exclusively to execute platform actions, including:
+  - Creating campaign auctions and posting briefs
+  - Submitting bids and pitching proposals
+  - Buying and selling video assets in the video marketplace
+  - Unlocking premium creator/brand features and boosting visibility
+
+- **Website**: https://www.kollabary.com
+- **Target Audience**: Enterprise Brands, D2C Advertisers, Marketing Agencies, Digital Content Creators (YouTube, Instagram, TikTok, Twitter/X, LinkedIn)
+
+---
+
+## Key Platform Features
+
+### 1. Direct Brand-Creator Bridge
+Kollabary enables transparent connection and communication without middleman agency fees or fund holding. Brands and creators manage their partnerships directly.
+
+### 2. KC Coin Utility Economy
+KC Coins power all key platform operations. Users purchase or earn KC Coins to create auctions, bid on brand campaigns, pitch creative ideas, list short-form videos for sale, and access prestige features.
+
+### 3. Dynamic Bidding & Pitching Marketplace
+Brands post campaign requirements and target criteria. Verified creators utilize KC Coins to submit tailored creative proposals, pitch concepts, and submit competitive bids.
+
+### 4. Video Showcase & Asset Sales
+Creators showcase portfolio reels and list high-performing short video assets for sale, allowing brands to discover and license original creator video content.
+
+### 5. Verified Audience Analytics
+Integrations with social platform APIs ensure authentic metrics for reach, subscriber growth, engagement rates, and audience demographics.
+
+### 6. Prestige Ranking Engine
+Creators earn rank badges (Bronze, Silver, Gold, Platinum, Diamond) based on verifiable performance benchmarks: activity level, prompt deliverable submissions, and community reputation.
+
+### 7. Real-Time Collaboration Workspace
+Integrated messaging workspace allowing creators and brand managers to refine campaign briefs, review draft previews, adjust timelines, and exchange feedback directly.
+
+---
+
+## Workflow for Brands
+
+1. **Create Campaign Auction**: Use KC Coins to post project briefs, target platforms, deliverable specs, and target budgets.
+2. **Review Bids & Pitches**: Compare creator proposals, verified audience stats, video portfolio reels, and submitted bids.
+3. **Connect & Agree**: Select preferred creator(s) and finalize collaboration terms directly with the creator.
+4. **Collaborate & Review**: Work together via the real-time workspace chat, review draft previews, and approve final content.
+
+---
+
+## Workflow for Creators
+
+1. **Build Verified Profile**: Connect social media channels (YouTube, Instagram, TikTok) to pull authentic metric insights and feature video showcases.
+2. **Discover Auctions**: Browse active brand campaign auctions matching your niche, platform, and audience.
+3. **Pitch & Bid**: Use KC Coins to submit customized campaign pitches, portfolio clips, and bids to brands.
+4. **Deliver & Monetize**: Collaborate directly with brands in the Kollabary workspace and monetize content/video assets under mutually agreed terms.
+
+---
+
+## Frequently Asked Questions
+
+### What is Kollabary?
+Kollabary is an influencer marketing platform that acts as a bridge connecting verified creators with brands for campaign discovery, bidding, pitching, and video sales.
+
+### Does Kollabary hold funds or provide escrow payouts?
+No. Kollabary does not store or hold campaign funds, nor do we run an escrow or cash payout system. All financial terms, payments, and settlements for campaign deliverables are agreed upon and handled directly between brands and creators.
+
+### What are KC Coins?
+KC Coins are in-platform digital credits used on Kollabary to perform platform actions. They are used for creating campaign auctions, submitting bids, pitching proposals, buying/selling video assets, and boosting platform presence. KC Coins are non-refundable and used within the Kollabary ecosystem.
+
+### Is Kollabary free to join?
+Yes! Signing up and browsing creators or campaign listings is 100% free. Users top up KC Coins as needed to perform active bidding, campaign creation, and pitching.
+
+### How are metrics verified?
+Kollabary integrates social platform APIs to verify authentic channel statistics, subscriber activity, and engagement rates. Our Prestige Ranking System evaluates creator activity and track record.
+
+---
+
+## Sitemap & Canonical References
+
+- Main Platform: https://www.kollabary.com
+- About Us: https://www.kollabary.com/about
+- Features: https://www.kollabary.com/features
+- How It Works: https://www.kollabary.com/how-it-works
+- Pricing: https://www.kollabary.com/pricing
+- FAQ: https://www.kollabary.com/faq
+- Blog: https://www.kollabary.com/blog
+- Contact: https://www.kollabary.com/contact
+- Privacy Policy: https://www.kollabary.com/privacy
+- Terms of Service: https://www.kollabary.com/terms

@@ -1,0 +1,32 @@
+# Kollabary
+
+> Kollabary is an AI-powered influencer marketing platform that serves as a direct bridge connecting verified creators with brands for campaign discovery, bidding, pitching, video asset trading, and collaboration.
+
+Kollabary simplifies creator economy partnerships without holding funds or acting as an escrow/payout intermediary. Financial terms and payments for campaigns are handled directly between brands and creators. On Kollabary, in-platform KC Coins power platform interactions—enabling users to create campaign auctions, submit bids, pitch creative proposals, buy/sell video assets, and access platform features.
+
+## Core Pages
+
+- [Kollabary Homepage](https://www.kollabary.com): Overview of the Kollabary platform, active campaign auctions, and creator spotlights.
+- [About Kollabary](https://www.kollabary.com/about): Our mission as a direct brand-creator bridge, prestige ranking engine, and platform values.
+- [Platform Features](https://www.kollabary.com/features): Key capabilities including dynamic bidding, verified audience analytics, KC Coin economy, video marketplace, and real-time chat.
+- [How It Works](https://www.kollabary.com/how-it-works): Step-by-step guide for brands launching campaign auctions and creators pitching proposals.
+- [Pricing & Plans](https://www.kollabary.com/pricing): KC Coin packages and feature pricing options for creators, agencies, and brand advertisers.
+- [Frequently Asked Questions](https://www.kollabary.com/faq): Answers regarding account verification, bidding rules, KC Coins, and direct brand-creator collaboration.
+- [Kollabary Blog](https://www.kollabary.com/blog): Industry insights, influencer marketing strategies, creator growth guides, and platform updates.
+- [Contact Us](https://www.kollabary.com/contact): Reach out to Kollabary support, brand partnerships, or creator assistance.
+- [Privacy Policy](https://www.kollabary.com/privacy): Information on data protection, cookie management, and user privacy rights.
+- [Terms of Service](https://www.kollabary.com/terms): Terms and conditions governing platform usage, KC Coin utilities, and platform rules.
+
+## Key Platform Features
+
+- [Direct Brand-Creator Bridge](https://www.kollabary.com/features): Direct discovery and communication platform where financial terms are settled directly between brands and creators.
+- [KC Coin Platform Economy](https://www.kollabary.com/features): In-platform credit system used for campaign creation, auction bidding, pitching, and video content sales.
+- [Dynamic Bidding & Pitching](https://www.kollabary.com/features): Competitive marketplace where creators submit customized pitches and bids on brand campaign briefs.
+- [Video Sales Marketplace](https://www.kollabary.com/features): Dedicated portal for creators to showcase, license, and sell video assets directly.
+- [Verified Audience Analytics](https://www.kollabary.com/features): Real-time API integrations with YouTube, Instagram, and TikTok to inspect authentic audience reach and engagement history.
+- [Prestige Ranking Engine](https://www.kollabary.com/features): Merit-based ranking system (Bronze to Diamond) evaluating creator activity and campaign track record.
+- [Real-Time Collaboration Workspace](https://www.kollabary.com/features): Direct workspace messaging for brief negotiation, script revisions, draft video previews, and status tracking.
+
+## Full Context Document
+
+- [llms-full.txt](https://www.kollabary.com/llms-full.txt): Comprehensive extended text documentation of Kollabary for LLMs, including complete feature breakdowns, FAQ data, workflow steps, and KC Coin specifications.
