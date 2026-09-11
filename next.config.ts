@@ -15,6 +15,10 @@ const cspHeader = `
     https://*.firebaseapp.com
     https://*.google.com
     https://www.google.com
+    https://*.google.co.in
+    https://www.google.co.in
+    https://*.google.co.uk
+    https://www.google.co.uk
     https://*.google
     https://*.adtrafficquality.google
     https://*.posthog.com
@@ -32,6 +36,11 @@ const cspHeader = `
     https://*.googletagmanager.com
     https://*.google-analytics.com
     https://*.google.com
+    https://www.google.com
+    https://*.google.co.in
+    https://www.google.co.in
+    https://*.google.co.uk
+    https://www.google.co.uk
     https://*.google
     https://*.adtrafficquality.google
     https://*.posthog.com
@@ -60,6 +69,10 @@ const cspHeader = `
     https://*.posthog.com
     https://www.google.com
     https://*.google.com
+    https://*.google.co.in
+    https://www.google.co.in
+    https://*.google.co.uk
+    https://www.google.co.uk
     https://*.google
     https://*.adtrafficquality.google
     https://analytics.google.com
@@ -77,6 +90,10 @@ const cspHeader = `
     https://*.firebaseapp.com
     https://*.google.com
     https://www.google.com
+    https://*.google.co.in
+    https://www.google.co.in
+    https://*.google.co.uk
+    https://www.google.co.uk
     https://*.google
     https://calendly.com
     https://*.razorpay.com;
