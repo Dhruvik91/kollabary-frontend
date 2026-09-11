@@ -309,7 +309,7 @@ export function SignupForm({ onSubmit, isLoading, error, onGoogleAuth, referralC
                                     onCheckedChange={field.onChange}
                                     disabled={isLoading}
                                     aria-invalid={!!errors.acceptTerms}
-                                    className="h-3.5 w-3.5 sm:h-4 sm:w-4 mt-0.5 shrink-0 aspect-square"
+                                    className="h-4 w-4 mt-0.5 shrink-0 min-h-0 min-w-0"
                                 />
                             )}
                         />

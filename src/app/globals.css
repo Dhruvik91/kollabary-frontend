@@ -613,9 +613,9 @@
   /* Touch optimization for mobile */
   @media (pointer: coarse) {
 
-    button,
-    a,
-    [role="button"] {
+    button:not([role="checkbox"]):not([role="switch"]):not([role="radio"]):not([data-slot="checkbox"]),
+    a:not([role="checkbox"]),
+    [role="button"]:not([role="checkbox"]):not([role="switch"]):not([role="radio"]) {
       min-height: 44px;
       min-width: 44px;
     }
